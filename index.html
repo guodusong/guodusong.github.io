@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>新标签页</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 16px; padding-bottom: 40px; }
+        .app { max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 28px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .card-header { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: #0f172a; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border-radius: 40px; font-weight: 500; border: none; cursor: pointer; background: #f1f5f9; color: #1e293b; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-primary:active { background: #2563eb; transform: scale(0.97); }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-warning { background: #f97316; color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 28px; font-size: 1rem; background: white; }
+        .input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+        .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 20px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 500px; }
+        th, td { padding: 12px 8px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f8fafc; }
+        .token-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .action-btn { padding: 4px 10px; font-size: 0.7rem; border-radius: 30px; }
+        .log-list { max-height: 280px; overflow-y: auto; background: #fefce8; border-radius: 20px; padding: 8px; }
+        .log-item { font-size: 0.7rem; padding: 8px; border-bottom: 1px solid #e2e8f0; font-family: monospace; }
+        .pagination { display: flex; justify-content: center; gap: 12px; margin-top: 16px; align-items: center; }
+        @media (max-width: 600px) { body { padding: 12px; } .card { padding: 16px; } .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="app">
+    <!-- 普通用户卡片 -->
+    <div class="card">
+        <div class="card-header">链接生成器</div>
+        <input type="text" id="tokenInput" class="input" placeholder="请输入验证码" autocomplete="off">
+        <button id="verifyBtn" class="btn btn-primary" style="width:100%; margin-top:16px;">验证并生成链接</button>
+        <div id="resultArea" style="display: none; margin-top: 16px;"></div>
+        <div style="margin-top: 16px; font-size: 0.75rem; background:#fef9c3; padding:12px; border-radius:20px;">
+            提示：生成的代码复制后，粘贴到浏览器地址栏，删掉最前方的等号 “=”，然后回车。
+        </div>
+    </div>
+
+    <!-- 管理员卡片 -->
+    <div class="card">
+        <div class="card-header">🌴🌴🌴🌴🌴🌴🏖🌴🌴🌴🌴🌴🌴</div>
+        <div class="flex-row" style="margin-bottom: 16px;">
+            <input type="password" id="adminPassword" class="input" placeholder="" style="flex:2;">
+            <button id="loginAdminBtn" class="btn btn-primary" style="flex:1;">🌴</button>
+        </div>
+        <div id="adminContent" style="display: none;">
+            <!-- Token 管理 -->
+            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
+                <div class="flex-between">
+                    <span style="font-weight:600;">Token管理</span>
+                    <button id="refreshTokenBtn" class="btn btn-sm">刷新</button>
+                </div>
+                <div class="grid-2" style="margin-bottom: 12px;">
+                    <button id="queryTokenBtn" class="btn btn-primary">查询所有</button>
+                    <button id="clearAllBtn" class="btn btn-danger">清空全部</button>
+                </div>
+                <div class="flex-row" style="margin-bottom: 12px;">
+                    <input type="text" id="newTokenInput" class="input" placeholder="" style="flex:2;">
+                    <input type="number" id="newTokenInit" class="input" placeholder="初始次数" value="3" style="flex:1; text-align:center;">
+                    <button id="addTokenBtn" class="btn btn-primary">添加</button>
+                </div>
+                <div class="flex-row">
+                    <button id="deleteSelectedBtn" class="btn btn-danger">删除选中</button>
+                    <details style="flex:1;">
+                        <summary style="cursor:pointer; background:#e2e8f0; padding:8px 12px; border-radius:40px; text-align:center;">批量导入</summary>
+                        <div style="margin-top:12px;">
+                            <textarea id="importTokensText" rows="3" class="input" placeholder="每行一个Token"></textarea>
+                            <button id="importPasteBtn" class="btn btn-primary" style="margin-top:8px;">导入（默认3次）</button>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Token 列表 -->
+            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
+                <div class="flex-between">
+                    <span style="font-weight:600;">Token 列表</span>
+                    <div class="flex-row">
+                        <button id="filterRemainBtn" class="btn btn-sm">筛选剩余次数</button>
+                        <button id="clearFilterBtn" class="btn btn-sm">清除筛选</button>
+                    </div>
+                </div>
+                <div id="tokenTableContainer">点击“查询所有”加载数据</div>
+                <div id="paginationContainer" style="display: none;"></div>
+            </div>
+
+            <!-- 日志 -->
+            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
+                <div class="flex-between">
+                    <span style="font-weight:600;">操作日志</span>
+                    <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
+                </div>
+                <div id="logsContainer" class="log-list">暂无日志</div>
+            </div>
+
+            <!-- 应急代码 -->
+            <div style="background:#f8fafc; border-radius: 20px; padding: 16px;">
+                <div class="flex-between">
+                    <span style="font-weight:600;">免 Token 应急代码</span>
+                    <button id="copyNoTokenBtn" class="btn btn-primary btn-sm">复制</button>
+                </div>
+                <pre id="noTokenCode" style="background:#eef2ff; padding:12px; border-radius:20px; overflow-x:auto; font-size:0.7rem; margin-top:12px;"></pre>
+                <div style="font-size:0.7rem; margin-top:8px;">* 复制后删掉最前面的等号再使用</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
+    const EMERGENCY_CODE = `=javascript:(function(){var s=document.createElement('script');s.src='https://nszd-1416699676.cos.ap-beijing.myqcloud.com/gdsdt.js?_='+Date.now();document.body.appendChild(s);})();`;
+
+    function copyToClipboard(text, btn) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (success) {
+            const original = btn.innerText;
+            btn.innerText = '已复制';
+            setTimeout(() => { btn.innerText = original; }, 1500);
+        } else {
+            alert('复制失败，请手动复制');
+        }
+    }
+
+    async function verifyToken(token) {
+        const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
+        if (!res.ok) {
+            if (res.status === 403) return { valid: false, remain: 0 };
+            throw new Error(`HTTP ${res.status}`);
+        }
+        return await res.json();
+    }
+    function generateCodes(token) {
+        return {
+            code1: `=javascript:$.getScript('${API_URL}?token=${token}')`,
+            code2: `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`
+        };
+    }
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+    function renderResult(token, remain, code1, code2) {
+        const resultDiv = document.getElementById('resultArea');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `
+            <div style="background:#d1fae5; padding:12px; border-radius:20px;">验证码有效，剩余次数：<strong>${remain}</strong></div>
+            <div style="background:#f8fafc; border-radius:20px; padding:12px; margin-top:12px;"><div><strong>方式一</strong></div><pre style="background:#eef2ff; padding:8px; border-radius:16px; overflow-x:auto;">${escapeHtml(code1)}</pre><button class="copy-btn" data-code="${escapeHtml(code1)}">复制代码</button></div>
+            <div style="background:#f8fafc; border-radius:20px; padding:12px; margin-top:12px;"><div><strong>方式二</strong></div><pre style="background:#eef2ff; padding:8px; border-radius:16px; overflow-x:auto;">${escapeHtml(code2)}</pre><button class="copy-btn" data-code="${escapeHtml(code2)}">复制代码</button></div>
+        `;
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            const code = btn.getAttribute('data-code');
+            btn.addEventListener('click', () => copyToClipboard(code, btn));
+        });
+    }
+
+    document.getElementById('verifyBtn').addEventListener('click', async () => {
+        const token = document.getElementById('tokenInput').value.trim();
+        if (!token) { alert('请输入验证码'); return; }
+        const btn = document.getElementById('verifyBtn');
+        const original = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = '验证中...';
+        document.getElementById('resultArea').style.display = 'none';
+        try {
+            const result = await verifyToken(token);
+            if (result.valid) {
+                const { code1, code2 } = generateCodes(token);
+                renderResult(token, result.remain, code1, code2);
+            } else {
+                document.getElementById('resultArea').style.display = 'block';
+                document.getElementById('resultArea').innerHTML = `<div style="background:#fee2e2; padding:12px; border-radius:20px;">验证码无效或不存在</div>`;
+            }
+        } catch(e) {
+            document.getElementById('resultArea').style.display = 'block';
+            document.getElementById('resultArea').innerHTML = `<div style="background:#fee2e2; padding:12px; border-radius:20px;">网络错误</div>`;
+        } finally {
+            btn.disabled = false;
+            btn.innerText = original;
+        }
+    });
+
+    // 管理员功能
+    let adminPassword = '';
+    let currentTokens = [];
+    let filteredTokens = [];
+    let currentPage = 1;
+    const pageSize = 15;
+    let remainFilterValue = null;
+    let selectedTokensSet = new Set();
+
+    async function adminFetch(action, params = {}) {
+        let url = `${API_URL}?admin=1&action=${action}&password=${encodeURIComponent(adminPassword)}`;
+        for (const [k, v] of Object.entries(params)) url += `&${k}=${encodeURIComponent(v)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(await res.text());
+        return await res.json();
+    }
+
+    async function loadAllTokens() {
+        const container = document.getElementById('tokenTableContainer');
+        container.innerHTML = '<div style="text-align:center; padding:30px;">加载中...</div>';
+        try {
+            const data = await adminFetch('listAll');
+            currentTokens = data.tokens || [];
+            applyFilters();
+        } catch (err) {
+            container.innerHTML = `<div style="color:red;">加载失败: ${err.message}</div>`;
+        }
+    }
+
+    function applyFilters() {
+        let filtered = [...currentTokens];
+        if (remainFilterValue !== null) filtered = filtered.filter(t => t.remain === remainFilterValue);
+        filteredTokens = filtered;
+        currentPage = 1;
+        renderTable();
+    }
+
+    function renderTable() {
+        const container = document.getElementById('tokenTableContainer');
+        if (!filteredTokens.length) {
+            container.innerHTML = '<div style="text-align:center; padding:30px; color:#64748b;">暂无数据</div>';
+            document.getElementById('paginationContainer').style.display = 'none';
+            return;
+        }
+        const start = (currentPage - 1) * pageSize;
+        const pageTokens = filteredTokens.slice(start, start + pageSize);
+        const totalPages = Math.ceil(filteredTokens.length / pageSize);
+        let html = `
+            <div class="table-wrapper">
+                <table>
+                    <thead><tr><th style="width:40px;"><input type="checkbox" id="selectAllCheckbox"></th><th>Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead>
+                    <tbody>
+                        ${pageTokens.map(t => `
+                            <tr data-token="${escapeHtml(t.token)}">
+                                <td><input type="checkbox" class="token-checkbox" value="${escapeHtml(t.token)}" ${selectedTokensSet.has(t.token) ? 'checked' : ''}></td>
+                                <td>${escapeHtml(t.token)}</td><td>${t.initCount}</td><td>${t.remain}</td><td>${t.used}</td>
+                                <td class="token-actions">
+                                    <button class="action-btn edit-btn" data-token="${escapeHtml(t.token)}">修改</button>
+                                    <button class="action-btn reset-btn" data-token="${escapeHtml(t.token)}">重置</button>
+                                    <button class="action-btn delete-btn" data-token="${escapeHtml(t.token)}">删除</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+        container.innerHTML = html;
+        const paginationDiv = document.getElementById('paginationContainer');
+        paginationDiv.style.display = 'flex';
+        paginationDiv.innerHTML = `
+            <div class="pagination">
+                <button class="btn btn-sm" id="prevPageBtn" ${currentPage===1?'disabled':''}>上一页</button>
+                <span>${currentPage} / ${totalPages}</span>
+                <button class="btn btn-sm" id="nextPageBtn" ${currentPage===totalPages?'disabled':''}>下一页</button>
+            </div>
+        `;
+
+        const selectAll = document.getElementById('selectAllCheckbox');
+        if (selectAll) selectAll.onchange = (e) => {
+            document.querySelectorAll('.token-checkbox').forEach(cb => {
+                cb.checked = e.target.checked;
+                if (e.target.checked) selectedTokensSet.add(cb.value);
+                else selectedTokensSet.delete(cb.value);
+            });
+        };
+        document.querySelectorAll('.token-checkbox').forEach(cb => {
+            cb.onchange = (e) => {
+                if (e.target.checked) selectedTokensSet.add(e.target.value);
+                else selectedTokensSet.delete(e.target.value);
+                if (selectAll) selectAll.checked = document.querySelectorAll('.token-checkbox:checked').length === document.querySelectorAll('.token-checkbox').length;
+            };
+        });
+        // 修改次数按钮
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.onclick = async () => {
+                const token = btn.getAttribute('data-token');
+                const newRemain = prompt('请输入新的剩余次数:');
+                if (newRemain === null) return;
+                const num = parseInt(newRemain);
+                if (isNaN(num)) { alert('请输入数字'); return; }
+                try {
+                    const result = await adminFetch('updateRemain', { token, newRemain: num });
+                    if (result.success) {
+                        await loadAllTokens();
+                        await loadLogs();
+                    } else {
+                        alert('修改失败: ' + (result.error || '未知错误'));
+                    }
+                } catch(e) { alert('修改失败: ' + e.message); }
+            };
+        });
+        document.querySelectorAll('.reset-btn').forEach(btn => {
+            btn.onclick = async () => {
+                const token = btn.getAttribute('data-token');
+                if (confirm(`重置 ${token} 的剩余次数为初始值？`)) {
+                    await adminFetch('reset', { token });
+                    await loadAllTokens();
+                    await loadLogs();
+                }
+            };
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = async () => {
+                const token = btn.getAttribute('data-token');
+                if (confirm(`删除 ${token} ？`)) {
+                    await adminFetch('delete', { token });
+                    selectedTokensSet.delete(token);
+                    await loadAllTokens();
+                    await loadLogs();
+                }
+            };
+        });
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => { if(currentPage>1){ currentPage--; renderTable(); } });
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => { if(currentPage<totalPages){ currentPage++; renderTable(); } });
+    }
+
+    async function loadLogs() {
+        try {
+            const data = await adminFetch('logs');
+            const logs = data.logs || [];
+            const container = document.getElementById('logsContainer');
+            container.innerHTML = logs.length ? '' : '<div style="text-align:center; padding:20px;">暂无日志</div>';
+            logs.forEach(logStr => {
+                try {
+                    const log = JSON.parse(logStr);
+                    const date = new Date(log.timestamp);
+                    const formatted = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+                    let text = '';
+                    switch(log.action){
+                        case 'use': text = `用户使用 ${log.token}，${log.details}`; break;
+                        case 'add': text = `添加 ${log.token}，${log.details}`; break;
+                        case 'updateRemain': text = `修改 ${log.token}，${log.details}`; break;
+                        case 'reset': text = `重置 ${log.token}，${log.details}`; break;
+                        case 'delete': text = `删除 ${log.token}`; break;
+                        case 'deleteBatch': text = `批量删除，${log.details}`; break;
+                        case 'clearAll': text = `清空所有 Token`; break;
+                        case 'import': text = `导入 Token，${log.details}`; break;
+                        default: text = `${log.action} ${log.token||''} ${log.details||''}`;
+                    }
+                    const div = document.createElement('div');
+                    div.className = 'log-item';
+                    div.innerText = `${formatted} ${text}`;
+                    container.appendChild(div);
+                } catch(e) {}
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    async function clearLogs() {
+        if(confirm('清除所有日志？')) {
+            await adminFetch('clearLogs');
+            await loadLogs();
+        }
+    }
+
+    async function addToken() {
+        const token = document.getElementById('newTokenInput').value.trim();
+        if(!token) { alert('请输入 Token 名称'); return; }
+        let initCount = parseInt(document.getElementById('newTokenInit').value);
+        if(isNaN(initCount) || initCount < 1) initCount = 3;
+        try {
+            const result = await adminFetch('add', { token, initCount });
+            if (result.success) {
+                alert(`添加成功：${token}，初始次数 ${initCount}`);
+                document.getElementById('newTokenInput').value = '';
+                document.getElementById('newTokenInit').value = '3';
+                await loadAllTokens();
+                await loadLogs();
+            } else {
+                alert('添加失败: ' + result.error);
+            }
+        } catch(e) { alert('添加失败: ' + e.message); }
+    }
+
+    async function filterRemain() {
+        const values = [...new Set(currentTokens.map(t => t.remain))].sort((a,b)=>a-b);
+        const val = prompt(`当前剩余次数值有：${values.join(', ')}\n请输入要筛选的数字：`);
+        if(val !== null && !isNaN(parseInt(val))) {
+            remainFilterValue = parseInt(val);
+            applyFilters();
+        }
+    }
+    function clearFilter() {
+        remainFilterValue = null;
+        applyFilters();
+    }
+
+    async function deleteSelected() {
+        if(selectedTokensSet.size === 0) { alert('未选中任何 Token'); return; }
+        if(confirm(`删除选中的 ${selectedTokensSet.size} 个 Token？`)) {
+            const tokens = Array.from(selectedTokensSet);
+            await adminFetch('deleteBatch', { tokens: JSON.stringify(tokens) });
+            selectedTokensSet.clear();
+            await loadAllTokens();
+            await loadLogs();
+        }
+    }
+
+    document.getElementById('loginAdminBtn').addEventListener('click', async () => {
+        const pwd = document.getElementById('adminPassword').value;
+        if(!pwd) { alert('请输入密码'); return; }
+        const btn = document.getElementById('loginAdminBtn');
+        const original = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = '登录中...';
+        adminPassword = pwd;
+        try {
+            await adminFetch('listAll');
+            document.getElementById('adminContent').style.display = 'block';
+            await loadAllTokens();
+            await loadLogs();
+            document.getElementById('noTokenCode').innerText = EMERGENCY_CODE;
+        } catch(e) {
+            alert('密码错误或网络错误');
+            adminPassword = '';
+        } finally {
+            btn.disabled = false;
+            btn.innerText = original;
+        }
+    });
+
+    document.getElementById('queryTokenBtn').addEventListener('click', loadAllTokens);
+    document.getElementById('refreshTokenBtn').addEventListener('click', loadAllTokens);
+    document.getElementById('addTokenBtn').addEventListener('click', addToken);
+    document.getElementById('deleteSelectedBtn').addEventListener('click', deleteSelected);
+    document.getElementById('clearAllBtn').addEventListener('click', async () => {
+        if(confirm('清空所有 Token，不可恢复！')) {
+            await adminFetch('clearAll');
+            selectedTokensSet.clear();
+            await loadAllTokens();
+            await loadLogs();
+        }
+    });
+    document.getElementById('clearLogsBtn').addEventListener('click', clearLogs);
+    document.getElementById('filterRemainBtn').addEventListener('click', filterRemain);
+    document.getElementById('clearFilterBtn').addEventListener('click', clearFilter);
+    document.getElementById('importPasteBtn').addEventListener('click', async () => {
+        const text = document.getElementById('importTokensText').value.trim();
+        if(!text) { alert('请粘贴 Token 列表'); return; }
+        const result = await adminFetch('import', { tokens: text });
+        alert(`导入完成：添加 ${result.added} 个，跳过 ${result.skipped} 个`);
+        document.getElementById('importTokensText').value = '';
+        await loadAllTokens();
+        await loadLogs();
+    });
+    document.getElementById('copyNoTokenBtn').addEventListener('click', () => {
+        copyToClipboard(EMERGENCY_CODE, document.getElementById('copyNoTokenBtn'));
+    });
+</script>
+</body>
+</html>
