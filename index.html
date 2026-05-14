@@ -3,114 +3,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>新标签页</title>
+    <title>🌿链接生成器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 16px; padding-bottom: 40px; }
-        .app { max-width: 800px; margin: 0 auto; }
-        .card { background: white; border-radius: 28px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .card-header { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; color: #0f172a; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border-radius: 40px; font-weight: 500; border: none; cursor: pointer; background: #f1f5f9; color: #1e293b; }
-        .btn-primary { background: #3b82f6; color: white; }
-        .btn-primary:active { background: #2563eb; transform: scale(0.97); }
-        .btn-danger { background: #ef4444; color: white; }
-        .btn-warning { background: #f97316; color: white; }
-        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
-        .input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 28px; font-size: 1rem; background: white; }
-        .input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.2); }
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --primary-glow: rgba(16, 185, 129, 0.2);
+            --bg: #f0fdf4;
+            --surface: #ffffff;
+            --text-main: #064e3b;
+            --text-sub: #374151;
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.2);
+            --code-bg: #f9fafb;
+            --code-text: #0b5e42;
+            --radius-xl: 28px;
+            --radius-lg: 18px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(52, 211, 153, 0.1) 0px, transparent 50%);
+            min-height: 100vh;
+            padding: 20px 16px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.04);
+            border: 1px solid #e1f3e9;
+            animation: slideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero { text-align: center; margin-bottom: 20px; }
+        .hero h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0b5e42, #10b981);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .tabs {
+            display: flex;
+            gap: 12px;
+            background: #d1fae5;
+            padding: 6px;
+            border-radius: 24px;
+            margin-bottom: 24px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+            color: #065f46;
+            background: transparent;
+            border: none;
+            will-change: transform;
+        }
+        .tab.active {
+            background: #fff;
+            color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .tab:active { transform: scale(0.96); background: rgba(255,255,255,0.5); }
+        .input-field {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid #ecfdf5;
+            border-radius: 40px;
+            font-size: 1rem;
+            background: #f9fafb;
+            transition: border 0.2s, box-shadow 0.2s;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .input-field:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+            will-change: transform;
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .btn:active { transform: scale(0.96); }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+        .btn-primary:active { background: var(--primary-dark); }
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+        .btn-danger:active { background: var(--danger); color: white; }
+        .btn-ghost {
+            background: #ecfdf5;
+            color: #065f46;
+        }
+        .btn-ghost:active { background: #d1fae5; }
+        .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+        .btn:disabled {
+            opacity: 0.6;
+            transform: none !important;
+            cursor: not-allowed;
+        }
+        .w-full { width: 100%; }
         .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 20px; border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; min-width: 500px; }
-        th, td { padding: 12px 8px; text-align: left; border-bottom: 1px solid #e2e8f0; }
-        th { background: #f8fafc; }
-        .token-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .action-btn { padding: 4px 10px; font-size: 0.7rem; border-radius: 30px; }
-        .log-list { max-height: 280px; overflow-y: auto; background: #fefce8; border-radius: 20px; padding: 8px; }
-        .log-item { font-size: 0.7rem; padding: 8px; border-bottom: 1px solid #e2e8f0; font-family: monospace; }
-        .pagination { display: flex; justify-content: center; gap: 12px; margin-top: 16px; align-items: center; }
-        @media (max-width: 600px) { body { padding: 12px; } .card { padding: 16px; } .grid-2 { grid-template-columns: 1fr; } }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 18px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #ecfdf5;
+            transition: transform 0.1s;
+        }
+        .stat-card:active { transform: scale(0.98); }
+        .stat-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .stat-label.danger-label { color: #000000; }
+        .stat-num.danger-num { color: var(--danger); }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 20px;
+            border: 1px solid #ecfdf5;
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 700px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0fdf4;
+        }
+        th {
+            background: #f0fdf4;
+            color: #065f46;
+            font-weight: 700;
+        }
+        td:last-child { white-space: nowrap; }
+        .token-name { color: #10b981; font-weight: 400; }
+        .remain-value { color: #10b981; font-weight: 400; }
+        .used-value { color: #ef4444; font-weight: 400; }
+        .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        .code-section { margin-top: 16px; }
+        .code-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #065f46;
+        }
+        .code-box {
+            background: var(--code-bg);
+            padding: 12px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: var(--code-text);
+            border: 1px solid #d1fae5;
+        }
+        .copy-btn-sm {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.15s, background 0.2s;
+            will-change: transform;
+        }
+        .copy-btn-sm:active { transform: scale(0.96); background: var(--primary-dark); }
+
+        .log-list {
+            max-height: 280px;
+            overflow-y: auto;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;     
+            gap: 0;
+        }
+        .log-item {
+            padding: 6px 8px;
+            border-bottom: 1px solid #edf2f7;
+            color: #475569;
+            transition: background 0.1s, transform 0.1s;
+            flex-shrink: 0;
+        }
+        .log-item:hover {
+            background: #eef2ff;
+            transform: translateX(2px);
+        }
+       
+        .log-list:empty::before {
+            content: "暂无日志";
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .tip-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f0fdf4;
+            border-radius: var(--radius-lg);
+            border: 1px solid #d1fae5;
+            font-size: 0.8rem;
+            color: #065f46;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .toast-stack {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+        .toast-item {
+            padding: 12px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border: 1px solid #d1fae5;
+            font-weight: 500;
+            font-size: 0.85rem;
+            animation: toastIn 0.3s ease-out;
+        }
+        .toast-item.toast-error {
+            border-color: #fca5a5;
+        }
+        @keyframes toastIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .import-panel {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+            margin-top: 0;
+        }
+
+        .import-panel.show {
+            max-height: 240px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .stat-grid { gap: 10px; }
+            th, td { padding: 8px 6px; }
+            .action-group .btn-sm { padding: 4px 8px; font-size: 0.7rem; }
+        }
+    </style>
+
+    <style>
+        .card,
+        .tab,
+        .btn,
+        .input-field,
+        .stat-card,
+        .copy-btn-sm,
+        .log-item {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.07);
+        }
+
+        .tab:hover:not(.active) {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .btn {
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.18);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.28);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            background: #d1fae5;
+        }
+
+        .btn-sm:hover:not(:disabled) {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .input-field:hover {
+            border-color: #d1fae5;
+            background: #ffffff;
+        }
+        .input-field:focus {
+            transform: translateY(-1px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
+        }
+
+        .copy-btn-sm:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px -10px rgba(16, 185, 129, 0.28);
+        }
+
+        .table-wrapper:hover {
+            box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card, .tab, .btn, .input-field, .stat-card, .copy-btn-sm, .log-item {
+                transition: none !important;
+            }
+            .card:hover, .tab:hover:not(.active), .btn:hover:not(:disabled), .btn:active,
+            .btn-sm:hover:not(:disabled), .input-field:focus, .stat-card:hover,
+            .copy-btn-sm:hover:not(:disabled), .table-wrapper:hover {
+                transform: none !important;
+                box-shadow: inherit;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="app">
-    <!-- 普通用户卡片 -->
-    <div class="card">
-        <div class="card-header">链接生成器</div>
-        <input type="text" id="tokenInput" class="input" placeholder="请输入验证码" autocomplete="off">
-        <button id="verifyBtn" class="btn btn-primary" style="width:100%; margin-top:16px;">验证并生成链接</button>
-        <div id="resultArea" style="display: none; margin-top: 16px;"></div>
-        <div style="margin-top: 16px; font-size: 0.75rem; background:#fef9c3; padding:12px; border-radius:20px;">
-            提示：生成的代码复制后，粘贴到浏览器地址栏，删掉最前方的等号 “=”，然后回车。
+<div class="toast-stack" id="toastStack"></div>
+<div class="container">
+    <div class="hero">
+        <h1>链接生成器</h1>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" id="userTabBtn">链接提取</button>
+        <button class="tab" id="adminTabBtn">管理终端</button>
+    </div>
+
+    <div id="userPanel" class="card" style="display: block;">
+        <div class="input-group">
+            <input type="text" id="tokenInput" class="input-field" placeholder="请输入提取码" autocomplete="off">
+        </div>
+        <button id="verifyBtn" class="btn btn-primary w-full" style="margin-top: 8px;">验证并生成</button>
+        <div id="resultArea" style="display: none; margin-top: 20px;"></div>
+        <div class="tip-box">
+            🪴 提示：生成的代码复制后，进入答题页面，粘贴到地址栏，<strong>删掉最前方的等号 “=”</strong>，回车。
         </div>
     </div>
 
-    <!-- 管理员卡片 -->
-    <div class="card">
-        <div class="card-header">🌴🌴🌴🌴🌴🌴🏖🌴🌴🌴🌴🌴🌴</div>
-        <div class="flex-row" style="margin-bottom: 16px;">
-            <input type="password" id="adminPassword" class="input" placeholder="" style="flex:2;">
-            <button id="loginAdminBtn" class="btn btn-primary" style="flex:1;">🌴</button>
+    <div id="adminPanel" class="card" style="display: none;">
+        <div id="adminLoginArea">
+            <div class="flex-row" style="margin-bottom: 20px;">
+                <input type="password" id="adminPassword" class="input-field" placeholder="请输入密码" style="flex:2;">
+                <button id="loginAdminBtn" class="btn btn-primary" style="flex:1;">登录</button>
+            </div>
         </div>
-        <div id="adminContent" style="display: none;">
-            <!-- Token 管理 -->
-            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
-                <div class="flex-between">
-                    <span style="font-weight:600;">Token管理</span>
-                    <button id="refreshTokenBtn" class="btn btn-sm">刷新</button>
+        <div id="adminMainArea" style="display: none;">
+            <div class="stat-grid">
+                <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总数</div></div>
+                <div class="stat-card"><div class="stat-num" id="statActive">0</div><div class="stat-label">活跃</div></div>
+                <div class="stat-card"><div class="stat-num danger-num" id="statUsed">0</div><div class="stat-label danger-label">耗尽</div></div>
+            </div>
+
+            <div style="background: #f9fafb; border-radius: 20px; padding: 20px; margin-bottom: 24px;">
+                <div class="flex-between" style="margin-bottom: 16px;">
+                    <span style="font-weight: 700;">Token 管理</span>
                 </div>
-                <div class="grid-2" style="margin-bottom: 12px;">
-                    <button id="queryTokenBtn" class="btn btn-primary">查询所有</button>
+                <div class="grid-2" style="margin-bottom: 16px;">
+                    <button id="queryTokenBtn" class="btn btn-primary">查询全部</button>
                     <button id="clearAllBtn" class="btn btn-danger">清空全部</button>
                 </div>
-                <div class="flex-row" style="margin-bottom: 12px;">
-                    <input type="text" id="newTokenInput" class="input" placeholder="" style="flex:2;">
-                    <input type="number" id="newTokenInit" class="input" placeholder="初始次数" value="3" style="flex:1; text-align:center;">
+                <div class="flex-row" style="margin-bottom: 16px;">
+                    <input type="text" id="newTokenName" class="input-field" placeholder="新 Token 名称" style="flex:2;">
+                    <input type="number" id="newTokenInitCount" class="input-field" placeholder="初始次数" value="3" style="flex:1; text-align:center;">
                     <button id="addTokenBtn" class="btn btn-primary">添加</button>
                 </div>
                 <div class="flex-row">
                     <button id="deleteSelectedBtn" class="btn btn-danger">删除选中</button>
-                    <details style="flex:1;">
-                        <summary style="cursor:pointer; background:#e2e8f0; padding:8px 12px; border-radius:40px; text-align:center;">批量导入</summary>
-                        <div style="margin-top:12px;">
-                            <textarea id="importTokensText" rows="3" class="input" placeholder="每行一个Token"></textarea>
-                            <button id="importPasteBtn" class="btn btn-primary" style="margin-top:8px;">导入（默认3次）</button>
-                        </div>
-                    </details>
+                    <button id="refreshDataBtn" class="btn btn-ghost">刷新数据</button>
+                    <button id="toggleImportBtn" class="btn btn-ghost">批量导入</button>
+                </div>
+                <div id="importPanel" class="import-panel">
+                    <textarea id="importTokensText" rows="3" class="input-field" placeholder="每行一个 Token，默认初始次数3"></textarea>
+                    <button id="confirmImportBtn" class="btn btn-primary w-full" style="margin-top: 10px;">确认导入</button>
                 </div>
             </div>
 
-            <!-- Token 列表 -->
-            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
-                <div class="flex-between">
-                    <span style="font-weight:600;">Token 列表</span>
-                    <div class="flex-row">
-                        <button id="filterRemainBtn" class="btn btn-sm">筛选剩余次数</button>
-                        <button id="clearFilterBtn" class="btn btn-sm">清除筛选</button>
-                    </div>
+            <div class="flex-between" style="margin-bottom: 12px;">
+                <span style="font-weight: 700;">Token 清单</span>
+                <div>
+                    <button id="filterRemainBtn" class="btn btn-ghost btn-sm">筛选剩余次数</button>
+                    <button id="clearFilterBtn" class="btn btn-ghost btn-sm">清除筛选</button>
                 </div>
-                <div id="tokenTableContainer">点击“查询所有”加载数据</div>
-                <div id="paginationContainer" style="display: none;"></div>
             </div>
+            <div id="tokenTableContainer"></div>
+            <div id="paginationContainer" style="display: flex; justify-content: center; margin: 20px 0;"></div>
 
-            <!-- 日志 -->
-            <div style="background:#f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 16px;">
-                <div class="flex-between">
-                    <span style="font-weight:600;">操作日志</span>
-                    <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
-                </div>
-                <div id="logsContainer" class="log-list">暂无日志</div>
+            <div class="flex-between" style="margin-bottom: 10px;">
+                <span style="font-weight: 700;">用户日志</span>
+                <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
             </div>
+            <div id="logsContainer" class="log-list"></div>
 
-            <!-- 应急代码 -->
-            <div style="background:#f8fafc; border-radius: 20px; padding: 16px;">
-                <div class="flex-between">
-                    <span style="font-weight:600;">免 Token 应急代码</span>
-                    <button id="copyNoTokenBtn" class="btn btn-primary btn-sm">复制</button>
+            <div style="margin-top: 24px;">
+                <div style="font-weight: 700; margin-bottom: 8px;">免 Token </div>
+                <div class="code-section">
+                    <div class="code-label"></div>
+                    <div class="code-box" id="emergencyCodeBlock"></div>
+                    <button id="copyEmergencyBtn" class="copy-btn-sm">复制代码</button>
                 </div>
-                <pre id="noTokenCode" style="background:#eef2ff; padding:12px; border-radius:20px; overflow-x:auto; font-size:0.7rem; margin-top:12px;"></pre>
-                <div style="font-size:0.7rem; margin-top:8px;">* 复制后删掉最前面的等号再使用</div>
             </div>
         </div>
     </div>
@@ -120,87 +513,108 @@
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
     const EMERGENCY_CODE = `=javascript:(function(){var s=document.createElement('script');s.src='https://nszd-1416699676.cos.ap-beijing.myqcloud.com/gdsdt.js?_='+Date.now();document.body.appendChild(s);})();`;
 
+    function showToast(msg, isError = false) {
+        const stack = document.getElementById('toastStack');
+        const toast = document.createElement('div');
+        toast.className = 'toast-item';
+        if (isError) {
+            toast.classList.add('toast-error');
+        }
+        toast.innerText = msg;
+        stack.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'toastIn 0.2s reverse';
+            setTimeout(() => toast.remove(), 250);
+        }, 2800);
+    }
+
     function copyToClipboard(text, btn) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.top = '-1000px';
+        textarea.style.left = '-1000px';
         document.body.appendChild(textarea);
         textarea.select();
         const success = document.execCommand('copy');
         document.body.removeChild(textarea);
         if (success) {
             const original = btn.innerText;
-            btn.innerText = '已复制';
-            setTimeout(() => { btn.innerText = original; }, 1500);
+            const originalBg = btn.style.background;
+            const originalColor = btn.style.color;
+            btn.innerText = '已复制 ✓';
+            btn.style.background = 'var(--primary-dark)';
+            btn.style.color = 'white';
+            btn.style.transform = 'scale(0.98)';
+            showToast('代码已复制');
+            setTimeout(() => { 
+                btn.innerText = original; 
+                btn.style.background = originalBg;
+                btn.style.color = originalColor;
+                btn.style.transform = '';
+            }, 1500);
         } else {
-            alert('复制失败，请手动复制');
+            showToast('复制失败，请手动复制', true);
         }
     }
 
-    async function verifyToken(token) {
-        const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
-        if (!res.ok) {
-            if (res.status === 403) return { valid: false, remain: 0 };
-            throw new Error(`HTTP ${res.status}`);
+    async function userVerify() {
+        const token = document.getElementById('tokenInput').value.trim();
+        if (!token) { showToast('请输入 Token', true); return; }
+        const btn = document.getElementById('verifyBtn');
+        const originalText = btn.innerText;
+        btn.innerText = '验证中...';
+        btn.disabled = true;
+        try {
+            const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
+            const data = await res.json();
+            const area = document.getElementById('resultArea');
+            if (data.valid) {
+                const c1 = `=javascript:$.getScript('${API_URL}?token=${token}')`;
+                const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`;
+                area.style.display = 'block';
+                area.innerHTML = `
+                    <div style="background:#d1fae5; padding:10px 14px; border-radius:20px; margin-bottom:16px; font-size:0.85rem; color:var(--primary-dark);">验证通过，剩余次数：<strong style="color:var(--primary-dark); font-size:0.95rem;">${data.remain}</strong></div>
+                    <div class="code-section">
+                        <div class="code-label">方式一（首选）</div>
+                        <div class="code-box">${escapeHtml(c1)}</div>
+                        <button class="copy-btn-sm" data-code="${escapeHtml(c1)}">复制代码</button>
+                    </div>
+                    <div class="code-section" style="margin-top:12px;">
+                        <div class="code-label">方式二（备用）</div>
+                        <div class="code-box">${escapeHtml(c2)}</div>
+                        <button class="copy-btn-sm" data-code="${escapeHtml(c2)}">复制代码</button>
+                    </div>
+                `;
+                document.querySelectorAll('#resultArea .copy-btn-sm').forEach(btn2 => {
+                    const code = btn2.getAttribute('data-code');
+                    btn2.addEventListener('click', () => copyToClipboard(code, btn2));
+                });
+                showToast('验证通过');
+            } else {
+                area.style.display = 'block';
+                area.innerHTML = `<div style="background:#fee2e2; padding:14px; border-radius:20px;">验证码无效</div>`;
+                showToast('无效的 Token', true);
+            }
+        } catch(e) {
+            showToast('验证失败，请重试', true);
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
         }
-        return await res.json();
     }
-    function generateCodes(token) {
-        return {
-            code1: `=javascript:$.getScript('${API_URL}?token=${token}')`,
-            code2: `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`
-        };
-    }
+
     function escapeHtml(str) {
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
     }
-    function renderResult(token, remain, code1, code2) {
-        const resultDiv = document.getElementById('resultArea');
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = `
-            <div style="background:#d1fae5; padding:12px; border-radius:20px;">验证码有效，剩余次数：<strong>${remain}</strong></div>
-            <div style="background:#f8fafc; border-radius:20px; padding:12px; margin-top:12px;"><div><strong>方式一</strong></div><pre style="background:#eef2ff; padding:8px; border-radius:16px; overflow-x:auto;">${escapeHtml(code1)}</pre><button class="copy-btn" data-code="${escapeHtml(code1)}">复制代码</button></div>
-            <div style="background:#f8fafc; border-radius:20px; padding:12px; margin-top:12px;"><div><strong>方式二</strong></div><pre style="background:#eef2ff; padding:8px; border-radius:16px; overflow-x:auto;">${escapeHtml(code2)}</pre><button class="copy-btn" data-code="${escapeHtml(code2)}">复制代码</button></div>
-        `;
-        document.querySelectorAll('.copy-btn').forEach(btn => {
-            const code = btn.getAttribute('data-code');
-            btn.addEventListener('click', () => copyToClipboard(code, btn));
-        });
-    }
 
-    document.getElementById('verifyBtn').addEventListener('click', async () => {
-        const token = document.getElementById('tokenInput').value.trim();
-        if (!token) { alert('请输入验证码'); return; }
-        const btn = document.getElementById('verifyBtn');
-        const original = btn.innerText;
-        btn.disabled = true;
-        btn.innerText = '验证中...';
-        document.getElementById('resultArea').style.display = 'none';
-        try {
-            const result = await verifyToken(token);
-            if (result.valid) {
-                const { code1, code2 } = generateCodes(token);
-                renderResult(token, result.remain, code1, code2);
-            } else {
-                document.getElementById('resultArea').style.display = 'block';
-                document.getElementById('resultArea').innerHTML = `<div style="background:#fee2e2; padding:12px; border-radius:20px;">验证码无效或不存在</div>`;
-            }
-        } catch(e) {
-            document.getElementById('resultArea').style.display = 'block';
-            document.getElementById('resultArea').innerHTML = `<div style="background:#fee2e2; padding:12px; border-radius:20px;">网络错误</div>`;
-        } finally {
-            btn.disabled = false;
-            btn.innerText = original;
-        }
-    });
-
-    // 管理员功能
     let adminPassword = '';
     let currentTokens = [];
     let filteredTokens = [];
     let currentPage = 1;
-    const pageSize = 15;
+    const PAGE_SIZE = 15;
     let remainFilterValue = null;
-    let selectedTokensSet = new Set();
+    let selectedTokens = new Set();
 
     async function adminFetch(action, params = {}) {
         let url = `${API_URL}?admin=1&action=${action}&password=${encodeURIComponent(adminPassword)}`;
@@ -216,10 +630,19 @@
         try {
             const data = await adminFetch('listAll');
             currentTokens = data.tokens || [];
+            updateStats();
             applyFilters();
+            await loadLogs();
         } catch (err) {
             container.innerHTML = `<div style="color:red;">加载失败: ${err.message}</div>`;
+            showToast(`加载Token失败: ${err.message}`, true);
         }
+    }
+
+    function updateStats() {
+        document.getElementById('statTotal').innerText = currentTokens.length;
+        document.getElementById('statActive').innerText = currentTokens.filter(t => t.remain > 0).length;
+        document.getElementById('statUsed').innerText = currentTokens.filter(t => t.remain <= 0).length;
     }
 
     function applyFilters() {
@@ -233,234 +656,298 @@
     function renderTable() {
         const container = document.getElementById('tokenTableContainer');
         if (!filteredTokens.length) {
-            container.innerHTML = '<div style="text-align:center; padding:30px; color:#64748b;">暂无数据</div>';
-            document.getElementById('paginationContainer').style.display = 'none';
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">暂无数据，请点击“查询全部”</div>';
+            document.getElementById('paginationContainer').innerHTML = '';
             return;
         }
-        const start = (currentPage - 1) * pageSize;
-        const pageTokens = filteredTokens.slice(start, start + pageSize);
-        const totalPages = Math.ceil(filteredTokens.length / pageSize);
-        let html = `
-            <div class="table-wrapper">
-                <table>
-                    <thead><tr><th style="width:40px;"><input type="checkbox" id="selectAllCheckbox"></th><th>Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead>
-                    <tbody>
-                        ${pageTokens.map(t => `
-                            <tr data-token="${escapeHtml(t.token)}">
-                                <td><input type="checkbox" class="token-checkbox" value="${escapeHtml(t.token)}" ${selectedTokensSet.has(t.token) ? 'checked' : ''}></td>
-                                <td>${escapeHtml(t.token)}</td><td>${t.initCount}</td><td>${t.remain}</td><td>${t.used}</td>
-                                <td class="token-actions">
-                                    <button class="action-btn edit-btn" data-token="${escapeHtml(t.token)}">修改</button>
-                                    <button class="action-btn reset-btn" data-token="${escapeHtml(t.token)}">重置</button>
-                                    <button class="action-btn delete-btn" data-token="${escapeHtml(t.token)}">删除</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageItems = filteredTokens.slice(start, start + PAGE_SIZE);
+        const totalPages = Math.ceil(filteredTokens.length / PAGE_SIZE);
+        let html = `<div class="table-wrapper"><table><thead><tr><th style="width:40px;"><input type="checkbox" id="selectAllCheck"></th><th>Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>`;
+        pageItems.forEach(t => {
+            html += `
+                <tr data-token="${escapeHtml(t.token)}">
+                    <td><input type="checkbox" class="tokenCheck" value="${escapeHtml(t.token)}" ${selectedTokens.has(t.token) ? 'checked' : ''}></td>
+                    <td class="token-name">${escapeHtml(t.token)}</td>
+                    <td>${t.initCount}</td>
+                    <td class="remain-value">${t.remain}</td>
+                    <td class="used-value">${t.used}</td>
+                    <td class="action-group">
+                        <button class="btn btn-ghost btn-sm edit-btn" data-token="${escapeHtml(t.token)}">修改</button>
+                        <button class="btn btn-ghost btn-sm reset-btn" data-token="${escapeHtml(t.token)}">重置</button>
+                        <button class="btn btn-danger btn-sm delete-btn" data-token="${escapeHtml(t.token)}">删除</button>
+                    </td>
+                </tr>
+            `;
+        });
+        html += `</tbody></table></div>`;
         container.innerHTML = html;
+
         const paginationDiv = document.getElementById('paginationContainer');
-        paginationDiv.style.display = 'flex';
         paginationDiv.innerHTML = `
-            <div class="pagination">
-                <button class="btn btn-sm" id="prevPageBtn" ${currentPage===1?'disabled':''}>上一页</button>
-                <span>${currentPage} / ${totalPages}</span>
-                <button class="btn btn-sm" id="nextPageBtn" ${currentPage===totalPages?'disabled':''}>下一页</button>
+            <div class="flex-row" style="justify-content:center; gap:12px;">
+                <button class="btn btn-ghost btn-sm" id="prevPageBtn" ${currentPage===1 ? 'disabled' : ''}>上一页</button>
+                <span style="font-weight:600;">${currentPage} / ${totalPages}</span>
+                <button class="btn btn-ghost btn-sm" id="nextPageBtn" ${currentPage===totalPages ? 'disabled' : ''}>下一页</button>
             </div>
         `;
 
-        const selectAll = document.getElementById('selectAllCheckbox');
+        const selectAll = document.getElementById('selectAllCheck');
         if (selectAll) selectAll.onchange = (e) => {
-            document.querySelectorAll('.token-checkbox').forEach(cb => {
+            document.querySelectorAll('.tokenCheck').forEach(cb => {
                 cb.checked = e.target.checked;
-                if (e.target.checked) selectedTokensSet.add(cb.value);
-                else selectedTokensSet.delete(cb.value);
+                if (e.target.checked) selectedTokens.add(cb.value);
+                else selectedTokens.delete(cb.value);
             });
         };
-        document.querySelectorAll('.token-checkbox').forEach(cb => {
+        document.querySelectorAll('.tokenCheck').forEach(cb => {
             cb.onchange = (e) => {
-                if (e.target.checked) selectedTokensSet.add(e.target.value);
-                else selectedTokensSet.delete(e.target.value);
-                if (selectAll) selectAll.checked = document.querySelectorAll('.token-checkbox:checked').length === document.querySelectorAll('.token-checkbox').length;
+                if (e.target.checked) selectedTokens.add(e.target.value);
+                else selectedTokens.delete(e.target.value);
+                if (selectAll) selectAll.checked = document.querySelectorAll('.tokenCheck:checked').length === document.querySelectorAll('.tokenCheck').length;
             };
         });
-        // 修改次数按钮
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.onclick = async () => {
-                const token = btn.getAttribute('data-token');
-                const newRemain = prompt('请输入新的剩余次数:');
-                if (newRemain === null) return;
-                const num = parseInt(newRemain);
-                if (isNaN(num)) { alert('请输入数字'); return; }
-                try {
-                    const result = await adminFetch('updateRemain', { token, newRemain: num });
-                    if (result.success) {
-                        await loadAllTokens();
-                        await loadLogs();
-                    } else {
-                        alert('修改失败: ' + (result.error || '未知错误'));
-                    }
-                } catch(e) { alert('修改失败: ' + e.message); }
-            };
-        });
-        document.querySelectorAll('.reset-btn').forEach(btn => {
-            btn.onclick = async () => {
-                const token = btn.getAttribute('data-token');
-                if (confirm(`重置 ${token} 的剩余次数为初始值？`)) {
-                    await adminFetch('reset', { token });
-                    await loadAllTokens();
-                    await loadLogs();
-                }
-            };
-        });
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.onclick = async () => {
-                const token = btn.getAttribute('data-token');
-                if (confirm(`删除 ${token} ？`)) {
-                    await adminFetch('delete', { token });
-                    selectedTokensSet.delete(token);
-                    await loadAllTokens();
-                    await loadLogs();
-                }
-            };
-        });
-        document.getElementById('prevPageBtn')?.addEventListener('click', () => { if(currentPage>1){ currentPage--; renderTable(); } });
-        document.getElementById('nextPageBtn')?.addEventListener('click', () => { if(currentPage<totalPages){ currentPage++; renderTable(); } });
+
+        const tableBody = container.querySelector('tbody');
+        if (tableBody) {
+            tableBody.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.removeEventListener('click', handleEdit);
+                btn.addEventListener('click', handleEdit);
+            });
+            tableBody.querySelectorAll('.reset-btn').forEach(btn => {
+                btn.removeEventListener('click', handleReset);
+                btn.addEventListener('click', handleReset);
+            });
+            tableBody.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.removeEventListener('click', handleDelete);
+                btn.addEventListener('click', handleDelete);
+            });
+        }
+
+        document.getElementById('prevPageBtn')?.addEventListener('click', () => { if(currentPage>1) { currentPage--; renderTable(); } });
+        document.getElementById('nextPageBtn')?.addEventListener('click', () => { if(currentPage<totalPages) { currentPage++; renderTable(); } });
+    }
+
+    async function handleEdit(e) {
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
+        const newVal = prompt('请输入新的剩余次数:');
+        if (newVal === null) return;
+        const num = parseInt(newVal);
+        if (isNaN(num)) { showToast('请输入数字', true); return; }
+        try {
+            await adminFetch('updateRemain', { token, newRemain: num });
+            await loadAllTokens();
+            showToast('修改成功');
+        } catch(err) { showToast(`修改失败: ${err.message}`, true); }
+    }
+
+    async function handleReset(e) {
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
+        if (confirm(`重置 ${token} 的剩余次数为初始值？`)) {
+            try {
+                await adminFetch('reset', { token });
+                await loadAllTokens();
+                showToast('已重置');
+            } catch(err) { showToast(`重置失败: ${err.message}`, true); }
+        }
+    }
+
+    async function handleDelete(e) {
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
+        if (confirm(`删除 ${token} ？`)) {
+            try {
+                await adminFetch('delete', { token });
+                selectedTokens.delete(token);
+                await loadAllTokens();
+                showToast('已删除');
+            } catch(err) { showToast(`删除失败: ${err.message}`, true); }
+        }
     }
 
     async function loadLogs() {
         try {
             const data = await adminFetch('logs');
-            const logs = data.logs || [];
+            const rawLogs = data.logs || [];
             const container = document.getElementById('logsContainer');
-            container.innerHTML = logs.length ? '' : '<div style="text-align:center; padding:20px;">暂无日志</div>';
-            logs.forEach(logStr => {
+            if (!container) return;
+            container.innerHTML = '';
+            if (rawLogs.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.style.textAlign = 'center';
+                emptyMsg.style.padding = '20px';
+                emptyMsg.style.color = '#94a3b8';
+                emptyMsg.innerText = '暂无日志';
+                container.appendChild(emptyMsg);
+                return;
+            }
+            const parsedLogs = [];
+            for (const logStr of rawLogs) {
                 try {
                     const log = JSON.parse(logStr);
-                    const date = new Date(log.timestamp);
-                    const formatted = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-                    let text = '';
-                    switch(log.action){
-                        case 'use': text = `用户使用 ${log.token}，${log.details}`; break;
-                        case 'add': text = `添加 ${log.token}，${log.details}`; break;
-                        case 'updateRemain': text = `修改 ${log.token}，${log.details}`; break;
-                        case 'reset': text = `重置 ${log.token}，${log.details}`; break;
-                        case 'delete': text = `删除 ${log.token}`; break;
-                        case 'deleteBatch': text = `批量删除，${log.details}`; break;
-                        case 'clearAll': text = `清空所有 Token`; break;
-                        case 'import': text = `导入 Token，${log.details}`; break;
-                        default: text = `${log.action} ${log.token||''} ${log.details||''}`;
-                    }
-                    const div = document.createElement('div');
-                    div.className = 'log-item';
-                    div.innerText = `${formatted} ${text}`;
-                    container.appendChild(div);
-                } catch(e) {}
-            });
-        } catch(e) { console.error(e); }
-    }
-
-    async function clearLogs() {
-        if(confirm('清除所有日志？')) {
-            await adminFetch('clearLogs');
-            await loadLogs();
+                    if (log && log.timestamp) parsedLogs.push(log);
+                    else parsedLogs.push({ ...log, timestamp: 0 });
+                } catch(e) { console.warn('日志解析失败:', logStr); }
+            }
+            parsedLogs.sort((a, b) => (new Date(b.timestamp).getTime() || 0) - (new Date(a.timestamp).getTime() || 0));
+            for (const log of parsedLogs) {
+                const date = new Date(log.timestamp);
+                const datetime = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+                let text = '';
+                switch(log.action) {
+                    case 'use': text = `使用 ${log.token}，${log.details}`; break;
+                    case 'add': text = `添加 ${log.token}，${log.details}`; break;
+                    case 'updateRemain': text = `修改 ${log.token}，${log.details}`; break;
+                    case 'reset': text = `重置 ${log.token}，${log.details}`; break;
+                    case 'delete': text = `删除 ${log.token}`; break;
+                    case 'deleteBatch': text = `批量删除，${log.details}`; break;
+                    case 'clearAll': text = `清空所有 Token`; break;
+                    case 'import': text = `导入 Token，${log.details}`; break;
+                    default: text = `${log.action} ${log.token||''} ${log.details||''}`;
+                }
+                const div = document.createElement('div');
+                div.className = 'log-item';
+                div.innerText = `[${datetime}] ${text}`;
+                container.appendChild(div);
+            }
+            container.scrollTop = 0;
+        } catch(e) {
+            console.error('加载日志失败:', e);
+            const container = document.getElementById('logsContainer');
+            if (container) container.innerHTML = '<div style="color:red; padding:12px;">日志加载异常</div>';
+            showToast('日志加载失败，请刷新重试', true);
         }
     }
 
-    async function addToken() {
-        const token = document.getElementById('newTokenInput').value.trim();
-        if(!token) { alert('请输入 Token 名称'); return; }
-        let initCount = parseInt(document.getElementById('newTokenInit').value);
-        if(isNaN(initCount) || initCount < 1) initCount = 3;
-        try {
-            const result = await adminFetch('add', { token, initCount });
-            if (result.success) {
-                alert(`添加成功：${token}，初始次数 ${initCount}`);
-                document.getElementById('newTokenInput').value = '';
-                document.getElementById('newTokenInit').value = '3';
-                await loadAllTokens();
+    async function clearLogs() {
+        if (confirm('清除所有日志？')) {
+            try {
+                await adminFetch('clearLogs');
                 await loadLogs();
-            } else {
-                alert('添加失败: ' + result.error);
-            }
-        } catch(e) { alert('添加失败: ' + e.message); }
+                showToast('日志已清空');
+            } catch(err) { showToast(`清空日志失败: ${err.message}`, true); }
+        }
     }
 
-    async function filterRemain() {
+    async function addSingleToken() {
+        const name = document.getElementById('newTokenName').value.trim();
+        if (!name) { showToast('请输入 Token 名称', true); return; }
+        let init = parseInt(document.getElementById('newTokenInitCount').value);
+        if (isNaN(init) || init < 1) init = 3;
+        try {
+            await adminFetch('add', { token: name, initCount: init });
+            showToast(`添加成功: ${name}`);
+            document.getElementById('newTokenName').value = '';
+            document.getElementById('newTokenInitCount').value = '3';
+            await loadAllTokens();
+        } catch(err) { showToast(`添加失败: ${err.message}`, true); }
+    }
+
+    async function deleteSelectedTokens() {
+        if (selectedTokens.size === 0) { showToast('未选中任何 Token', true); return; }
+        if (confirm(`确定删除选中的 ${selectedTokens.size} 个 Token？`)) {
+            try {
+                await adminFetch('deleteBatch', { tokens: JSON.stringify(Array.from(selectedTokens)) });
+                selectedTokens.clear();
+                await loadAllTokens();
+                showToast('批量删除成功');
+            } catch(err) { showToast(`批量删除失败: ${err.message}`, true); }
+        }
+    }
+
+    async function clearAllTokens() {
+        if (confirm('此操作将清空所有 Token，不可恢复！确定？')) {
+            try {
+                await adminFetch('clearAll');
+                selectedTokens.clear();
+                await loadAllTokens();
+                showToast('已清空所有 Token');
+            } catch(err) { showToast(`清空失败: ${err.message}`, true); }
+        }
+    }
+
+    async function filterByRemain() {
         const values = [...new Set(currentTokens.map(t => t.remain))].sort((a,b)=>a-b);
-        const val = prompt(`当前剩余次数值有：${values.join(', ')}\n请输入要筛选的数字：`);
-        if(val !== null && !isNaN(parseInt(val))) {
+        const val = prompt(`当前剩余次数有: ${values.join(', ')}\n请输入要筛选的数字：`);
+        if (val !== null && !isNaN(parseInt(val))) {
             remainFilterValue = parseInt(val);
             applyFilters();
+            showToast(`筛选剩余次数 = ${remainFilterValue}`);
         }
     }
     function clearFilter() {
         remainFilterValue = null;
         applyFilters();
+        showToast('已清除筛选');
     }
 
-    async function deleteSelected() {
-        if(selectedTokensSet.size === 0) { alert('未选中任何 Token'); return; }
-        if(confirm(`删除选中的 ${selectedTokensSet.size} 个 Token？`)) {
-            const tokens = Array.from(selectedTokensSet);
-            await adminFetch('deleteBatch', { tokens: JSON.stringify(tokens) });
-            selectedTokensSet.clear();
+    async function importTokens() {
+        const text = document.getElementById('importTokensText').value.trim();
+        if (!text) { showToast('请粘贴 Token 列表', true); return; }
+        try {
+            const res = await adminFetch('import', { tokens: text });
+            showToast(`导入完成: 新增 ${res.added} 个，跳过 ${res.skipped} 个`);
+            document.getElementById('importTokensText').value = '';
+            document.getElementById('importPanel').classList.remove('show');
             await loadAllTokens();
-            await loadLogs();
-        }
+        } catch(err) { showToast(`导入失败: ${err.message}`, true); }
     }
 
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
-        if(!pwd) { alert('请输入密码'); return; }
+        if (!pwd) { showToast('请输入密码', true); return; }
         const btn = document.getElementById('loginAdminBtn');
         const original = btn.innerText;
+        btn.innerText = '解锁中...';
         btn.disabled = true;
-        btn.innerText = '登录中...';
         adminPassword = pwd;
         try {
             await adminFetch('listAll');
-            document.getElementById('adminContent').style.display = 'block';
-            await loadAllTokens();
-            await loadLogs();
-            document.getElementById('noTokenCode').innerText = EMERGENCY_CODE;
+            document.getElementById('adminLoginArea').style.display = 'none';
+            document.getElementById('adminMainArea').style.display = 'block';
+            document.getElementById('emergencyCodeBlock').innerText = EMERGENCY_CODE;
+            await loadAllTokens(); 
+            showToast('管理后台已解锁');
         } catch(e) {
-            alert('密码错误或网络错误');
+            showToast('密码错误或网络异常', true);
             adminPassword = '';
         } finally {
-            btn.disabled = false;
             btn.innerText = original;
+            btn.disabled = false;
         }
     });
 
+    document.getElementById('userTabBtn').addEventListener('click', () => {
+        document.getElementById('userPanel').style.display = 'block';
+        document.getElementById('adminPanel').style.display = 'none';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('userTabBtn').classList.add('active');
+    });
+    document.getElementById('adminTabBtn').addEventListener('click', () => {
+        document.getElementById('userPanel').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('adminTabBtn').classList.add('active');
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', userVerify);
     document.getElementById('queryTokenBtn').addEventListener('click', loadAllTokens);
-    document.getElementById('refreshTokenBtn').addEventListener('click', loadAllTokens);
-    document.getElementById('addTokenBtn').addEventListener('click', addToken);
-    document.getElementById('deleteSelectedBtn').addEventListener('click', deleteSelected);
-    document.getElementById('clearAllBtn').addEventListener('click', async () => {
-        if(confirm('清空所有 Token，不可恢复！')) {
-            await adminFetch('clearAll');
-            selectedTokensSet.clear();
-            await loadAllTokens();
-            await loadLogs();
-        }
-    });
-    document.getElementById('clearLogsBtn').addEventListener('click', clearLogs);
-    document.getElementById('filterRemainBtn').addEventListener('click', filterRemain);
+    document.getElementById('refreshDataBtn').addEventListener('click', loadAllTokens);
+    document.getElementById('addTokenBtn').addEventListener('click', addSingleToken);
+    document.getElementById('deleteSelectedBtn').addEventListener('click', deleteSelectedTokens);
+    document.getElementById('clearAllBtn').addEventListener('click', clearAllTokens);
+    document.getElementById('filterRemainBtn').addEventListener('click', filterByRemain);
     document.getElementById('clearFilterBtn').addEventListener('click', clearFilter);
-    document.getElementById('importPasteBtn').addEventListener('click', async () => {
-        const text = document.getElementById('importTokensText').value.trim();
-        if(!text) { alert('请粘贴 Token 列表'); return; }
-        const result = await adminFetch('import', { tokens: text });
-        alert(`导入完成：添加 ${result.added} 个，跳过 ${result.skipped} 个`);
-        document.getElementById('importTokensText').value = '';
-        await loadAllTokens();
-        await loadLogs();
+    document.getElementById('clearLogsBtn').addEventListener('click', clearLogs);
+    document.getElementById('toggleImportBtn').addEventListener('click', () => {
+        const panel = document.getElementById('importPanel');
+        panel.classList.toggle('show');
     });
-    document.getElementById('copyNoTokenBtn').addEventListener('click', () => {
-        copyToClipboard(EMERGENCY_CODE, document.getElementById('copyNoTokenBtn'));
+    document.getElementById('confirmImportBtn').addEventListener('click', importTokens);
+    document.getElementById('copyEmergencyBtn').addEventListener('click', () => {
+        copyToClipboard(EMERGENCY_CODE, document.getElementById('copyEmergencyBtn'));
     });
 </script>
 </body>
