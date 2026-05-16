@@ -108,62 +108,222 @@
             border: none;
             cursor: pointer;
             transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
+            will-change: transform;
             font-family: 'Inter', sans-serif;
             background: #f1f5f9;
             color: #1e293b;
         }
         .btn:active { transform: scale(0.96); }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px var(--primary-glow); }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
         .btn-primary:active { background: var(--primary-dark); }
-        .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--danger);
+        }
         .btn-danger:active { background: var(--danger); color: white; }
-        .btn-ghost { background: #ecfdf5; color: #065f46; }
+        .btn-ghost {
+            background: #ecfdf5;
+            color: #065f46;
+        }
         .btn-ghost:active { background: #d1fae5; }
         .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn:disabled {
+            opacity: 0.6;
+            transform: none !important;
+            cursor: not-allowed;
+        }
         .w-full { width: 100%; }
         .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: #fff; padding: 18px; border-radius: 20px; text-align: center; border: 1px solid #ecfdf5; transition: transform 0.1s; }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #fff;
+            padding: 18px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #ecfdf5;
+            transition: transform 0.1s;
+        }
         .stat-card:active { transform: scale(0.98); }
-        .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); }
-        .stat-label { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
+        .stat-num {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
         .stat-label.danger-label { color: #000000; }
         .stat-num.danger-num { color: var(--danger); }
 
-        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 20px; border: 1px solid #ecfdf5; background: #fff; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 700px; }
-        th, td { padding: 12px 8px; text-align: left; vertical-align: middle; border-bottom: 1px solid #f0fdf4; }
-        th { background: #f0fdf4; color: #065f46; font-weight: 700; }
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: 20px;
+            border: 1px solid #ecfdf5;
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 700px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0fdf4;
+        }
+        th {
+            background: #f0fdf4;
+            color: #065f46;
+            font-weight: 700;
+        }
         td:last-child { white-space: nowrap; }
-        .token-name { color: #10b981; font-weight: 600; cursor: pointer; transition: color 0.2s; }
-        .token-name:hover { color: #059669; }
+        .token-name { color: #10b981; font-weight: 400; }
         .remain-value { color: #10b981; font-weight: 400; }
         .used-value { color: #ef4444; font-weight: 400; }
         .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
 
         .code-section { margin-top: 16px; }
-        .code-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: #065f46; }
-        .code-box { background: var(--code-bg); padding: 12px; border-radius: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; white-space: pre-wrap; word-break: break-all; color: var(--code-text); border: 1px solid #d1fae5; }
-        .copy-btn-sm { background: var(--primary); color: white; padding: 6px 12px; border-radius: 40px; font-size: 0.7rem; margin-top: 8px; width: 100%; border: none; cursor: pointer; font-weight: 600; transition: transform 0.15s, background 0.2s; }
+        .code-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #065f46;
+        }
+        .code-box {
+            background: var(--code-bg);
+            padding: 12px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: var(--code-text);
+            border: 1px solid #d1fae5;
+        }
+        .copy-btn-sm {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            margin-top: 8px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.15s, background 0.2s;
+            will-change: transform;
+        }
         .copy-btn-sm:active { transform: scale(0.96); background: var(--primary-dark); }
 
-        /* 全新日志区域排版 */
-        .log-list { max-height: 400px; overflow-y: auto; background: #f8fafc; border-radius: 18px; padding: 12px; font-family: 'Inter', system-ui, sans-serif; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 10px; }
-        .log-list:empty::before { content: "暂无日志"; display: block; text-align: center; padding: 20px; color: #94a3b8; font-size: 0.85rem; }
-        
-        .tip-box { margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: var(--radius-lg); border: 1px solid #d1fae5; font-size: 0.8rem; color: #065f46; }
-        
-        .toast-stack { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column-reverse; gap: 10px; }
-        .toast-item { padding: 12px 20px; background: white; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #d1fae5; font-weight: 500; font-size: 0.85rem; animation: toastIn 0.3s ease-out; }
-        .toast-item.toast-error { border-color: #fca5a5; }
-        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        
-        .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; margin-top: 0; }
-        .import-panel.show { max-height: 240px; opacity: 1; margin-top: 16px; }
+        .log-list {
+            max-height: 400px; /* 适度增加高度，更便于查阅商业卡片日志 */
+            overflow-y: auto;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* 卡片之间的呼吸间距 */
+        }
+        .log-item {
+            padding: 10px 14px;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #edf2f7;
+            color: #475569;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.01);
+        }
+        .log-item:hover {
+            background: #eef2ff;
+            transform: translateX(2px);
+            border-color: #e2e8f0;
+        }
+        .log-list:empty::before {
+            content: "暂无日志";
+            display: block;
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        .tip-box {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f0fdf4;
+            border-radius: var(--radius-lg);
+            border: 1px solid #d1fae5;
+            font-size: 0.8rem;
+            color: #065f46;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .toast-stack {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+        .toast-item {
+            padding: 12px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border: 1px solid #d1fae5;
+            font-weight: 500;
+            font-size: 0.85rem;
+            animation: toastIn 0.3s ease-out;
+        }
+        .toast-item.toast-error {
+            border-color: #fca5a5;
+        }
+        @keyframes toastIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .import-panel {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.25s ease;
+            margin-top: 0;
+        }
+        .import-panel.show {
+            max-height: 240px;
+            opacity: 1;
+            margin-top: 16px;
+        }
 
         @media (max-width: 600px) {
             .card { padding: 20px; }
@@ -171,6 +331,85 @@
             .stat-grid { gap: 10px; }
             th, td { padding: 8px 6px; }
             .action-group .btn-sm { padding: 4px 8px; font-size: 0.7rem; }
+            .log-item { padding: 8px 10px; }
+        }
+    </style>
+
+    <style>
+        .card,
+        .tab,
+        .btn,
+        .input-field,
+        .stat-card,
+        .copy-btn-sm,
+        .log-item {
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.07);
+        }
+        .tab:hover:not(.active) {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        .btn {
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+        }
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.18);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.28);
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+            color: #ffffff;
+        }
+        .btn-ghost:hover:not(:disabled) {
+            background: #d1fae5;
+        }
+        .btn-sm:hover:not(:disabled) {
+            transform: translateY(-1px) scale(1.01);
+        }
+        .input-field:hover {
+            border-color: #d1fae5;
+            background: #ffffff;
+        }
+        .input-field:focus {
+            transform: translateY(-1px);
+        }
+        .stat-card:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
+        }
+        .copy-btn-sm:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px -10px rgba(16, 185, 129, 0.28);
+        }
+        .table-wrapper:hover {
+            box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.08);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .card, .tab, .btn, .input-field, .stat-card, .copy-btn-sm, .log-item {
+                transition: none !important;
+            }
+            .card:hover, .tab:hover:not(.active), .btn:hover:not(:disabled), .btn:active,
+            .btn-sm:hover:not(:disabled), .input-field:focus, .stat-card:hover,
+            .copy-btn-sm:hover:not(:disabled), .table-wrapper:hover {
+                transform: none !important;
+                box-shadow: inherit;
+            }
         }
     </style>
 </head>
@@ -266,12 +505,13 @@
 <script>
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
 
-    // ===== 基础工具库 =====
     function showToast(msg, isError = false) {
         const stack = document.getElementById('toastStack');
         const toast = document.createElement('div');
         toast.className = 'toast-item';
-        if (isError) toast.classList.add('toast-error');
+        if (isError) {
+            toast.classList.add('toast-error');
+        }
         toast.innerText = msg;
         stack.appendChild(toast);
         setTimeout(() => {
@@ -280,64 +520,36 @@
         }, 2800);
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
-    }
-
-    // 复制按钮代码 (用于普通提取面板)
     function copyToClipboard(text, btn) {
-        const successVisual = () => {
-            const original = btn.innerText;
-            const originalBg = btn.style.background;
-            btn.innerText = '已复制 ✓';
-            btn.style.background = 'var(--primary-dark)';
-            showToast('代码已复制');
-            setTimeout(() => { 
-                btn.innerText = original; 
-                btn.style.background = originalBg;
-            }, 1500);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(successVisual).catch(() => fallbackCopy(text, successVisual));
-        } else {
-            fallbackCopy(text, successVisual);
-        }
-    }
-
-    // 表格内点击 Token 复制专享函数
-    window.copyTokenText = function(text, el) {
-        const successVisual = () => {
-            const originalColor = el.style.color;
-            el.style.color = '#059669';
-            showToast(`Token [${text}] 已复制`);
-            setTimeout(() => { el.style.color = originalColor; }, 800);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(successVisual).catch(() => fallbackCopy(text, successVisual));
-        } else {
-            fallbackCopy(text, successVisual);
-        }
-    }
-
-    function fallbackCopy(text, successCallback) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.style.position = 'fixed';
         textarea.style.top = '-1000px';
+        textarea.style.left = '-1000px';
         document.body.appendChild(textarea);
         textarea.select();
-        try {
-            if (document.execCommand('copy')) successCallback();
-            else showToast('复制失败，请手动选择复制', true);
-        } catch (err) {
-            showToast('复制失败，请手动选择复制', true);
-        } finally {
-            document.body.removeChild(textarea);
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (success) {
+            const original = btn.innerText;
+            const originalBg = btn.style.background;
+            const originalColor = btn.style.color;
+            btn.innerText = '已复制 ✓';
+            btn.style.background = 'var(--primary-dark)';
+            btn.style.color = 'white';
+            btn.style.transform = 'scale(0.98)';
+            showToast('代码已复制');
+            setTimeout(() => { 
+                btn.innerText = original; 
+                btn.style.background = originalBg;
+                btn.style.color = originalColor;
+                btn.style.transform = '';
+            }, 1500);
+        } else {
+            showToast('复制失败，请手动复制', true);
         }
     }
 
-    // ===== 用户侧逻辑 =====
     async function userVerify() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) { showToast('请输入 Token', true); return; }
@@ -384,7 +596,10 @@
         }
     }
 
-    // ===== 管理员侧逻辑 =====
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+
     let adminPassword = '';
     let currentTokens = [];
     let filteredTokens = [];
@@ -394,18 +609,10 @@
     let selectedTokens = new Set();
 
     async function adminFetch(action, params = {}) {
-        const payload = { admin: '1', action: action, password: adminPassword, ...params };
-        const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        if (!res.ok) {
-            const text = await res.text();
-            let errMessage = '请求失败';
-            try { const parsed = JSON.parse(text); if (parsed.error) errMessage = parsed.error; } catch(e) {}
-            throw new Error(errMessage);
-        }
+        let url = `${API_URL}?admin=1&action=${action}&password=${encodeURIComponent(adminPassword)}`;
+        for (const [k, v] of Object.entries(params)) url += `&${k}=${encodeURIComponent(v)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(await res.text());
         return await res.json();
     }
 
@@ -448,13 +655,12 @@
         const start = (currentPage - 1) * PAGE_SIZE;
         const pageItems = filteredTokens.slice(start, start + PAGE_SIZE);
         const totalPages = Math.ceil(filteredTokens.length / PAGE_SIZE);
-        
         let html = `<div class="table-wrapper"><table><thead><tr><th style="width:40px;"><input type="checkbox" id="selectAllCheck"></th><th>Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>`;
         pageItems.forEach(t => {
             html += `
                 <tr data-token="${escapeHtml(t.token)}">
                     <td><input type="checkbox" class="tokenCheck" value="${escapeHtml(t.token)}" ${selectedTokens.has(t.token) ? 'checked' : ''}></td>
-                    <td class="token-name" title="点击复制" onclick="copyTokenText('${escapeHtml(t.token)}', this)"><span style="border-bottom: 1px dashed #10b981;">${escapeHtml(t.token)}</span></td>
+                    <td class="token-name">${escapeHtml(t.token)}</td>
                     <td>${t.initCount}</td>
                     <td class="remain-value">${t.remain}</td>
                     <td class="used-value">${t.used}</td>
@@ -496,9 +702,18 @@
 
         const tableBody = container.querySelector('tbody');
         if (tableBody) {
-            tableBody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
-            tableBody.querySelectorAll('.reset-btn').forEach(btn => btn.addEventListener('click', handleReset));
-            tableBody.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
+            tableBody.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.removeEventListener('click', handleEdit);
+                btn.addEventListener('click', handleEdit);
+            });
+            tableBody.querySelectorAll('.reset-btn').forEach(btn => {
+                btn.removeEventListener('click', handleReset);
+                btn.addEventListener('click', handleReset);
+            });
+            tableBody.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.removeEventListener('click', handleDelete);
+                btn.addEventListener('click', handleDelete);
+            });
         }
 
         document.getElementById('prevPageBtn')?.addEventListener('click', () => { if(currentPage>1) { currentPage--; renderTable(); } });
@@ -506,7 +721,8 @@
     }
 
     async function handleEdit(e) {
-        const token = e.currentTarget.getAttribute('data-token');
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
         const newVal = prompt('请输入新的剩余次数:');
         if (newVal === null) return;
         const num = parseInt(newVal);
@@ -519,7 +735,8 @@
     }
 
     async function handleReset(e) {
-        const token = e.currentTarget.getAttribute('data-token');
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
         if (confirm(`重置 ${token} 的剩余次数为初始值？`)) {
             try {
                 await adminFetch('reset', { token });
@@ -530,7 +747,8 @@
     }
 
     async function handleDelete(e) {
-        const token = e.currentTarget.getAttribute('data-token');
+        const btn = e.currentTarget;
+        const token = btn.getAttribute('data-token');
         if (confirm(`删除 ${token} ？`)) {
             try {
                 await adminFetch('delete', { token });
@@ -541,7 +759,6 @@
         }
     }
 
-    // 全新美化的日志卡片加载系统
     async function loadLogs() {
         try {
             const data = await adminFetch('logs');
@@ -549,74 +766,67 @@
             const container = document.getElementById('logsContainer');
             if (!container) return;
             container.innerHTML = '';
-            
-            if (rawLogs.length === 0) return;
-
+            if (rawLogs.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.style.textAlign = 'center';
+                emptyMsg.style.padding = '20px';
+                emptyMsg.style.color = '#94a3b8';
+                emptyMsg.innerText = '暂无日志';
+                container.appendChild(emptyMsg);
+                return;
+            }
             const parsedLogs = [];
             for (const logStr of rawLogs) {
                 try {
                     const log = JSON.parse(logStr);
                     if (log && log.timestamp) parsedLogs.push(log);
                     else parsedLogs.push({ ...log, timestamp: 0 });
-                } catch(e) {}
+                } catch(e) { console.warn('日志解析失败:', logStr); }
             }
             parsedLogs.sort((a, b) => (new Date(b.timestamp).getTime() || 0) - (new Date(a.timestamp).getTime() || 0));
             
             for (const log of parsedLogs) {
                 const date = new Date(log.timestamp);
-                const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+                const datetime = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
                 
-                // 彻底修复：身份识别逻辑（根据动作类型判定）
-                const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import'];
-                const isIdentityAdmin = adminActions.includes(log.action);
-                
+                // 1. 行为解析机制
+                let actionText = '';
+                switch(log.action) {
+                    case 'use': actionText = `提取脚本 (${log.details || ''})`; break;
+                    case 'add': actionText = `${log.details || '添加 Token'}`; break;
+                    case 'updateRemain': actionText = `${log.details || '修改剩余次数'}`; break;
+                    case 'reset': actionText = `${log.details || '重置剩余次数'}`; break;
+                    case 'delete': actionText = `删除了该单独Token`; break;
+                    case 'deleteBatch': actionText = `批量删除 (${log.details || ''})`; break;
+                    case 'clearAll': actionText = `清空了全站所有 Token`; break;
+                    case 'import': actionText = `批量导入 (${log.details || ''})`; break;
+                    case 'login': actionText = `登录管理面板`; break;
+                    default: actionText = `${log.action || ''} ${log.details || ''}`;
+                }
+
+                // 2. 身份徽章渲染计算
+                const isIdentityAdmin = log.token === 'admin';
                 const badgeStyle = isIdentityAdmin 
                     ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' 
                     : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
                 const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
 
-                // 动作文案格式化
-                let actionText = '';
-                if (log.action === 'use') {
-                    const remainStr = log.details ? log.details.replace(/[^0-9]/g, '') : '0';
-                    actionText = `提取脚本 (剩余次数 ${remainStr})`;
-                } else if (log.action === 'add') {
-                    actionText = `添加了 Token "${escapeHtml(log.token)}" ${log.details ? '(' + escapeHtml(log.details) + ')' : ''}`;
-                } else if (log.action === 'updateRemain') {
-                    actionText = `修改了 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数')}`;
-                } else if (log.action === 'reset') {
-                    actionText = `将 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数恢复')}`;
-                } else if (log.action === 'delete') {
-                    actionText = `删除了 Token "${escapeHtml(log.token)}"`;
-                } else if (log.action === 'deleteBatch') {
-                    actionText = `批量删除 (${escapeHtml(log.details || '')})`;
-                } else if (log.action === 'clearAll') {
-                    actionText = `清空了全站所有 Token`;
-                } else if (log.action === 'import') {
-                    actionText = `批量导入 (${escapeHtml(log.details || '')})`;
-                } else if (log.action === 'login') {
-                    actionText = `登录管理面板`;
-                } else {
-                    actionText = `${log.action || ''} ${log.details || ''}`;
-                }
-
-                // 三行自适应绝美 UI 卡片
+                // 3. 构建高颜值响应式 UI 卡片节点
                 const div = document.createElement('div');
-                div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02);";
-                
+                div.className = 'log-item';
                 div.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
-                        <span style="padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; ${badgeStyle}">${identityText}</span>
-                    </div>
-                    <div style="color: #1f2937; font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
-                        ${actionText}
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <span style="color: #059669; background: #ecfdf5; border: 1px solid #d1fae5; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+                    <span style="color: #9ca3af; margin-right: 14px; min-width: 140px;">[${datetime}]</span>
+                    <span style="padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 12px; display: inline-block; ${badgeStyle}">
+                        ${identityText}
+                    </span>
+                    <span style="color: #111827; font-weight: 500; flex-grow: 1; min-width: 150px; word-break: break-all; margin-right: 10px;">
+                        ${escapeHtml(actionText)}
+                    </span>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-left: auto; padding-left: 2px;">
+                        <span style="color: #059669; background: #ecfdf5; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
                             ${escapeHtml(log.ip || '未知IP')}
                         </span>
-                        <span style="color: #4b5563; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
+                        <span style="color: #6b7280; background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 11px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(log.location || '未知属地')}">
                             📍 ${escapeHtml(log.location || '未知属地')}
                         </span>
                     </div>
@@ -660,7 +870,7 @@
         if (selectedTokens.size === 0) { showToast('未选中任何 Token', true); return; }
         if (confirm(`确定删除选中的 ${selectedTokens.size} 个 Token？`)) {
             try {
-                await adminFetch('deleteBatch', { tokens: Array.from(selectedTokens) });
+                await adminFetch('deleteBatch', { tokens: JSON.stringify(Array.from(selectedTokens)) });
                 selectedTokens.clear();
                 await loadAllTokens();
                 showToast('批量删除成功');
@@ -698,8 +908,7 @@
         const text = document.getElementById('importTokensText').value.trim();
         if (!text) { showToast('请粘贴 Token 列表', true); return; }
         try {
-            const tokenArray = text.split('\n').map(s => s.trim()).filter(s => s);
-            const res = await adminFetch('import', { tokens: tokenArray });
+            const res = await adminFetch('import', { tokens: text });
             showToast(`导入完成: 新增 ${res.added} 个，跳过 ${res.skipped} 个`);
             document.getElementById('importTokensText').value = '';
             document.getElementById('importPanel').classList.remove('show');
@@ -707,7 +916,6 @@
         } catch(err) { showToast(`导入失败: ${err.message}`, true); }
     }
 
-    // 事件绑定初始化
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
         if (!pwd) { showToast('请输入密码', true); return; }
@@ -717,23 +925,24 @@
         btn.disabled = true;
         adminPassword = pwd;
         try {
-            const loginResult = await adminFetch('login');
+            await adminFetch('listAll');
             document.getElementById('adminLoginArea').style.display = 'none';
             document.getElementById('adminMainArea').style.display = 'block';
             try {
                 const codeData = await adminFetch('getEmergencyCode');
-                document.getElementById('emergencyCodeBlock').innerText = codeData?.code ? codeData.code : '应急代码获取失败';
+                if (codeData && codeData.code) {
+                    document.getElementById('emergencyCodeBlock').innerText = codeData.code;
+                } else {
+                    document.getElementById('emergencyCodeBlock').innerText = '应急代码获取失败';
+                }
             } catch (err) {
+                console.error('获取应急代码失败:', err);
                 document.getElementById('emergencyCodeBlock').innerText = '应急代码加载失败';
             }
-            currentTokens = loginResult.tokens || [];
-            updateStats();
-            applyFilters();
-            await loadLogs();
+            await loadAllTokens();
             showToast('管理后台已解锁');
         } catch(e) {
-            if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
-            else showToast(e.message || '密码错误或网络异常', true);
+            showToast('密码错误或网络异常', true);
             adminPassword = '';
         } finally {
             btn.innerText = original;
@@ -764,13 +973,17 @@
     document.getElementById('clearFilterBtn').addEventListener('click', clearFilter);
     document.getElementById('clearLogsBtn').addEventListener('click', clearLogs);
     document.getElementById('toggleImportBtn').addEventListener('click', () => {
-        document.getElementById('importPanel').classList.toggle('show');
+        const panel = document.getElementById('importPanel');
+        panel.classList.toggle('show');
     });
     document.getElementById('confirmImportBtn').addEventListener('click', importTokens);
     document.getElementById('copyEmergencyBtn').addEventListener('click', () => {
         const code = document.getElementById('emergencyCodeBlock').innerText;
-        if (code && !code.includes('失败')) copyToClipboard(code, document.getElementById('copyEmergencyBtn'));
-        else showToast('应急代码不可用', true);
+        if (code && code !== '应急代码获取失败' && code !== '应急代码加载失败') {
+            copyToClipboard(code, document.getElementById('copyEmergencyBtn'));
+        } else {
+            showToast('应急代码不可用', true);
+        }
     });
 </script>
 </body>
