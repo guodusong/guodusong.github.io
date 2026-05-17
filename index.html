@@ -419,6 +419,12 @@
         btn.disabled = true;
         try {
             const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
+            if (!res.ok) {
+                const text = await res.text();
+                let errMsg = '验证失败';
+                try { errMsg = JSON.parse(text).error || errMsg; } catch(e) {}
+                throw new Error(errMsg);
+            }
             const data = await res.json();
             const area = document.getElementById('resultArea');
             if (data.valid) {
@@ -449,7 +455,7 @@
                 showToast('无效的 Token', true);
             }
         } catch(e) {
-            showToast('验证失败，请重试', true);
+            showToast(e.message || '验证失败，请重试', true);
         } finally {
             btn.innerText = originalText;
             btn.disabled = false;
@@ -699,12 +705,17 @@
     }
 
     async function clearLogs() {
+        const btn = document.getElementById('clearLogsBtn');
         if (confirm('清除所有日志？')) {
+            const original = btn.innerText;
+            btn.innerText = '清空中...';
+            btn.disabled = true;
             try {
                 await adminFetch('clearLogs');
                 await loadLogs();
                 showToast('日志已清空');
             } catch(err) { showToast(`清空日志失败: ${err.message}`, true); }
+            finally { btn.innerText = original; btn.disabled = false; }
         }
     }
 
@@ -713,6 +724,10 @@
         if (!name) { showToast('请输入 Token 名称', true); return; }
         let init = parseInt(document.getElementById('newTokenInitCount').value);
         if (isNaN(init) || init < 1) init = 3;
+        const btn = document.getElementById('addTokenBtn');
+        const original = btn.innerText;
+        btn.innerText = '添加中...';
+        btn.disabled = true;
         try {
             await adminFetch('add', { token: name, initCount: init });
             showToast(`添加成功: ${name}`);
@@ -720,28 +735,39 @@
             document.getElementById('newTokenInitCount').value = '3';
             await loadAllTokens();
         } catch(err) { showToast(`添加失败: ${err.message}`, true); }
+        finally { btn.innerText = original; btn.disabled = false; }
     }
 
     async function deleteSelectedTokens() {
         if (selectedTokens.size === 0) { showToast('未选中任何 Token', true); return; }
+        const btn = document.getElementById('deleteSelectedBtn');
         if (confirm(`确定删除选中的 ${selectedTokens.size} 个 Token？`)) {
+            const original = btn.innerText;
+            btn.innerText = '删除中...';
+            btn.disabled = true;
             try {
                 await adminFetch('deleteBatch', { tokens: Array.from(selectedTokens) });
                 selectedTokens.clear();
                 await loadAllTokens();
                 showToast('批量删除成功');
             } catch(err) { showToast(`批量删除失败: ${err.message}`, true); }
+            finally { btn.innerText = original; btn.disabled = false; }
         }
     }
 
     async function clearAllTokens() {
+        const btn = document.getElementById('clearAllBtn');
         if (confirm('此操作将清空所有 Token，不可恢复！确定？')) {
+            const original = btn.innerText;
+            btn.innerText = '清空中...';
+            btn.disabled = true;
             try {
                 await adminFetch('clearAll');
                 selectedTokens.clear();
                 await loadAllTokens();
                 showToast('已清空所有 Token');
             } catch(err) { showToast(`清空失败: ${err.message}`, true); }
+            finally { btn.innerText = original; btn.disabled = false; }
         }
     }
 
@@ -754,6 +780,7 @@
             showToast(`筛选剩余次数 = ${remainFilterValue}`);
         }
     }
+    
     function clearFilter() {
         remainFilterValue = null;
         applyFilters();
@@ -763,6 +790,10 @@
     async function importTokens() {
         const text = document.getElementById('importTokensText').value.trim();
         if (!text) { showToast('请粘贴 Token 列表', true); return; }
+        const btn = document.getElementById('confirmImportBtn');
+        const original = btn.innerText;
+        btn.innerText = '导入中...';
+        btn.disabled = true;
         try {
             const tokenArray = text.split('\n').map(s => s.trim()).filter(s => s);
             const res = await adminFetch('import', { tokens: tokenArray });
@@ -771,6 +802,7 @@
             document.getElementById('importPanel').classList.remove('show');
             await loadAllTokens();
         } catch(err) { showToast(`导入失败: ${err.message}`, true); }
+        finally { btn.innerText = original; btn.disabled = false; }
     }
 
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
