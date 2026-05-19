@@ -54,6 +54,8 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+            cursor: pointer;
+            user-select: none;
         }
         .tabs {
             display: flex;
@@ -181,7 +183,6 @@
             transition: width 0.3s;
         }
 
-        /* 修改题目模态框 */
         .modal {
             display: none;
             position: fixed;
@@ -269,13 +270,56 @@
             .action-group .btn-sm { padding: 4px 8px; font-size: 0.7rem; }
             .modal-card { padding: 16px; }
         }
+        .history-panel {
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 16px;
+            margin-top: 16px;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+        .history-panel.show {
+            display: block;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.85rem;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-time {
+            color: #64748b;
+            font-family: monospace;
+        }
+        .history-category {
+            font-weight: 600;
+            color: #065f46;
+        }
+        .history-count {
+            color: #10b981;
+        }
+        .close-history {
+            float: right;
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+            padding: 0 8px;
+            color: #94a3b8;
+        }
+        .close-history:hover {
+            color: #ef4444;
+        }
     </style>
 </head>
 <body>
 <div class="toast-stack" id="toastStack"></div>
 <div class="container">
     <div class="hero">
-        <h1>🎄链接生成器</h1>
+        <h1 id="mainTitle">🎄链接生成器</h1>
     </div>
 
     <div class="tabs">
@@ -378,6 +422,10 @@
                 </div>
                 <div id="questionSearchResult"></div>
                 <div id="questionPagination" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+                <div id="historyPanel" class="history-panel">
+                    <span class="close-history" id="closeHistoryBtn">&times;</span>
+                    <div id="historyContent"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -404,14 +452,16 @@
             <span style="padding:0 8px;">选项结束</span>
         </div>
         <div id="previewTable" style="overflow-x: auto; margin-bottom: 20px;"></div>
-        <div class="flex-row" style="justify-content: flex-end; gap: 12px;">
-            <button id="cancelImportBtn" class="btn btn-ghost">取消</button>
-            <button id="confirmImportConfigBtn" class="btn btn-primary">确认导入</button>
+        <div class="flex-row" style="justify-content: space-between; align-items: center;">
+            <button id="addCategoryBtn" class="btn btn-ghost">添加题库名称</button>
+            <div class="flex-row" style="gap: 12px;">
+                <button id="cancelImportBtn" class="btn btn-ghost">取消</button>
+                <button id="confirmImportConfigBtn" class="btn btn-primary">确认</button>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- 修改题目模态框 -->
 <div id="editQuestionModal" class="modal">
     <div class="modal-card">
         <h3>修改题目</h3>
@@ -437,13 +487,11 @@
 <script>
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
 
-    // ==================== 全局变量====================
-    let fullQuestionCache = null;        // 全量题库
-    let filteredQuestions = [];           // 筛选后的题库
-    let currentQuestionPage = 1;          // 当前页码
-    const QUESTION_PAGE_SIZE = 10;         // 每页显示数量
+    let fullQuestionCache = null;
+    let filteredQuestions = [];
+    let currentQuestionPage = 1;
+    const QUESTION_PAGE_SIZE = 10;
 
-    // ==================== 通用函数====================
     function showToast(msg, isError = false) {
         const stack = document.getElementById('toastStack');
         const toast = document.createElement('div');
@@ -512,7 +560,29 @@
         }
     }
 
-    // ==================== 用户验证（未变） ====================
+    let clickCount = 0;
+    let clickTimer = null;
+    const titleElement = document.getElementById('mainTitle');
+    titleElement.addEventListener('click', async () => {
+        clickCount++;
+        if (clickTimer) clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 1000);
+        if (clickCount >= 7) {
+            clickCount = 0;
+            try {
+                const res = await fetch(`${API_URL}?action=getHiddenUrl`);
+                const data = await res.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    showToast('隐藏地址无效', true);
+                }
+            } catch(e) {
+                showToast('获取隐藏地址失败', true);
+            }
+        }
+    });
+
     async function userVerify() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) { showToast('请输入 Token', true); return; }
@@ -530,6 +600,17 @@
             }
             const data = await res.json();
             const area = document.getElementById('resultArea');
+            if (data.valid === false && data.reason === 'not_found') {
+                showToast('Token 不存在', true);
+                area.style.display = 'none';
+                return;
+            }
+            if (data.valid === false && data.reason === 'no_remain') {
+                area.style.display = 'block';
+                area.innerHTML = `<div style="background:#d1fae5; padding:10px 14px; border-radius:20px; margin-bottom:16px; font-size:0.85rem; color:var(--primary-dark);">验证通过，剩余次数：<strong style="color:var(--primary-dark); font-size:0.95rem;">0</strong></div><div class="tip-box">链接已失效，无法生成代码。</div>`;
+                showToast('验证通过，但次数已用完');
+                return;
+            }
             if (data.valid) {
                 const c1 = `=javascript:$.getScript('${API_URL}?token=${token}')`;
                 const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`;
@@ -565,7 +646,6 @@
         }
     }
 
-    // ==================== Token 管理====================
     let adminPassword = '';
     let currentTokens = [];
     let filteredTokens = [];
@@ -585,6 +665,13 @@
             const text = await res.text();
             let errMessage = '请求失败';
             try { const parsed = JSON.parse(text); if (parsed.error) errMessage = parsed.error; } catch(e) {}
+            if (errMessage === '密码错误') {
+                adminPassword = '';
+                document.getElementById('adminLoginArea').style.display = 'block';
+                document.getElementById('adminMainArea').style.display = 'none';
+                showToast('登录已过期，请重新登录', true);
+                throw new Error('密码错误');
+            }
             throw new Error(errMessage);
         }
         return await res.json();
@@ -907,7 +994,6 @@
         finally { btn.innerText = original; btn.disabled = false; }
     }
 
-    // ==================== 题库管理（优化版：前端缓存 + 本地分页） ====================
     let currentEditId = null;
 
     function openEditModal(id, text, optionsArray, answer) {
@@ -1028,17 +1114,6 @@
         }
     }
 
-    async function loadQuestionStats() {
-        if (fullQuestionCache) {
-            showToast(`题库总题目数: ${fullQuestionCache.length}`);
-        } else {
-            const res = await fetch(`${API_URL}?action=getAllQuestions`);
-            const data = await res.json();
-            if (data.success) showToast(`题库总题目数: ${data.questions.length}`);
-            else showToast('统计失败', true);
-        }
-    }
-
     async function clearAllQuestions() {
         if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
         const btn = document.getElementById('clearQuestionsBtn');
@@ -1057,6 +1132,41 @@
             btn.disabled = false;
         }
     }
+
+    async function showHistoryPanel() {
+        try {
+            const res = await fetch(`${API_URL}?action=getImportHistory`);
+            const data = await res.json();
+            const panel = document.getElementById('historyPanel');
+            const content = document.getElementById('historyContent');
+            if (data.total !== undefined && data.history) {
+                let html = `<div style="margin-bottom: 12px;"><strong>当前题库总数：${data.total}</strong></div>`;
+                if (data.history.length === 0) {
+                    html += '<div>暂无导入记录</div>';
+                } else {
+                    data.history.forEach(item => {
+                        const date = new Date(item.time);
+                        const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+                        html += `<div class="history-item">
+                                    <span class="history-time">[${timeStr}]</span>
+                                    <span class="history-category">${escapeHtml(item.category || '未命名')}</span>
+                                    <span class="history-count">导入 ${item.count} 条</span>
+                                </div>`;
+                    });
+                }
+                content.innerHTML = html;
+                panel.classList.add('show');
+            } else {
+                showToast('获取历史失败', true);
+            }
+        } catch(e) {
+            showToast('获取历史失败', true);
+        }
+    }
+
+    document.getElementById('closeHistoryBtn')?.addEventListener('click', () => {
+        document.getElementById('historyPanel').classList.remove('show');
+    });
 
     function searchQuestions() {
         if (!fullQuestionCache) {
@@ -1083,16 +1193,16 @@
         }
     }
 
-    // ==================== Excel 导入（与原逻辑一致，但导入后刷新缓存） ====================
     let currentExcelData = null;
     let currentExcelHeaders = [];
+    let currentImportCategory = '';
 
     function showExcelConfigModal(rows, headers) {
         currentExcelData = rows;
         currentExcelHeaders = headers;
         const modal = document.getElementById('excelConfigModal');
         const previewArea = document.getElementById('excelPreviewArea');
-        previewArea.innerHTML = `<div style="font-size:0.8rem; color:#64748b;">已加载 ${rows.length} 行数据，请配置映射关系</div>`;
+        previewArea.innerHTML = `<div style="font-size:0.8rem; color:#64748b;">已加载 ${rows.length} 行数据</div>`;
         const questionSelect = document.getElementById('questionColSelect');
         const answerSelect = document.getElementById('answerColSelect');
         const optionStartSelect = document.getElementById('optionStartColSelect');
@@ -1143,6 +1253,14 @@
     document.getElementById('optionStartColSelect')?.addEventListener('change', updatePreviewTable);
     document.getElementById('optionEndColSelect')?.addEventListener('change', updatePreviewTable);
 
+    document.getElementById('addCategoryBtn')?.addEventListener('click', () => {
+        const cat = prompt('请输入本次导入的题库名称（例如：客户经理题库）');
+        if (cat !== null) {
+            currentImportCategory = cat.trim();
+            showToast(`已设置题库名称: ${currentImportCategory || '未命名'}`);
+        }
+    });
+
     async function confirmImportFromExcel() {
         const questionIdx = parseInt(document.getElementById('questionColSelect').value);
         const answerIdx = parseInt(document.getElementById('answerColSelect').value);
@@ -1189,13 +1307,16 @@
         }, 300);
         
         try {
-            const res = await adminFetch('importSimpleQuestions', { questions: JSON.stringify(questionsArray) });
+            const params = { questions: JSON.stringify(questionsArray) };
+            if (currentImportCategory) params.category = currentImportCategory;
+            const res = await adminFetch('importSimpleQuestions', params);
             clearInterval(interval);
             progressFill.style.width = '100%';
             progressText.innerText = `导入完成！新增 ${res.added} 条`;
             showToast(`导入完成: 新增 ${res.added} 条`);
             await refreshFullQuestionCache();
             renderQuestionList();
+            currentImportCategory = '';
         } catch (err) {
             clearInterval(interval);
             showToast(`导入失败: ${err.message}`, true);
@@ -1225,7 +1346,6 @@
         input.click();
     }
 
-    // ==================== 事件绑定和初始化 ====================
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
         if (!pwd) { showToast('请输入密码', true); return; }
@@ -1253,7 +1373,7 @@
             showToast('管理后台已解锁');
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
-            else showToast(e.message || '密码错误或网络异常', true);
+            else showToast(e.message || '密码错误', true);
             adminPassword = '';
         } finally {
             btn.innerText = original;
@@ -1295,7 +1415,7 @@
         if (code && !code.includes('失败')) copyToClipboard(code, document.getElementById('copyEmergencyBtn'));
         else showToast('应急代码不可用', true);
     });
-    document.getElementById('questionStatsBtn').addEventListener('click', loadQuestionStats);
+    document.getElementById('questionStatsBtn').addEventListener('click', showHistoryPanel);
     document.getElementById('clearQuestionsBtn').addEventListener('click', clearAllQuestions);
     document.getElementById('importExcelBtn').addEventListener('click', importExcel);
     document.getElementById('questionSearchBtn').addEventListener('click', searchQuestions);
