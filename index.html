@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>新标签页</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #10b981;
@@ -124,6 +125,7 @@
         .w-full { width: 100%; }
         .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .flex-end { justify-content: flex-end; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
         .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
@@ -164,89 +166,108 @@
         .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; margin-top: 0; }
         .import-panel.show { max-height: 240px; opacity: 1; margin-top: 16px; }
 
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        /* 修改题目模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10002;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-card {
+            background: white;
+            border-radius: 28px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 24px;
+            margin: 20px;
+            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
+            animation: modalSlideIn 0.2s ease-out;
+        }
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+        .modal .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-sub);
+        }
+        .modal textarea.input-field {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .modal .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .card:hover,
+        .tab:hover:not(.active),
+        .btn:hover:not(:disabled),
+        .btn-primary:hover:not(:disabled),
+        .btn-danger:hover:not(:disabled),
+        .btn-ghost:hover:not(:disabled),
+        .btn-sm:hover:not(:disabled),
+        .input-field:hover,
+        .input-field:focus,
+        .stat-card:hover,
+        .copy-btn-sm:hover:not(:disabled),
+        .table-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.07);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .card, .tab, .btn, .input-field, .stat-card, .copy-btn-sm,
+            .card:hover, .tab:hover:not(.active), .btn:hover:not(:disabled), .btn:active,
+            .btn-sm:hover:not(:disabled), .input-field:focus, .stat-card:hover,
+            .copy-btn-sm:hover:not(:disabled), .table-wrapper:hover {
+                transition: none !important;
+                transform: none !important;
+                box-shadow: inherit;
+            }
+        }
         @media (max-width: 600px) {
             .card { padding: 20px; }
             .grid-2 { grid-template-columns: 1fr; }
             .stat-grid { gap: 10px; }
             th, td { padding: 8px 6px; }
             .action-group .btn-sm { padding: 4px 8px; font-size: 0.7rem; }
-        }
-    </style>
-
-    <style>
-        .card,
-        .tab,
-        .btn,
-        .input-field,
-        .stat-card,
-        .copy-btn-sm {
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                        background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.07);
-        }
-        .tab:hover:not(.active) {
-            transform: translateY(-1px);
-            background: rgba(255, 255, 255, 0.35);
-        }
-        .btn {
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-        }
-        .btn:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.18);
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-primary:hover:not(:disabled) {
-            background: var(--primary-dark);
-            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.28);
-        }
-        .btn-danger:hover:not(:disabled) {
-            background: #dc2626;
-            color: #ffffff;
-        }
-        .btn-ghost:hover:not(:disabled) {
-            background: #d1fae5;
-        }
-        .btn-sm:hover:not(:disabled) {
-            transform: translateY(-1px) scale(1.01);
-        }
-        .input-field:hover {
-            border-color: #d1fae5;
-            background: #ffffff;
-        }
-        .input-field:focus {
-            transform: translateY(-1px);
-        }
-        .stat-card:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08);
-        }
-        .copy-btn-sm:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px -10px rgba(16, 185, 129, 0.28);
-        }
-        .table-wrapper:hover {
-            box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.08);
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .card, .tab, .btn, .input-field, .stat-card, .copy-btn-sm {
-                transition: none !important;
-            }
-            .card:hover, .tab:hover:not(.active), .btn:hover:not(:disabled), .btn:active,
-            .btn-sm:hover:not(:disabled), .input-field:focus, .stat-card:hover,
-            .copy-btn-sm:hover:not(:disabled), .table-wrapper:hover {
-                transform: none !important;
-                box-shadow: inherit;
-            }
+            .modal-card { padding: 16px; }
         }
     </style>
 </head>
@@ -254,7 +275,7 @@
 <div class="toast-stack" id="toastStack"></div>
 <div class="container">
     <div class="hero">
-        <h1>🌿链接生成器</h1>
+        <h1>🎄链接生成器</h1>
     </div>
 
     <div class="tabs">
@@ -269,7 +290,7 @@
         <button id="verifyBtn" class="btn btn-primary w-full" style="margin-top: 8px;">验证并生成</button>
         <div id="resultArea" style="display: none; margin-top: 20px;"></div>
         <div class="tip-box">
-            🪴 提示：生成的代码复制后，进入答题页面，粘贴到地址栏，<strong>删掉最前方的等号 “=”</strong>，回车。
+            🎋提示：生成的代码复制后，进入答题页面，粘贴到地址栏，删掉最前方的等号 “=”，回车。
         </div>
     </div>
 
@@ -330,11 +351,85 @@
             <div style="margin-top: 24px;">
                 <div style="font-weight: 700; margin-bottom: 8px;">免 Token</div>
                 <div class="code-section">
-                    <div class="code-label"></div>
                     <div class="code-box" id="emergencyCodeBlock"></div>
                     <button id="copyEmergencyBtn" class="copy-btn-sm">复制代码</button>
                 </div>
             </div>
+
+            <div style="margin-top: 32px; border-top: 1px solid #ecfdf5; padding-top: 24px;">
+                <div class="flex-between" style="margin-bottom: 16px;">
+                    <span style="font-weight: 700;">题库管理</span>
+                    <div class="flex-row" style="gap: 8px;">
+                        <button id="questionStatsBtn" class="btn btn-ghost btn-sm">统计总数</button>
+                        <button id="clearQuestionsBtn" class="btn btn-danger btn-sm">清空题库</button>
+                    </div>
+                </div>
+                <div class="code-section" style="margin-top: 0;">
+                    <button id="importExcelBtn" class="btn btn-primary w-full" style="margin-bottom: 8px;">导入 Excel</button>
+                    <div id="importProgress" style="display: none;">
+                        <div class="progress-bar"><div id="importProgressFill" class="progress-fill"></div></div>
+                        <div style="font-size: 0.75rem; text-align: center; margin-top: 4px;" id="importProgressText">导入中 0%</div>
+                    </div>
+                </div>
+                <div class="flex-row" style="margin-bottom: 16px;">
+                    <input type="text" id="questionSearchKeyword" class="input-field" placeholder="题目关键词搜索" style="flex:3;">
+                    <button id="questionSearchBtn" class="btn btn-primary">搜索</button>
+                    <button id="questionResetBtn" class="btn btn-ghost">重置</button>
+                </div>
+                <div id="questionSearchResult"></div>
+                <div id="questionPagination" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="excelConfigModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10001; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 28px; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 24px; margin: 20px;">
+        <div style="font-weight: 700; font-size: 1.2rem; margin-bottom: 16px;">导入映射</div>
+        <div id="excelPreviewArea" style="margin-bottom: 20px;"></div>
+        <div class="flex-row" style="margin-bottom: 16px;">
+            <select id="questionColSelect" class="input-field" style="flex:1;"></select>
+            <span style="padding:0 8px;">题目</span>
+        </div>
+        <div class="flex-row" style="margin-bottom: 16px;">
+            <select id="answerColSelect" class="input-field" style="flex:1;"></select>
+            <span style="padding:0 8px;">答案</span>
+        </div>
+        <div class="flex-row" style="margin-bottom: 16px;">
+            <select id="optionStartColSelect" class="input-field" style="flex:1;"></select>
+            <span style="padding:0 8px;">选项起始</span>
+        </div>
+        <div class="flex-row" style="margin-bottom: 16px;">
+            <select id="optionEndColSelect" class="input-field" style="flex:1;"></select>
+            <span style="padding:0 8px;">选项结束</span>
+        </div>
+        <div id="previewTable" style="overflow-x: auto; margin-bottom: 20px;"></div>
+        <div class="flex-row" style="justify-content: flex-end; gap: 12px;">
+            <button id="cancelImportBtn" class="btn btn-ghost">取消</button>
+            <button id="confirmImportConfigBtn" class="btn btn-primary">确认导入</button>
+        </div>
+    </div>
+</div>
+
+<!-- 修改题目模态框 -->
+<div id="editQuestionModal" class="modal">
+    <div class="modal-card">
+        <h3>修改题目</h3>
+        <div class="form-group">
+            <label>题干</label>
+            <textarea id="editQuestionText" class="input-field" rows="3" placeholder="请输入题目内容"></textarea>
+        </div>
+        <div class="form-group">
+            <label>选项列表（每行一个选项）</label>
+            <textarea id="editQuestionOptions" class="input-field" rows="5" placeholder="例如：&#10;正确&#10;错误"></textarea>
+        </div>
+        <div class="form-group">
+            <label>答案</label>
+            <input type="text" id="editQuestionAnswer" class="input-field" placeholder="请输入正确答案">
+        </div>
+        <div class="btn-group">
+            <button id="cancelEditBtn" class="btn btn-ghost">取消</button>
+            <button id="saveEditBtn" class="btn btn-primary">保存</button>
         </div>
     </div>
 </div>
@@ -342,6 +437,13 @@
 <script>
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
 
+    // ==================== 全局变量====================
+    let fullQuestionCache = null;        // 全量题库
+    let filteredQuestions = [];           // 筛选后的题库
+    let currentQuestionPage = 1;          // 当前页码
+    const QUESTION_PAGE_SIZE = 10;         // 每页显示数量
+
+    // ==================== 通用函数====================
     function showToast(msg, isError = false) {
         const stack = document.getElementById('toastStack');
         const toast = document.createElement('div');
@@ -410,6 +512,7 @@
         }
     }
 
+    // ==================== 用户验证（未变） ====================
     async function userVerify() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) { showToast('请输入 Token', true); return; }
@@ -462,6 +565,7 @@
         }
     }
 
+    // ==================== Token 管理====================
     let adminPassword = '';
     let currentTokens = [];
     let filteredTokens = [];
@@ -625,9 +729,7 @@
             const container = document.getElementById('logsContainer');
             if (!container) return;
             container.innerHTML = '';
-            
             if (rawLogs.length === 0) return;
-
             const parsedLogs = [];
             for (const logStr of rawLogs) {
                 try {
@@ -637,19 +739,13 @@
                 } catch(e) {}
             }
             parsedLogs.sort((a, b) => (new Date(b.timestamp).getTime() || 0) - (new Date(a.timestamp).getTime() || 0));
-            
             for (const log of parsedLogs) {
                 const date = new Date(log.timestamp);
                 const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-                
-                const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import'];
+                const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
                 const isIdentityAdmin = adminActions.includes(log.action);
-                
-                const badgeStyle = isIdentityAdmin 
-                    ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' 
-                    : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
+                const badgeStyle = isIdentityAdmin ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
                 const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
-
                 let actionText = '';
                 if (log.action === 'use') {
                     const remainStr = log.details ? log.details.replace(/[^0-9]/g, '') : '0';
@@ -667,16 +763,22 @@
                 } else if (log.action === 'clearAll') {
                     actionText = `清空了全站所有 Token`;
                 } else if (log.action === 'import') {
-                    actionText = `批量导入 (${escapeHtml(log.details || '')})`;
+                    actionText = `批量导入 Token (${escapeHtml(log.details || '')})`;
+                } else if (log.action === 'importSimpleQuestions') {
+                    actionText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
+                } else if (log.action === 'updateSimpleQuestion') {
+                    actionText = `修改题目 ${log.details || ''}`;
+                } else if (log.action === 'deleteSimpleQuestion') {
+                    actionText = `删除题目 ${log.details || ''}`;
+                } else if (log.action === 'clearAllQuestions') {
+                    actionText = `清空题库 (${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
                 } else if (log.action === 'login') {
                     actionText = `登录管理面板`;
                 } else {
                     actionText = `${log.action || ''} ${log.details || ''}`;
                 }
-
                 const div = document.createElement('div');
                 div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 8px;";
-                
                 div.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <span style="color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
@@ -805,6 +907,325 @@
         finally { btn.innerText = original; btn.disabled = false; }
     }
 
+    // ==================== 题库管理（优化版：前端缓存 + 本地分页） ====================
+    let currentEditId = null;
+
+    function openEditModal(id, text, optionsArray, answer) {
+        currentEditId = id;
+        document.getElementById('editQuestionText').value = text;
+        document.getElementById('editQuestionOptions').value = optionsArray.join('\n');
+        document.getElementById('editQuestionAnswer').value = answer;
+        document.getElementById('editQuestionModal').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editQuestionModal').style.display = 'none';
+        currentEditId = null;
+    }
+
+    async function refreshFullQuestionCache() {
+        const res = await fetch(`${API_URL}?action=getAllQuestions`);
+        const data = await res.json();
+        if (data.success && data.questions) {
+            fullQuestionCache = data.questions;
+        } else {
+            fullQuestionCache = [];
+        }
+    }
+
+    function renderQuestionList() {
+        const keyword = document.getElementById('questionSearchKeyword').value.trim();
+        let filtered = fullQuestionCache;
+        if (keyword) {
+            filtered = fullQuestionCache.filter(q => q.text.includes(keyword) || q.options.some(opt => opt.includes(keyword)) || q.answer.includes(keyword));
+        }
+        filteredQuestions = filtered;
+        const totalPages = Math.ceil(filteredQuestions.length / QUESTION_PAGE_SIZE);
+        const start = (currentQuestionPage - 1) * QUESTION_PAGE_SIZE;
+        const pageData = filteredQuestions.slice(start, start + QUESTION_PAGE_SIZE);
+        const container = document.getElementById('questionSearchResult');
+        if (pageData.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">未找到题目</div>';
+            document.getElementById('questionPagination').innerHTML = '';
+            return;
+        }
+        let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
+        for (const item of pageData) {
+            const optionsDisplay = item.options.map(opt => escapeHtml(opt)).join(' | ');
+            html += `
+                <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options))}' data-answer="${escapeHtml(item.answer)}">
+                    <td>${escapeHtml(item.id)}</td>
+                    <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
+                    <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
+                    <td>${escapeHtml(item.answer)}</td>
+                    <td class="action-group">
+                        <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
+                        <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
+                    </td>
+                </tr>
+            `;
+        }
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+        const paginationDiv = document.getElementById('questionPagination');
+        paginationDiv.innerHTML = `
+            <div class="flex-row" style="justify-content:center; gap:12px;">
+                <button class="btn btn-ghost btn-sm" id="questionPrevPage" ${currentQuestionPage===1 ? 'disabled' : ''}>上一页</button>
+                <span style="font-weight:600;">${currentQuestionPage} / ${totalPages}</span>
+                <button class="btn btn-ghost btn-sm" id="questionNextPage" ${currentQuestionPage===totalPages ? 'disabled' : ''}>下一页</button>
+            </div>
+        `;
+        document.getElementById('questionPrevPage')?.addEventListener('click', () => { if(currentQuestionPage>1) { currentQuestionPage--; renderQuestionList(); } });
+        document.getElementById('questionNextPage')?.addEventListener('click', () => { if(currentQuestionPage<totalPages) { currentQuestionPage++; renderQuestionList(); } });
+        
+        document.querySelectorAll('.edit-question-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const row = e.target.closest('tr');
+                const id = row.getAttribute('data-id');
+                const text = row.getAttribute('data-text');
+                const options = JSON.parse(row.getAttribute('data-options'));
+                const answer = row.getAttribute('data-answer');
+                openEditModal(id, text, options, answer);
+            });
+        });
+        document.querySelectorAll('.delete-question-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const row = e.target.closest('tr');
+                const id = row.getAttribute('data-id');
+                if (confirm('确定删除该题目吗？')) {
+                    try {
+                        await adminFetch('deleteSimpleQuestion', { id });
+                        showToast('删除成功');
+                        await refreshFullQuestionCache();
+                        renderQuestionList();
+                    } catch(err) { showToast(`删除失败: ${err.message}`, true); }
+                }
+            });
+        });
+    }
+
+    async function saveEdit() {
+        const newText = document.getElementById('editQuestionText').value.trim();
+        const newOptionsRaw = document.getElementById('editQuestionOptions').value;
+        const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
+        if (!newText) { showToast('题目不能为空', true); return; }
+        if (!newAnswer) { showToast('答案不能为空', true); return; }
+        const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
+        if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
+        try {
+            await adminFetch('updateSimpleQuestion', {
+                id: currentEditId,
+                text: newText,
+                options: JSON.stringify(optionsArray),
+                answer: newAnswer
+            });
+            showToast('修改成功');
+            closeEditModal();
+            await refreshFullQuestionCache();
+            renderQuestionList();
+        } catch(err) {
+            showToast(`修改失败: ${err.message}`, true);
+        }
+    }
+
+    async function loadQuestionStats() {
+        if (fullQuestionCache) {
+            showToast(`题库总题目数: ${fullQuestionCache.length}`);
+        } else {
+            const res = await fetch(`${API_URL}?action=getAllQuestions`);
+            const data = await res.json();
+            if (data.success) showToast(`题库总题目数: ${data.questions.length}`);
+            else showToast('统计失败', true);
+        }
+    }
+
+    async function clearAllQuestions() {
+        if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
+        const btn = document.getElementById('clearQuestionsBtn');
+        const original = btn.innerText;
+        btn.innerText = '清空中...';
+        btn.disabled = true;
+        try {
+            const res = await adminFetch('clearAllQuestions');
+            showToast(`已清空 ${res.deleted} 条题目`);
+            await refreshFullQuestionCache();
+            renderQuestionList();
+        } catch(err) {
+            showToast(`清空失败: ${err.message}`, true);
+        } finally {
+            btn.innerText = original;
+            btn.disabled = false;
+        }
+    }
+
+    function searchQuestions() {
+        if (!fullQuestionCache) {
+            refreshFullQuestionCache().then(() => {
+                currentQuestionPage = 1;
+                renderQuestionList();
+            });
+        } else {
+            currentQuestionPage = 1;
+            renderQuestionList();
+        }
+    }
+
+    function resetQuestionSearch() {
+        document.getElementById('questionSearchKeyword').value = '';
+        if (fullQuestionCache) {
+            currentQuestionPage = 1;
+            renderQuestionList();
+        } else {
+            refreshFullQuestionCache().then(() => {
+                currentQuestionPage = 1;
+                renderQuestionList();
+            });
+        }
+    }
+
+    // ==================== Excel 导入（与原逻辑一致，但导入后刷新缓存） ====================
+    let currentExcelData = null;
+    let currentExcelHeaders = [];
+
+    function showExcelConfigModal(rows, headers) {
+        currentExcelData = rows;
+        currentExcelHeaders = headers;
+        const modal = document.getElementById('excelConfigModal');
+        const previewArea = document.getElementById('excelPreviewArea');
+        previewArea.innerHTML = `<div style="font-size:0.8rem; color:#64748b;">已加载 ${rows.length} 行数据，请配置映射关系</div>`;
+        const questionSelect = document.getElementById('questionColSelect');
+        const answerSelect = document.getElementById('answerColSelect');
+        const optionStartSelect = document.getElementById('optionStartColSelect');
+        const optionEndSelect = document.getElementById('optionEndColSelect');
+        questionSelect.innerHTML = '';
+        answerSelect.innerHTML = '';
+        optionStartSelect.innerHTML = '';
+        optionEndSelect.innerHTML = '';
+        headers.forEach((h, idx) => {
+            const option1 = document.createElement('option');
+            option1.value = idx;
+            option1.textContent = `${h} (列${idx+1})`;
+            questionSelect.appendChild(option1.cloneNode(true));
+            answerSelect.appendChild(option1.cloneNode(true));
+            optionStartSelect.appendChild(option1.cloneNode(true));
+            optionEndSelect.appendChild(option1.cloneNode(true));
+        });
+        optionEndSelect.value = headers.length - 1;
+        updatePreviewTable();
+        modal.style.display = 'flex';
+    }
+
+    function updatePreviewTable() {
+        const questionIdx = parseInt(document.getElementById('questionColSelect').value);
+        const answerIdx = parseInt(document.getElementById('answerColSelect').value);
+        const startIdx = parseInt(document.getElementById('optionStartColSelect').value);
+        const endIdx = parseInt(document.getElementById('optionEndColSelect').value);
+        if (isNaN(questionIdx) || isNaN(answerIdx) || isNaN(startIdx) || isNaN(endIdx)) return;
+        const previewRows = currentExcelData.slice(0, 5);
+        let html = '<div style="font-weight:600; margin-bottom:8px;">预览前5行</div><div class="table-wrapper"><table style="min-width:300px;"><thead><tr><th>题目</th><th>选项列表</th><th>答案</th></tr></thead><tbody>';
+        for (const row of previewRows) {
+            const question = row[questionIdx] || '';
+            const answer = row[answerIdx] || '';
+            const options = [];
+            for (let i = startIdx; i <= endIdx; i++) {
+                const opt = row[i];
+                if (opt && opt.toString().trim() !== '') options.push(opt.toString().trim());
+            }
+            const optionsStr = options.join(' | ');
+            html += `<tr><td style="max-width:200px;">${escapeHtml(question)}</td><td style="max-width:200px;">${escapeHtml(optionsStr)}</td><td>${escapeHtml(answer)}</td></tr>`;
+        }
+        html += '</tbody></table></div>';
+        document.getElementById('previewTable').innerHTML = html;
+    }
+
+    document.getElementById('questionColSelect')?.addEventListener('change', updatePreviewTable);
+    document.getElementById('answerColSelect')?.addEventListener('change', updatePreviewTable);
+    document.getElementById('optionStartColSelect')?.addEventListener('change', updatePreviewTable);
+    document.getElementById('optionEndColSelect')?.addEventListener('change', updatePreviewTable);
+
+    async function confirmImportFromExcel() {
+        const questionIdx = parseInt(document.getElementById('questionColSelect').value);
+        const answerIdx = parseInt(document.getElementById('answerColSelect').value);
+        const startIdx = parseInt(document.getElementById('optionStartColSelect').value);
+        const endIdx = parseInt(document.getElementById('optionEndColSelect').value);
+        if (isNaN(questionIdx) || isNaN(answerIdx) || isNaN(startIdx) || isNaN(endIdx) || startIdx > endIdx) {
+            showToast('请正确选择列映射', true);
+            return;
+        }
+        const questionsArray = [];
+        for (const row of currentExcelData) {
+            const text = row[questionIdx] ? String(row[questionIdx]).trim() : '';
+            const answer = row[answerIdx] ? String(row[answerIdx]).trim() : '';
+            if (!text || !answer) continue;
+            const options = [];
+            for (let i = startIdx; i <= endIdx; i++) {
+                const opt = row[i];
+                if (opt && opt.toString().trim() !== '') options.push(opt.toString().trim());
+            }
+            if (options.length === 0) continue;
+            questionsArray.push({ text, options, answer });
+        }
+        if (questionsArray.length === 0) {
+            showToast('没有有效的题目数据', true);
+            return;
+        }
+        document.getElementById('excelConfigModal').style.display = 'none';
+        const btn = document.getElementById('importExcelBtn');
+        const progressDiv = document.getElementById('importProgress');
+        const progressFill = document.getElementById('importProgressFill');
+        const progressText = document.getElementById('importProgressText');
+        btn.disabled = true;
+        progressDiv.style.display = 'block';
+        progressFill.style.width = '0%';
+        progressText.innerText = `准备导入 ${questionsArray.length} 条...`;
+        
+        let simulatedPercent = 0;
+        const interval = setInterval(() => {
+            if (simulatedPercent < 90) {
+                simulatedPercent += 10;
+                progressFill.style.width = simulatedPercent + '%';
+                progressText.innerText = `导入中 ${simulatedPercent}%...`;
+            }
+        }, 300);
+        
+        try {
+            const res = await adminFetch('importSimpleQuestions', { questions: JSON.stringify(questionsArray) });
+            clearInterval(interval);
+            progressFill.style.width = '100%';
+            progressText.innerText = `导入完成！新增 ${res.added} 条`;
+            showToast(`导入完成: 新增 ${res.added} 条`);
+            await refreshFullQuestionCache();
+            renderQuestionList();
+        } catch (err) {
+            clearInterval(interval);
+            showToast(`导入失败: ${err.message}`, true);
+            progressDiv.style.display = 'none';
+        } finally {
+            setTimeout(() => { progressDiv.style.display = 'none'; }, 2000);
+            btn.disabled = false;
+        }
+    }
+
+    function importExcel() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.xlsx, .xls, .csv';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const data = await file.arrayBuffer();
+            const workbook = XLSX.read(data);
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+            if (!rows || rows.length < 2) { showToast('Excel 至少需要两行数据', true); return; }
+            const headers = rows[0].map(h => String(h || '').trim());
+            const dataRows = rows.slice(1).filter(row => row.some(cell => cell && cell.toString().trim() !== ''));
+            showExcelConfigModal(dataRows, headers);
+        };
+        input.click();
+    }
+
+    // ==================== 事件绑定和初始化 ====================
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
         if (!pwd) { showToast('请输入密码', true); return; }
@@ -827,6 +1248,8 @@
             updateStats();
             applyFilters();
             await loadLogs();
+            await refreshFullQuestionCache();
+            renderQuestionList();
             showToast('管理后台已解锁');
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
@@ -849,6 +1272,9 @@
         document.getElementById('adminPanel').style.display = 'block';
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById('adminTabBtn').classList.add('active');
+        if (adminPassword && !fullQuestionCache) {
+            refreshFullQuestionCache().then(() => renderQuestionList());
+        }
     });
 
     document.getElementById('verifyBtn').addEventListener('click', userVerify);
@@ -868,6 +1294,21 @@
         const code = document.getElementById('emergencyCodeBlock').innerText;
         if (code && !code.includes('失败')) copyToClipboard(code, document.getElementById('copyEmergencyBtn'));
         else showToast('应急代码不可用', true);
+    });
+    document.getElementById('questionStatsBtn').addEventListener('click', loadQuestionStats);
+    document.getElementById('clearQuestionsBtn').addEventListener('click', clearAllQuestions);
+    document.getElementById('importExcelBtn').addEventListener('click', importExcel);
+    document.getElementById('questionSearchBtn').addEventListener('click', searchQuestions);
+    document.getElementById('questionResetBtn').addEventListener('click', resetQuestionSearch);
+    document.getElementById('cancelImportBtn')?.addEventListener('click', () => {
+        document.getElementById('excelConfigModal').style.display = 'none';
+    });
+    document.getElementById('confirmImportConfigBtn')?.addEventListener('click', confirmImportFromExcel);
+    document.getElementById('cancelEditBtn')?.addEventListener('click', closeEditModal);
+    document.getElementById('saveEditBtn')?.addEventListener('click', saveEdit);
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('editQuestionModal');
+        if (e.target === modal) closeEditModal();
     });
 </script>
 </body>
