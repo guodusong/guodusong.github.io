@@ -262,6 +262,111 @@
                 box-shadow: inherit;
             }
         }
+
+        body {
+            background-size: 200% 200%;
+            animation: bgShift 18s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .card {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+        .card:hover {
+            border-color: #b8ead3;
+        }
+        .tab {
+            transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+        }
+        .tab:hover:not(.active) {
+            transform: translateY(-1px) scale(1.01);
+        }
+        .btn {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+        .btn:hover:not(:disabled),
+        .btn-primary:hover:not(:disabled),
+        .btn-danger:hover:not(:disabled),
+        .btn-ghost:hover:not(:disabled),
+        .btn-sm:hover:not(:disabled),
+        .copy-btn-sm:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.01);
+            filter: brightness(1.02);
+        }
+        .btn:active:not(:disabled),
+        .btn-primary:active:not(:disabled),
+        .btn-danger:active:not(:disabled),
+        .btn-ghost:active:not(:disabled),
+        .btn-sm:active:not(:disabled),
+        .copy-btn-sm:active:not(:disabled) {
+            transform: translateY(0) scale(0.97);
+        }
+        .input-field {
+            transition: transform 0.18s ease, border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .input-field:hover {
+            transform: translateY(-1px);
+        }
+        .table-wrapper {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+        }
+        .table-wrapper:hover {
+            border-color: #b8ead3;
+        }
+        tbody tr {
+            transition: background 0.18s ease, transform 0.18s ease;
+        }
+        tbody tr:hover {
+            background: #f8fffb;
+        }
+        .action-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100%;
+        }
+        .question-action-group {
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100%;
+        }
+        .token-name,
+        .history-item,
+        .stats-history-item,
+        .stat-card {
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+        .token-name:hover,
+        .history-item:hover,
+        .stats-history-item:hover,
+        .stat-card:hover {
+            transform: translateY(-1px);
+        }
+        .log-list,
+        .history-panel,
+        .stats-section,
+        .stats-card,
+        .modal-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .toast-item {
+            transform-origin: top right;
+        }
+        .btn.is-pressed,
+        .btn-primary.is-pressed,
+        .btn-danger.is-pressed,
+        .btn-ghost.is-pressed,
+        .btn-sm.is-pressed,
+        .copy-btn-sm.is-pressed {
+            transform: translateY(0) scale(0.96) !important;
+        }
+
         @media (max-width: 600px) {
             .card { padding: 20px; }
             .grid-2 { grid-template-columns: 1fr; }
@@ -841,7 +946,6 @@
             currentTokens = data.tokens || [];
             updateStats();
             applyFilters();
-            await loadLogs();
         } catch (err) {
             container.innerHTML = `<div style="color:red;">加载失败: ${err.message}</div>`;
             showToast(`加载Token失败: ${err.message}`, true);
@@ -1166,10 +1270,24 @@
     }
 
 
-let questionStatsTotal = 0;
 
-async function loadQuestionList() {
+let questionStatsTotal = 0;
+let questionListCache = new Map();
+
+function invalidateQuestionCache() {
+    questionListCache.clear();
+}
+
+async function loadQuestionList(forceReload = false) {
     const keyword = document.getElementById('questionSearchKeyword').value.trim();
+    const cacheKey = `${keyword}__${currentQuestionPage}__${QUESTION_PAGE_SIZE}`;
+    if (!forceReload && questionListCache.has(cacheKey)) {
+        const cached = questionListCache.get(cacheKey);
+        filteredQuestions = cached.data || [];
+        questionStatsTotal = Number(cached.total || 0);
+        renderQuestionList();
+        return cached;
+    }
     const data = await adminFetch('searchSimpleQuestions', {
         keyword,
         page: currentQuestionPage,
@@ -1177,6 +1295,10 @@ async function loadQuestionList() {
     });
     filteredQuestions = Array.isArray(data.data) ? data.data : [];
     questionStatsTotal = Number(data.total || 0);
+    questionListCache.set(cacheKey, {
+        data: filteredQuestions,
+        total: questionStatsTotal
+    });
     renderQuestionList();
     return data;
 }
@@ -1201,7 +1323,7 @@ function renderQuestionList() {
                 <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
                 <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
                 <td>${escapeHtml(item.answer)}</td>
-                <td class="action-group">
+                <td class="action-group question-action-group">
                     <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
                     <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
                 </td>
@@ -1250,7 +1372,8 @@ function renderQuestionList() {
                 try {
                     await adminFetch('deleteSimpleQuestion', { id });
                     showToast('删除成功');
-                    await loadQuestionList();
+                    invalidateQuestionCache();
+                    await loadQuestionList(true);
                 } catch(err) { showToast(`删除失败: ${err.message}`, true); }
             }
         });
@@ -1287,7 +1410,8 @@ async function saveEdit() {
         });
         showToast('修改成功');
         closeEditModal();
-        await loadQuestionList();
+        invalidateQuestionCache();
+        await loadQuestionList(true);
     } catch(err) {
         showToast(`修改失败: ${err.message}`, true);
     }
@@ -1303,7 +1427,8 @@ async function clearAllQuestions() {
         const res = await adminFetch('clearAllQuestions');
         showToast(`已清空 ${res.deleted} 条题目`);
         currentQuestionPage = 1;
-        await loadQuestionList();
+        invalidateQuestionCache();
+        await loadQuestionList(true);
     } catch(err) {
         showToast(`清空失败: ${err.message}`, true);
     } finally {
@@ -1326,12 +1451,13 @@ async function showQuestionStatsModal() {
         const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
         const latest = history[0] || null;
         const latestTime = latest ? new Date(latest.time) : null;
-        const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
+        const latestTimeText = latestTime
+            ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}`
+            : '暂无';
         const totalBatches = history.length;
         const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
         const latestCategory = latest ? (latest.category || '未命名') : '暂无';
         const latestCount = latest ? (Number(latest.count) || 0) : 0;
-
         const recentList = history.slice(0, 8).map(item => {
             const date = new Date(item.time);
             const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
@@ -1343,7 +1469,6 @@ async function showQuestionStatsModal() {
                 </div>
             `;
         }).join('');
-
         body.innerHTML = `
             <div class="stats-grid">
                 <div class="stats-card">
@@ -1367,7 +1492,6 @@ async function showQuestionStatsModal() {
                     <div class="stats-card-sub">历史导入总题量</div>
                 </div>
             </div>
-
             <div class="stats-section">
                 <div class="stats-section-title">最近导入记录</div>
                 <div class="stats-history-list">
@@ -1380,19 +1504,17 @@ async function showQuestionStatsModal() {
     }
 }
 
-async function showHistoryPanel() {
-    return showQuestionStatsModal();
-}
-
 function searchQuestions() {
     currentQuestionPage = 1;
-    loadQuestionList().catch(err => showToast(`搜索失败: ${err.message}`, true));
+    invalidateQuestionCache();
+    loadQuestionList(true).catch(err => showToast(`搜索失败: ${err.message}`, true));
 }
 
 function resetQuestionSearch() {
     document.getElementById('questionSearchKeyword').value = '';
     currentQuestionPage = 1;
-    loadQuestionList().catch(err => showToast(`重置失败: ${err.message}`, true));
+    invalidateQuestionCache();
+    loadQuestionList(true).catch(err => showToast(`重置失败: ${err.message}`, true));
 }
 
 document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
@@ -1405,7 +1527,8 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
     document.getElementById('questionStatsModal').style.display = 'none';
 });
 
-    let currentExcelData = null;
+let currentExcelData = null;
+
     let currentExcelHeaders = [];
     let currentImportCategory = '';
 
@@ -1526,7 +1649,8 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
             progressFill.style.width = '100%';
             progressText.innerText = `导入完成！新增 ${res.added} 条`;
             showToast(`导入完成: 新增 ${res.added} 条`);
-            await loadQuestionList();
+            invalidateQuestionCache();
+            await loadQuestionList(true);
             currentImportCategory = '';
         } catch (err) {
             clearInterval(interval);
@@ -1579,7 +1703,7 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
             updateStats();
             applyFilters();
             await loadLogs();
-            await loadQuestionList();
+            await loadQuestionList(true);
             showToast('管理后台已解锁');
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
@@ -1636,6 +1760,32 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
     document.getElementById('confirmImportConfigBtn')?.addEventListener('click', confirmImportFromExcel);
     document.getElementById('cancelEditBtn')?.addEventListener('click', closeEditModal);
     document.getElementById('saveEditBtn')?.addEventListener('click', saveEdit);
+    document.getElementById('questionSearchKeyword')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchQuestions();
+        }
+    });
+    let questionSearchDebounceTimer = null;
+    document.getElementById('questionSearchKeyword')?.addEventListener('input', () => {
+        clearTimeout(questionSearchDebounceTimer);
+        questionSearchDebounceTimer = setTimeout(() => {
+            if (document.getElementById('questionSearchKeyword').value.trim()) {
+                searchQuestions();
+            }
+        }, 320);
+    });
+    document.addEventListener('pointerdown', (e) => {
+        const btn = e.target.closest && e.target.closest('.btn, .copy-btn-sm, .tab');
+        if (btn) btn.classList.add('is-pressed');
+    });
+    document.addEventListener('pointerup', (e) => {
+        document.querySelectorAll('.is-pressed').forEach(el => el.classList.remove('is-pressed'));
+    });
+    document.addEventListener('pointercancel', () => {
+        document.querySelectorAll('.is-pressed').forEach(el => el.classList.remove('is-pressed'));
+    });
+
     window.addEventListener('click', (e) => {
         const modal = document.getElementById('editQuestionModal');
         if (e.target === modal) closeEditModal();
