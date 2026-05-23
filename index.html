@@ -147,7 +147,10 @@
         .token-name:hover { color: #059669; }
         .remain-value { color: #10b981; font-weight: 400; }
         .used-value { color: #ef4444; font-weight: 400; }
-        .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .action-group { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; justify-content: center; min-height: 100%; }
+        td.action-group { vertical-align: middle; }
+        .table-wrapper tbody tr { transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease; }
+        .table-wrapper tbody tr:hover { background: #f8fffb; transform: translateY(-1px); }
 
         .code-section { margin-top: 16px; }
         .code-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: #065f46; }
@@ -262,111 +265,6 @@
                 box-shadow: inherit;
             }
         }
-
-        body {
-            background-size: 200% 200%;
-            animation: bgShift 18s ease-in-out infinite alternate;
-        }
-        @keyframes bgShift {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-        .card {
-            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-        }
-        .card:hover {
-            border-color: #b8ead3;
-        }
-        .tab {
-            transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
-        }
-        .tab:hover:not(.active) {
-            transform: translateY(-1px) scale(1.01);
-        }
-        .btn {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-        }
-        .btn:hover:not(:disabled),
-        .btn-primary:hover:not(:disabled),
-        .btn-danger:hover:not(:disabled),
-        .btn-ghost:hover:not(:disabled),
-        .btn-sm:hover:not(:disabled),
-        .copy-btn-sm:hover:not(:disabled) {
-            transform: translateY(-2px) scale(1.01);
-            filter: brightness(1.02);
-        }
-        .btn:active:not(:disabled),
-        .btn-primary:active:not(:disabled),
-        .btn-danger:active:not(:disabled),
-        .btn-ghost:active:not(:disabled),
-        .btn-sm:active:not(:disabled),
-        .copy-btn-sm:active:not(:disabled) {
-            transform: translateY(0) scale(0.97);
-        }
-        .input-field {
-            transition: transform 0.18s ease, border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-        .input-field:hover {
-            transform: translateY(-1px);
-        }
-        .table-wrapper {
-            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-        }
-        .table-wrapper:hover {
-            border-color: #b8ead3;
-        }
-        tbody tr {
-            transition: background 0.18s ease, transform 0.18s ease;
-        }
-        tbody tr:hover {
-            background: #f8fffb;
-        }
-        .action-group {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100%;
-        }
-        .question-action-group {
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100%;
-        }
-        .token-name,
-        .history-item,
-        .stats-history-item,
-        .stat-card {
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-        }
-        .token-name:hover,
-        .history-item:hover,
-        .stats-history-item:hover,
-        .stat-card:hover {
-            transform: translateY(-1px);
-        }
-        .log-list,
-        .history-panel,
-        .stats-section,
-        .stats-card,
-        .modal-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-        .toast-item {
-            transform-origin: top right;
-        }
-        .btn.is-pressed,
-        .btn-primary.is-pressed,
-        .btn-danger.is-pressed,
-        .btn-ghost.is-pressed,
-        .btn-sm.is-pressed,
-        .copy-btn-sm.is-pressed {
-            transform: translateY(0) scale(0.96) !important;
-        }
-
         @media (max-width: 600px) {
             .card { padding: 20px; }
             .grid-2 { grid-template-columns: 1fr; }
@@ -629,7 +527,11 @@
 
             <div class="flex-between" style="margin-bottom: 10px;">
                 <span style="font-weight: 700;">用户日志</span>
-                <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
+                <div class="flex-row" style="gap: 8px;">
+                    <button id="refreshLogsBtn" class="btn btn-ghost btn-sm">刷新日志</button>
+                    <button id="loadMoreLogsBtn" class="btn btn-ghost btn-sm" style="display:none;">加载更多</button>
+                    <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
+                </div>
             </div>
             <div id="logsContainer" class="log-list"></div>
 
@@ -911,9 +813,26 @@
     let currentTokens = [];
     let filteredTokens = [];
     let currentPage = 1;
-    const PAGE_SIZE = 15;
+    const PAGE_SIZE = 10;
     let remainFilterValue = null;
     let selectedTokens = new Set();
+    let logsCache = [];
+    let logsTotal = 0;
+    let logsOffset = 0;
+    let logsPageSize = 20;
+    let logsHasMore = false;
+
+    function isPasswordError(err) {
+        return !!err && (err.message === '密码错误' || err.message === '登录已过期，请重新登录');
+    }
+
+    function debounce(fn, wait = 300) {
+        let timer = null;
+        return function(...args) {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), wait);
+        };
+    }
 
     async function adminFetch(action, params = {}) {
         const payload = { admin: '1', action: action, password: adminPassword, ...params };
@@ -947,6 +866,7 @@
             updateStats();
             applyFilters();
         } catch (err) {
+            if (isPasswordError(err)) return;
             container.innerHTML = `<div style="color:red;">加载失败: ${err.message}</div>`;
             showToast(`加载Token失败: ${err.message}`, true);
         }
@@ -986,7 +906,7 @@
                     <td>${t.initCount}</td>
                     <td class="remain-value">${t.remain}</td>
                     <td class="used-value">${t.used}</td>
-                    <td class="action-group">
+                    <td class="action-group" style="vertical-align: middle;">
                         <button class="btn btn-ghost btn-sm edit-btn" data-token="${escapeHtml(t.token)}">修改</button>
                         <button class="btn btn-ghost btn-sm reset-btn" data-token="${escapeHtml(t.token)}">重置</button>
                         <button class="btn btn-danger btn-sm delete-btn" data-token="${escapeHtml(t.token)}">删除</button>
@@ -1069,24 +989,15 @@
         }
     }
 
-    async function loadLogs() {
-        try {
-            const data = await adminFetch('logs');
-            const rawLogs = data.logs || [];
-            const container = document.getElementById('logsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            if (rawLogs.length === 0) return;
-            const parsedLogs = [];
-            for (const logStr of rawLogs) {
-                try {
-                    const log = JSON.parse(logStr);
-                    if (log && log.timestamp) parsedLogs.push(log);
-                    else parsedLogs.push({ ...log, timestamp: 0 });
-                } catch(e) {}
-            }
-            parsedLogs.sort((a, b) => (new Date(b.timestamp).getTime() || 0) - (new Date(a.timestamp).getTime() || 0));
-            for (const log of parsedLogs) {
+    function renderLogs() {
+        const container = document.getElementById('logsContainer');
+        const moreBtn = document.getElementById('loadMoreLogsBtn');
+        if (!container) return;
+        container.innerHTML = '';
+        if (!logsCache.length) {
+            container.innerHTML = '<div style="text-align:center; padding:18px; color:#94a3b8; font-size:0.85rem;">暂无日志</div>';
+        } else {
+            for (const log of logsCache) {
                 const date = new Date(log.timestamp);
                 const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
                 const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
@@ -1146,10 +1057,62 @@
                 container.appendChild(div);
             }
             container.scrollTop = 0;
+        }
+        if (moreBtn) {
+            moreBtn.style.display = logsHasMore ? 'inline-flex' : 'none';
+            moreBtn.innerText = logsHasMore ? `加载更多 (${logsCache.length}/${logsTotal || logsCache.length})` : '加载更多';
+            moreBtn.disabled = false;
+        }
+    }
+
+    async function loadLogs(options = {}) {
+        const { append = false, reset = false, silent = false } = options;
+        const refreshBtn = document.getElementById('refreshLogsBtn');
+        const moreBtn = document.getElementById('loadMoreLogsBtn');
+        if (refreshBtn && !append) {
+            refreshBtn.disabled = true;
+            refreshBtn.innerText = '加载中...';
+        }
+        if (moreBtn && append) {
+            moreBtn.disabled = true;
+            moreBtn.innerText = '加载中...';
+        }
+        try {
+            if (reset || !append) {
+                logsOffset = 0;
+                logsCache = [];
+                logsTotal = 0;
+                logsHasMore = false;
+            }
+            const data = await adminFetch('logs', { limit: logsPageSize, offset: logsOffset });
+            const rawLogs = Array.isArray(data.logs) ? data.logs : [];
+            const parsedLogs = [];
+            for (const logStr of rawLogs) {
+                try {
+                    const log = JSON.parse(logStr);
+                    if (log && log.timestamp) parsedLogs.push(log);
+                    else parsedLogs.push({ ...log, timestamp: 0 });
+                } catch(e) {}
+            }
+            if (append) logsCache = logsCache.concat(parsedLogs);
+            else logsCache = parsedLogs;
+            logsTotal = Number(data.total || logsCache.length);
+            logsHasMore = !!data.hasMore;
+            logsOffset = logsCache.length;
+            renderLogs();
         } catch(e) {
+            if (isPasswordError(e)) return;
             const container = document.getElementById('logsContainer');
             if (container) container.innerHTML = '<div style="color:red; padding:12px;">日志加载异常</div>';
-            showToast('日志加载失败，请刷新重试', true);
+            if (!silent) showToast('日志加载失败，请刷新重试', true);
+        } finally {
+            if (refreshBtn && !append) {
+                refreshBtn.disabled = false;
+                refreshBtn.innerText = '刷新日志';
+            }
+            if (moreBtn && append) {
+                moreBtn.disabled = false;
+            }
         }
     }
 
@@ -1161,7 +1124,11 @@
             btn.disabled = true;
             try {
                 await adminFetch('clearLogs');
-                await loadLogs();
+                logsCache = [];
+                logsTotal = 0;
+                logsOffset = 0;
+                logsHasMore = false;
+                renderLogs();
                 showToast('日志已清空');
             } catch(err) { showToast(`清空日志失败: ${err.message}`, true); }
             finally { btn.innerText = original; btn.disabled = false; }
@@ -1272,35 +1239,50 @@
 
 
 let questionStatsTotal = 0;
-let questionListCache = new Map();
+let questionPageCache = new Map();
+let questionSearchDebounceTimer = null;
 
 function invalidateQuestionCache() {
-    questionListCache.clear();
+    questionPageCache.clear();
 }
 
-async function loadQuestionList(forceReload = false) {
-    const keyword = document.getElementById('questionSearchKeyword').value.trim();
-    const cacheKey = `${keyword}__${currentQuestionPage}__${QUESTION_PAGE_SIZE}`;
-    if (!forceReload && questionListCache.has(cacheKey)) {
-        const cached = questionListCache.get(cacheKey);
-        filteredQuestions = cached.data || [];
-        questionStatsTotal = Number(cached.total || 0);
+function showQuestionListHint(message) {
+    const container = document.getElementById('questionSearchResult');
+    const paginationDiv = document.getElementById('questionPagination');
+    container.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b;">${escapeHtml(message)}</div>`;
+    paginationDiv.innerHTML = '';
+}
+
+async function loadQuestionList(options = {}) {
+    const { force = false, silent = false } = options;
+    try {
+        const keyword = document.getElementById('questionSearchKeyword').value.trim();
+        const cacheKey = `${keyword}::${currentQuestionPage}::${QUESTION_PAGE_SIZE}`;
+        if (!force && questionPageCache.has(cacheKey)) {
+            const cached = questionPageCache.get(cacheKey);
+            filteredQuestions = Array.isArray(cached.data) ? cached.data : [];
+            questionStatsTotal = Number(cached.total || 0);
+            renderQuestionList();
+            return cached;
+        }
+        const data = await adminFetch('searchSimpleQuestions', {
+            keyword,
+            page: currentQuestionPage,
+            pageSize: QUESTION_PAGE_SIZE
+        });
+        filteredQuestions = Array.isArray(data.data) ? data.data : [];
+        questionStatsTotal = Number(data.total || 0);
+        questionPageCache.set(cacheKey, {
+            data: filteredQuestions,
+            total: questionStatsTotal
+        });
         renderQuestionList();
-        return cached;
+        return data;
+    } catch (err) {
+        if (isPasswordError(err)) return;
+        if (!silent) showToast(`题库加载失败: ${err.message}`, true);
+        throw err;
     }
-    const data = await adminFetch('searchSimpleQuestions', {
-        keyword,
-        page: currentQuestionPage,
-        pageSize: QUESTION_PAGE_SIZE
-    });
-    filteredQuestions = Array.isArray(data.data) ? data.data : [];
-    questionStatsTotal = Number(data.total || 0);
-    questionListCache.set(cacheKey, {
-        data: filteredQuestions,
-        total: questionStatsTotal
-    });
-    renderQuestionList();
-    return data;
 }
 
 function renderQuestionList() {
@@ -1308,7 +1290,9 @@ function renderQuestionList() {
     const paginationDiv = document.getElementById('questionPagination');
     const totalPages = Math.max(1, Math.ceil((questionStatsTotal || 0) / QUESTION_PAGE_SIZE));
     if (!filteredQuestions || filteredQuestions.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">未找到题目</div>';
+        container.innerHTML = questionStatsTotal
+            ? '<div style="text-align:center; padding:40px; color:#64748b;">未找到题目</div>'
+            : '<div style="text-align:center; padding:40px; color:#64748b;">请输入关键词后点击搜索，或直接回车加载第一页</div>';
         paginationDiv.innerHTML = questionStatsTotal
             ? `<div style="font-weight:600; color:#64748b;">共 ${questionStatsTotal} 条，当前第 ${currentQuestionPage} 页</div>`
             : '';
@@ -1323,7 +1307,7 @@ function renderQuestionList() {
                 <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
                 <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
                 <td>${escapeHtml(item.answer)}</td>
-                <td class="action-group question-action-group">
+                <td class="action-group" style="vertical-align: middle;">
                     <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
                     <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
                 </td>
@@ -1344,13 +1328,15 @@ function renderQuestionList() {
     document.getElementById('questionPrevPage')?.addEventListener('click', async () => {
         if (currentQuestionPage > 1) {
             currentQuestionPage--;
-            await loadQuestionList();
+            invalidateQuestionCache();
+            await loadQuestionList({ force: true });
         }
     });
     document.getElementById('questionNextPage')?.addEventListener('click', async () => {
         if (currentQuestionPage < totalPages) {
             currentQuestionPage++;
-            await loadQuestionList();
+            invalidateQuestionCache();
+            await loadQuestionList({ force: true });
         }
     });
 
@@ -1371,9 +1357,9 @@ function renderQuestionList() {
             if (confirm('确定删除该题目吗？')) {
                 try {
                     await adminFetch('deleteSimpleQuestion', { id });
-                    showToast('删除成功');
                     invalidateQuestionCache();
-                    await loadQuestionList(true);
+                    showToast('删除成功');
+                    await loadQuestionList({ force: true });
                 } catch(err) { showToast(`删除失败: ${err.message}`, true); }
             }
         });
@@ -1383,7 +1369,8 @@ function renderQuestionList() {
 function openEditModal(id, text, optionsArray, answer) {
     currentEditId = id;
     document.getElementById('editQuestionText').value = text;
-    document.getElementById('editQuestionOptions').value = Array.isArray(optionsArray) ? optionsArray.join('\n') : '';
+    document.getElementById('editQuestionOptions').value = Array.isArray(optionsArray) ? optionsArray.join('
+') : '';
     document.getElementById('editQuestionAnswer').value = answer;
     document.getElementById('editQuestionModal').style.display = 'flex';
 }
@@ -1399,7 +1386,8 @@ async function saveEdit() {
     const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
     if (!newText) { showToast('题目不能为空', true); return; }
     if (!newAnswer) { showToast('答案不能为空', true); return; }
-    const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
+    const optionsArray = newOptionsRaw.split('
+').map(s => s.trim()).filter(s => s);
     if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
     try {
         await adminFetch('updateSimpleQuestion', {
@@ -1408,10 +1396,10 @@ async function saveEdit() {
             options: JSON.stringify(optionsArray),
             answer: newAnswer
         });
+        invalidateQuestionCache();
         showToast('修改成功');
         closeEditModal();
-        invalidateQuestionCache();
-        await loadQuestionList(true);
+        await loadQuestionList({ force: true });
     } catch(err) {
         showToast(`修改失败: ${err.message}`, true);
     }
@@ -1428,7 +1416,7 @@ async function clearAllQuestions() {
         showToast(`已清空 ${res.deleted} 条题目`);
         currentQuestionPage = 1;
         invalidateQuestionCache();
-        await loadQuestionList(true);
+        showQuestionListHint('题库已清空');
     } catch(err) {
         showToast(`清空失败: ${err.message}`, true);
     } finally {
@@ -1451,13 +1439,12 @@ async function showQuestionStatsModal() {
         const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
         const latest = history[0] || null;
         const latestTime = latest ? new Date(latest.time) : null;
-        const latestTimeText = latestTime
-            ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}`
-            : '暂无';
+        const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
         const totalBatches = history.length;
         const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
         const latestCategory = latest ? (latest.category || '未命名') : '暂无';
         const latestCount = latest ? (Number(latest.count) || 0) : 0;
+
         const recentList = history.slice(0, 8).map(item => {
             const date = new Date(item.time);
             const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
@@ -1469,6 +1456,7 @@ async function showQuestionStatsModal() {
                 </div>
             `;
         }).join('');
+
         body.innerHTML = `
             <div class="stats-grid">
                 <div class="stats-card">
@@ -1492,6 +1480,7 @@ async function showQuestionStatsModal() {
                     <div class="stats-card-sub">历史导入总题量</div>
                 </div>
             </div>
+
             <div class="stats-section">
                 <div class="stats-section-title">最近导入记录</div>
                 <div class="stats-history-list">
@@ -1504,18 +1493,52 @@ async function showQuestionStatsModal() {
     }
 }
 
+async function showHistoryPanel() {
+    return showQuestionStatsModal();
+}
+
+function scheduleQuestionSearch() {
+    if (questionSearchDebounceTimer) clearTimeout(questionSearchDebounceTimer);
+    questionSearchDebounceTimer = setTimeout(() => {
+        currentQuestionPage = 1;
+        loadQuestionList({ silent: true }).catch(err => {
+            if (!isPasswordError(err)) showToast(`搜索失败: ${err.message}`, true);
+        });
+    }, 350);
+}
+
 function searchQuestions() {
+    if (questionSearchDebounceTimer) clearTimeout(questionSearchDebounceTimer);
     currentQuestionPage = 1;
-    invalidateQuestionCache();
-    loadQuestionList(true).catch(err => showToast(`搜索失败: ${err.message}`, true));
+    loadQuestionList({ force: true }).catch(err => {
+        if (!isPasswordError(err)) showToast(`搜索失败: ${err.message}`, true);
+    });
 }
 
 function resetQuestionSearch() {
+    if (questionSearchDebounceTimer) clearTimeout(questionSearchDebounceTimer);
     document.getElementById('questionSearchKeyword').value = '';
     currentQuestionPage = 1;
-    invalidateQuestionCache();
-    loadQuestionList(true).catch(err => showToast(`重置失败: ${err.message}`, true));
+    questionPageCache.clear();
+    showQuestionListHint('已清空关键词，点击搜索可加载第一页题目');
 }
+
+document.getElementById('questionSearchKeyword')?.addEventListener('input', (e) => {
+    const value = e.target.value.trim();
+    if (!value) {
+        if (questionSearchDebounceTimer) clearTimeout(questionSearchDebounceTimer);
+        showQuestionListHint('请输入关键词后自动搜索，或点击搜索加载第一页');
+        return;
+    }
+    scheduleQuestionSearch();
+});
+
+document.getElementById('questionSearchKeyword')?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        searchQuestions();
+    }
+});
 
 document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'questionStatsModal') {
@@ -1528,7 +1551,6 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
 });
 
 let currentExcelData = null;
-
     let currentExcelHeaders = [];
     let currentImportCategory = '';
 
@@ -1650,7 +1672,7 @@ let currentExcelData = null;
             progressText.innerText = `导入完成！新增 ${res.added} 条`;
             showToast(`导入完成: 新增 ${res.added} 条`);
             invalidateQuestionCache();
-            await loadQuestionList(true);
+            await loadQuestionList({ force: true });
             currentImportCategory = '';
         } catch (err) {
             clearInterval(interval);
@@ -1681,7 +1703,8 @@ let currentExcelData = null;
         input.click();
     }
 
-    document.getElementById('loginAdminBtn').addEventListener('click', async () => {
+    
+document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
         if (!pwd) { showToast('请输入密码', true); return; }
         const btn = document.getElementById('loginAdminBtn');
@@ -1702,8 +1725,9 @@ let currentExcelData = null;
             currentTokens = loginResult.tokens || [];
             updateStats();
             applyFilters();
-            await loadLogs();
-            await loadQuestionList(true);
+            invalidateQuestionCache();
+            showQuestionListHint('请输入关键词后点击搜索，或直接回车加载第一页');
+            await loadLogs({ silent: true, reset: true });
             showToast('管理后台已解锁');
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
@@ -1726,8 +1750,8 @@ let currentExcelData = null;
         document.getElementById('adminPanel').style.display = 'block';
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById('adminTabBtn').classList.add('active');
-        if (adminPassword && !fullQuestionCache) {
-            loadQuestionList().then(() => renderQuestionList());
+        if (adminPassword && !questionPageCache.size) {
+            showQuestionListHint('请输入关键词后点击搜索，或直接回车加载第一页');
         }
     });
 
@@ -1754,38 +1778,14 @@ let currentExcelData = null;
     document.getElementById('importExcelBtn').addEventListener('click', importExcel);
     document.getElementById('questionSearchBtn').addEventListener('click', searchQuestions);
     document.getElementById('questionResetBtn').addEventListener('click', resetQuestionSearch);
+    document.getElementById('refreshLogsBtn')?.addEventListener('click', () => loadLogs({ reset: true }));
+    document.getElementById('loadMoreLogsBtn')?.addEventListener('click', () => loadLogs({ append: true }));
     document.getElementById('cancelImportBtn')?.addEventListener('click', () => {
         document.getElementById('excelConfigModal').style.display = 'none';
     });
     document.getElementById('confirmImportConfigBtn')?.addEventListener('click', confirmImportFromExcel);
     document.getElementById('cancelEditBtn')?.addEventListener('click', closeEditModal);
     document.getElementById('saveEditBtn')?.addEventListener('click', saveEdit);
-    document.getElementById('questionSearchKeyword')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            searchQuestions();
-        }
-    });
-    let questionSearchDebounceTimer = null;
-    document.getElementById('questionSearchKeyword')?.addEventListener('input', () => {
-        clearTimeout(questionSearchDebounceTimer);
-        questionSearchDebounceTimer = setTimeout(() => {
-            if (document.getElementById('questionSearchKeyword').value.trim()) {
-                searchQuestions();
-            }
-        }, 320);
-    });
-    document.addEventListener('pointerdown', (e) => {
-        const btn = e.target.closest && e.target.closest('.btn, .copy-btn-sm, .tab');
-        if (btn) btn.classList.add('is-pressed');
-    });
-    document.addEventListener('pointerup', (e) => {
-        document.querySelectorAll('.is-pressed').forEach(el => el.classList.remove('is-pressed'));
-    });
-    document.addEventListener('pointercancel', () => {
-        document.querySelectorAll('.is-pressed').forEach(el => el.classList.remove('is-pressed'));
-    });
-
     window.addEventListener('click', (e) => {
         const modal = document.getElementById('editQuestionModal');
         if (e.target === modal) closeEditModal();
