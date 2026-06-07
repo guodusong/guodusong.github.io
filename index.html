@@ -639,7 +639,6 @@
 <script>
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
 
-    let fullQuestionCache = null;
     let filteredQuestions = [];
     let currentQuestionPage = 1;
     const QUESTION_PAGE_SIZE = 10;
@@ -965,87 +964,113 @@
         }
     }
 
-    async function loadLogs() {
+    let logPage = 1;
+    let logHasMore = true;
+    let logLoading = false;
+    const LOG_PAGE_SIZE = 10;
+
+    function renderLogEntry(log) {
+        const date = new Date(log.timestamp);
+        const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+        const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
+        const isIdentityAdmin = adminActions.includes(log.action);
+        const badgeStyle = isIdentityAdmin ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
+        const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
+        let actionText = '';
+        if (log.action === 'use') {
+            const remainStr = log.details ? log.details.replace(/[^0-9]/g, '') : '0';
+            actionText = `提取脚本 (剩余次数 ${remainStr})`;
+        } else if (log.action === 'add') {
+            actionText = `添加了 Token "${escapeHtml(log.token)}" ${log.details ? '(' + escapeHtml(log.details) + ')' : ''}`;
+        } else if (log.action === 'updateRemain') {
+            actionText = `修改了 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数')}`;
+        } else if (log.action === 'reset') {
+            actionText = `将 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数恢复')}`;
+        } else if (log.action === 'delete') {
+            actionText = `删除了 Token "${escapeHtml(log.token)}"`;
+        } else if (log.action === 'deleteBatch') {
+            actionText = `批量删除 (${escapeHtml(log.details || '')})`;
+        } else if (log.action === 'clearAll') {
+            actionText = `清空了全站所有 Token`;
+        } else if (log.action === 'import') {
+            actionText = `批量导入 Token (${escapeHtml(log.details || '')})`;
+        } else if (log.action === 'importSimpleQuestions') {
+            actionText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
+        } else if (log.action === 'updateSimpleQuestion') {
+            actionText = `修改题目 ${log.details || ''}`;
+        } else if (log.action === 'deleteSimpleQuestion') {
+            actionText = `删除题目 ${log.details || ''}`;
+        } else if (log.action === 'clearAllQuestions') {
+            actionText = `清空题库 (${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
+        } else if (log.action === 'login') {
+            actionText = `登录管理面板`;
+        } else {
+            actionText = `${log.action || ''} ${log.details || ''}`;
+        }
+        const div = document.createElement('div');
+        div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 8px;";
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
+                <span style="padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; ${badgeStyle}">${identityText}</span>
+            </div>
+            <div style="color: #1f2937; font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
+                ${actionText}
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="color: #059669; background: #ecfdf5; border: 1px solid #d1fae5; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+                    ${escapeHtml(log.ip || '未知IP')}
+                </span>
+                <span style="color: #4b5563; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
+                     ${escapeHtml(log.location || '未知属地')}
+                </span>
+            </div>
+        `;
+        return div;
+    }
+
+    // reset=true 清空重新加载，reset=false 追加下一页
+    async function loadLogs(reset = true) {
+        const container = document.getElementById('logsContainer');
+        if (!container || logLoading) return;
+        if (reset) {
+            logPage = 1;
+            logHasMore = true;
+            container.innerHTML = '<div style="text-align:center;padding:12px;color:#94a3b8;">加载中...</div>';
+            container._logScrollSetup = false;
+        }
+        if (!logHasMore) return;
+        logLoading = true;
         try {
-            const data = await adminFetch('logs');
+            const data = await adminFetch('logs', { page: logPage, pageSize: LOG_PAGE_SIZE });
             const rawLogs = data.logs || [];
-            const container = document.getElementById('logsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            if (rawLogs.length === 0) return;
-            const parsedLogs = [];
+            logHasMore = data.hasMore !== false && rawLogs.length >= LOG_PAGE_SIZE;
+            if (reset) container.innerHTML = '';
+            if (rawLogs.length === 0 && reset) {
+                container.innerHTML = '';
+                return;
+            }
             for (const logStr of rawLogs) {
                 try {
                     const log = JSON.parse(logStr);
-                    if (log && log.timestamp) parsedLogs.push(log);
-                    else parsedLogs.push({ ...log, timestamp: 0 });
+                    if (log && log.timestamp) container.appendChild(renderLogEntry(log));
                 } catch(e) {}
             }
-            parsedLogs.sort((a, b) => (new Date(b.timestamp).getTime() || 0) - (new Date(a.timestamp).getTime() || 0));
-            for (const log of parsedLogs) {
-                const date = new Date(log.timestamp);
-                const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-                const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
-                const isIdentityAdmin = adminActions.includes(log.action);
-                const badgeStyle = isIdentityAdmin ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
-                const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
-                let actionText = '';
-                if (log.action === 'use') {
-                    const remainStr = log.details ? log.details.replace(/[^0-9]/g, '') : '0';
-                    actionText = `提取脚本 (剩余次数 ${remainStr})`;
-                } else if (log.action === 'add') {
-                    actionText = `添加了 Token "${escapeHtml(log.token)}" ${log.details ? '(' + escapeHtml(log.details) + ')' : ''}`;
-                } else if (log.action === 'updateRemain') {
-                    actionText = `修改了 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数')}`;
-                } else if (log.action === 'reset') {
-                    actionText = `将 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数恢复')}`;
-                } else if (log.action === 'delete') {
-                    actionText = `删除了 Token "${escapeHtml(log.token)}"`;
-                } else if (log.action === 'deleteBatch') {
-                    actionText = `批量删除 (${escapeHtml(log.details || '')})`;
-                } else if (log.action === 'clearAll') {
-                    actionText = `清空了全站所有 Token`;
-                } else if (log.action === 'import') {
-                    actionText = `批量导入 Token (${escapeHtml(log.details || '')})`;
-                } else if (log.action === 'importSimpleQuestions') {
-                    actionText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
-                } else if (log.action === 'updateSimpleQuestion') {
-                    actionText = `修改题目 ${log.details || ''}`;
-                } else if (log.action === 'deleteSimpleQuestion') {
-                    actionText = `删除题目 ${log.details || ''}`;
-                } else if (log.action === 'clearAllQuestions') {
-                    actionText = `清空题库 (${log.details?.match(/\d+/)?.[0] || '?'} 条)`;
-                } else if (log.action === 'login') {
-                    actionText = `登录管理面板`;
-                } else {
-                    actionText = `${log.action || ''} ${log.details || ''}`;
-                }
-                const div = document.createElement('div');
-                div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 8px;";
-                div.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
-                        <span style="padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; ${badgeStyle}">${identityText}</span>
-                    </div>
-                    <div style="color: #1f2937; font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
-                        ${actionText}
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                        <span style="color: #059669; background: #ecfdf5; border: 1px solid #d1fae5; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
-                            ${escapeHtml(log.ip || '未知IP')}
-                        </span>
-                        <span style="color: #4b5563; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
-                             ${escapeHtml(log.location || '未知属地')}
-                        </span>
-                    </div>
-                `;
-                container.appendChild(div);
+            logPage++;
+            // 首次加载后设置滚动监听
+            if (!container._logScrollSetup) {
+                container._logScrollSetup = true;
+                container.addEventListener('scroll', () => {
+                    if (container.scrollHeight - container.scrollTop - container.clientHeight < 60) {
+                        loadLogs(false);
+                    }
+                });
             }
-            container.scrollTop = 0;
         } catch(e) {
-            const container = document.getElementById('logsContainer');
-            if (container) container.innerHTML = '<div style="color:red; padding:12px;">日志加载异常</div>';
+            if (reset) container.innerHTML = '<div style="color:red;padding:12px;">日志加载异常</div>';
             showToast('日志加载失败，请刷新重试', true);
+        } finally {
+            logLoading = false;
         }
     }
 
@@ -1167,50 +1192,18 @@
 
 
 let questionStatsTotal = 0;
-let questionCacheLoading = false;  // 防止并发加载
-
-// 一次性加载全部题目到前端缓存（仅首次）
-async function loadAllQuestionsToCache() {
-    if (questionCacheLoading) return;
-    questionCacheLoading = true;
-    try {
-        const data = await adminFetch('getAllQuestionsData');
-        fullQuestionCache = Array.isArray(data.questions) ? data.questions : [];
-        questionStatsTotal = fullQuestionCache.length;
-        console.log('[题库缓存] 已加载 ' + fullQuestionCache.length + ' 道题目到本地');
-    } catch (err) {
-        showToast('题库加载失败: ' + err.message, true);
-        fullQuestionCache = [];
-    } finally {
-        questionCacheLoading = false;
-    }
-}
-
-// 从本地缓存中分页/搜索（不再请求后端）
+// 后端真分页：每次只取10条，10000题也保持快速响应
 async function loadQuestionList() {
-    // 首次访问时加载全部题目到缓存
-    if (!fullQuestionCache) {
-        await loadAllQuestionsToCache();
-    }
     const keyword = document.getElementById('questionSearchKeyword').value.trim();
-    const cache = fullQuestionCache || [];
-    if (keyword) {
-        const kw = keyword;
-        filteredQuestions = cache.filter(q =>
-            q.text.includes(kw) ||
-            (Array.isArray(q.options) && q.options.some(o => o.includes(kw))) ||
-            q.answer.includes(kw)
-        );
-    } else {
-        filteredQuestions = [...cache];
-    }
-    questionStatsTotal = filteredQuestions.length;
-    // 搜索后如果当前页超出范围，回到第1页
-    const totalPages = Math.max(1, Math.ceil(questionStatsTotal / QUESTION_PAGE_SIZE));
-    if (currentQuestionPage > totalPages) {
-        currentQuestionPage = 1;
-    }
+    const data = await adminFetch('searchSimpleQuestions', {
+        keyword,
+        page: currentQuestionPage,
+        pageSize: QUESTION_PAGE_SIZE
+    });
+    filteredQuestions = Array.isArray(data.data) ? data.data : [];
+    questionStatsTotal = Number(data.total || 0);
     renderQuestionList();
+    return data;
 }
 
 function renderQuestionList() {
@@ -1284,7 +1277,6 @@ function renderQuestionList() {
                 try {
                     await adminFetch('deleteSimpleQuestion', { id });
                     showToast('删除成功');
-                    fullQuestionCache = null;  // 删除后刷新缓存
                     await loadQuestionList();
                 } catch(err) { showToast(`删除失败: ${err.message}`, true); }
             }
@@ -1322,7 +1314,6 @@ async function saveEdit() {
         });
         showToast('修改成功');
         closeEditModal();
-        fullQuestionCache = null;  // 修改后刷新缓存
         await loadQuestionList();
     } catch(err) {
         showToast(`修改失败: ${err.message}`, true);
@@ -1339,7 +1330,6 @@ async function clearAllQuestions() {
         const res = await adminFetch('clearAllQuestions');
         showToast(`已清空 ${res.deleted} 条题目`);
         currentQuestionPage = 1;
-        fullQuestionCache = null;  // 清空后刷新缓存
         await loadQuestionList();
     } catch(err) {
         showToast(`清空失败: ${err.message}`, true);
@@ -1563,7 +1553,6 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
             progressFill.style.width = '100%';
             progressText.innerText = `导入完成！新增 ${res.added} 条`;
             showToast(`导入完成: 新增 ${res.added} 条`);
-            fullQuestionCache = null;  // 导入新题后刷新缓存
             await loadQuestionList();
             currentImportCategory = '';
         } catch (err) {
@@ -1644,8 +1633,8 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
         document.getElementById('adminPanel').style.display = 'block';
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById('adminTabBtn').classList.add('active');
-        if (adminPassword && !fullQuestionCache) {
-            loadQuestionList().then(() => renderQuestionList());
+        if (adminPassword) {
+            loadQuestionList().catch(() => {});
         }
     });
 
