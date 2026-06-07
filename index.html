@@ -1167,18 +1167,50 @@
 
 
 let questionStatsTotal = 0;
+let questionCacheLoading = false;  // 防止并发加载
 
+// 一次性加载全部题目到前端缓存（仅首次）
+async function loadAllQuestionsToCache() {
+    if (questionCacheLoading) return;
+    questionCacheLoading = true;
+    try {
+        const data = await adminFetch('getAllQuestionsData');
+        fullQuestionCache = Array.isArray(data.questions) ? data.questions : [];
+        questionStatsTotal = fullQuestionCache.length;
+        console.log('[题库缓存] 已加载 ' + fullQuestionCache.length + ' 道题目到本地');
+    } catch (err) {
+        showToast('题库加载失败: ' + err.message, true);
+        fullQuestionCache = [];
+    } finally {
+        questionCacheLoading = false;
+    }
+}
+
+// 从本地缓存中分页/搜索（不再请求后端）
 async function loadQuestionList() {
+    // 首次访问时加载全部题目到缓存
+    if (!fullQuestionCache) {
+        await loadAllQuestionsToCache();
+    }
     const keyword = document.getElementById('questionSearchKeyword').value.trim();
-    const data = await adminFetch('searchSimpleQuestions', {
-        keyword,
-        page: currentQuestionPage,
-        pageSize: QUESTION_PAGE_SIZE
-    });
-    filteredQuestions = Array.isArray(data.data) ? data.data : [];
-    questionStatsTotal = Number(data.total || 0);
+    const cache = fullQuestionCache || [];
+    if (keyword) {
+        const kw = keyword;
+        filteredQuestions = cache.filter(q =>
+            q.text.includes(kw) ||
+            (Array.isArray(q.options) && q.options.some(o => o.includes(kw))) ||
+            q.answer.includes(kw)
+        );
+    } else {
+        filteredQuestions = [...cache];
+    }
+    questionStatsTotal = filteredQuestions.length;
+    // 搜索后如果当前页超出范围，回到第1页
+    const totalPages = Math.max(1, Math.ceil(questionStatsTotal / QUESTION_PAGE_SIZE));
+    if (currentQuestionPage > totalPages) {
+        currentQuestionPage = 1;
+    }
     renderQuestionList();
-    return data;
 }
 
 function renderQuestionList() {
@@ -1192,8 +1224,10 @@ function renderQuestionList() {
             : '';
         return;
     }
+    const start = (currentQuestionPage - 1) * QUESTION_PAGE_SIZE;
+    const pageItems = filteredQuestions.slice(start, start + QUESTION_PAGE_SIZE);
     let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
-    for (const item of filteredQuestions) {
+    for (const item of pageItems) {
         const optionsDisplay = Array.isArray(item.options) ? item.options.map(opt => escapeHtml(opt)).join(' | ') : '';
         html += `
             <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options || []))}' data-answer="${escapeHtml(item.answer)}">
@@ -1250,6 +1284,7 @@ function renderQuestionList() {
                 try {
                     await adminFetch('deleteSimpleQuestion', { id });
                     showToast('删除成功');
+                    fullQuestionCache = null;  // 删除后刷新缓存
                     await loadQuestionList();
                 } catch(err) { showToast(`删除失败: ${err.message}`, true); }
             }
@@ -1287,6 +1322,7 @@ async function saveEdit() {
         });
         showToast('修改成功');
         closeEditModal();
+        fullQuestionCache = null;  // 修改后刷新缓存
         await loadQuestionList();
     } catch(err) {
         showToast(`修改失败: ${err.message}`, true);
@@ -1303,6 +1339,7 @@ async function clearAllQuestions() {
         const res = await adminFetch('clearAllQuestions');
         showToast(`已清空 ${res.deleted} 条题目`);
         currentQuestionPage = 1;
+        fullQuestionCache = null;  // 清空后刷新缓存
         await loadQuestionList();
     } catch(err) {
         showToast(`清空失败: ${err.message}`, true);
@@ -1526,6 +1563,7 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
             progressFill.style.width = '100%';
             progressText.innerText = `导入完成！新增 ${res.added} 条`;
             showToast(`导入完成: 新增 ${res.added} 条`);
+            fullQuestionCache = null;  // 导入新题后刷新缓存
             await loadQuestionList();
             currentImportCategory = '';
         } catch (err) {
@@ -1567,20 +1605,24 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
         adminPassword = pwd;
         try {
             const loginResult = await adminFetch('login');
+            // 立即显示管理界面和 Token 数据
             document.getElementById('adminLoginArea').style.display = 'none';
             document.getElementById('adminMainArea').style.display = 'block';
-            try {
-                const codeData = await adminFetch('getEmergencyCode');
-                document.getElementById('emergencyCodeBlock').innerText = codeData?.code ? codeData.code : '应急代码获取失败';
-            } catch (err) {
-                document.getElementById('emergencyCodeBlock').innerText = '应急代码加载失败';
-            }
             currentTokens = loginResult.tokens || [];
             updateStats();
             applyFilters();
-            await loadLogs();
-            await loadQuestionList();
             showToast('管理后台已解锁');
+            // 以下三项并行加载，互不阻塞
+            // 1. 应急代码
+            adminFetch('getEmergencyCode').then(data => {
+                document.getElementById('emergencyCodeBlock').innerText = data?.code ? data.code : '应急代码获取失败';
+            }).catch(() => {
+                document.getElementById('emergencyCodeBlock').innerText = '应急代码加载失败';
+            });
+            // 2. 用户日志
+            loadLogs().catch(() => {});
+            // 3. 题库全量缓存（首次自动加载）
+            loadQuestionList().catch(() => {});
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
             else showToast(e.message || '密码错误', true);
