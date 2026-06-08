@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>新标签页</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <style>
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
         :root {
             --bg: #e8ecf1;
             --surface: #e8ecf1;
@@ -456,6 +458,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 <div class="toast-stack" id="toastStack"></div>
@@ -643,11 +646,45 @@
 </div>
 
 <script>
+    // ═══════════════════════════════════════════════════════════
+    //  配置与全局状态
+    // ═══════════════════════════════════════════════════════════
     const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
 
+    // 题目状态
     let filteredQuestions = [];
     let currentQuestionPage = 1;
     const QUESTION_PAGE_SIZE = 10;
+    let questionStatsTotal = 0;
+    let currentEditId = null;
+
+    // Token 管理状态
+    let adminPassword = '';
+    let currentTokens = [];
+    let filteredTokens = [];
+    let currentPage = 1;
+    const PAGE_SIZE = 15;
+    let remainFilterValue = null;
+    let selectedTokens = new Set();
+
+    // 日志状态
+    let logPage = 1;
+    let logHasMore = true;
+    let logLoading = false;
+    const LOG_PAGE_SIZE = 10;
+
+    // Excel 导入状态
+    let currentExcelData = null;
+    let currentExcelHeaders = [];
+    let currentImportCategory = '';
+
+    // 彩蛋状态
+    let clickCount = 0;
+    let clickTimer = null;
+
+    // ═══════════════════════════════════════════════════════════
+    //  工具函数
+    // ═══════════════════════════════════════════════════════════
 
     function showToast(msg, isError = false) {
         const stack = document.getElementById('toastStack');
@@ -717,8 +754,6 @@
         }
     }
 
-    let clickCount = 0;
-    let clickTimer = null;
     window.addEventListener('error', (event) => {
         console.error('[页面错误]', event.error || event.message || event);
     });
@@ -753,6 +788,9 @@
         return await res.json();
     }
 
+    // ═══════════════════════════════════════════════════════════
+    //  用户端逻辑
+    // ═══════════════════════════════════════════════════════════
     async function userVerify() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) { showToast('请输入 Token', true); return; }
@@ -828,10 +866,10 @@
                 document.getElementById('confirmRenameBtn').addEventListener('click', async () => {
                     const newName = document.getElementById('newTokenNameInput').value.trim();
                     const msgEl = document.getElementById('renameMsg');
-                    if (!newName) { msgEl.innerHTML = '<span style="color:var(--danger);">请输入新名称</span>'; return; }
-                    if (newName === currentVerifiedToken) { msgEl.innerHTML = '<span style="color:var(--danger);">新名称不能与当前名称相同</span>'; return; }
-                    const renameBtn = document.getElementById('confirmRenameBtn');
-                    renameBtn.disabled = true; renameBtn.innerText = '改名中...';
+                    if (!newName) { msgEl.innerHTML = '<span style=\"color:var(--danger);\">请输入新名称</span>'; return; }
+                    if (newName === currentVerifiedToken) { msgEl.innerHTML = '<span style=\"color:var(--danger);\">新名称不能与当前名称相同</span>'; return; }
+                    const btn = document.getElementById('confirmRenameBtn');
+                    btn.disabled = true; btn.innerText = '改名中...';
                     try {
                         const result = await renameUserToken(currentVerifiedToken, newName);
                         if (result.error) throw new Error(result.error);
@@ -839,24 +877,25 @@
                         document.getElementById('tokenInput').value = newName;
                         document.getElementById('renamePanel').style.display = 'none';
                         document.getElementById('newTokenNameInput').value = '';
-                        msgEl.innerHTML = '<span style="color:var(--primary-dark);">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
-                        const nc1 = '=javascript:$.getScript(\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\')';
-                        const nc2 = '=javascript:(function(){var s=document.createElement(\'script\');s.src=\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\';document.body.appendChild(s);})();';
+                        msgEl.innerHTML = '<span style=\"color:var(--primary-dark);\">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
+                        // 刷新代码块
+                        const nc1 = '=javascript:\$.getScript(\\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\\')';
+                        const nc2 = '=javascript:(function(){var s=document.createElement(\\'script\\');s.src=\\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\\';document.body.appendChild(s);})();';
                         document.querySelectorAll('#resultArea .code-box')[0].innerText = nc1;
                         document.querySelectorAll('#resultArea .code-box')[1].innerText = nc2;
                         document.querySelectorAll('#resultArea .copy-btn-sm')[0].setAttribute('data-code', nc1);
                         document.querySelectorAll('#resultArea .copy-btn-sm')[1].setAttribute('data-code', nc2);
                         showToast('令牌已更名为：' + newName);
                     } catch(e) {
-                        msgEl.innerHTML = '<span style="color:var(--danger);">' + escapeHtml(e.message) + '</span>';
+                        msgEl.innerHTML = '<span style=\"color:var(--danger);\">' + escapeHtml(e.message) + '</span>';
                     } finally {
-                        renameBtn.disabled = false; renameBtn.innerText = '确认';
+                        btn.disabled = false; btn.innerText = '确认';
                     }
                 });
                 showToast('验证通过');
             } else {
                 area.style.display = 'block';
-                area.innerHTML = '<div class="rename-panel" style="text-align:center;color:var(--danger);">验证码无效</div>';
+                area.innerHTML = '<div class=\"rename-panel\" style=\"text-align:center;color:var(--danger);\">验证码无效</div>';
                 showToast('无效的 Token', true);
             }
         } catch(e) {
@@ -867,14 +906,9 @@
         }
     }
 
-    let adminPassword = '';
-    let currentTokens = [];
-    let filteredTokens = [];
-    let currentPage = 1;
-    const PAGE_SIZE = 15;
-    let remainFilterValue = null;
-    let selectedTokens = new Set();
-
+    // ═══════════════════════════════════════════════════════════
+    //  管理端 API 封装
+    // ═══════════════════════════════════════════════════════════
     async function adminFetch(action, params = {}) {
         const payload = { admin: '1', action: action, password: adminPassword, ...params };
         const res = await fetch(API_URL, {
@@ -898,6 +932,9 @@
         return await res.json();
     }
 
+    // ═══════════════════════════════════════════════════════════
+    //  Token 管理（列表/统计/筛选/增删改查）
+    // ═══════════════════════════════════════════════════════════
     async function loadAllTokens() {
         const container = document.getElementById('tokenTableContainer');
         container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary);">加载中...</div>';
@@ -1046,11 +1083,9 @@
         }
     }
 
-    let logPage = 1;
-    let logHasMore = true;
-    let logLoading = false;
-    const LOG_PAGE_SIZE = 10;
-
+    // ═══════════════════════════════════════════════════════════
+    //  操作日志
+    // ═══════════════════════════════════════════════════════════
     function renderLogEntry(log) {
         const date = new Date(log.timestamp);
         const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
@@ -1113,6 +1148,7 @@
         return div;
     }
 
+    // reset=true 清空重新加载，reset=false 追加下一页
     async function loadLogs(reset = true) {
         const container = document.getElementById('logsContainer');
         if (!container || logLoading) return;
@@ -1140,6 +1176,7 @@
                 } catch(e) {}
             }
             logPage++;
+            // 首次加载后设置滚动监听
             if (!container._logScrollSetup) {
                 container._logScrollSetup = true;
                 container.addEventListener('scroll', () => {
@@ -1225,8 +1262,7 @@
 
     async function filterByRemain() {
         const values = [...new Set(currentTokens.map(t => t.remain))].sort((a,b)=>a-b);
-        const val = prompt(`当前剩余次数有: ${values.join(', ')}
-请输入要筛选的数字：`);
+        const val = prompt(`当前剩余次数有: ${values.join(', ')}\n请输入要筛选的数字：`);
         if (val !== null && !isNaN(parseInt(val))) {
             remainFilterValue = parseInt(val);
             applyFilters();
@@ -1258,98 +1294,6 @@
         finally { btn.innerText = original; btn.disabled = false; }
     }
 
-    let currentEditId = null;
-
-    let questionStatsTotal = 0;
-    async function loadQuestionList() {
-        const keyword = document.getElementById('questionSearchKeyword').value.trim();
-        const data = await adminFetch('searchSimpleQuestions', {
-            keyword,
-            page: currentQuestionPage,
-            pageSize: QUESTION_PAGE_SIZE
-        });
-        filteredQuestions = Array.isArray(data.data) ? data.data : [];
-        questionStatsTotal = Number(data.total || 0);
-        renderQuestionList();
-        return data;
-    }
-
-    function renderQuestionList() {
-        const container = document.getElementById('questionSearchResult');
-        const paginationDiv = document.getElementById('questionPagination');
-        const totalPages = Math.max(1, Math.ceil((questionStatsTotal || 0) / QUESTION_PAGE_SIZE));
-        if (!filteredQuestions || filteredQuestions.length === 0) {
-            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-secondary);">未找到题目</div>';
-            paginationDiv.innerHTML = questionStatsTotal
-                ? `<div style="font-weight:600; color:var(--text-secondary);">共 ${questionStatsTotal} 条，当前第 ${currentQuestionPage} 页</div>`
-                : '';
-            return;
-        }
-        let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
-        for (const item of filteredQuestions) {
-            const optionsDisplay = Array.isArray(item.options) ? item.options.map(opt => escapeHtml(opt)).join(' | ') : '';
-            html += `
-                <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options || []))}' data-answer="${escapeHtml(item.answer)}">
-                    <td>${escapeHtml(item.id)}</td>
-                    <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
-                    <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
-                    <td>${escapeHtml(item.answer)}</td>
-                    <td class="action-group">
-                        <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
-                        <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
-                    </td>
-                </tr>
-            `;
-        }
-        html += '</tbody></table></div>';
-        container.innerHTML = html;
-
-        paginationDiv.innerHTML = `
-            <div class="flex-row" style="justify-content:center; gap:12px;">
-                <button class="btn btn-ghost btn-sm" id="questionPrevPage" ${currentQuestionPage===1 ? 'disabled' : ''}>上一页</button>
-                <span style="font-weight:600;">${currentQuestionPage} / ${totalPages}</span>
-                <button class="btn btn-ghost btn-sm" id="questionNextPage" ${currentQuestionPage===totalPages ? 'disabled' : ''}>下一页</button>
-            </div>
-        `;
-
-        document.getElementById('questionPrevPage')?.addEventListener('click', async () => {
-            if (currentQuestionPage > 1) {
-                currentQuestionPage--;
-                await loadQuestionList();
-            }
-        });
-        document.getElementById('questionNextPage')?.addEventListener('click', async () => {
-            if (currentQuestionPage < totalPages) {
-                currentQuestionPage++;
-                await loadQuestionList();
-            }
-        });
-
-        document.querySelectorAll('.edit-question-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const row = e.target.closest('tr');
-                const id = row.getAttribute('data-id');
-                const text = row.getAttribute('data-text');
-                const options = JSON.parse(row.getAttribute('data-options'));
-                const answer = row.getAttribute('data-answer');
-                openEditModal(id, text, options, answer);
-            });
-        });
-        document.querySelectorAll('.delete-question-btn').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const row = e.target.closest('tr');
-                const id = row.getAttribute('data-id');
-                if (confirm('确定删除该题目吗？')) {
-                    try {
-                        await adminFetch('deleteSimpleQuestion', { id });
-                        showToast('删除成功');
-                        await loadQuestionList();
-                    } catch(err) { showToast(`删除失败: ${err.message}`, true); }
-                }
-            });
-        });
-    }
-
     function openEditModal(id, text, optionsArray, answer) {
         currentEditId = id;
         document.getElementById('editQuestionText').value = text;
@@ -1363,141 +1307,238 @@
         currentEditId = null;
     }
 
-    async function saveEdit() {
-        const newText = document.getElementById('editQuestionText').value.trim();
-        const newOptionsRaw = document.getElementById('editQuestionOptions').value;
-        const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
-        if (!newText) { showToast('题目不能为空', true); return; }
-        if (!newAnswer) { showToast('答案不能为空', true); return; }
-        const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
-        if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
-        try {
-            await adminFetch('updateSimpleQuestion', {
-                id: currentEditId,
-                text: newText,
-                options: JSON.stringify(optionsArray),
-                answer: newAnswer
-            });
-            showToast('修改成功');
-            closeEditModal();
-            await loadQuestionList();
-        } catch(err) {
-            showToast(`修改失败: ${err.message}`, true);
-        }
-    }
 
-    async function clearAllQuestions() {
-        if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
-        const btn = document.getElementById('clearQuestionsBtn');
-        const original = btn.innerText;
-        btn.innerText = '清空中...';
-        btn.disabled = true;
-        try {
-            const res = await adminFetch('clearAllQuestions');
-            showToast(`已清空 ${res.deleted} 条题目`);
-            currentQuestionPage = 1;
-            await loadQuestionList();
-        } catch(err) {
-            showToast(`清空失败: ${err.message}`, true);
-        } finally {
-            btn.innerText = original;
-            btn.disabled = false;
-        }
-    }
+// 后端真分页：每次只取10条，10000题也保持快速响应
+// ═══════════════════════════════════════════════════════════
+//  题库管理
+// ═══════════════════════════════════════════════════════════
+async function loadQuestionList() {
+    const keyword = document.getElementById('questionSearchKeyword').value.trim();
+    const data = await adminFetch('searchSimpleQuestions', {
+        keyword,
+        page: currentQuestionPage,
+        pageSize: QUESTION_PAGE_SIZE
+    });
+    filteredQuestions = Array.isArray(data.data) ? data.data : [];
+    questionStatsTotal = Number(data.total || 0);
+    renderQuestionList();
+    return data;
+}
 
-    async function showQuestionStatsModal() {
-        const modal = document.getElementById('questionStatsModal');
-        const body = document.getElementById('questionStatsBody');
-        modal.style.display = 'flex';
-        body.innerHTML = '<div class="stats-empty">正在加载统计数据...</div>';
-        try {
-            const res = await fetch(`${API_URL}?action=getImportHistory`);
-            const data = await res.json();
-            if (data.total === undefined || !Array.isArray(data.history)) {
-                throw new Error('统计数据格式错误');
+function renderQuestionList() {
+    const container = document.getElementById('questionSearchResult');
+    const paginationDiv = document.getElementById('questionPagination');
+    const totalPages = Math.max(1, Math.ceil((questionStatsTotal || 0) / QUESTION_PAGE_SIZE));
+    if (!filteredQuestions || filteredQuestions.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-secondary);">未找到题目</div>';
+        paginationDiv.innerHTML = questionStatsTotal
+            ? `<div style="font-weight:600; color:var(--text-secondary);">共 ${questionStatsTotal} 条，当前第 ${currentQuestionPage} 页</div>`
+            : '';
+        return;
+    }
+    let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
+    for (const item of filteredQuestions) {
+        const optionsDisplay = Array.isArray(item.options) ? item.options.map(opt => escapeHtml(opt)).join(' | ') : '';
+        html += `
+            <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options || []))}' data-answer="${escapeHtml(item.answer)}">
+                <td>${escapeHtml(item.id)}</td>
+                <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
+                <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
+                <td>${escapeHtml(item.answer)}</td>
+                <td class="action-group">
+                    <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
+                    <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
+                </td>
+            </tr>
+        `;
+    }
+    html += '</tbody></table></div>';
+    container.innerHTML = html;
+
+    paginationDiv.innerHTML = `
+        <div class="flex-row" style="justify-content:center; gap:12px;">
+            <button class="btn btn-ghost btn-sm" id="questionPrevPage" ${currentQuestionPage===1 ? 'disabled' : ''}>上一页</button>
+            <span style="font-weight:600;">${currentQuestionPage} / ${totalPages}</span>
+            <button class="btn btn-ghost btn-sm" id="questionNextPage" ${currentQuestionPage===totalPages ? 'disabled' : ''}>下一页</button>
+        </div>
+    `;
+
+    document.getElementById('questionPrevPage')?.addEventListener('click', async () => {
+        if (currentQuestionPage > 1) {
+            currentQuestionPage--;
+            await loadQuestionList();
+        }
+    });
+    document.getElementById('questionNextPage')?.addEventListener('click', async () => {
+        if (currentQuestionPage < totalPages) {
+            currentQuestionPage++;
+            await loadQuestionList();
+        }
+    });
+
+    document.querySelectorAll('.edit-question-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            const id = row.getAttribute('data-id');
+            const text = row.getAttribute('data-text');
+            const options = JSON.parse(row.getAttribute('data-options'));
+            const answer = row.getAttribute('data-answer');
+            openEditModal(id, text, options, answer);
+        });
+    });
+    document.querySelectorAll('.delete-question-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            const row = e.target.closest('tr');
+            const id = row.getAttribute('data-id');
+            if (confirm('确定删除该题目吗？')) {
+                try {
+                    await adminFetch('deleteSimpleQuestion', { id });
+                    showToast('删除成功');
+                    await loadQuestionList();
+                } catch(err) { showToast(`删除失败: ${err.message}`, true); }
             }
-            const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
-            const latest = history[0] || null;
-            const latestTime = latest ? new Date(latest.time) : null;
-            const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
-            const totalBatches = history.length;
-            const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
-            const latestCategory = latest ? (latest.category || '未命名') : '暂无';
-            const latestCount = latest ? (Number(latest.count) || 0) : 0;
+        });
+    });
+}
 
-            const recentList = history.slice(0, 8).map(item => {
-                const date = new Date(item.time);
-                const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-                return `
-                    <div class="stats-history-item">
-                        <div class="stats-history-time">${timeStr}</div>
-                        <div class="stats-history-category">${escapeHtml(item.category || '未命名')}</div>
-                        <div class="stats-history-count">导入 ${Number(item.count) || 0} 条</div>
-                    </div>
-                `;
-            }).join('');
+async function saveEdit() {
+    const newText = document.getElementById('editQuestionText').value.trim();
+    const newOptionsRaw = document.getElementById('editQuestionOptions').value;
+    const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
+    if (!newText) { showToast('题目不能为空', true); return; }
+    if (!newAnswer) { showToast('答案不能为空', true); return; }
+    const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
+    if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
+    try {
+        await adminFetch('updateSimpleQuestion', {
+            id: currentEditId,
+            text: newText,
+            options: JSON.stringify(optionsArray),
+            answer: newAnswer
+        });
+        showToast('修改成功');
+        closeEditModal();
+        await loadQuestionList();
+    } catch(err) {
+        showToast(`修改失败: ${err.message}`, true);
+    }
+}
 
-            body.innerHTML = `
-                <div class="stats-grid">
-                    <div class="stats-card">
-                        <div class="stats-card-label">当前题库总数</div>
-                        <div class="stats-card-value">${escapeHtml(String(data.total))}</div>
-                        <div class="stats-card-sub">来自题库管理统计</div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-card-label">导入批次</div>
-                        <div class="stats-card-value">${escapeHtml(String(totalBatches))}</div>
-                        <div class="stats-card-sub">最近 ${Math.min(totalBatches, 8)} 条导入记录</div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-card-label">最近导入</div>
-                        <div class="stats-card-value">${escapeHtml(String(latestCount))}</div>
-                        <div class="stats-card-sub">${escapeHtml(latestCategory)} · ${escapeHtml(latestTimeText)}</div>
-                    </div>
-                    <div class="stats-card">
-                        <div class="stats-card-label">累计导入量</div>
-                        <div class="stats-card-value">${escapeHtml(String(totalImported))}</div>
-                        <div class="stats-card-sub">历史导入总题量</div>
-                    </div>
-                </div>
+async function clearAllQuestions() {
+    if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
+    const btn = document.getElementById('clearQuestionsBtn');
+    const original = btn.innerText;
+    btn.innerText = '清空中...';
+    btn.disabled = true;
+    try {
+        const res = await adminFetch('clearAllQuestions');
+        showToast(`已清空 ${res.deleted} 条题目`);
+        currentQuestionPage = 1;
+        await loadQuestionList();
+    } catch(err) {
+        showToast(`清空失败: ${err.message}`, true);
+    } finally {
+        btn.innerText = original;
+        btn.disabled = false;
+    }
+}
 
-                <div class="stats-section">
-                    <div class="stats-section-title">最近导入记录</div>
-                    <div class="stats-history-list">
-                        ${recentList || '<div class="stats-empty">暂无导入记录</div>'}
-                    </div>
+async function showQuestionStatsModal() {
+    const modal = document.getElementById('questionStatsModal');
+    const body = document.getElementById('questionStatsBody');
+    modal.style.display = 'flex';
+    body.innerHTML = '<div class="stats-empty">正在加载统计数据...</div>';
+    try {
+        const res = await fetch(`${API_URL}?action=getImportHistory`);
+        const data = await res.json();
+        if (data.total === undefined || !Array.isArray(data.history)) {
+            throw new Error('统计数据格式错误');
+        }
+        const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+        const latest = history[0] || null;
+        const latestTime = latest ? new Date(latest.time) : null;
+        const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
+        const totalBatches = history.length;
+        const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+        const latestCategory = latest ? (latest.category || '未命名') : '暂无';
+        const latestCount = latest ? (Number(latest.count) || 0) : 0;
+
+        const recentList = history.slice(0, 8).map(item => {
+            const date = new Date(item.time);
+            const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+            return `
+                <div class="stats-history-item">
+                    <div class="stats-history-time">${timeStr}</div>
+                    <div class="stats-history-category">${escapeHtml(item.category || '未命名')}</div>
+                    <div class="stats-history-count">导入 ${Number(item.count) || 0} 条</div>
                 </div>
             `;
-        } catch (e) {
-            body.innerHTML = `<div class="stats-empty">获取统计失败：${escapeHtml(e.message || '未知错误')}</div>`;
-        }
+        }).join('');
+
+        body.innerHTML = `
+            <div class="stats-grid">
+                <div class="stats-card">
+                    <div class="stats-card-label">当前题库总数</div>
+                    <div class="stats-card-value">${escapeHtml(String(data.total))}</div>
+                    <div class="stats-card-sub">来自题库管理统计</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-card-label">导入批次</div>
+                    <div class="stats-card-value">${escapeHtml(String(totalBatches))}</div>
+                    <div class="stats-card-sub">最近 ${Math.min(totalBatches, 8)} 条导入记录</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-card-label">最近导入</div>
+                    <div class="stats-card-value">${escapeHtml(String(latestCount))}</div>
+                    <div class="stats-card-sub">${escapeHtml(latestCategory)} · ${escapeHtml(latestTimeText)}</div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-card-label">累计导入量</div>
+                    <div class="stats-card-value">${escapeHtml(String(totalImported))}</div>
+                    <div class="stats-card-sub">历史导入总题量</div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <div class="stats-section-title">最近导入记录</div>
+                <div class="stats-history-list">
+                    ${recentList || '<div class="stats-empty">暂无导入记录</div>'}
+                </div>
+            </div>
+        `;
+    } catch (e) {
+        body.innerHTML = `<div class="stats-empty">获取统计失败：${escapeHtml(e.message || '未知错误')}</div>`;
     }
+}
 
-    function searchQuestions() {
-        currentQuestionPage = 1;
-        loadQuestionList().catch(err => showToast(`搜索失败: ${err.message}`, true));
-    }
+async function showHistoryPanel() {
+    return showQuestionStatsModal();
+}
 
-    function resetQuestionSearch() {
-        document.getElementById('questionSearchKeyword').value = '';
-        currentQuestionPage = 1;
-        loadQuestionList().catch(err => showToast(`重置失败: ${err.message}`, true));
-    }
+function searchQuestions() {
+    currentQuestionPage = 1;
+    loadQuestionList().catch(err => showToast(`搜索失败: ${err.message}`, true));
+}
 
-    document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
-        if (e.target && e.target.id === 'questionStatsModal') {
-            document.getElementById('questionStatsModal').style.display = 'none';
-        }
-    });
+function resetQuestionSearch() {
+    document.getElementById('questionSearchKeyword').value = '';
+    currentQuestionPage = 1;
+    loadQuestionList().catch(err => showToast(`重置失败: ${err.message}`, true));
+}
 
-    document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () => {
+document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'questionStatsModal') {
         document.getElementById('questionStatsModal').style.display = 'none';
-    });
+    }
+});
 
-    let currentExcelData = null;
-    let currentExcelHeaders = [];
-    let currentImportCategory = '';
+document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () => {
+    document.getElementById('questionStatsModal').style.display = 'none';
+});
 
+    // ═══════════════════════════════════════════════════════════
+    //  Excel 导入
+    // ═══════════════════════════════════════════════════════════
     function showExcelConfigModal(rows, headers) {
         currentExcelData = rows;
         currentExcelHeaders = headers;
@@ -1646,6 +1687,9 @@
         input.click();
     }
 
+    // ═══════════════════════════════════════════════════════════
+    //  事件绑定
+    // ═══════════════════════════════════════════════════════════
     document.getElementById('loginAdminBtn').addEventListener('click', async () => {
         const pwd = document.getElementById('adminPassword').value;
         if (!pwd) { showToast('请输入密码', true); return; }
@@ -1656,18 +1700,23 @@
         adminPassword = pwd;
         try {
             const loginResult = await adminFetch('login');
+            // 立即显示管理界面和 Token 数据
             document.getElementById('adminLoginArea').style.display = 'none';
             document.getElementById('adminMainArea').style.display = 'block';
             currentTokens = loginResult.tokens || [];
             updateStats();
             applyFilters();
             showToast('管理后台已解锁');
+            // 以下三项并行加载，互不阻塞
+            // 1. 应急代码
             adminFetch('getEmergencyCode').then(data => {
                 document.getElementById('emergencyCodeBlock').innerText = data?.code ? data.code : '应急代码获取失败';
             }).catch(() => {
                 document.getElementById('emergencyCodeBlock').innerText = '应急代码加载失败';
             });
+            // 2. 用户日志
             loadLogs().catch(() => {});
+            // 3. 题库全量缓存（首次自动加载）
             loadQuestionList().catch(() => {});
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
