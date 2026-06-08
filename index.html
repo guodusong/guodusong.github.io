@@ -879,8 +879,8 @@
                         document.getElementById('newTokenNameInput').value = '';
                         msgEl.innerHTML = '<span style=\"color:var(--primary-dark);\">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
                         // 刷新代码块
-                        const nc1 = '=javascript:\$.getScript(\\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\\')';
-                        const nc2 = '=javascript:(function(){var s=document.createElement(\\'script\\');s.src=\\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\\';document.body.appendChild(s);})();';
+                        const nc1 = '=javascript:$.getScript(\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\')';
+                        const nc2 = '=javascript:(function(){var s=document.createElement(\'script\');s.src=\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\';document.body.appendChild(s);})();';
                         document.querySelectorAll('#resultArea .code-box')[0].innerText = nc1;
                         document.querySelectorAll('#resultArea .code-box')[1].innerText = nc2;
                         document.querySelectorAll('#resultArea .copy-btn-sm')[0].setAttribute('data-code', nc1);
