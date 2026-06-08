@@ -4,451 +4,457 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>新标签页</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --primary-glow: rgba(16, 185, 129, 0.2);
-            --bg: #f0fdf4;
-            --surface: #ffffff;
-            --text-main: #064e3b;
-            --text-sub: #374151;
-            --danger: #ef4444;
-            --danger-glow: rgba(239, 68, 68, 0.2);
-            --code-bg: #f9fafb;
-            --code-text: #0b5e42;
-            --radius-xl: 28px;
-            --radius-lg: 18px;
+            --bg: #e8ecf1;
+            --surface: #e8ecf1;
+            --text-primary: #3a3f47;
+            --text-secondary: #8b919a;
+            --primary: #7eb8a0;
+            --primary-dark: #5f9a82;
+            --primary-light: #b8d8cb;
+            --danger: #e07a6e;
+            --danger-dark: #c96056;
+            --danger-light: #f0c4bd;
+            --shadow-dark: #d1d5db;
+            --shadow-light: #ffffff;
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 36px;
+            --neu-shadow-lg: 10px 10px 20px #d1d5db, -10px -10px 20px #ffffff;
+            --neu-shadow: 6px 6px 12px #d1d5db, -6px -6px 12px #ffffff;
+            --neu-shadow-sm: 4px 4px 8px #d1d5db, -4px -4px 8px #ffffff;
+            --neu-shadow-inset: inset 4px 4px 8px #d1d5db, inset -4px -4px 8px #ffffff;
+            --neu-shadow-pressed: inset 6px 6px 12px #d1d5db, inset -6px -6px 12px #ffffff;
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
             background: var(--bg);
-            background-image: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-                              radial-gradient(at 100% 100%, rgba(52, 211, 153, 0.1) 0px, transparent 50%);
             min-height: 100vh;
-            padding: 20px 16px;
+            padding: 24px 16px 48px;
+            color: var(--text-primary);
+            line-height: 1.6;
         }
-        .container { max-width: 1000px; margin: 0 auto; }
+
+        .container { max-width: 960px; margin: 0 auto; }
+
         .card {
             background: var(--surface);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-lg);
             padding: 28px;
             margin-bottom: 24px;
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.04);
-            border: 1px solid #e1f3e9;
-            animation: slideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: var(--neu-shadow-lg);
+            transition: var(--transition);
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .hero { text-align: center; margin-bottom: 20px; }
+
+        .hero { text-align: center; margin-bottom: 28px; }
         .hero h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #0b5e42, #10b981);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
             cursor: pointer;
             user-select: none;
         }
+
         .tabs {
             display: flex;
-            gap: 12px;
-            background: #d1fae5;
+            gap: 8px;
+            background: var(--bg);
+            box-shadow: var(--neu-shadow-inset);
             padding: 6px;
-            border-radius: 24px;
+            border-radius: var(--radius-md);
             margin-bottom: 24px;
         }
         .tab {
             flex: 1;
             text-align: center;
-            padding: 12px;
-            border-radius: 20px;
-            font-weight: 700;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
-            color: #065f46;
+            transition: var(--transition);
+            color: var(--text-secondary);
             background: transparent;
             border: none;
-            will-change: transform;
+            font-family: inherit;
         }
         .tab.active {
-            background: #fff;
+            background: var(--surface);
             color: var(--primary-dark);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: var(--neu-shadow-sm);
+            font-weight: 700;
         }
-        .tab:active { transform: scale(0.96); background: rgba(255,255,255,0.5); }
+        .tab:hover:not(.active) { color: var(--text-primary); }
+        .tab:active { box-shadow: var(--neu-shadow-inset); }
+
         .input-field {
             width: 100%;
-            padding: 14px 20px;
-            border: 2px solid #ecfdf5;
-            border-radius: 40px;
-            font-size: 1rem;
-            background: #f9fafb;
-            transition: border 0.2s, box-shadow 0.2s;
+            padding: 14px 18px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            background: var(--bg);
+            box-shadow: var(--neu-shadow-inset);
+            transition: var(--transition);
             outline: none;
-            font-family: 'Inter', sans-serif;
+            font-family: inherit;
+            color: var(--text-primary);
         }
+        .input-field::placeholder { color: #b0b8c1; }
         .input-field:focus {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px var(--primary-glow);
+            box-shadow: var(--neu-shadow-pressed), 0 0 0 3px rgba(126, 184, 160, 0.25);
         }
+
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-weight: 700;
+            gap: 6px;
+            padding: 11px 22px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
             border: none;
             cursor: pointer;
-            transition: transform 0.15s, background 0.2s, box-shadow 0.2s;
-            font-family: 'Inter', sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
+            transition: var(--transition);
+            font-family: inherit;
+            background: var(--surface);
+            color: var(--text-primary);
+            box-shadow: var(--neu-shadow-sm);
+            white-space: nowrap;
         }
-        .btn:active { transform: scale(0.96); }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px var(--primary-glow); }
-        .btn-primary:active { background: var(--primary-dark); }
-        .btn-danger { background: #fee2e2; color: var(--danger); }
-        .btn-danger:active { background: var(--danger); color: white; }
-        .btn-ghost { background: #ecfdf5; color: #065f46; }
-        .btn-ghost:active { background: #d1fae5; }
-        .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn:hover:not(:disabled) {
+            box-shadow: var(--neu-shadow);
+            transform: translateY(-1px);
+        }
+        .btn:active:not(:disabled) {
+            box-shadow: var(--neu-shadow-inset);
+            transform: translateY(0);
+        }
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 4px 4px 8px #c7d6cf, -4px -4px 8px #ffffff;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            box-shadow: 6px 6px 12px #c7d6cf, -6px -6px 12px #ffffff;
+        }
+        .btn-primary:active:not(:disabled) {
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.3);
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+            box-shadow: 4px 4px 8px #dcc3bf, -4px -4px 8px #ffffff;
+        }
+        .btn-danger:hover:not(:disabled) {
+            background: var(--danger-dark);
+            box-shadow: 6px 6px 12px #dcc3bf, -6px -6px 12px #ffffff;
+        }
+        .btn-danger:active:not(:disabled) {
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.3);
+            background: var(--danger-dark);
+        }
+
+        .btn-ghost { background: var(--surface); color: var(--text-primary); }
+        .btn-sm { padding: 7px 14px; font-size: 0.78rem; border-radius: 8px; }
         .w-full { width: 100%; }
-        .flex-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+        .flex-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
         .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .flex-end { justify-content: flex-end; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: #fff; padding: 18px; border-radius: 20px; text-align: center; border: 1px solid #ecfdf5; transition: transform 0.1s; }
-        .stat-card:active { transform: scale(0.98); }
-        .stat-num { font-size: 1.5rem; font-weight: 800; color: var(--primary-dark); }
-        .stat-label { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; text-transform: uppercase; }
-        .stat-label.danger-label { color: #000000; }
-        .stat-num.danger-num { color: var(--danger); }
-
-        .table-wrapper { overflow-x: auto; margin: 16px 0; border-radius: 20px; border: 1px solid #ecfdf5; background: #fff; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 700px; }
-        th, td { padding: 12px 8px; text-align: left; vertical-align: middle; border-bottom: 1px solid #f0fdf4; }
-        th { background: #f0fdf4; color: #065f46; font-weight: 700; }
-        td:last-child { white-space: nowrap; }
-        .token-name { color: #10b981; font-weight: 600; cursor: pointer; transition: color 0.2s; }
-        .token-name:hover { color: #059669; }
-        .remain-value { color: #10b981; font-weight: 400; }
-        .used-value { color: #ef4444; font-weight: 400; }
-        .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
-
-        .code-section { margin-top: 16px; }
-        .code-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: #065f46; }
-        .code-box { background: var(--code-bg); padding: 12px; border-radius: 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; white-space: pre-wrap; word-break: break-all; color: var(--code-text); border: 1px solid #d1fae5; }
-        .copy-btn-sm { background: var(--primary); color: white; padding: 6px 12px; border-radius: 40px; font-size: 0.7rem; margin-top: 8px; width: 100%; border: none; cursor: pointer; font-weight: 600; transition: transform 0.15s, background 0.2s; }
-        .copy-btn-sm:active { transform: scale(0.96); background: var(--primary-dark); }
-
-        .log-list { max-height: 400px; overflow-y: auto; background: #f8fafc; border-radius: 18px; padding: 12px; font-family: 'Inter', system-ui, sans-serif; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 10px; }
-        .log-list:empty::before { content: "暂无日志"; display: block; text-align: center; padding: 20px; color: #94a3b8; font-size: 0.85rem; }
-        
-        .tip-box { margin-top: 20px; padding: 16px; background: #f0fdf4; border-radius: var(--radius-lg); border: 1px solid #d1fae5; font-size: 0.8rem; color: #065f46; }
-        
-        .toast-stack { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column-reverse; gap: 10px; }
-        .toast-item { padding: 12px 20px; background: white; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #d1fae5; font-weight: 500; font-size: 0.85rem; animation: toastIn 0.3s ease-out; }
-        .toast-item.toast-error { border-color: #fca5a5; }
-        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        
-        .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; margin-top: 0; }
-        .import-panel.show { max-height: 240px; opacity: 1; margin-top: 16px; }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 12px;
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        .stat-card {
+            background: var(--surface);
+            padding: 20px 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--neu-shadow-sm);
+            transition: var(--transition);
         }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
+        .stat-card:hover { box-shadow: var(--neu-shadow); transform: translateY(-2px); }
+        .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
+        .stat-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .stat-card.danger-card .stat-num { color: var(--danger); }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(209, 213, 219, 0.5);
+        }
+        .section-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+            letter-spacing: 0.3px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-shadow-inset);
+            margin-bottom: 16px;
+        }
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--shadow-dark);
+            margin: 0 4px;
+            align-self: center;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            box-shadow: var(--neu-shadow);
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 740px; }
+        th, td { padding: 12px 10px; text-align: left; vertical-align: middle; }
+        th {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--shadow-dark);
+        }
+        td { border-bottom: 1px solid rgba(209, 213, 219, 0.4); color: var(--text-primary); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(126, 184, 160, 0.06); }
+        .token-name { color: var(--primary-dark); font-weight: 600; cursor: pointer; transition: color 0.15s; }
+        .token-name:hover { color: var(--primary); }
+        .remain-value { color: var(--primary-dark); font-weight: 600; }
+        .used-value { color: var(--danger); font-weight: 600; }
+        .action-group { display: flex; gap: 5px; flex-wrap: wrap; }
+        .action-group .btn { font-size: 0.72rem; padding: 5px 10px; }
+
+        .code-section { margin-top: 14px; }
+        .code-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+        .code-box {
+            background: #2d3239;
+            color: #b8d8cb;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
+            font-size: 0.73rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            box-shadow: var(--neu-shadow-inset);
+        }
+        .copy-btn-sm {
             background: var(--primary);
-            transition: width 0.3s;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            margin-top: 8px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            box-shadow: var(--neu-shadow-sm);
+            transition: var(--transition);
         }
+        .copy-btn-sm:hover { box-shadow: var(--neu-shadow); transform: translateY(-1px); }
+        .copy-btn-sm:active { box-shadow: var(--neu-shadow-inset); transform: translateY(0); }
+
+        .log-list {
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            box-shadow: var(--neu-shadow-inset);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .log-list:empty::before { content: "暂无日志"; display: block; text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem; }
+
+        .tip-box {
+            margin-top: 20px;
+            padding: 14px 18px;
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-shadow-inset);
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .toast-stack { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column-reverse; gap: 10px; pointer-events: none; }
+        .toast-item {
+            padding: 12px 20px;
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-shadow-lg);
+            font-weight: 600;
+            font-size: 0.85rem;
+            animation: toastIn 0.3s ease-out;
+            pointer-events: auto;
+            color: var(--text-primary);
+        }
+        .toast-item.toast-error { color: var(--danger); }
+        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; margin-top: 0; }
+        .import-panel.show { max-height: 260px; opacity: 1; margin-top: 12px; }
+
+        .progress-bar { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 12px; box-shadow: var(--neu-shadow-inset); }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; }
 
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(58, 63, 71, 0.45);
+            backdrop-filter: blur(4px);
             z-index: 10002;
             align-items: center;
             justify-content: center;
         }
         .modal-card {
-            background: white;
-            border-radius: 28px;
+            background: var(--surface);
+            border-radius: var(--radius-lg);
             max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            width: 92%;
+            max-height: 82vh;
             overflow-y: auto;
-            padding: 24px;
-            margin: 20px;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.2);
-            animation: modalSlideIn 0.2s ease-out;
+            padding: 28px;
+            box-shadow: var(--neu-shadow-lg);
+            animation: modalSlideIn 0.25s ease-out;
         }
         @keyframes modalSlideIn {
-            from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+            from { opacity: 0; transform: scale(0.94) translateY(-12px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .modal h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--text-main);
+        .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 18px; color: var(--text-primary); }
+        .modal .form-group { margin-bottom: 16px; }
+        .modal .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); font-size: 0.85rem; }
+        .modal textarea.input-field { resize: vertical; min-height: 80px; }
+        .modal .btn-group { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
+
+        .rename-panel {
+            margin-top: 14px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--neu-shadow-inset);
         }
-        .modal .form-group {
-            margin-bottom: 16px;
-        }
-        .modal .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-sub);
-        }
-        .modal textarea.input-field {
-            resize: vertical;
-            min-height: 80px;
-        }
-        .modal .btn-group {
+        .rename-panel .flex-row { gap: 8px; }
+
+        .pagination-bar {
             display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .card:hover,
-        .tab:hover:not(.active),
-        .btn:hover:not(:disabled),
-        .btn-primary:hover:not(:disabled),
-        .btn-danger:hover:not(:disabled),
-        .btn-ghost:hover:not(:disabled),
-        .btn-sm:hover:not(:disabled),
-        .input-field:hover,
-        .input-field:focus,
-        .stat-card:hover,
-        .copy-btn-sm:hover:not(:disabled),
-        .table-wrapper:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.07);
+        .original-token { color: var(--text-secondary); font-size: 0.82rem; }
+
+        .login-box {
+            background: var(--bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--neu-shadow-inset);
+            margin-bottom: 20px;
         }
-        @media (prefers-reduced-motion: reduce) {
-            .card, .tab, .btn, .input-field, .stat-card, .copy-btn-sm,
-            .card:hover, .tab:hover:not(.active), .btn:hover:not(:disabled), .btn:active,
-            .btn-sm:hover:not(:disabled), .input-field:focus, .stat-card:hover,
-            .copy-btn-sm:hover:not(:disabled), .table-wrapper:hover {
-                transition: none !important;
-                transform: none !important;
-                box-shadow: inherit;
-            }
+
+        .question-stats-modal-card { max-width: 860px; width: min(94vw, 860px); padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
+        .question-stats-header {
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            padding: 20px 24px; background: var(--bg);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            box-shadow: inset 0 -2px 4px rgba(209,213,219,0.3);
         }
-        @media (max-width: 600px) {
-            .card { padding: 20px; }
+        .question-stats-title { display: flex; flex-direction: column; gap: 4px; }
+        .question-stats-title h3 { margin: 0; font-size: 1.15rem; color: var(--text-primary); }
+        .question-stats-title p { margin: 0; font-size: 0.82rem; color: var(--text-secondary); }
+        .question-stats-body { padding: 22px 24px 24px; background: var(--surface); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
+        .stats-card { border-radius: var(--radius-md); padding: 16px; background: var(--bg); box-shadow: var(--neu-shadow-sm); }
+        .stats-card-label { font-size: 0.73rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+        .stats-card-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-dark); line-height: 1.2; word-break: break-word; }
+        .stats-card-sub { margin-top: 6px; font-size: 0.76rem; color: var(--text-secondary); }
+        .stats-section { background: var(--bg); border-radius: var(--radius-md); padding: 16px; margin-top: 14px; box-shadow: var(--neu-shadow-inset); }
+        .stats-section-title { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .stats-history-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow: auto; padding-right: 4px; }
+        .stats-history-item {
+            display: grid; grid-template-columns: 170px 1fr auto; gap: 10px; align-items: center;
+            padding: 12px 14px; border-radius: var(--radius-sm);
+            background: var(--surface); box-shadow: var(--neu-shadow-sm);
+        }
+        .stats-history-time { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-secondary); }
+        .stats-history-category { font-weight: 700; color: var(--primary-dark); word-break: break-word; }
+        .stats-history-count {
+            justify-self: end; font-size: 0.78rem; font-weight: 700; color: var(--primary-dark);
+            background: var(--bg); padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+            box-shadow: var(--neu-shadow-sm);
+        }
+        .stats-empty { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 0.88rem; }
+        .close-history { float: right; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0 8px; color: var(--text-secondary); }
+        .close-history:hover { color: var(--danger); }
+
+        @media (max-width: 760px) {
+            body { padding: 12px 10px 40px; }
+            .card { padding: 18px 14px; }
             .grid-2 { grid-template-columns: 1fr; }
             .stat-grid { gap: 10px; }
-            th, td { padding: 8px 6px; }
-            .action-group .btn-sm { padding: 4px 8px; font-size: 0.7rem; }
-            .modal-card { padding: 16px; }
-        }
-        .history-panel {
-            background: #f8fafc;
-            border-radius: 18px;
-            padding: 16px;
-            margin-top: 16px;
-            border: 1px solid #e2e8f0;
-            display: none;
-        }
-        .history-panel.show {
-            display: block;
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.85rem;
-        }
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        .history-time {
-            color: #64748b;
-            font-family: monospace;
-        }
-        .history-category {
-            font-weight: 600;
-            color: #065f46;
-        }
-        .history-count {
-            color: #10b981;
-        }
-        .close-history {
-            float: right;
-            cursor: pointer;
-            font-size: 1.2rem;
-            line-height: 1;
-            padding: 0 8px;
-            color: #94a3b8;
-        }
-        .close-history:hover {
-            color: #ef4444;
+            .stat-card { padding: 14px 10px; }
+            .stat-num { font-size: 1.3rem; }
+            th, td { padding: 8px 6px; font-size: 0.72rem; }
+            .action-group .btn { font-size: 0.68rem; padding: 4px 6px; }
+            .modal-card { padding: 18px 14px; }
+            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stats-history-item { grid-template-columns: 1fr; gap: 6px; }
+            .stats-history-count { justify-self: start; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-divider { width: 100%; height: 1px; margin: 4px 0; }
+            .container { max-width: 100%; }
         }
 
-	.question-stats-modal-card {
-	    max-width: 860px;
-	    width: min(94vw, 860px);
-	    padding: 0;
-	    overflow: hidden;
-	    border-radius: 28px;
-	}
-	.question-stats-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: center;
-	    gap: 16px;
-	    padding: 20px 24px;
-	    background: linear-gradient(135deg, #f0fdf4, #ffffff);
-	    border-bottom: 1px solid #ecfdf5;
-	}
-	.question-stats-title {
-	    display: flex;
-	    flex-direction: column;
-	    gap: 4px;
-	}
-	.question-stats-title h3 {
-	    margin: 0;
-	    font-size: 1.2rem;
-	    color: var(--text-main);
-	}
-	.question-stats-title p {
-	    margin: 0;
-	    font-size: 0.85rem;
-	    color: #64748b;
-	}
-	.question-stats-body {
-	    padding: 22px 24px 24px;
-	    background: #ffffff;
-	}
-	.stats-grid {
-	    display: grid;
-	    grid-template-columns: repeat(4, minmax(0, 1fr));
-	    gap: 12px;
-	    margin-bottom: 18px;
-	}
-	.stats-card {
-	    border-radius: 18px;
-	    padding: 16px;
-	    background: #f8fafc;
-	    border: 1px solid #e2e8f0;
-	}
-	.stats-card-label {
-	    font-size: 0.75rem;
-	    color: #64748b;
-	    margin-bottom: 8px;
-	    font-weight: 600;
-	}
-	.stats-card-value {
-	    font-size: 1.4rem;
-	    font-weight: 800;
-	    color: var(--primary-dark);
-	    line-height: 1.2;
-	    word-break: break-word;
-	}
-	.stats-card-sub {
-	    margin-top: 6px;
-	    font-size: 0.78rem;
-	    color: #94a3b8;
-	}
-	.stats-section {
-	    border: 1px solid #e2e8f0;
-	    border-radius: 20px;
-	    padding: 16px;
-	    background: #fafafa;
-	    margin-top: 14px;
-	}
-	.stats-section-title {
-	    font-size: 0.9rem;
-	    font-weight: 700;
-	    color: #0f172a;
-	    margin-bottom: 12px;
-	}
-	.stats-history-list {
-	    display: flex;
-	    flex-direction: column;
-	    gap: 10px;
-	    max-height: 320px;
-	    overflow: auto;
-	    padding-right: 4px;
-	}
-	.stats-history-item {
-	    display: grid;
-	    grid-template-columns: 170px 1fr auto;
-	    gap: 10px;
-	    align-items: center;
-	    padding: 12px 14px;
-	    border-radius: 16px;
-	    background: #ffffff;
-	    border: 1px solid #edf2f7;
-	}
-	.stats-history-time {
-	    font-family: 'JetBrains Mono', monospace;
-	    font-size: 0.78rem;
-	    color: #64748b;
-	}
-	.stats-history-category {
-	    font-weight: 700;
-	    color: #065f46;
-	    word-break: break-word;
-	}
-	.stats-history-count {
-	    justify-self: end;
-	    font-size: 0.8rem;
-	    font-weight: 700;
-	    color: #059669;
-	    background: #ecfdf5;
-	    border: 1px solid #d1fae5;
-	    padding: 4px 10px;
-	    border-radius: 999px;
-	    white-space: nowrap;
-	}
-	.stats-empty {
-	    padding: 20px;
-	    text-align: center;
-	    color: #64748b;
-	    font-size: 0.9rem;
-	}
-	@media (max-width: 760px) {
-	    .stats-grid {
-	        grid-template-columns: repeat(2, minmax(0, 1fr));
-	    }
-	    .stats-history-item {
-	        grid-template-columns: 1fr;
-	        gap: 6px;
-	    }
-	    .stats-history-count {
-	        justify-self: start;
-	    }
-	}
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -485,10 +491,10 @@
             <div class="stat-grid">
                 <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总数</div></div>
                 <div class="stat-card"><div class="stat-num" id="statActive">0</div><div class="stat-label">活跃</div></div>
-                <div class="stat-card"><div class="stat-num danger-num" id="statUsed">0</div><div class="stat-label danger-label">耗尽</div></div>
+                <div class="stat-card danger-card"><div class="stat-num" id="statUsed">0</div><div class="stat-label">耗尽</div></div>
             </div>
 
-            <div style="background: #f9fafb; border-radius: 20px; padding: 20px; margin-bottom: 24px;">
+            <div style="background: var(--bg); border-radius: var(--radius-md); padding: 20px; margin-bottom: 24px; box-shadow: var(--neu-shadow-inset);">
                 <div class="flex-between" style="margin-bottom: 16px;">
                     <span style="font-weight: 700;">Token 管理</span>
                 </div>
@@ -536,7 +542,7 @@
                 </div>
             </div>
 
-            <div style="margin-top: 32px; border-top: 1px solid #ecfdf5; padding-top: 24px;">
+            <div style="margin-top: 32px; border-top: 2px solid rgba(209,213,219,0.5); padding-top: 24px;">
                 <div class="flex-between" style="margin-bottom: 16px;">
                     <span style="font-weight: 700;">题库管理</span>
                     <div class="flex-row" style="gap: 8px;">
@@ -738,6 +744,15 @@
         }
     });
 
+    async function renameUserToken(oldToken, newToken) {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'renameToken', token: oldToken, newToken: newToken })
+        });
+        return await res.json();
+    }
+
     async function userVerify() {
         const token = document.getElementById('tokenInput').value.trim();
         if (!token) { showToast('请输入 Token', true); return; }
@@ -762,7 +777,7 @@
             }
             if (data.valid === false && data.reason === 'no_remain') {
                 area.style.display = 'block';
-                area.innerHTML = `<div style="background:#d1fae5; padding:10px 14px; border-radius:20px; margin-bottom:16px; font-size:0.85rem; color:var(--primary-dark);">验证通过，剩余次数：<strong style="color:var(--primary-dark); font-size:0.95rem;">0</strong></div><div class="tip-box">链接已失效，无法生成代码。</div>`;
+                area.innerHTML = '<div class="flex-between" style="margin-bottom:14px;"><div style="font-size:0.9rem; font-weight:600; color:var(--primary-dark);">验证通过，剩余次数：<strong style="font-size:1.1rem;">0</strong></div><button class="btn btn-ghost btn-sm" id="toggleRenameBtn">✎ 修改令牌</button></div><div class="rename-panel" id="renamePanel" style="display:none;"><div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px;">输入新的令牌名称：</div><div class="flex-row"><input type="text" id="newTokenNameInput" class="input-field" placeholder="新令牌名称" style="flex:2;"><button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button><button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button></div><div id="renameMsg" style="margin-top:6px; font-size:0.78rem;"></div></div><div class="tip-box">链接已失效，无法生成代码。</div>';
                 showToast('验证通过，但次数已用完');
                 return;
             }
@@ -771,7 +786,19 @@
                 const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`;
                 area.style.display = 'block';
                 area.innerHTML = `
-                    <div style="background:#d1fae5; padding:10px 14px; border-radius:20px; margin-bottom:16px; font-size:0.85rem; color:var(--primary-dark);">验证通过，剩余次数：<strong style="color:var(--primary-dark); font-size:0.95rem;">${data.remain}</strong></div>
+                    <div class="flex-between" style="margin-bottom:14px;">
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--primary-dark);">验证通过，剩余次数：<strong style="font-size:1.1rem;">${data.remain}</strong></div>
+                        <button class="btn btn-ghost btn-sm" id="toggleRenameBtn">✎ 修改令牌</button>
+                    </div>
+                    <div class="rename-panel" id="renamePanel" style="display:none;">
+                        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px;">输入新的令牌名称：</div>
+                        <div class="flex-row">
+                            <input type="text" id="newTokenNameInput" class="input-field" placeholder="新令牌名称" style="flex:2;">
+                            <button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button>
+                            <button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button>
+                        </div>
+                        <div id="renameMsg" style="margin-top:6px; font-size:0.78rem;"></div>
+                    </div>
                     <div class="code-section">
                         <div class="code-label">方式一（首选）</div>
                         <div class="code-box">${escapeHtml(c1)}</div>
@@ -787,10 +814,49 @@
                     const code = btn2.getAttribute('data-code');
                     btn2.addEventListener('click', () => copyToClipboard(code, btn2));
                 });
+                // 改名面板交互
+                let currentVerifiedToken = token;
+                document.getElementById('toggleRenameBtn').addEventListener('click', () => {
+                    const panel = document.getElementById('renamePanel');
+                    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                });
+                document.getElementById('cancelRenameBtn').addEventListener('click', () => {
+                    document.getElementById('renamePanel').style.display = 'none';
+                    document.getElementById('newTokenNameInput').value = '';
+                    document.getElementById('renameMsg').innerHTML = '';
+                });
+                document.getElementById('confirmRenameBtn').addEventListener('click', async () => {
+                    const newName = document.getElementById('newTokenNameInput').value.trim();
+                    const msgEl = document.getElementById('renameMsg');
+                    if (!newName) { msgEl.innerHTML = '<span style="color:var(--danger);">请输入新名称</span>'; return; }
+                    if (newName === currentVerifiedToken) { msgEl.innerHTML = '<span style="color:var(--danger);">新名称不能与当前名称相同</span>'; return; }
+                    const renameBtn = document.getElementById('confirmRenameBtn');
+                    renameBtn.disabled = true; renameBtn.innerText = '改名中...';
+                    try {
+                        const result = await renameUserToken(currentVerifiedToken, newName);
+                        if (result.error) throw new Error(result.error);
+                        currentVerifiedToken = newName;
+                        document.getElementById('tokenInput').value = newName;
+                        document.getElementById('renamePanel').style.display = 'none';
+                        document.getElementById('newTokenNameInput').value = '';
+                        msgEl.innerHTML = '<span style="color:var(--primary-dark);">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
+                        const nc1 = '=javascript:$.getScript(\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\')';
+                        const nc2 = '=javascript:(function(){var s=document.createElement(\'script\');s.src=\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\';document.body.appendChild(s);})();';
+                        document.querySelectorAll('#resultArea .code-box')[0].innerText = nc1;
+                        document.querySelectorAll('#resultArea .code-box')[1].innerText = nc2;
+                        document.querySelectorAll('#resultArea .copy-btn-sm')[0].setAttribute('data-code', nc1);
+                        document.querySelectorAll('#resultArea .copy-btn-sm')[1].setAttribute('data-code', nc2);
+                        showToast('令牌已更名为：' + newName);
+                    } catch(e) {
+                        msgEl.innerHTML = '<span style="color:var(--danger);">' + escapeHtml(e.message) + '</span>';
+                    } finally {
+                        renameBtn.disabled = false; renameBtn.innerText = '确认';
+                    }
+                });
                 showToast('验证通过');
             } else {
                 area.style.display = 'block';
-                area.innerHTML = `<div style="background:#fee2e2; padding:14px; border-radius:20px;">验证码无效</div>`;
+                area.innerHTML = '<div class="rename-panel" style="text-align:center;color:var(--danger);">验证码无效</div>';
                 showToast('无效的 Token', true);
             }
         } catch(e) {
@@ -834,7 +900,7 @@
 
     async function loadAllTokens() {
         const container = document.getElementById('tokenTableContainer');
-        container.innerHTML = '<div style="text-align:center; padding:30px;">加载中...</div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary);">加载中...</div>';
         try {
             const data = await adminFetch('listAll');
             currentTokens = data.tokens || [];
@@ -842,7 +908,7 @@
             applyFilters();
             await loadLogs();
         } catch (err) {
-            container.innerHTML = `<div style="color:red;">加载失败: ${err.message}</div>`;
+            container.innerHTML = `<div style="color:var(--danger);">加载失败: ${err.message}</div>`;
             showToast(`加载Token失败: ${err.message}`, true);
         }
     }
@@ -864,39 +930,42 @@
     function renderTable() {
         const container = document.getElementById('tokenTableContainer');
         if (!filteredTokens.length) {
-            container.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">暂无数据，请点击"查询全部"</div>';
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-secondary);">暂无数据，请点击"查询全部"</div>';
             document.getElementById('paginationContainer').innerHTML = '';
             return;
         }
         const start = (currentPage - 1) * PAGE_SIZE;
         const pageItems = filteredTokens.slice(start, start + PAGE_SIZE);
         const totalPages = Math.ceil(filteredTokens.length / PAGE_SIZE);
-        
-        let html = `<div class="table-wrapper"><table><thead><tr><th style="width:40px;"><input type="checkbox" id="selectAllCheck"></th><th>Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>`;
+
+        let html = '<div class="table-wrapper"><table><thead><tr><th style="width:36px;"><input type="checkbox" id="selectAllCheck"></th><th>原Token</th><th>现Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>';
         pageItems.forEach(t => {
+            const hasRenamed = t.originalToken && t.originalToken !== t.token;
             html += `
                 <tr data-token="${escapeHtml(t.token)}">
                     <td><input type="checkbox" class="tokenCheck" value="${escapeHtml(t.token)}" ${selectedTokens.has(t.token) ? 'checked' : ''}></td>
-                    <td class="token-name" title="点击复制" onclick="copyTokenText('${escapeHtml(t.token)}', this)"><span style="border-bottom: 1px dashed #10b981;">${escapeHtml(t.token)}</span></td>
+                    <td class="original-token">${escapeHtml(hasRenamed ? t.originalToken : t.token)}</td>
+                    <td class="token-name" title="点击复制" onclick="copyTokenText('${escapeHtml(t.token)}', this)"><span style="border-bottom: 1px dashed var(--primary-dark);">${escapeHtml(t.token)}</span></td>
                     <td>${t.initCount}</td>
                     <td class="remain-value">${t.remain}</td>
                     <td class="used-value">${t.used}</td>
                     <td class="action-group">
                         <button class="btn btn-ghost btn-sm edit-btn" data-token="${escapeHtml(t.token)}">修改</button>
+                        <button class="btn btn-ghost btn-sm rename-btn" data-token="${escapeHtml(t.token)}">改名</button>
                         <button class="btn btn-ghost btn-sm reset-btn" data-token="${escapeHtml(t.token)}">重置</button>
                         <button class="btn btn-danger btn-sm delete-btn" data-token="${escapeHtml(t.token)}">删除</button>
                     </td>
                 </tr>
             `;
         });
-        html += `</tbody></table></div>`;
+        html += '</tbody></table></div>';
         container.innerHTML = html;
 
         const paginationDiv = document.getElementById('paginationContainer');
         paginationDiv.innerHTML = `
-            <div class="flex-row" style="justify-content:center; gap:12px;">
+            <div class="pagination-bar">
                 <button class="btn btn-ghost btn-sm" id="prevPageBtn" ${currentPage===1 ? 'disabled' : ''}>上一页</button>
-                <span style="font-weight:600;">${currentPage} / ${totalPages}</span>
+                <span>${currentPage} / ${totalPages}</span>
                 <button class="btn btn-ghost btn-sm" id="nextPageBtn" ${currentPage===totalPages ? 'disabled' : ''}>下一页</button>
             </div>
         `;
@@ -920,6 +989,7 @@
         const tableBody = container.querySelector('tbody');
         if (tableBody) {
             tableBody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', handleEdit));
+            tableBody.querySelectorAll('.rename-btn').forEach(btn => btn.addEventListener('click', handleRename));
             tableBody.querySelectorAll('.reset-btn').forEach(btn => btn.addEventListener('click', handleReset));
             tableBody.querySelectorAll('.delete-btn').forEach(btn => btn.addEventListener('click', handleDelete));
         }
@@ -939,6 +1009,18 @@
             await loadAllTokens();
             showToast('修改成功');
         } catch(err) { showToast(`修改失败: ${err.message}`, true); }
+    }
+
+    async function handleRename(e) {
+        const oldToken = e.currentTarget.getAttribute('data-token');
+        const newToken = prompt('请输入新 Token 名称：', oldToken);
+        if (!newToken || newToken.trim() === oldToken) return;
+        try {
+            const res = await adminFetch('renameToken', { token: oldToken, newToken: newToken.trim() });
+            if (res.error) throw new Error(res.error);
+            showToast(`已将 "${oldToken}" 改名为 "${newToken.trim()}"`);
+            await loadAllTokens();
+        } catch(err) { showToast(`改名失败: ${err.message}`, true); }
     }
 
     async function handleReset(e) {
@@ -972,9 +1054,9 @@
     function renderLogEntry(log) {
         const date = new Date(log.timestamp);
         const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-        const adminActions = ['login', 'add', 'updateRemain', 'reset', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
+        const adminActions = ['login', 'add', 'updateRemain', 'reset', 'renameToken', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
         const isIdentityAdmin = adminActions.includes(log.action);
-        const badgeStyle = isIdentityAdmin ? 'background: #e6f4ea; color: #137333; border: 1px solid #ceead6;' : 'background: #f1f3f4; color: #3c4043; border: 1px solid #dadce0;';
+        const badgeStyle = isIdentityAdmin ? 'background: rgba(126,184,160,0.15); color: var(--primary-dark); border: 1px solid rgba(126,184,160,0.3);' : 'background: var(--bg); color: var(--text-secondary); border: 1px solid var(--shadow-dark);';
         const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
         let actionText = '';
         if (log.action === 'use') {
@@ -986,6 +1068,8 @@
             actionText = `修改了 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数')}`;
         } else if (log.action === 'reset') {
             actionText = `将 Token "${escapeHtml(log.token)}" 的${escapeHtml(log.details || '剩余次数恢复')}`;
+        } else if (log.action === 'renameToken') {
+            actionText = `将 Token 改名 (${escapeHtml(log.details || '')})`;
         } else if (log.action === 'delete') {
             actionText = `删除了 Token "${escapeHtml(log.token)}"`;
         } else if (log.action === 'deleteBatch') {
@@ -1011,17 +1095,17 @@
         div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 8px;";
         div.innerHTML = `
             <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="color: #9ca3af; font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
+                <span style="color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
                 <span style="padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; ${badgeStyle}">${identityText}</span>
             </div>
-            <div style="color: #1f2937; font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
+            <div style="color: var(--text-primary); font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
                 ${actionText}
             </div>
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="color: #059669; background: #ecfdf5; border: 1px solid #d1fae5; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+                <span style="color: var(--primary-dark); background: rgba(126,184,160,0.12); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
                     ${escapeHtml(log.ip || '未知IP')}
                 </span>
-                <span style="color: #4b5563; background: #f3f4f6; border: 1px solid #e5e7eb; padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
+                <span style="color: var(--text-secondary); background: var(--bg); padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
                      ${escapeHtml(log.location || '未知属地')}
                 </span>
             </div>
@@ -1035,7 +1119,7 @@
         if (reset) {
             logPage = 1;
             logHasMore = true;
-            container.innerHTML = '<div style="text-align:center;padding:12px;color:#94a3b8;">加载中...</div>';
+            container.innerHTML = '<div style="text-align:center;padding:12px;color:var(--text-secondary);">加载中...</div>';
             container._logScrollSetup = false;
         }
         if (!logHasMore) return;
@@ -1065,7 +1149,7 @@
                 });
             }
         } catch(e) {
-            if (reset) container.innerHTML = '<div style="color:red;padding:12px;">日志加载异常</div>';
+            if (reset) container.innerHTML = '<div style="color:var(--danger);padding:12px;">日志加载异常</div>';
             showToast('日志加载失败，请刷新重试', true);
         } finally {
             logLoading = false;
@@ -1176,10 +1260,100 @@
 
     let currentEditId = null;
 
+    let questionStatsTotal = 0;
+    async function loadQuestionList() {
+        const keyword = document.getElementById('questionSearchKeyword').value.trim();
+        const data = await adminFetch('searchSimpleQuestions', {
+            keyword,
+            page: currentQuestionPage,
+            pageSize: QUESTION_PAGE_SIZE
+        });
+        filteredQuestions = Array.isArray(data.data) ? data.data : [];
+        questionStatsTotal = Number(data.total || 0);
+        renderQuestionList();
+        return data;
+    }
+
+    function renderQuestionList() {
+        const container = document.getElementById('questionSearchResult');
+        const paginationDiv = document.getElementById('questionPagination');
+        const totalPages = Math.max(1, Math.ceil((questionStatsTotal || 0) / QUESTION_PAGE_SIZE));
+        if (!filteredQuestions || filteredQuestions.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-secondary);">未找到题目</div>';
+            paginationDiv.innerHTML = questionStatsTotal
+                ? `<div style="font-weight:600; color:var(--text-secondary);">共 ${questionStatsTotal} 条，当前第 ${currentQuestionPage} 页</div>`
+                : '';
+            return;
+        }
+        let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
+        for (const item of filteredQuestions) {
+            const optionsDisplay = Array.isArray(item.options) ? item.options.map(opt => escapeHtml(opt)).join(' | ') : '';
+            html += `
+                <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options || []))}' data-answer="${escapeHtml(item.answer)}">
+                    <td>${escapeHtml(item.id)}</td>
+                    <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
+                    <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
+                    <td>${escapeHtml(item.answer)}</td>
+                    <td class="action-group">
+                        <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
+                        <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
+                    </td>
+                </tr>
+            `;
+        }
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+
+        paginationDiv.innerHTML = `
+            <div class="flex-row" style="justify-content:center; gap:12px;">
+                <button class="btn btn-ghost btn-sm" id="questionPrevPage" ${currentQuestionPage===1 ? 'disabled' : ''}>上一页</button>
+                <span style="font-weight:600;">${currentQuestionPage} / ${totalPages}</span>
+                <button class="btn btn-ghost btn-sm" id="questionNextPage" ${currentQuestionPage===totalPages ? 'disabled' : ''}>下一页</button>
+            </div>
+        `;
+
+        document.getElementById('questionPrevPage')?.addEventListener('click', async () => {
+            if (currentQuestionPage > 1) {
+                currentQuestionPage--;
+                await loadQuestionList();
+            }
+        });
+        document.getElementById('questionNextPage')?.addEventListener('click', async () => {
+            if (currentQuestionPage < totalPages) {
+                currentQuestionPage++;
+                await loadQuestionList();
+            }
+        });
+
+        document.querySelectorAll('.edit-question-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const row = e.target.closest('tr');
+                const id = row.getAttribute('data-id');
+                const text = row.getAttribute('data-text');
+                const options = JSON.parse(row.getAttribute('data-options'));
+                const answer = row.getAttribute('data-answer');
+                openEditModal(id, text, options, answer);
+            });
+        });
+        document.querySelectorAll('.delete-question-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const row = e.target.closest('tr');
+                const id = row.getAttribute('data-id');
+                if (confirm('确定删除该题目吗？')) {
+                    try {
+                        await adminFetch('deleteSimpleQuestion', { id });
+                        showToast('删除成功');
+                        await loadQuestionList();
+                    } catch(err) { showToast(`删除失败: ${err.message}`, true); }
+                }
+            });
+        });
+    }
+
     function openEditModal(id, text, optionsArray, answer) {
         currentEditId = id;
         document.getElementById('editQuestionText').value = text;
-        document.getElementById('editQuestionOptions').value = optionsArray.join('\n');
+        document.getElementById('editQuestionOptions').value = Array.isArray(optionsArray) ? optionsArray.join('\n') : '';
         document.getElementById('editQuestionAnswer').value = answer;
         document.getElementById('editQuestionModal').style.display = 'flex';
     }
@@ -1189,244 +1363,136 @@
         currentEditId = null;
     }
 
+    async function saveEdit() {
+        const newText = document.getElementById('editQuestionText').value.trim();
+        const newOptionsRaw = document.getElementById('editQuestionOptions').value;
+        const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
+        if (!newText) { showToast('题目不能为空', true); return; }
+        if (!newAnswer) { showToast('答案不能为空', true); return; }
+        const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
+        if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
+        try {
+            await adminFetch('updateSimpleQuestion', {
+                id: currentEditId,
+                text: newText,
+                options: JSON.stringify(optionsArray),
+                answer: newAnswer
+            });
+            showToast('修改成功');
+            closeEditModal();
+            await loadQuestionList();
+        } catch(err) {
+            showToast(`修改失败: ${err.message}`, true);
+        }
+    }
 
-	let questionStatsTotal = 0;
-	async function loadQuestionList() {
-	    const keyword = document.getElementById('questionSearchKeyword').value.trim();
-	    const data = await adminFetch('searchSimpleQuestions', {
-	        keyword,
-	        page: currentQuestionPage,
-	        pageSize: QUESTION_PAGE_SIZE
-	    });
-	    filteredQuestions = Array.isArray(data.data) ? data.data : [];
-	    questionStatsTotal = Number(data.total || 0);
-	    renderQuestionList();
-	    return data;
-	}
+    async function clearAllQuestions() {
+        if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
+        const btn = document.getElementById('clearQuestionsBtn');
+        const original = btn.innerText;
+        btn.innerText = '清空中...';
+        btn.disabled = true;
+        try {
+            const res = await adminFetch('clearAllQuestions');
+            showToast(`已清空 ${res.deleted} 条题目`);
+            currentQuestionPage = 1;
+            await loadQuestionList();
+        } catch(err) {
+            showToast(`清空失败: ${err.message}`, true);
+        } finally {
+            btn.innerText = original;
+            btn.disabled = false;
+        }
+    }
 
-	function renderQuestionList() {
-	    const container = document.getElementById('questionSearchResult');
-	    const paginationDiv = document.getElementById('questionPagination');
-	    const totalPages = Math.max(1, Math.ceil((questionStatsTotal || 0) / QUESTION_PAGE_SIZE));
-	    if (!filteredQuestions || filteredQuestions.length === 0) {
-	        container.innerHTML = '<div style="text-align:center; padding:40px; color:#64748b;">未找到题目</div>';
-	        paginationDiv.innerHTML = questionStatsTotal
-	            ? `<div style="font-weight:600; color:#64748b;">共 ${questionStatsTotal} 条，当前第 ${currentQuestionPage} 页</div>`
-	            : '';
-	        return;
-	    }
-	    let html = '<div class="table-wrapper"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
-	    for (const item of filteredQuestions) {
-	        const optionsDisplay = Array.isArray(item.options) ? item.options.map(opt => escapeHtml(opt)).join(' | ') : '';
-	        html += `
-	            <tr data-id="${escapeHtml(item.id)}" data-text="${escapeHtml(item.text)}" data-options='${escapeHtml(JSON.stringify(item.options || []))}' data-answer="${escapeHtml(item.answer)}">
-	                <td>${escapeHtml(item.id)}</td>
-	                <td style="max-width:300px; word-break:break-word;">${escapeHtml(item.text)}</td>
-	                <td style="max-width:250px; word-break:break-word;">${optionsDisplay}</td>
-	                <td>${escapeHtml(item.answer)}</td>
-	                <td class="action-group">
-	                    <button class="btn btn-ghost btn-sm edit-question-btn">修改</button>
-	                    <button class="btn btn-danger btn-sm delete-question-btn">删除</button>
-	                </td>
-	            </tr>
-	        `;
-	    }
-	    html += '</tbody></table></div>';
-	    container.innerHTML = html;
+    async function showQuestionStatsModal() {
+        const modal = document.getElementById('questionStatsModal');
+        const body = document.getElementById('questionStatsBody');
+        modal.style.display = 'flex';
+        body.innerHTML = '<div class="stats-empty">正在加载统计数据...</div>';
+        try {
+            const res = await fetch(`${API_URL}?action=getImportHistory`);
+            const data = await res.json();
+            if (data.total === undefined || !Array.isArray(data.history)) {
+                throw new Error('统计数据格式错误');
+            }
+            const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
+            const latest = history[0] || null;
+            const latestTime = latest ? new Date(latest.time) : null;
+            const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
+            const totalBatches = history.length;
+            const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
+            const latestCategory = latest ? (latest.category || '未命名') : '暂无';
+            const latestCount = latest ? (Number(latest.count) || 0) : 0;
 
-	    paginationDiv.innerHTML = `
-	        <div class="flex-row" style="justify-content:center; gap:12px;">
-	            <button class="btn btn-ghost btn-sm" id="questionPrevPage" ${currentQuestionPage===1 ? 'disabled' : ''}>上一页</button>
-	            <span style="font-weight:600;">${currentQuestionPage} / ${totalPages}</span>
-	            <button class="btn btn-ghost btn-sm" id="questionNextPage" ${currentQuestionPage===totalPages ? 'disabled' : ''}>下一页</button>
-	        </div>
-	    `;
+            const recentList = history.slice(0, 8).map(item => {
+                const date = new Date(item.time);
+                const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
+                return `
+                    <div class="stats-history-item">
+                        <div class="stats-history-time">${timeStr}</div>
+                        <div class="stats-history-category">${escapeHtml(item.category || '未命名')}</div>
+                        <div class="stats-history-count">导入 ${Number(item.count) || 0} 条</div>
+                    </div>
+                `;
+            }).join('');
 
-	    document.getElementById('questionPrevPage')?.addEventListener('click', async () => {
-	        if (currentQuestionPage > 1) {
-	            currentQuestionPage--;
-	            await loadQuestionList();
-	        }
-	    });
-	    document.getElementById('questionNextPage')?.addEventListener('click', async () => {
-	        if (currentQuestionPage < totalPages) {
-	            currentQuestionPage++;
-	            await loadQuestionList();
-	        }
-	    });
+            body.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <div class="stats-card-label">当前题库总数</div>
+                        <div class="stats-card-value">${escapeHtml(String(data.total))}</div>
+                        <div class="stats-card-sub">来自题库管理统计</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-label">导入批次</div>
+                        <div class="stats-card-value">${escapeHtml(String(totalBatches))}</div>
+                        <div class="stats-card-sub">最近 ${Math.min(totalBatches, 8)} 条导入记录</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-label">最近导入</div>
+                        <div class="stats-card-value">${escapeHtml(String(latestCount))}</div>
+                        <div class="stats-card-sub">${escapeHtml(latestCategory)} · ${escapeHtml(latestTimeText)}</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-card-label">累计导入量</div>
+                        <div class="stats-card-value">${escapeHtml(String(totalImported))}</div>
+                        <div class="stats-card-sub">历史导入总题量</div>
+                    </div>
+                </div>
 
-	    document.querySelectorAll('.edit-question-btn').forEach(btn => {
-	        btn.addEventListener('click', (e) => {
-	            const row = e.target.closest('tr');
-	            const id = row.getAttribute('data-id');
-	            const text = row.getAttribute('data-text');
-	            const options = JSON.parse(row.getAttribute('data-options'));
-	            const answer = row.getAttribute('data-answer');
-	            openEditModal(id, text, options, answer);
-	        });
-	    });
-	    document.querySelectorAll('.delete-question-btn').forEach(btn => {
-	        btn.addEventListener('click', async (e) => {
-	            const row = e.target.closest('tr');
-	            const id = row.getAttribute('data-id');
-	            if (confirm('确定删除该题目吗？')) {
-	                try {
-	                    await adminFetch('deleteSimpleQuestion', { id });
-	                    showToast('删除成功');
-	                    await loadQuestionList();
-	                } catch(err) { showToast(`删除失败: ${err.message}`, true); }
-	            }
-	        });
-	    });
-	}
+                <div class="stats-section">
+                    <div class="stats-section-title">最近导入记录</div>
+                    <div class="stats-history-list">
+                        ${recentList || '<div class="stats-empty">暂无导入记录</div>'}
+                    </div>
+                </div>
+            `;
+        } catch (e) {
+            body.innerHTML = `<div class="stats-empty">获取统计失败：${escapeHtml(e.message || '未知错误')}</div>`;
+        }
+    }
 
-	function openEditModal(id, text, optionsArray, answer) {
-	    currentEditId = id;
-	    document.getElementById('editQuestionText').value = text;
-	    document.getElementById('editQuestionOptions').value = Array.isArray(optionsArray) ? optionsArray.join('\n') : '';
-	    document.getElementById('editQuestionAnswer').value = answer;
-	    document.getElementById('editQuestionModal').style.display = 'flex';
-	}
+    function searchQuestions() {
+        currentQuestionPage = 1;
+        loadQuestionList().catch(err => showToast(`搜索失败: ${err.message}`, true));
+    }
 
-	function closeEditModal() {
-	    document.getElementById('editQuestionModal').style.display = 'none';
-	    currentEditId = null;
-	}
+    function resetQuestionSearch() {
+        document.getElementById('questionSearchKeyword').value = '';
+        currentQuestionPage = 1;
+        loadQuestionList().catch(err => showToast(`重置失败: ${err.message}`, true));
+    }
 
-	async function saveEdit() {
-	    const newText = document.getElementById('editQuestionText').value.trim();
-	    const newOptionsRaw = document.getElementById('editQuestionOptions').value;
-	    const newAnswer = document.getElementById('editQuestionAnswer').value.trim();
-	    if (!newText) { showToast('题目不能为空', true); return; }
-	    if (!newAnswer) { showToast('答案不能为空', true); return; }
-	    const optionsArray = newOptionsRaw.split('\n').map(s => s.trim()).filter(s => s);
-	    if (optionsArray.length === 0) { showToast('至少需要一个选项', true); return; }
-	    try {
-	        await adminFetch('updateSimpleQuestion', {
-	            id: currentEditId,
-	            text: newText,
-	            options: JSON.stringify(optionsArray),
-	            answer: newAnswer
-	        });
-	        showToast('修改成功');
-	        closeEditModal();
-	        await loadQuestionList();
-	    } catch(err) {
-	        showToast(`修改失败: ${err.message}`, true);
-	    }
-	}
+    document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
+        if (e.target && e.target.id === 'questionStatsModal') {
+            document.getElementById('questionStatsModal').style.display = 'none';
+        }
+    });
 
-	async function clearAllQuestions() {
-	    if (!confirm('此操作将清空整个题库，不可恢复！确定要清空吗？')) return;
-	    const btn = document.getElementById('clearQuestionsBtn');
-	    const original = btn.innerText;
-	    btn.innerText = '清空中...';
-	    btn.disabled = true;
-	    try {
-	        const res = await adminFetch('clearAllQuestions');
-	        showToast(`已清空 ${res.deleted} 条题目`);
-	        currentQuestionPage = 1;
-	        await loadQuestionList();
-	    } catch(err) {
-	        showToast(`清空失败: ${err.message}`, true);
-	    } finally {
-	        btn.innerText = original;
-	        btn.disabled = false;
-	    }
-	}
-
-	async function showQuestionStatsModal() {
-	    const modal = document.getElementById('questionStatsModal');
-	    const body = document.getElementById('questionStatsBody');
-	    modal.style.display = 'flex';
-	    body.innerHTML = '<div class="stats-empty">正在加载统计数据...</div>';
-	    try {
-	        const res = await fetch(`${API_URL}?action=getImportHistory`);
-	        const data = await res.json();
-	        if (data.total === undefined || !Array.isArray(data.history)) {
-	            throw new Error('统计数据格式错误');
-	        }
-	        const history = [...data.history].sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
-	        const latest = history[0] || null;
-	        const latestTime = latest ? new Date(latest.time) : null;
-	        const latestTimeText = latestTime ? `${latestTime.getFullYear()}-${String(latestTime.getMonth()+1).padStart(2,'0')}-${String(latestTime.getDate()).padStart(2,'0')} ${String(latestTime.getHours()).padStart(2,'0')}:${String(latestTime.getMinutes()).padStart(2,'0')}:${String(latestTime.getSeconds()).padStart(2,'0')}` : '暂无';
-	        const totalBatches = history.length;
-	        const totalImported = history.reduce((sum, item) => sum + (Number(item.count) || 0), 0);
-	        const latestCategory = latest ? (latest.category || '未命名') : '暂无';
-	        const latestCount = latest ? (Number(latest.count) || 0) : 0;
-
-	        const recentList = history.slice(0, 8).map(item => {
-	            const date = new Date(item.time);
-	            const timeStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
-	            return `
-	                <div class="stats-history-item">
-	                    <div class="stats-history-time">${timeStr}</div>
-	                    <div class="stats-history-category">${escapeHtml(item.category || '未命名')}</div>
-	                    <div class="stats-history-count">导入 ${Number(item.count) || 0} 条</div>
-	                </div>
-	            `;
-	        }).join('');
-
-	        body.innerHTML = `
-	            <div class="stats-grid">
-	                <div class="stats-card">
-	                    <div class="stats-card-label">当前题库总数</div>
-	                    <div class="stats-card-value">${escapeHtml(String(data.total))}</div>
-	                    <div class="stats-card-sub">来自题库管理统计</div>
-	                </div>
-	                <div class="stats-card">
-	                    <div class="stats-card-label">导入批次</div>
-	                    <div class="stats-card-value">${escapeHtml(String(totalBatches))}</div>
-	                    <div class="stats-card-sub">最近 ${Math.min(totalBatches, 8)} 条导入记录</div>
-	                </div>
-	                <div class="stats-card">
-	                    <div class="stats-card-label">最近导入</div>
-	                    <div class="stats-card-value">${escapeHtml(String(latestCount))}</div>
-	                    <div class="stats-card-sub">${escapeHtml(latestCategory)} · ${escapeHtml(latestTimeText)}</div>
-	                </div>
-	                <div class="stats-card">
-	                    <div class="stats-card-label">累计导入量</div>
-	                    <div class="stats-card-value">${escapeHtml(String(totalImported))}</div>
-	                    <div class="stats-card-sub">历史导入总题量</div>
-	                </div>
-	            </div>
-
-	            <div class="stats-section">
-	                <div class="stats-section-title">最近导入记录</div>
-	                <div class="stats-history-list">
-	                    ${recentList || '<div class="stats-empty">暂无导入记录</div>'}
-	                </div>
-	            </div>
-	        `;
-	    } catch (e) {
-	        body.innerHTML = `<div class="stats-empty">获取统计失败：${escapeHtml(e.message || '未知错误')}</div>`;
-	    }
-	}
-
-	async function showHistoryPanel() {
-	    return showQuestionStatsModal();
-	}
-
-	function searchQuestions() {
-	    currentQuestionPage = 1;
-	    loadQuestionList().catch(err => showToast(`搜索失败: ${err.message}`, true));
-	}
-
-	function resetQuestionSearch() {
-	    document.getElementById('questionSearchKeyword').value = '';
-	    currentQuestionPage = 1;
-	    loadQuestionList().catch(err => showToast(`重置失败: ${err.message}`, true));
-	}
-
-	document.getElementById('questionStatsModal')?.addEventListener('click', (e) => {
-	    if (e.target && e.target.id === 'questionStatsModal') {
-	        document.getElementById('questionStatsModal').style.display = 'none';
-	    }
-	});
-
-	document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () => {
-	    document.getElementById('questionStatsModal').style.display = 'none';
-	});
+    document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () => {
+        document.getElementById('questionStatsModal').style.display = 'none';
+    });
 
     let currentExcelData = null;
     let currentExcelHeaders = [];
@@ -1437,7 +1503,7 @@
         currentExcelHeaders = headers;
         const modal = document.getElementById('excelConfigModal');
         const previewArea = document.getElementById('excelPreviewArea');
-        previewArea.innerHTML = `<div style="font-size:0.8rem; color:#64748b;">已加载 ${rows.length} 行数据</div>`;
+        previewArea.innerHTML = `<div style="font-size:0.8rem; color:var(--text-secondary);">已加载 ${rows.length} 行数据</div>`;
         const questionSelect = document.getElementById('questionColSelect');
         const answerSelect = document.getElementById('answerColSelect');
         const optionStartSelect = document.getElementById('optionStartColSelect');
