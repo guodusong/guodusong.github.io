@@ -3,581 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>新标签页</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>链接生成器</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-        <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
-
+    <style>
+        /* ═══════════════════════════════════════════════════
+           Design Tokens — Warm Refined Minimal
+           ═══════════════════════════════════════════════════ */
         :root {
-            --bg: #e8ecf1;
-            --surface: #e8ecf1;
-            --text-primary: #3a3f47;
-            --text-secondary: #8b919a;
-            --primary: #7eb8a0;
-            --primary-dark: #5f9a82;
-            --primary-light: #b8d8cb;
-            --danger: #e07a6e;
-            --danger-dark: #c96056;
-            --danger-light: #f0c4bd;
-            --shadow-dark: #d1d5db;
-            --shadow-light: #ffffff;
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 24px;
-            --radius-xl: 36px;
-            --neu-shadow-lg: 10px 10px 20px #d1d5db, -10px -10px 20px #ffffff;
-            --neu-shadow: 6px 6px 12px #d1d5db, -6px -6px 12px #ffffff;
-            --neu-shadow-sm: 4px 4px 8px #d1d5db, -4px -4px 8px #ffffff;
-            --neu-shadow-inset: inset 4px 4px 8px #d1d5db, inset -4px -4px 8px #ffffff;
-            --neu-shadow-pressed: inset 6px 6px 12px #d1d5db, inset -6px -6px 12px #ffffff;
-            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg: #f8f7f4;
+            --surface: #ffffff;
+            --surface-hover: #f3f2ef;
+            --text: #1e1b2e;
+            --text-secondary: #6b6779;
+            --text-muted: #9e9aa8;
+            --primary: #5c5fef;
+            --primary-hover: #4b4ed8;
+            --primary-light: #eeedff;
+            --primary-text: #ffffff;
+            --success: #059669;
+            --success-bg: #ecfdf5;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --danger-light: #fef2f2;
+            --border: #e8e6e1;
+            --border-light: #f0eeea;
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.03);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --sp-1: 4px;
+            --sp-2: 8px;
+            --sp-3: 12px;
+            --sp-4: 16px;
+            --sp-5: 20px;
+            --sp-6: 24px;
+            --sp-8: 32px;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 150ms var(--ease);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
 
         body {
             font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
             background: var(--bg);
             min-height: 100vh;
-            padding: 24px 16px 48px;
-            color: var(--text-primary);
+            padding: var(--sp-4) var(--sp-4) 60px;
+            color: var(--text);
             line-height: 1.6;
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
         }
+        .container { max-width: 720px; margin: 0 auto; }
 
-        .container { max-width: 960px; margin: 0 auto; }
-
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-            margin-bottom: 24px;
-            box-shadow: var(--neu-shadow-lg);
-            transition: var(--transition);
-        }
-
-        .hero { text-align: center; margin-bottom: 28px; }
+        /* Header */
+        .hero { text-align: center; margin-bottom: var(--sp-5); padding-top: var(--sp-2); }
         .hero h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            user-select: none;
+            font-size: 1.25rem; font-weight: 700; color: var(--text);
+            letter-spacing: -0.3px; cursor: pointer; user-select: none;
+            display: inline-flex; align-items: center; gap: 6px;
         }
 
-        .tabs {
-            display: flex;
-            gap: 8px;
-            background: var(--bg);
-            box-shadow: var(--neu-shadow-inset);
-            padding: 6px;
-            border-radius: var(--radius-md);
-            margin-bottom: 24px;
-        }
+        /* Tabs — 下划线风格 */
+        .tabs { display: flex; gap: 0; margin-bottom: var(--sp-4); border-bottom: 2px solid var(--border); }
         .tab {
-            flex: 1;
-            text-align: center;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-            color: var(--text-secondary);
-            background: transparent;
-            border: none;
+            flex: 1; text-align: center; padding: 12px 16px; font-weight: 600;
+            font-size: 0.9rem; cursor: pointer; color: var(--text-secondary);
+            background: none; border: none; border-bottom: 2px solid transparent;
+            margin-bottom: -2px; transition: color var(--transition), border-color var(--transition);
             font-family: inherit;
         }
-        .tab.active {
-            background: var(--surface);
-            color: var(--primary-dark);
-            box-shadow: var(--neu-shadow-sm);
-            font-weight: 700;
-        }
-        .tab:hover:not(.active) { color: var(--text-primary); }
-        .tab:active { box-shadow: var(--neu-shadow-inset); }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab:hover:not(.active) { color: var(--text); }
 
+        /* Card */
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: var(--sp-6);
+            margin-bottom: var(--sp-4); box-shadow: var(--shadow-sm);
+        }
+
+        /* Input */
         .input-field {
-            width: 100%;
-            padding: 14px 18px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            background: var(--bg);
-            box-shadow: var(--neu-shadow-inset);
-            transition: var(--transition);
-            outline: none;
-            font-family: inherit;
-            color: var(--text-primary);
+            width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+            border-radius: var(--radius); font-size: 16px; font-family: inherit;
+            color: var(--text); background: var(--surface);
+            transition: border-color var(--transition), box-shadow var(--transition);
+            outline: none; -webkit-appearance: none;
         }
-        .input-field::placeholder { color: #b0b8c1; }
+        .input-field::placeholder { color: var(--text-muted); }
         .input-field:focus {
-            box-shadow: var(--neu-shadow-pressed), 0 0 0 3px rgba(126, 184, 160, 0.25);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(92, 95, 239, 0.12);
         }
 
+        /* Buttons */
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 11px 22px;
-            border-radius: var(--radius-sm);
-            font-weight: 600;
-            font-size: 0.85rem;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            background: var(--surface);
-            color: var(--text-primary);
-            box-shadow: var(--neu-shadow-sm);
-            white-space: nowrap;
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            padding: 10px 18px; border-radius: var(--radius); font-weight: 600;
+            font-size: 0.85rem; border: none; cursor: pointer;
+            transition: all var(--transition); font-family: inherit;
+            background: var(--surface); color: var(--text);
+            border: 1px solid var(--border); box-shadow: var(--shadow-xs);
+            white-space: nowrap; min-height: 44px;
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn:hover:not(:disabled) {
-            box-shadow: var(--neu-shadow);
-            transform: translateY(-1px);
-        }
-        .btn:active:not(:disabled) {
-            box-shadow: var(--neu-shadow-inset);
-            transform: translateY(0);
-        }
-        .btn:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
+        .btn:hover:not(:disabled) { background: var(--surface-hover); box-shadow: var(--shadow-sm); }
+        .btn:active:not(:disabled) { transform: scale(0.97); background: #edebe8; }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .btn-primary {
-            background: var(--primary);
-            color: #fff;
-            box-shadow: 4px 4px 8px #c7d6cf, -4px -4px 8px #ffffff;
+            background: var(--primary); color: var(--primary-text);
+            border-color: var(--primary); font-weight: 600;
         }
         .btn-primary:hover:not(:disabled) {
-            background: var(--primary-dark);
-            box-shadow: 6px 6px 12px #c7d6cf, -6px -6px 12px #ffffff;
+            background: var(--primary-hover); border-color: var(--primary-hover);
+            box-shadow: var(--shadow);
         }
         .btn-primary:active:not(:disabled) {
-            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.3);
-            background: var(--primary-dark);
+            background: #3f42cc; border-color: #3f42cc; transform: scale(0.97);
         }
 
         .btn-danger {
-            background: var(--danger);
-            color: #fff;
-            box-shadow: 4px 4px 8px #dcc3bf, -4px -4px 8px #ffffff;
+            background: var(--surface); color: var(--danger); border-color: #fecaca;
         }
         .btn-danger:hover:not(:disabled) {
-            background: var(--danger-dark);
-            box-shadow: 6px 6px 12px #dcc3bf, -6px -6px 12px #ffffff;
+            background: var(--danger-light); border-color: var(--danger); box-shadow: var(--shadow-sm);
         }
-        .btn-danger:active:not(:disabled) {
-            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.3);
-            background: var(--danger-dark);
+        .btn-danger:active:not(:disabled) { background: #fee2e2; transform: scale(0.97); }
+
+        .btn-ghost {
+            background: var(--surface); color: var(--text-secondary); border-color: var(--border);
         }
+        .btn-ghost:hover:not(:disabled) {
+            color: var(--text); border-color: #c4c1ba; background: var(--surface-hover);
+        }
+        .btn-sm { padding: 7px 14px; font-size: 0.78rem; min-height: 36px; border-radius: var(--radius-sm); }
 
-        .btn-ghost { background: var(--surface); color: var(--text-primary); }
-        .btn-sm { padding: 7px 14px; font-size: 0.78rem; border-radius: 8px; }
-        .w-full { width: 100%; }
-
-        .flex-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+        /* Stats */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin-bottom: var(--sp-6); }
         .stat-card {
-            background: var(--surface);
-            padding: 20px 16px;
-            border-radius: var(--radius-md);
-            text-align: center;
-            box-shadow: var(--neu-shadow-sm);
-            transition: var(--transition);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: var(--sp-4) var(--sp-3);
+            text-align: center; box-shadow: var(--shadow-xs);
         }
-        .stat-card:hover { box-shadow: var(--neu-shadow); transform: translateY(-2px); }
-        .stat-num { font-size: 1.6rem; font-weight: 700; color: var(--primary-dark); }
-        .stat-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .stat-num { font-size: 1.5rem; font-weight: 700; color: var(--primary); line-height: 1.2; }
+        .stat-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
         .stat-card.danger-card .stat-num { color: var(--danger); }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid rgba(209, 213, 219, 0.5);
+        /* Collapsible admin sections */
+        .admin-section {
+            border: 1px solid var(--border); border-radius: var(--radius);
+            margin-bottom: var(--sp-3); background: var(--surface); overflow: hidden;
         }
-        .section-title {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--text-primary);
-            letter-spacing: 0.3px;
-        }
+        .admin-section[open] { box-shadow: var(--shadow-xs); }
 
+        .admin-section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px var(--sp-4); font-weight: 700; font-size: 0.92rem;
+            color: var(--text); cursor: pointer; list-style: none; user-select: none;
+            transition: background var(--transition);
+        }
+        .admin-section-header::-webkit-details-marker { display: none; }
+        .admin-section-header::after {
+            content: '';
+            width: 20px; height: 20px; background: currentColor;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") center/cover;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") center/cover;
+            transition: transform 0.2s var(--ease); opacity: 0.5;
+        }
+        .admin-section[open] > .admin-section-header::after { transform: rotate(180deg); }
+        .admin-section-header:hover { background: var(--surface-hover); }
+        .admin-section-body { padding: 0 var(--sp-4) var(--sp-4); }
+
+        /* Toolbar */
         .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-shadow-inset);
-            margin-bottom: 16px;
+            display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center;
+            margin-bottom: var(--sp-3); padding-bottom: var(--sp-3);
+            border-bottom: 1px solid var(--border-light);
         }
-        .toolbar-divider {
-            width: 1px;
-            height: 24px;
-            background: var(--shadow-dark);
-            margin: 0 4px;
-            align-self: center;
-        }
+        .toolbar-divider { width: 1px; height: 20px; background: var(--border); margin: 0 2px; align-self: center; }
 
+        /* Section header (legacy) */
+        .section-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: var(--sp-4); padding-bottom: var(--sp-3);
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title { font-weight: 700; font-size: 1rem; color: var(--text); }
+
+        /* Table */
         .table-wrapper {
-            overflow-x: auto;
-            margin: 16px 0;
-            border-radius: var(--radius-md);
-            background: var(--surface);
-            box-shadow: var(--neu-shadow);
+            overflow-x: auto; margin: var(--sp-3) 0; border-radius: var(--radius);
+            border: 1px solid var(--border); background: var(--surface);
         }
-        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 740px; }
-        th, td { padding: 12px 10px; text-align: left; vertical-align: middle; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        th, td { padding: 10px 10px; text-align: left; vertical-align: middle; }
         th {
-            background: var(--bg);
-            color: var(--text-primary);
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid var(--shadow-dark);
+            background: #faf9f7; color: var(--text-secondary); font-weight: 700;
+            font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.3px;
+            border-bottom: 1px solid var(--border);
         }
-        td { border-bottom: 1px solid rgba(209, 213, 219, 0.4); color: var(--text-primary); }
+        td { border-bottom: 1px solid var(--border-light); color: var(--text); }
         tr:last-child td { border-bottom: none; }
-        tr:hover td { background: rgba(126, 184, 160, 0.06); }
-        .token-name { color: var(--primary-dark); font-weight: 600; cursor: pointer; transition: color 0.15s; }
-        .token-name:hover { color: var(--primary); }
-        .remain-value { color: var(--primary-dark); font-weight: 600; }
+        tr:hover td { background: rgba(92, 95, 239, 0.03); }
+        .token-name { color: var(--primary); font-weight: 600; cursor: pointer; }
+        .token-name:hover { text-decoration: underline; }
+        .remain-value { color: var(--success); font-weight: 600; }
         .used-value { color: var(--danger); font-weight: 600; }
-        .action-group { display: flex; gap: 5px; flex-wrap: wrap; }
-        .action-group .btn { font-size: 0.72rem; padding: 5px 10px; }
+        .action-group { display: flex; gap: 4px; flex-wrap: wrap; }
+        .original-token { color: var(--text-muted); font-size: 0.8rem; }
 
-        .code-section { margin-top: 14px; }
-        .code-label { font-size: 0.75rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+        /* Code block */
+        .code-section { margin-top: var(--sp-4); }
+        .code-label { font-size: 0.73rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; }
         .code-box {
-            background: #2d3239;
-            color: #b8d8cb;
-            padding: 14px 16px;
-            border-radius: var(--radius-sm);
-            overflow-x: auto;
-            font-family: 'JetBrains Mono', 'Cascadia Code', monospace;
-            font-size: 0.73rem;
-            white-space: pre-wrap;
-            word-break: break-all;
-            box-shadow: var(--neu-shadow-inset);
+            background: #1e1b2e; color: #c4b5fd; padding: 14px 16px;
+            border-radius: var(--radius); overflow-x: auto;
+            font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+            font-size: 0.72rem; line-height: 1.6; white-space: pre-wrap;
+            word-break: break-all; border: 1px solid #2d2940;
         }
         .copy-btn-sm {
-            background: var(--primary);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 0.78rem;
-            margin-top: 8px;
-            width: 100%;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-            box-shadow: var(--neu-shadow-sm);
-            transition: var(--transition);
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+            width: 100%; margin-top: var(--sp-2); padding: 10px 16px;
+            background: var(--primary-light); color: var(--primary);
+            border: 1px solid #c7c4f8; border-radius: var(--radius);
+            font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: inherit;
+            transition: all var(--transition); min-height: 44px;
         }
-        .copy-btn-sm:hover { box-shadow: var(--neu-shadow); transform: translateY(-1px); }
-        .copy-btn-sm:active { box-shadow: var(--neu-shadow-inset); transform: translateY(0); }
+        .copy-btn-sm:hover { background: #e0defa; border-color: var(--primary); }
+        .copy-btn-sm:active { transform: scale(0.97); background: #d5d2f8; }
 
+        /* Log list */
         .log-list {
-            max-height: 400px;
-            overflow-y: auto;
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            box-shadow: var(--neu-shadow-inset);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            max-height: 360px; overflow-y: auto; display: flex; flex-direction: column;
+            gap: 6px; background: #faf9f7; border-radius: var(--radius);
+            padding: var(--sp-3); border: 1px solid var(--border-light);
         }
-        .log-list:empty::before { content: "暂无日志"; display: block; text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.85rem; }
+        .log-list:empty::before {
+            content: "暂无日志"; display: block; text-align: center;
+            padding: 24px; color: var(--text-muted); font-size: 0.85rem;
+        }
 
+        /* Tip */
         .tip-box {
-            margin-top: 20px;
-            padding: 14px 18px;
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-shadow-inset);
-            font-size: 0.82rem;
-            color: var(--text-secondary);
+            margin-top: var(--sp-5); padding: var(--sp-3) var(--sp-4);
+            background: #faf9f7; border: 1px solid var(--border-light);
+            border-radius: var(--radius); font-size: 0.82rem;
+            color: var(--text-secondary); line-height: 1.7;
         }
 
-        .toast-stack { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column-reverse; gap: 10px; pointer-events: none; }
+        /* Toast — top center for mobile */
+        .toast-stack {
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+            z-index: 10000; display: flex; flex-direction: column-reverse; gap: 8px;
+            pointer-events: none; width: calc(100% - 32px); max-width: 400px;
+        }
         .toast-item {
-            padding: 12px 20px;
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-shadow-lg);
-            font-weight: 600;
-            font-size: 0.85rem;
-            animation: toastIn 0.3s ease-out;
-            pointer-events: auto;
-            color: var(--text-primary);
+            padding: 12px 18px; background: var(--text); color: #fff;
+            border-radius: var(--radius); font-weight: 600; font-size: 0.85rem;
+            text-align: center; animation: toastIn 0.25s var(--ease);
+            pointer-events: auto; box-shadow: var(--shadow-lg);
         }
-        .toast-item.toast-error { color: var(--danger); }
-        @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-item.toast-error { background: var(--danger); }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease; margin-top: 0; }
-        .import-panel.show { max-height: 260px; opacity: 1; margin-top: 12px; }
+        /* Import panel */
+        .import-panel { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.25s var(--ease); margin: 0; }
+        .import-panel.show { max-height: 260px; opacity: 1; margin: var(--sp-3) 0; }
 
-        .progress-bar { width: 100%; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin-top: 12px; box-shadow: var(--neu-shadow-inset); }
-        .progress-fill { width: 0%; height: 100%; background: var(--primary); border-radius: 4px; transition: width 0.3s; }
+        /* Progress */
+        .progress-bar { width: 100%; height: 6px; background: var(--border-light); border-radius: 3px; overflow: hidden; margin-top: var(--sp-3); }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s var(--ease); }
 
+        /* Modal */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(58, 63, 71, 0.45);
-            backdrop-filter: blur(4px);
-            z-index: 10002;
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px); z-index: 10002;
+            align-items: center; justify-content: center;
         }
         .modal-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            max-width: 600px;
-            width: 92%;
-            max-height: 82vh;
-            overflow-y: auto;
-            padding: 28px;
-            box-shadow: var(--neu-shadow-lg);
-            animation: modalSlideIn 0.25s ease-out;
+            background: var(--surface); border-radius: var(--radius-lg);
+            max-width: 600px; width: 92%; max-height: 82vh; overflow-y: auto;
+            padding: var(--sp-6); border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg); animation: modalIn 0.2s var(--ease);
         }
-        @keyframes modalSlideIn {
-            from { opacity: 0; transform: scale(0.94) translateY(-12px); }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(8px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        .modal h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 18px; color: var(--text-primary); }
-        .modal .form-group { margin-bottom: 16px; }
+        .modal h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: var(--sp-4); color: var(--text); }
+        .modal .form-group { margin-bottom: var(--sp-4); }
         .modal .form-group label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); font-size: 0.85rem; }
         .modal textarea.input-field { resize: vertical; min-height: 80px; }
-        .modal .btn-group { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
+        .modal .btn-group { display: flex; justify-content: flex-end; gap: var(--sp-3); margin-top: var(--sp-5); }
 
+        /* Rename panel */
         .rename-panel {
-            margin-top: 14px;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            box-shadow: var(--neu-shadow-inset);
+            margin-top: var(--sp-4); padding: var(--sp-4);
+            background: #faf9f7; border: 1px solid var(--border); border-radius: var(--radius);
         }
-        .rename-panel .flex-row { gap: 8px; }
+        .rename-panel .flex-row { gap: var(--sp-2); }
 
-        .pagination-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 14px;
-            margin: 20px 0;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
+        /* Pagination */
+        .pagination-bar { display: flex; justify-content: center; align-items: center; gap: 14px; margin: var(--sp-5) 0; font-weight: 600; font-size: 0.9rem; }
 
-        .original-token { color: var(--text-secondary); font-size: 0.82rem; }
-
-        .login-box {
-            background: var(--bg);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            box-shadow: var(--neu-shadow-inset);
-            margin-bottom: 20px;
-        }
-
+        /* Question stats modal */
         .question-stats-modal-card { max-width: 860px; width: min(94vw, 860px); padding: 0; overflow: hidden; border-radius: var(--radius-lg); }
         .question-stats-header {
             display: flex; justify-content: space-between; align-items: center; gap: 16px;
-            padding: 20px 24px; background: var(--bg);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-            box-shadow: inset 0 -2px 4px rgba(209,213,219,0.3);
+            padding: 18px var(--sp-6); background: #faf9f7;
+            border-bottom: 1px solid var(--border); border-radius: var(--radius-lg) var(--radius-lg) 0 0;
         }
-        .question-stats-title { display: flex; flex-direction: column; gap: 4px; }
-        .question-stats-title h3 { margin: 0; font-size: 1.15rem; color: var(--text-primary); }
-        .question-stats-title p { margin: 0; font-size: 0.82rem; color: var(--text-secondary); }
-        .question-stats-body { padding: 22px 24px 24px; background: var(--surface); }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
-        .stats-card { border-radius: var(--radius-md); padding: 16px; background: var(--bg); box-shadow: var(--neu-shadow-sm); }
-        .stats-card-label { font-size: 0.73rem; color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
-        .stats-card-value { font-size: 1.35rem; font-weight: 800; color: var(--primary-dark); line-height: 1.2; word-break: break-word; }
-        .stats-card-sub { margin-top: 6px; font-size: 0.76rem; color: var(--text-secondary); }
-        .stats-section { background: var(--bg); border-radius: var(--radius-md); padding: 16px; margin-top: 14px; box-shadow: var(--neu-shadow-inset); }
-        .stats-section-title { font-size: 0.88rem; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
-        .stats-history-list { display: flex; flex-direction: column; gap: 10px; max-height: 320px; overflow: auto; padding-right: 4px; }
+        .question-stats-title { display: flex; flex-direction: column; gap: 2px; }
+        .question-stats-title h3 { margin: 0; font-size: 1.1rem; color: var(--text); }
+        .question-stats-title p { margin: 0; font-size: 0.8rem; color: var(--text-secondary); }
+        .question-stats-body { padding: 20px var(--sp-6) var(--sp-6); background: var(--surface); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-4); }
+        .stats-card { border-radius: var(--radius); padding: var(--sp-4); background: #faf9f7; border: 1px solid var(--border-light); }
+        .stats-card-label { font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+        .stats-card-value { font-size: 1.4rem; font-weight: 700; color: var(--primary); line-height: 1.2; word-break: break-word; }
+        .stats-card-sub { margin-top: 4px; font-size: 0.75rem; color: var(--text-muted); }
+        .stats-section { background: #faf9f7; border-radius: var(--radius); padding: var(--sp-4); margin-top: var(--sp-4); border: 1px solid var(--border-light); }
+        .stats-section-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: var(--sp-3); }
+        .stats-history-list { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow: auto; }
         .stats-history-item {
-            display: grid; grid-template-columns: 170px 1fr auto; gap: 10px; align-items: center;
-            padding: 12px 14px; border-radius: var(--radius-sm);
-            background: var(--surface); box-shadow: var(--neu-shadow-sm);
+            display: grid; grid-template-columns: 160px 1fr auto; gap: 10px; align-items: center;
+            padding: 10px 14px; border-radius: var(--radius-sm);
+            background: var(--surface); border: 1px solid var(--border-light);
         }
-        .stats-history-time { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-secondary); }
-        .stats-history-category { font-weight: 700; color: var(--primary-dark); word-break: break-word; }
+        .stats-history-time { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--text-secondary); }
+        .stats-history-category { font-weight: 700; color: var(--primary); word-break: break-word; }
         .stats-history-count {
-            justify-self: end; font-size: 0.78rem; font-weight: 700; color: var(--primary-dark);
-            background: var(--bg); padding: 4px 10px; border-radius: 999px; white-space: nowrap;
-            box-shadow: var(--neu-shadow-sm);
+            justify-self: end; font-size: 0.76rem; font-weight: 700; color: var(--text-secondary);
+            background: #faf9f7; padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+            border: 1px solid var(--border-light);
         }
-        .stats-empty { padding: 20px; text-align: center; color: var(--text-secondary); font-size: 0.88rem; }
-        .close-history { float: right; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0 8px; color: var(--text-secondary); }
+        .stats-empty { padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+        .close-history { float: right; cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0 8px; color: var(--text-muted); }
         .close-history:hover { color: var(--danger); }
 
-        @media (max-width: 760px) {
-            body { padding: 12px 10px 40px; }
-            .card { padding: 18px 14px; }
-            .grid-2 { grid-template-columns: 1fr; }
-            .stat-grid { gap: 10px; }
-            .stat-card { padding: 14px 10px; }
-            .stat-num { font-size: 1.3rem; }
-            th, td { padding: 8px 6px; font-size: 0.72rem; }
-            .action-group .btn { font-size: 0.68rem; padding: 4px 6px; }
-            .modal-card { padding: 18px 14px; }
-            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .stats-history-item { grid-template-columns: 1fr; gap: 6px; }
-            .stats-history-count { justify-self: start; }
-            .toolbar { flex-direction: column; align-items: stretch; }
-            .toolbar-divider { width: 100%; height: 1px; margin: 4px 0; }
+        /* Utilities */
+        .flex-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); align-items: center; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--sp-3); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+        .w-full { width: 100%; }
+        .mt-3 { margin-top: var(--sp-3); }
+
+        /* Responsive — Mobile <640px */
+        @media (max-width: 640px) {
+            body { padding: var(--sp-3) var(--sp-3) 48px; font-size: 14px; }
             .container { max-width: 100%; }
+            .hero { margin-bottom: var(--sp-4); padding-top: 0; }
+            .hero h1 { font-size: 1.15rem; }
+            .card { padding: var(--sp-4); margin-bottom: var(--sp-3); border-radius: var(--radius); }
+            .tabs { margin-bottom: var(--sp-3); }
+            .tab { padding: 10px 8px; font-size: 0.82rem; }
+            .stat-grid { gap: 8px; margin-bottom: var(--sp-4); }
+            .stat-card { padding: 12px 8px; }
+            .stat-num { font-size: 1.2rem; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .toolbar-divider { width: 100%; height: 1px; margin: 2px 0; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 8px 6px; }
+            .action-group .btn { font-size: 0.7rem; padding: 4px 8px; }
+            .admin-section-header { padding: 12px var(--sp-3); font-size: 0.85rem; }
+            .admin-section-body { padding: 0 var(--sp-3) var(--sp-3); }
+            .modal-card { padding: var(--sp-4); width: 96%; max-height: 88vh; }
+            .modal h3 { font-size: 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stats-history-item { grid-template-columns: 1fr; gap: 4px; }
+            .stats-history-count { justify-self: start; }
+            .question-stats-header { padding: 14px var(--sp-4); }
+            .question-stats-body { padding: var(--sp-4); }
+            .grid-2 { grid-template-columns: 1fr; }
+            .copy-btn-sm { font-size: 0.8rem; }
+            .pagination-bar { font-size: 0.8rem; gap: 10px; }
         }
+
+        @media (min-width: 1024px) { .container { max-width: 800px; } }
 
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
         }
     </style>
-
 </head>
 <body>
-<div class="toast-stack" id="toastStack"></div>
-<div class="container">
-    <div class="hero">
-        <h1 id="mainTitle">🎄链接生成器</h1>
-    </div>
 
-    <div class="tabs">
+<div class="toast-stack" id="toastStack"></div>
+
+<div class="container">
+    <header class="hero">
+        <h1 id="mainTitle">🔗 链接生成器</h1>
+    </header>
+
+    <nav class="tabs">
         <button class="tab active" id="userTabBtn">链接提取</button>
         <button class="tab" id="adminTabBtn">管理终端</button>
-    </div>
+    </nav>
 
-    <div id="userPanel" class="card" style="display: block;">
-        <div class="input-group">
-            <input type="text" id="tokenInput" class="input-field" placeholder="请输入提取码" autocomplete="off">
-        </div>
-        <button id="verifyBtn" class="btn btn-primary w-full" style="margin-top: 8px;">验证并生成</button>
-        <div id="resultArea" style="display: none; margin-top: 20px;"></div>
+    <!-- ═══ User Panel ═══ -->
+    <div id="userPanel" class="card">
+        <input type="text" id="tokenInput" class="input-field" placeholder="请输入提取码" autocomplete="off">
+        <button id="verifyBtn" class="btn btn-primary w-full mt-3">验证并生成</button>
+        <div id="resultArea" style="display:none; margin-top:20px;"></div>
         <div class="tip-box">
-            🎋提示：生成的代码复制后，进入答题页面，粘贴到地址栏，删掉最前方的等号 "="，回车。
+            💡 提示：生成的代码复制后，进入答题页面，粘贴到地址栏，删掉最前方的等号 "="，回车。
         </div>
     </div>
 
-    <div id="adminPanel" class="card" style="display: none;">
+    <!-- ═══ Admin Panel ═══ -->
+    <div id="adminPanel" class="card" style="display:none;">
+        <!-- Login -->
         <div id="adminLoginArea">
-            <div class="flex-row" style="margin-bottom: 20px;">
+            <div class="flex-row" style="margin-bottom:0;">
                 <input type="password" id="adminPassword" class="input-field" placeholder="请输入密码" style="flex:2;">
                 <button id="loginAdminBtn" class="btn btn-primary" style="flex:1;">登录</button>
             </div>
         </div>
-        <div id="adminMainArea" style="display: none;">
+
+        <!-- Main admin (after login) -->
+        <div id="adminMainArea" style="display:none;">
+            <!-- Stats -->
             <div class="stat-grid">
                 <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总数</div></div>
                 <div class="stat-card"><div class="stat-num" id="statActive">0</div><div class="stat-label">活跃</div></div>
                 <div class="stat-card danger-card"><div class="stat-num" id="statUsed">0</div><div class="stat-label">耗尽</div></div>
             </div>
 
-            <div style="background: var(--bg); border-radius: var(--radius-md); padding: 20px; margin-bottom: 24px; box-shadow: var(--neu-shadow-inset);">
-                <div class="flex-between" style="margin-bottom: 16px;">
-                    <span style="font-weight: 700;">Token 管理</span>
+            <!-- Token 管理 -->
+            <details class="admin-section" open>
+                <summary class="admin-section-header">Token 管理</summary>
+                <div class="admin-section-body">
+                    <div class="toolbar">
+                        <button id="queryTokenBtn" class="btn btn-primary btn-sm">查询全部</button>
+                        <button id="refreshDataBtn" class="btn btn-ghost btn-sm">刷新</button>
+                        <span class="toolbar-divider"></span>
+                        <button id="filterRemainBtn" class="btn btn-ghost btn-sm">筛选剩余</button>
+                        <button id="clearFilterBtn" class="btn btn-ghost btn-sm">清筛选</button>
+                    </div>
+                    <div class="flex-row" style="margin-bottom:12px;">
+                        <input type="text" id="newTokenName" class="input-field" placeholder="新 Token 名称" style="flex:2;">
+                        <input type="number" id="newTokenInitCount" class="input-field" placeholder="次数" value="3" style="flex:1; text-align:center; min-width:70px;">
+                        <button id="addTokenBtn" class="btn btn-primary">添加</button>
+                    </div>
+                    <div class="flex-row" style="margin-bottom:12px;">
+                        <button id="toggleImportBtn" class="btn btn-ghost btn-sm">批量导入</button>
+                        <button id="deleteSelectedBtn" class="btn btn-danger btn-sm">删除选中</button>
+                        <button id="clearAllBtn" class="btn btn-danger btn-sm">清空全部</button>
+                    </div>
+                    <div id="importPanel" class="import-panel">
+                        <textarea id="importTokensText" rows="3" class="input-field" placeholder="每行一个 Token，默认初始次数3"></textarea>
+                        <button id="confirmImportBtn" class="btn btn-primary w-full" style="margin-top:10px;">确认导入</button>
+                    </div>
+                    <div id="tokenTableContainer"></div>
+                    <div id="paginationContainer"></div>
                 </div>
-                <div class="grid-2" style="margin-bottom: 16px;">
-                    <button id="queryTokenBtn" class="btn btn-primary">查询全部</button>
-                    <button id="clearAllBtn" class="btn btn-danger">清空全部</button>
-                </div>
-                <div class="flex-row" style="margin-bottom: 16px;">
-                    <input type="text" id="newTokenName" class="input-field" placeholder="新 Token 名称" style="flex:2;">
-                    <input type="number" id="newTokenInitCount" class="input-field" placeholder="初始次数" value="3" style="flex:1; text-align:center;">
-                    <button id="addTokenBtn" class="btn btn-primary">添加</button>
-                </div>
-                <div class="flex-row">
-                    <button id="deleteSelectedBtn" class="btn btn-danger">删除选中</button>
-                    <button id="refreshDataBtn" class="btn btn-ghost">刷新数据</button>
-                    <button id="toggleImportBtn" class="btn btn-ghost">批量导入</button>
-                </div>
-                <div id="importPanel" class="import-panel">
-                    <textarea id="importTokensText" rows="3" class="input-field" placeholder="每行一个 Token，默认初始次数3"></textarea>
-                    <button id="confirmImportBtn" class="btn btn-primary w-full" style="margin-top: 10px;">确认导入</button>
-                </div>
-            </div>
+            </details>
 
-            <div class="flex-between" style="margin-bottom: 12px;">
-                <span style="font-weight: 700;">Token 清单</span>
-                <div>
-                    <button id="filterRemainBtn" class="btn btn-ghost btn-sm">筛选剩余次数</button>
-                    <button id="clearFilterBtn" class="btn btn-ghost btn-sm">清除筛选</button>
+            <!-- 操作日志 -->
+            <details class="admin-section">
+                <summary class="admin-section-header">操作日志</summary>
+                <div class="admin-section-body">
+                    <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
+                        <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
+                    </div>
+                    <div id="logsContainer" class="log-list"></div>
                 </div>
-            </div>
-            <div id="tokenTableContainer"></div>
-            <div id="paginationContainer" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+            </details>
 
-            <div class="flex-between" style="margin-bottom: 10px;">
-                <span style="font-weight: 700;">用户日志</span>
-                <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
-            </div>
-            <div id="logsContainer" class="log-list"></div>
-
-            <div style="margin-top: 24px;">
-                <div style="font-weight: 700; margin-bottom: 8px;">免 Token</div>
-                <div class="code-section">
-                    <div class="code-box" id="emergencyCodeBlock"></div>
-                    <button id="copyEmergencyBtn" class="copy-btn-sm">复制代码</button>
-                </div>
-            </div>
-
-            <div style="margin-top: 32px; border-top: 2px solid rgba(209,213,219,0.5); padding-top: 24px;">
-                <div class="flex-between" style="margin-bottom: 16px;">
-                    <span style="font-weight: 700;">题库管理</span>
-                    <div class="flex-row" style="gap: 8px;">
+            <!-- 题库管理 -->
+            <details class="admin-section">
+                <summary class="admin-section-header">题库管理</summary>
+                <div class="admin-section-body">
+                    <div class="flex-row" style="margin-bottom:10px;">
+                        <input type="text" id="questionSearchKeyword" class="input-field" placeholder="题目关键词搜索" style="flex:3;">
+                        <button id="questionSearchBtn" class="btn btn-primary btn-sm">搜索</button>
+                        <button id="questionResetBtn" class="btn btn-ghost btn-sm">重置</button>
+                    </div>
+                    <div class="flex-row" style="margin-bottom:12px;">
+                        <button id="importExcelBtn" class="btn btn-primary btn-sm">导入 Excel</button>
                         <button id="questionStatsBtn" class="btn btn-ghost btn-sm">统计总数</button>
                         <button id="clearQuestionsBtn" class="btn btn-danger btn-sm">清空题库</button>
                     </div>
-                </div>
-                <div class="code-section" style="margin-top: 0;">
-                    <button id="importExcelBtn" class="btn btn-primary w-full" style="margin-bottom: 8px;">导入 Excel</button>
-                    <div id="importProgress" style="display: none;">
+                    <div id="importProgress" style="display:none;">
                         <div class="progress-bar"><div id="importProgressFill" class="progress-fill"></div></div>
-                        <div style="font-size: 0.75rem; text-align: center; margin-top: 4px;" id="importProgressText">导入中 0%</div>
+                        <div style="font-size:0.75rem; text-align:center; margin-top:4px;" id="importProgressText">导入中 0%</div>
                     </div>
+                    <div id="questionSearchResult"></div>
+                    <div id="questionPagination"></div>
                 </div>
-                <div class="flex-row" style="margin-bottom: 16px;">
-                    <input type="text" id="questionSearchKeyword" class="input-field" placeholder="题目关键词搜索" style="flex:3;">
-                    <button id="questionSearchBtn" class="btn btn-primary">搜索</button>
-                    <button id="questionResetBtn" class="btn btn-ghost">重置</button>
-                </div>
-                <div id="questionSearchResult"></div>
-                <div id="questionPagination" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+            </details>
 
-                <div id="historyPanel" class="history-panel">
-                    <span class="close-history" id="closeHistoryBtn">&times;</span>
-                    <div id="historyContent"></div>
+            <!-- 应急代码 -->
+            <details class="admin-section">
+                <summary class="admin-section-header">应急代码</summary>
+                <div class="admin-section-body">
+                    <div class="code-box" id="emergencyCodeBlock" style="margin-bottom:0;"></div>
+                    <button id="copyEmergencyBtn" class="btn btn-primary w-full mt-3">复制代码</button>
                 </div>
-            </div>
+            </details>
         </div>
     </div>
 </div>
 
-<div id="questionStatsModal" class="modal" style="z-index: 10003;">
+<!-- ═══ Modals ═══ -->
+
+<!-- 题库统计弹窗 -->
+<div id="questionStatsModal" class="modal" style="z-index:10003;">
     <div class="modal-card question-stats-modal-card">
         <div class="question-stats-header">
             <div class="question-stats-title">
@@ -592,30 +532,31 @@
     </div>
 </div>
 
-<div id="excelConfigModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10001; align-items: center; justify-content: center;">
-    <div style="background: white; border-radius: 28px; max-width: 800px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 24px; margin: 20px;">
-        <div style="font-weight: 700; font-size: 1.2rem; margin-bottom: 16px;">导入映射</div>
-        <div id="excelPreviewArea" style="margin-bottom: 20px;"></div>
-        <div class="flex-row" style="margin-bottom: 16px;">
+<!-- Excel 导入配置弹窗 -->
+<div id="excelConfigModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); z-index:10001; align-items:center; justify-content:center;">
+    <div style="background:var(--surface); border-radius:var(--radius-lg); max-width:800px; width:90%; max-height:80vh; overflow-y:auto; padding:24px; border:1px solid var(--border); box-shadow:var(--shadow-lg);">
+        <div style="font-weight:700; font-size:1.2rem; margin-bottom:16px;">导入映射</div>
+        <div id="excelPreviewArea" style="margin-bottom:20px;"></div>
+        <div class="flex-row" style="margin-bottom:16px;">
             <select id="questionColSelect" class="input-field" style="flex:1;"></select>
             <span style="padding:0 8px;">题目</span>
         </div>
-        <div class="flex-row" style="margin-bottom: 16px;">
+        <div class="flex-row" style="margin-bottom:16px;">
             <select id="answerColSelect" class="input-field" style="flex:1;"></select>
             <span style="padding:0 8px;">答案</span>
         </div>
-        <div class="flex-row" style="margin-bottom: 16px;">
+        <div class="flex-row" style="margin-bottom:16px;">
             <select id="optionStartColSelect" class="input-field" style="flex:1;"></select>
             <span style="padding:0 8px;">选项起始</span>
         </div>
-        <div class="flex-row" style="margin-bottom: 16px;">
+        <div class="flex-row" style="margin-bottom:16px;">
             <select id="optionEndColSelect" class="input-field" style="flex:1;"></select>
             <span style="padding:0 8px;">选项结束</span>
         </div>
-        <div id="previewTable" style="overflow-x: auto; margin-bottom: 20px;"></div>
-        <div class="flex-row" style="justify-content: space-between; align-items: center;">
+        <div id="previewTable" style="overflow-x:auto; margin-bottom:20px;"></div>
+        <div class="flex-row" style="justify-content:space-between; align-items:center;">
             <button id="addCategoryBtn" class="btn btn-ghost">添加题库名称</button>
-            <div class="flex-row" style="gap: 12px;">
+            <div class="flex-row" style="gap:12px;">
                 <button id="cancelImportBtn" class="btn btn-ghost">取消</button>
                 <button id="confirmImportConfigBtn" class="btn btn-primary">确认</button>
             </div>
@@ -623,6 +564,7 @@
     </div>
 </div>
 
+<!-- 编辑题目弹窗 -->
 <div id="editQuestionModal" class="modal">
     <div class="modal-card">
         <h3>修改题目</h3>
@@ -709,10 +651,10 @@
             const original = btn.innerText;
             const originalBg = btn.style.background;
             btn.innerText = '已复制 ✓';
-            btn.style.background = 'var(--primary-dark)';
+            btn.style.background = 'var(--primary-hover)';
             showToast('代码已复制');
-            setTimeout(() => { 
-                btn.innerText = original; 
+            setTimeout(() => {
+                btn.innerText = original;
                 btn.style.background = originalBg;
             }, 1500);
         };
@@ -815,7 +757,7 @@
             }
             if (data.valid === false && data.reason === 'no_remain') {
                 area.style.display = 'block';
-                area.innerHTML = '<div class="flex-between" style="margin-bottom:14px;"><div style="font-size:0.9rem; font-weight:600; color:var(--primary-dark);">验证通过，剩余次数：<strong style="font-size:1.1rem;">0</strong></div><button class="btn btn-ghost btn-sm" id="toggleRenameBtn">✎ 修改令牌</button></div><div class="rename-panel" id="renamePanel" style="display:none;"><div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px;">输入新的令牌名称：</div><div class="flex-row"><input type="text" id="newTokenNameInput" class="input-field" placeholder="新令牌名称" style="flex:2;"><button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button><button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button></div><div id="renameMsg" style="margin-top:6px; font-size:0.78rem;"></div></div><div class="tip-box">链接已失效，无法生成代码。</div>';
+                area.innerHTML = '<div class="flex-between" style="margin-bottom:14px;"><div style="font-size:0.9rem; font-weight:600; color:var(--primary);">验证通过，剩余次数：<strong style="font-size:1.1rem;">0</strong></div><button class="btn btn-ghost btn-sm" id="toggleRenameBtn">✎ 修改令牌</button></div><div class="rename-panel" id="renamePanel" style="display:none;"><div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:8px;">输入新的令牌名称：</div><div class="flex-row"><input type="text" id="newTokenNameInput" class="input-field" placeholder="新令牌名称" style="flex:2;"><button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button><button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button></div><div id="renameMsg" style="margin-top:6px; font-size:0.78rem;"></div></div><div class="tip-box">链接已失效，无法生成代码。</div>';
                 showToast('验证通过，但次数已用完');
                 return;
             }
@@ -825,7 +767,7 @@
                 area.style.display = 'block';
                 area.innerHTML = `
                     <div class="flex-between" style="margin-bottom:14px;">
-                        <div style="font-size:0.9rem; font-weight:600; color:var(--primary-dark);">验证通过，剩余次数：<strong style="font-size:1.1rem;">${data.remain}</strong></div>
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--primary);">验证通过，剩余次数：<strong style="font-size:1.1rem;">${data.remain}</strong></div>
                         <button class="btn btn-ghost btn-sm" id="toggleRenameBtn">✎ 修改令牌</button>
                     </div>
                     <div class="rename-panel" id="renamePanel" style="display:none;">
@@ -877,8 +819,7 @@
                         document.getElementById('tokenInput').value = newName;
                         document.getElementById('renamePanel').style.display = 'none';
                         document.getElementById('newTokenNameInput').value = '';
-                        msgEl.innerHTML = '<span style=\"color:var(--primary-dark);\">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
-                        // 刷新代码块
+                        msgEl.innerHTML = '<span style=\"color:var(--primary);\">改名成功！新令牌：<strong>' + escapeHtml(newName) + '</strong></span>';
                         const nc1 = '=javascript:$.getScript(\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\')';
                         const nc2 = '=javascript:(function(){var s=document.createElement(\'script\');s.src=\'' + API_URL + '?token=' + encodeURIComponent(newName) + '\';document.body.appendChild(s);})();';
                         document.querySelectorAll('#resultArea .code-box')[0].innerText = nc1;
@@ -982,7 +923,7 @@
                 <tr data-token="${escapeHtml(t.token)}">
                     <td><input type="checkbox" class="tokenCheck" value="${escapeHtml(t.token)}" ${selectedTokens.has(t.token) ? 'checked' : ''}></td>
                     <td class="original-token">${escapeHtml(hasRenamed ? t.originalToken : t.token)}</td>
-                    <td class="token-name" title="点击复制" onclick="copyTokenText('${escapeHtml(t.token)}', this)"><span style="border-bottom: 1px dashed var(--primary-dark);">${escapeHtml(t.token)}</span></td>
+                    <td class="token-name" title="点击复制" onclick="copyTokenText('${escapeHtml(t.token)}', this)"><span style="border-bottom:1px dashed var(--primary);">${escapeHtml(t.token)}</span></td>
                     <td>${t.initCount}</td>
                     <td class="remain-value">${t.remain}</td>
                     <td class="used-value">${t.used}</td>
@@ -1091,7 +1032,7 @@
         const timeString = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}:${String(date.getSeconds()).padStart(2,'0')}`;
         const adminActions = ['login', 'add', 'updateRemain', 'reset', 'renameToken', 'delete', 'deleteBatch', 'clearAll', 'import', 'importSimpleQuestions', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions'];
         const isIdentityAdmin = adminActions.includes(log.action);
-        const badgeStyle = isIdentityAdmin ? 'background: rgba(126,184,160,0.15); color: var(--primary-dark); border: 1px solid rgba(126,184,160,0.3);' : 'background: var(--bg); color: var(--text-secondary); border: 1px solid var(--shadow-dark);';
+        const badgeStyle = isIdentityAdmin ? 'background:var(--primary-light); color:var(--primary); border:1px solid #c7c4f8;' : 'background:var(--surface-hover); color:var(--text-secondary); border:1px solid var(--border);';
         const identityText = isIdentityAdmin ? '管理员' : `用户 (${escapeHtml(log.token || '未知')})`;
         let actionText = '';
         if (log.action === 'use') {
@@ -1127,20 +1068,20 @@
             actionText = `${log.action || ''} ${log.details || ''}`;
         }
         const div = document.createElement('div');
-        div.style.cssText = "display: flex; flex-direction: column; gap: 8px; padding: 12px 16px; background: #fff; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 8px;";
+        div.style.cssText = "display:flex; flex-direction:column; gap:8px; padding:12px 14px; background:var(--surface); border-radius:var(--radius-sm); border:1px solid var(--border-light); margin-bottom:4px;";
         div.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; font-size: 12px;">[${timeString}]</span>
-                <span style="padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; ${badgeStyle}">${identityText}</span>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <span style="color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:11px;">[${timeString}]</span>
+                <span style="padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; ${badgeStyle}">${identityText}</span>
             </div>
-            <div style="color: var(--text-primary); font-size: 14px; font-weight: 600; word-break: break-all; margin: 2px 0;">
+            <div style="color:var(--text); font-size:14px; font-weight:600; word-break:break-all; margin:2px 0;">
                 ${actionText}
             </div>
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="color: var(--primary-dark); background: rgba(126,184,160,0.12); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-family: 'JetBrains Mono', monospace;">
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span style="color:var(--primary); background:var(--primary-light); padding:2px 8px; border-radius:6px; font-size:11px; font-family:'JetBrains Mono',monospace;">
                     ${escapeHtml(log.ip || '未知IP')}
                 </span>
-                <span style="color: var(--text-secondary); background: var(--bg); padding: 2px 8px; border-radius: 6px; font-size: 11px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
+                <span style="color:var(--text-secondary); background:var(--surface-hover); padding:2px 8px; border-radius:6px; font-size:11px; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${escapeHtml(log.location || '未知属地')}">
                      ${escapeHtml(log.location || '未知属地')}
                 </span>
             </div>
@@ -1148,7 +1089,6 @@
         return div;
     }
 
-    // reset=true 清空重新加载，reset=false 追加下一页
     async function loadLogs(reset = true) {
         const container = document.getElementById('logsContainer');
         if (!container || logLoading) return;
@@ -1176,7 +1116,6 @@
                 } catch(e) {}
             }
             logPage++;
-            // 首次加载后设置滚动监听
             if (!container._logScrollSetup) {
                 container._logScrollSetup = true;
                 container.addEventListener('scroll', () => {
@@ -1269,7 +1208,7 @@
             showToast(`筛选剩余次数 = ${remainFilterValue}`);
         }
     }
-    
+
     function clearFilter() {
         remainFilterValue = null;
         applyFilters();
@@ -1638,7 +1577,7 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
         progressDiv.style.display = 'block';
         progressFill.style.width = '0%';
         progressText.innerText = `准备导入 ${questionsArray.length} 条...`;
-        
+
         let simulatedPercent = 0;
         const interval = setInterval(() => {
             if (simulatedPercent < 90) {
@@ -1647,7 +1586,7 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
                 progressText.innerText = `导入中 ${simulatedPercent}%...`;
             }
         }, 300);
-        
+
         try {
             const params = { questions: JSON.stringify(questionsArray) };
             if (currentImportCategory) params.category = currentImportCategory;
@@ -1700,23 +1639,18 @@ document.getElementById('closeQuestionStatsBtn')?.addEventListener('click', () =
         adminPassword = pwd;
         try {
             const loginResult = await adminFetch('login');
-            // 立即显示管理界面和 Token 数据
             document.getElementById('adminLoginArea').style.display = 'none';
             document.getElementById('adminMainArea').style.display = 'block';
             currentTokens = loginResult.tokens || [];
             updateStats();
             applyFilters();
             showToast('管理后台已解锁');
-            // 以下三项并行加载，互不阻塞
-            // 1. 应急代码
             adminFetch('getEmergencyCode').then(data => {
                 document.getElementById('emergencyCodeBlock').innerText = data?.code ? data.code : '应急代码获取失败';
             }).catch(() => {
                 document.getElementById('emergencyCodeBlock').innerText = '应急代码加载失败';
             });
-            // 2. 用户日志
             loadLogs().catch(() => {});
-            // 3. 题库全量缓存（首次自动加载）
             loadQuestionList().catch(() => {});
         } catch(e) {
             if(e.message && e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
