@@ -367,6 +367,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         <button class="subtab" data-subtab="logs">操作日志</button>
         <button class="subtab" data-subtab="questions">题库管理</button>
         <button class="subtab" data-subtab="emergency">应急代码</button>
+        <button class="subtab" data-subtab="devices">设备绑定</button>
       </nav>
 
       <!-- Sub-pane: Tokens -->
@@ -435,6 +436,15 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
       <div class="subpane hidden" id="subEmergency">
         <div class="code-block" id="emergencyCodeBlock" style="margin-bottom:0;"></div>
         <button id="copyEmergencyBtn" class="btn btn-primary btn-full mt-12">复制代码</button>
+      </div>
+
+      <!-- Sub-pane: Devices (设备绑定) -->
+      <div class="subpane hidden" id="subDevices">
+        <div class="toolbar">
+          <button class="btn btn-primary btn-sm" id="createActivationBtn">+ 生成激活码</button>
+          <button class="btn btn-ghost btn-sm" id="refreshActivationsBtn">刷新</button>
+        </div>
+        <div id="activationTableContainer"></div>
       </div>
     </div>
   </div>
@@ -515,6 +525,8 @@ const state = {
   questionTotal: 0,
   questionKeyword: '',
   editId: null,
+  // Devices
+  activations: [],
   // Excel
   excelData: null,
   excelHeaders: [],
@@ -602,6 +614,7 @@ function switchSubtab(name) {
   if (pane) pane.classList.remove('hidden');
   if (name === 'logs' && state.isAdmin) loadLogs(true);
   if (name === 'questions' && state.isAdmin && state.questions.length === 0) loadQuestions();
+  if (name === 'devices' && state.isAdmin) loadActivations();
 }
 
 // ═══════════════════════════════════════════
@@ -1427,6 +1440,148 @@ window.addEventListener('resize', () => {
 });
 
 // Init
+// ═══════════════════════════════════════════
+//  设备绑定管理
+// ═══════════════════════════════════════════
+
+async function loadActivations() {
+  const container = document.getElementById('activationTableContainer');
+  if (!container) return;
+  container.innerHTML = '<div class="empty">加载中...</div>';
+  try {
+    const data = await adminFetch('listActivations');
+    state.activations = data.activations || [];
+    renderDeviceView();
+  } catch(e) {
+    container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function renderDeviceView() {
+  const container = document.getElementById('activationTableContainer');
+  const items = state.activations || [];
+  if (!items.length) {
+    container.innerHTML = '<div class="empty"><span class="empty-icon">🔐</span>暂无激活码<br><span style="font-size:.78rem;">点击上方 [+ 生成激活码] 创建</span></div>';
+    return;
+  }
+  const isDesktop = window.innerWidth >= 768;
+  if (isDesktop) {
+    let h = '<div class="table-wrap"><table><thead><tr><th>激活码</th><th>状态</th><th>备注</th><th>绑定设备</th><th>绑定时间</th><th>操作</th></tr></thead><tbody>';
+    items.forEach(a => {
+      const statusText = a.status === 'unused' ? '未使用' : a.status === 'bound' ? '已绑定' : '已撤销';
+      const statusColor = a.status === 'unused' ? 'var(--success)' : a.status === 'bound' ? 'var(--accent)' : 'var(--danger)';
+      const deviceShort = a.device ? a.device.substring(0, 12) + '...' : '-';
+      const boundAt = a.bound_at ? new Date(a.bound_at).toLocaleString('zh-CN') : '-';
+      h += `<tr>
+        <td class="token-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</td>
+        <td style="color:${statusColor};font-weight:500;">${statusText}</td>
+        <td>${escapeHtml(a.label||'-')}</td>
+        <td style="font-family:monospace;font-size:.72rem;">${deviceShort}</td>
+        <td style="font-size:.76rem;">${boundAt}</td>
+        <td class="act-group">
+          ${a.status==='revoked'?`<button class="btn btn-xs" data-action="restoreActivation" data-code="${escapeHtml(a.code)}">恢复</button>`:''}
+          ${a.status==='bound'?`<button class="btn btn-xs btn-danger" data-action="revokeActivation" data-code="${escapeHtml(a.code)}">撤销</button>`:''}
+          <button class="btn btn-xs btn-danger" data-action="deleteActivation" data-code="${escapeHtml(a.code)}">删除</button></td>
+      </tr>`;
+    });
+    h += '</tbody></table></div>';
+    container.innerHTML = h;
+  } else {
+    let h = '<div class="token-list">';
+    items.forEach(a => {
+      const statusText = a.status === 'unused' ? '未使用' : a.status === 'bound' ? '已绑定' : '已撤销';
+      const statusColor = a.status === 'unused' ? 'var(--success)' : a.status === 'bound' ? 'var(--accent)' : 'var(--danger)';
+      const deviceShort = a.device ? a.device.substring(0, 12) + '...' : '-';
+      const boundAt = a.bound_at ? new Date(a.bound_at).toLocaleString('zh-CN') : '-';
+      h += `<div class="token-card">
+        <div class="token-card-top">
+          <div class="token-card-info">
+            <div class="token-card-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</div>
+            <div style="font-size:.72rem;color:${statusColor};font-weight:500;margin-top:4px;">${statusText}</div>
+          </div>
+        </div>
+        <div style="font-size:.76rem;margin-top:6px;">备注: ${escapeHtml(a.label||'无')} | 设备: ${deviceShort}</div>
+        <div style="font-size:.72rem;color:var(--text-muted);">绑定: ${boundAt}</div>
+        <div class="token-card-acts">
+          ${a.status==='revoked'?`<button class="btn btn-xs" data-action="restoreActivation" data-code="${escapeHtml(a.code)}">恢复</button>`:''}
+          ${a.status==='bound'?`<button class="btn btn-xs btn-danger" data-action="revokeActivation" data-code="${escapeHtml(a.code)}">撤销</button>`:''}
+          <button class="btn btn-xs btn-danger" data-action="deleteActivation" data-code="${escapeHtml(a.code)}">删除</button>
+        </div>
+      </div>`;
+    });
+    h += '</div>';
+    container.innerHTML = h;
+  }
+}
+
+async function createActivationCode() {
+  const label = prompt('请输入备注（可选，如"张三"）：') || '';
+  try {
+    const data = await adminFetch('createActivation', { label });
+    if (data.ok) {
+      showToast(`激活码已生成: ${data.code}`);
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(data.code);
+        showToast(`已复制: ${data.code}`);
+      }
+      await loadActivations();
+    } else {
+      showToast('生成失败', true);
+    }
+  } catch(e) {
+    showToast(`生成失败: ${e.message}`, true);
+  }
+}
+
+async function revokeActivationCode(code) {
+  const ok = await showConfirm('撤销激活码', `确定要撤销 "${code}" 吗？该设备下次启动将被拦截。`);
+  if (!ok) return;
+  try {
+    await adminFetch('revokeActivation', { code });
+    showToast('已撤销');
+    await loadActivations();
+  } catch(e) {
+    showToast(`撤销失败: ${e.message}`, true);
+  }
+}
+
+// 事件绑定（使用 DOMContentLoaded 或直接在现有绑定区域添加）
+document.getElementById('createActivationBtn')?.addEventListener('click', createActivationCode);
+document.getElementById('refreshActivationsBtn')?.addEventListener('click', loadActivations);
+
+document.getElementById('activationTableContainer')?.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const { action, code } = btn.dataset;
+  if (action === 'copyCode') {
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(code);
+      showToast(`已复制: ${code}`);
+    }
+  }
+  if (action === 'revokeActivation') revokeActivationCode(code);
+  if (action === 'restoreActivation') restoreActivationCode(code);
+  if (action === 'deleteActivation') deleteActivationCode(code);
+});
+
+async function restoreActivationCode(code) {
+  try {
+    await adminFetch('restoreActivation', { code });
+    showToast('已恢复为未使用');
+    await loadActivations();
+  } catch(e) { showToast(`恢复失败: ${e.message}`, true); }
+}
+
+async function deleteActivationCode(code) {
+  const ok = await showConfirm('删除激活码', `确定要彻底删除 "${code}" 吗？此操作不可恢复。`);
+  if (!ok) return;
+  try {
+    await adminFetch('deleteActivation', { code });
+    showToast('已删除');
+    await loadActivations();
+  } catch(e) { showToast(`删除失败: ${e.message}`, true); }
+}
+
 console.log('Link · toekn管理 — 已就绪');
 </script>
 </body>
