@@ -249,6 +249,77 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .excel-modal.show{display:flex;}
 .excel-card{background:var(--surface);border-radius:var(--radius-xl) var(--radius-xl) 0 0;max-width:800px;width:100%;max-height:85dvh;overflow-y:auto;padding:24px 20px;box-shadow:var(--shadow-lg);animation:sheetUp .3s var(--ease-spring);}
 
+/* ── Course Automation ── */
+.course-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.course-head h3{font-size:1rem;margin-bottom:4px;}
+.course-head p{font-size:.76rem;color:var(--text-muted);line-height:1.6;}
+.course-badges{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+.course-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;border:1px solid var(--border);background:var(--surface-hover);font-size:.68rem;font-weight:500;color:var(--text-secondary);white-space:nowrap;}
+.course-badge.online{color:var(--success);background:var(--success-light);border-color:var(--success-border);}
+.course-badge.challenge{color:var(--warning);background:var(--warning-light);border-color:#fde68a;}
+.course-badge.error{color:var(--danger);background:var(--danger-light);border-color:var(--danger-border);}
+.course-badge.offline{color:var(--text-muted);}
+.course-login-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;}
+.course-login-grid label{display:block;font-size:.78rem;color:var(--text-secondary);font-weight:500;}
+.course-login-grid .input{margin-top:5px;}
+.course-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.course-session-message{margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface-hover);border:1px solid var(--border);font-size:.78rem;color:var(--text-secondary);}
+.course-session-message.success{color:var(--success);background:var(--success-light);border-color:var(--success-border);}
+.course-session-message.error{color:var(--danger);background:var(--danger-light);border-color:var(--danger-border);}
+.course-challenge{margin-top:12px;padding:14px;border-radius:var(--radius);background:var(--warning-light);border:1px solid #fde68a;}
+.course-challenge h4{font-size:.86rem;margin-bottom:4px;color:var(--warning);}
+.course-challenge p{font-size:.78rem;color:var(--text-secondary);margin-bottom:10px;}
+.course-challenge-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.course-challenge-row .input{flex:1;min-width:160px;background:var(--surface);}
+.course-captcha{display:block;max-width:180px;max-height:64px;margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;object-fit:contain;}
+.course-list-panel{margin-top:12px;}
+.course-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border-light);}
+.course-toolbar .checkbox{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--text-secondary);white-space:nowrap;}
+.course-toolbar .checkbox input{accent-color:var(--accent);}
+.course-summary{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.course-summary-item{padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-hover);font-size:.74rem;color:var(--text-secondary);}
+.course-summary-item strong{color:var(--text);font-size:.88rem;}
+.course-summary-item.danger strong{color:var(--danger);}
+.course-group{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;background:var(--surface);}
+.course-group-header{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;border:0;background:#f5f7ff;color:var(--text);font:inherit;text-align:left;cursor:pointer;}
+.course-group-header:hover{background:var(--accent-light);}
+.course-group-chevron{width:18px;color:var(--accent);font-size:.78rem;flex:0 0 18px;}
+.course-group-title{font-weight:600;font-size:.84rem;min-width:0;word-break:break-word;}
+.course-group-meta{margin-left:auto;color:var(--text-secondary);font-size:.7rem;white-space:nowrap;}
+.course-group-body{padding:8px;background:var(--surface-hover);}
+.course-group-body.collapsed{display:none;}
+.course-card{padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow-sm);}
+.course-card:last-child{margin-bottom:0;}
+.course-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.course-card-name{font-size:.86rem;font-weight:600;color:var(--text);line-height:1.45;word-break:break-word;}
+.course-card-id{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);word-break:break-all;}
+.course-card-score{flex:0 0 auto;font-size:.72rem;color:var(--warning);font-weight:600;white-space:nowrap;}
+.course-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+.course-status-item{min-width:0;padding:7px 8px;border-radius:var(--radius-sm);background:var(--surface-hover);border:1px solid var(--border-light);}
+.course-status-label{display:block;font-size:.64rem;color:var(--text-muted);margin-bottom:2px;}
+.course-status-value{display:block;font-size:.74rem;font-weight:600;word-break:break-word;}
+.course-status-value.done{color:var(--success);}
+.course-status-value.pending{color:var(--danger);}
+.course-status-value.neutral{color:var(--text-secondary);font-weight:500;}
+.course-status-value.warning{color:var(--warning);}
+.course-card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:.7rem;color:var(--text-muted);}
+.course-next-step{margin-top:9px;padding:7px 9px;border-left:3px solid var(--accent);background:var(--accent-light);color:var(--text-secondary);font-size:.74rem;}
+.course-next-step.blocked{border-left-color:var(--danger);background:var(--danger-light);color:var(--danger);}
+.course-card-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);}
+.course-output{margin-top:12px;}
+.course-output-card{padding:12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;}
+.course-output-card.success{border-color:var(--success-border);background:var(--success-light);}
+.course-output-card.error{border-color:var(--danger-border);background:var(--danger-light);}
+.course-output-card.warning{border-color:#fde68a;background:var(--warning-light);}
+.course-output-title{font-weight:600;color:var(--text);margin-bottom:5px;}
+.course-output-detail{color:var(--text-secondary);line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.course-output-card details{margin-top:8px;}
+.course-output-card summary{cursor:pointer;color:var(--accent);font-size:.72rem;}
+.course-output-card pre{margin-top:6px;max-height:240px;overflow:auto;padding:9px;border-radius:var(--radius-sm);background:rgba(255,255,255,.72);font: .66rem/1.55 'JetBrains Mono','Cascadia Code',monospace;white-space:pre-wrap;word-break:break-word;}
+.course-task-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.course-task-item{padding:8px 10px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);}
+.course-task-item strong{color:var(--text);}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -287,6 +358,8 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
   .excel-modal{align-items:center;}
   .excel-card{border-radius:var(--radius-xl);max-height:80dvh;}
   .stats-grid2{grid-template-columns:repeat(4,1fr);}
+  .course-login-grid{grid-template-columns:1fr 1fr;}
+  .course-status-grid{grid-template-columns:repeat(4,1fr);}
   .toast-stack{bottom:24px;}
 }
 
@@ -368,6 +441,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         <button class="subtab" data-subtab="questions">题库管理</button>
         <button class="subtab" data-subtab="emergency">应急代码</button>
         <button class="subtab" data-subtab="devices">设备绑定</button>
+        <button class="subtab" data-subtab="course">网课管理</button>
       </nav>
 
       <!-- Sub-pane: Tokens -->
@@ -471,6 +545,61 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
         <div id="activationTableContainer"></div>
       </div>
+
+      <!-- Sub-pane: Course automation -->
+      <div class="subpane hidden" id="subCourse">
+        <div class="card" style="margin-bottom:12px;">
+          <div class="course-head">
+            <div>
+              <h3>网课直连管理</h3>
+              <p>通过新云函数直接读取 21TB 数据，不打开 Edge；课程状态以平台复核结果为准。</p>
+            </div>
+            <div class="course-badges">
+              <span class="course-badge offline" id="courseAuthBadge">未连接</span>
+              <span class="course-badge" id="courseSessionBadge">会话准备中</span>
+            </div>
+          </div>
+          <div class="course-login-grid">
+            <label>网课账号
+              <input type="text" id="courseUsername" class="input" autocomplete="username" placeholder="请输入网课账号">
+            </label>
+            <label>网课密码
+              <input type="password" id="coursePassword" class="input" autocomplete="current-password" placeholder="仅本次登录使用，不保存到网页">
+            </label>
+          </div>
+          <div class="course-actions">
+            <button id="courseLoginBtn" class="btn btn-primary btn-sm">登录网课</button>
+            <button id="courseStatusBtn" class="btn btn-ghost btn-sm">读取会话状态</button>
+            <button id="courseLogoutBtn" class="btn btn-ghost btn-sm">退出网课</button>
+          </div>
+          <div id="courseSessionMessage" class="course-session-message">请先输入网课账号和密码登录。</div>
+          <div id="courseChallengePanel" class="course-challenge hidden">
+            <h4 id="courseChallengeTitle">需要完成登录验证</h4>
+            <p id="courseChallengeMessage"></p>
+            <img id="courseCaptchaImage" class="course-captcha hidden" alt="网课验证码">
+            <div class="course-challenge-row">
+              <input type="text" id="courseChallengeCode" class="input" autocomplete="one-time-code" placeholder="请输入验证码">
+              <input type="text" id="courseChallengePhone" class="input hidden" autocomplete="tel" placeholder="手机号（如平台要求）">
+              <button id="courseChallengeBtn" class="btn btn-primary btn-sm">提交验证</button>
+              <button id="courseSendSmsBtn" class="btn btn-ghost btn-sm hidden">重新发送</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="courseListPanel" class="card course-list-panel hidden">
+          <div class="course-toolbar">
+            <button id="courseRefreshBtn" class="btn btn-primary btn-sm">刷新课程</button>
+            <button id="courseTasksBtn" class="btn btn-ghost btn-sm">执行记录</button>
+            <span class="toolbar-sep"></span>
+            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
+            <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
+            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
+          </div>
+          <div id="courseSummary" class="course-summary"></div>
+          <div id="courseListContainer"></div>
+        </div>
+        <div id="courseOutput" class="course-output"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -528,11 +657,34 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 // ═══════════════════════════════════════════
 //  State
 // ═══════════════════════════════════════════
-const API_URL = 'https://1416699676-d1k7hq7ak8.ap-beijing.tencentscf.com';
+// 新 Node.js 20.19 云函数；原有管理员接口与网课接口共用此地址。
+const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
+const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
+
+function createCourseSessionId() {
+  try {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  } catch (_) {}
+  return `web-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function loadCourseSessionId() {
+  try {
+    const saved = localStorage.getItem(COURSE_SESSION_STORAGE_KEY);
+    if (saved && /^[a-zA-Z0-9._:-]{1,80}$/.test(saved)) return saved;
+    const created = createCourseSessionId();
+    localStorage.setItem(COURSE_SESSION_STORAGE_KEY, created);
+    return created;
+  } catch (_) {
+    return createCourseSessionId();
+  }
+}
+
 const state = {
   panel: 'user',
   adminSubtab: 'tokens',
   adminPwd: '',
+  adminSessionToken: '',
   isAdmin: false,
   // Tokens
   allTokens: [],
@@ -558,6 +710,19 @@ const state = {
   excelData: null,
   excelHeaders: [],
   importCategory: '',
+  // Course automation
+  courseSessionId: loadCourseSessionId(),
+  courseAuthenticated: false,
+  courseSessionStatus: 'logged_out',
+  courseSessionMessage: '请先输入网课账号和密码登录。',
+  courseChallenge: null,
+  courseCourses: [],
+  courseGroups: [],
+  courseById: new Map(),
+  courseCollapsed: new Set(),
+  courseGroupsInitialized: false,
+  courseLoading: false,
+  courseBusy: false,
   // Easter egg
   clickCount: 0,
   clickTimer: null,
@@ -642,27 +807,86 @@ function switchSubtab(name) {
   if (name === 'logs' && state.isAdmin) loadLogs(true);
   if (name === 'questions' && state.isAdmin && state.questions.length === 0) loadQuestions();
   if (name === 'devices' && state.isAdmin) loadActivations();
+  if (name === 'course' && state.isAdmin) {
+    renderCourseSessionState();
+    loadCourseStatus();
+  }
 }
 
 // ═══════════════════════════════════════════
 //  API wrappers
 // ═══════════════════════════════════════════
+function clearAdminSession(message = '管理后台登录已过期，请重新登录') {
+  state.adminPwd = '';
+  state.adminSessionToken = '';
+  state.isAdmin = false;
+  $('adminPassword').value = '';
+  $('adminLoginCard').classList.remove('hidden');
+  $('adminMain').classList.add('hidden');
+  showToast(message, true);
+}
+
+function acceptAdminSession(data) {
+  const token = typeof data?.adminSessionToken === 'string' ? data.adminSessionToken.trim() : '';
+  if (token) {
+    state.adminSessionToken = token;
+    // 管理员密码仅用于首次换取短期令牌，不再长期留在页面内存中。
+    state.adminPwd = '';
+    $('adminPassword').value = '';
+  }
+  return data;
+}
+
 async function adminFetch(action, params = {}) {
-  const payload = { admin: '1', action, password: state.adminPwd, ...params };
+  const payload = { admin: '1', action, ...params };
+  if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
+  else payload.password = state.adminPwd;
   const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  let data = null;
+  try { data = await res.json(); } catch (_) { data = {}; }
   if (!res.ok) {
-    let errMsg = '请求失败';
-    try { const d = JSON.parse(await res.text()); if (d.error) errMsg = d.error; } catch(e) {}
-    if (errMsg === '密码错误') {
-      state.adminPwd = ''; state.isAdmin = false;
-      $('adminLoginCard').classList.remove('hidden');
-      $('adminMain').classList.add('hidden');
-      showToast('登录已过期，请重新登录', true);
-      throw new Error('密码错误');
+    const errMsg = data.error || data.message || '请求失败';
+    if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || errMsg === '密码错误' || /管理员会话/.test(errMsg)) {
+      clearAdminSession('管理后台登录已过期，请重新登录');
+      throw new Error(errMsg);
     }
     throw new Error(errMsg);
   }
-  return await res.json();
+  return acceptAdminSession(data);
+}
+
+// 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
+// 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
+async function courseFetch(courseAction, params = {}) {
+  if (!state.isAdmin || (!state.adminPwd && !state.adminSessionToken)) throw new Error('请先登录管理后台');
+  const payload = {
+    module: 'course',
+    courseAction,
+    admin: '1',
+    courseSessionId: state.courseSessionId,
+    ...params,
+  };
+  if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
+  else payload.password = state.adminPwd;
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (_) { data = {}; }
+  if (!res.ok || data.ok === false) {
+    const message = data.error || data.message || `网课请求失败（HTTP ${res.status}）`;
+    if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
+      clearAdminSession('管理后台登录已过期，请重新登录');
+      throw new Error(message);
+    }
+    const error = new Error(message);
+    error.code = data.code || '';
+    error.sessionStatus = data.sessionStatus || '';
+    throw error;
+  }
+  return acceptAdminSession(data);
 }
 
 async function renameUserToken(oldToken, newToken) {
@@ -754,6 +978,7 @@ async function adminLogin() {
   if (!pwd) { showToast('请输入密码', true); return; }
   const btn = $('loginAdminBtn'); const orig = btn.textContent;
   btn.textContent = '解锁中...'; btn.disabled = true;
+  state.adminSessionToken = '';
   state.adminPwd = pwd;
   try {
     const res = await adminFetch('login');
@@ -1311,6 +1536,438 @@ function importExcel() {
 }
 
 // ═══════════════════════════════════════════
+//  Admin: Course automation
+// ═══════════════════════════════════════════
+const COURSE_WORKFLOW_LABELS = Object.freeze({ video: '视频学习', evaluation: '课程评价', exam: '内置考试' });
+
+function courseWorkflowLabel(workflow) {
+  return COURSE_WORKFLOW_LABELS[workflow] || workflow || '未知步骤';
+}
+
+function courseAttr(value) {
+  return escapeHtml(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function courseHasWorkflow(course, workflow) {
+  const values = [
+    ...(Array.isArray(course?.workflowCandidates) ? course.workflowCandidates : []),
+    ...(Array.isArray(course?.workflows) ? course.workflows : []),
+    course?.activeWorkflow,
+  ].filter(Boolean);
+  return values.includes(workflow);
+}
+
+function courseNextWorkflow(course) {
+  if (!course || course.mapOnly === true || course.eligibility?.allowed !== true) return null;
+  const candidates = new Set([
+    ...(Array.isArray(course.workflowCandidates) ? course.workflowCandidates : []),
+    ...(Array.isArray(course.workflows) ? course.workflows : []),
+    course.activeWorkflow,
+  ].filter(Boolean));
+  // 工作流不明确时不猜测、不执行；课程状态仍然照实展示。
+  if (!candidates.size) return null;
+  if (candidates.has('video') && Number(course.studyRate || 0) < 100) return 'video';
+  if (candidates.has('evaluation') && course.hasFinishEvaluate !== true) return 'evaluation';
+  if (candidates.has('exam') && course.examPassed !== true) return 'exam';
+  return null;
+}
+
+function courseHasPending(course) {
+  return Boolean(courseNextWorkflow(course));
+}
+
+function courseStatusValue(label, value, kind = 'neutral') {
+  return `<div class="course-status-item"><span class="course-status-label">${escapeHtml(label)}</span><span class="course-status-value ${kind}">${escapeHtml(value)}</span></div>`;
+}
+
+function courseStatusData(course) {
+  const studyRate = Number(course?.studyRate || 0);
+  const video = studyRate >= 100
+    ? ['已完成', 'done']
+    : [`待完成（${Number.isFinite(studyRate) ? studyRate : 0}%）`, 'pending'];
+
+  const evaluationDeferred = studyRate < 100
+    && courseHasWorkflow(course, 'video')
+    && ['deferred', 'unavailable'].includes(course?.workflowDiscoveryStatus);
+  const evaluation = course?.hasFinishEvaluate === true
+    ? ['已完成', 'done']
+    : courseHasWorkflow(course, 'evaluation')
+      ? ['待完成', 'pending']
+      : evaluationDeferred
+        ? ['待视频完成后确认', 'pending']
+        : ['未要求/未返回', 'neutral'];
+
+  const hasExam = courseHasWorkflow(course, 'exam')
+    || course?.examPassed === true
+    || course?.lastExamScore !== null && course?.lastExamScore !== undefined;
+  const exam = !hasExam
+    ? ['未要求/未返回', 'neutral']
+    : course.examPassed === true
+      ? ['已完成', 'done']
+      : ['待完成', 'pending'];
+
+  const deadline = course?.eligibility?.allowed === true
+    ? ['期限内', 'done']
+    : course?.eligibility?.status === 'expired'
+      ? ['已过期', 'pending']
+      : ['期限未知', 'warning'];
+
+  const score = course?.getScore === null || course?.getScore === undefined || course?.getScore === ''
+    ? ['未返回', 'neutral']
+    : [String(course.getScore), 'neutral'];
+  return { video, evaluation, exam, deadline, score };
+}
+
+function courseCompleteText(course) {
+  const { video, evaluation, exam } = courseStatusData(course);
+  const required = [video, evaluation, exam].filter(item => item[1] !== 'neutral');
+  return required.length > 0 && required.every(item => item[1] === 'done') ? '已完成' : '待完成';
+}
+
+function courseGroupKey(group) {
+  return String(group?.groupKey || `single:${group?.groupName || ''}`);
+}
+
+function renderCourseCard(course) {
+  const status = courseStatusData(course);
+  const next = courseNextWorkflow(course);
+  const allowed = course?.eligibility?.allowed === true && course?.mapOnly !== true;
+  const courseId = courseAttr(course?.courseId || '');
+  const workflowAttr = courseAttr(next || 'auto');
+  const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
+  const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
+  let nextHtml = '';
+  let actionHtml = `<span class="text-muted text-sm">当前无需执行</span>`;
+
+  if (!allowed) {
+    nextHtml = `<div class="course-next-step blocked">${course?.mapOnly === true ? '学习地图额外条目：只读展示' : escapeHtml(course?.eligibility?.reason || '当前课程不可执行')}</div>`;
+    actionHtml = '<span class="text-muted text-sm">仅查看，不执行写入</span>';
+  } else if (next) {
+    nextHtml = `<div class="course-next-step">下一步：<strong>${escapeHtml(courseWorkflowLabel(next))}</strong> · 每次只执行这一项，执行后可再次平台复核</div>`;
+    actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}">预览下一步</button>
+      <button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="${workflowAttr}">执行下一步</button>`;
+  } else {
+    nextHtml = '<div class="course-next-step">当前已没有可识别的待执行步骤，以下状态仅供平台复核。</div>';
+  }
+
+  return `<article class="course-card" data-course-id="${courseId}">
+    <div class="course-card-top">
+      <div style="min-width:0;flex:1;"><div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div><div class="course-card-id">${escapeHtml(course?.courseId || '')}</div></div>
+      <div class="course-card-score">得分：${escapeHtml(status.score[0])}</div>
+    </div>
+    <div class="course-status-grid">
+      ${courseStatusValue('视频学习', status.video[0], status.video[1])}
+      ${courseStatusValue('课程评估', status.evaluation[0], status.evaluation[1])}
+      ${courseStatusValue('课程期限', status.deadline[0], status.deadline[1])}
+      ${courseStatusValue('课程考试', status.exam[0], status.exam[1])}
+    </div>
+    <div class="course-card-meta"><span>${escapeHtml(platformState)}</span><span>·</span><span>${escapeHtml(source)}</span>${course?.planEndTime ? `<span>· 截止 ${escapeHtml(course.planEndTime)}</span>` : ''}</div>
+    ${nextHtml}
+    <div class="course-card-actions">
+      ${actionHtml}
+      <button class="btn btn-xs" data-course-action="inspect" data-course-id="${courseId}">平台复核</button>
+      <button class="btn btn-xs" data-course-action="verify" data-course-id="${courseId}" data-workflow="${workflowAttr}">验证状态</button>
+    </div>
+  </article>`;
+}
+
+function renderCourseList() {
+  const container = $('courseListContainer');
+  if (!container) return;
+  if (!state.courseCourses.length) {
+    container.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">可勾选“显示过期课程”或点击刷新</span></div>';
+    return;
+  }
+  const html = state.courseGroups.map(group => {
+    const key = courseGroupKey(group);
+    const collapsed = state.courseCollapsed.has(key);
+    const children = Array.isArray(group.courses) ? group.courses : [];
+    const complete = Number(group.completedCount || 0);
+    const groupSource = group.groupSource === 'learning-map' ? '学习地图真实分组' : group.groupSource === 'platform' ? '平台课程组' : '单门课程';
+    return `<section class="course-group" data-course-group-key="${courseAttr(key)}">
+      <button class="course-group-header" type="button" data-course-group-toggle="${courseAttr(key)}" aria-expanded="${collapsed ? 'false' : 'true'}">
+        <span class="course-group-chevron">${collapsed ? '▸' : '▾'}</span>
+        <span class="course-group-title">${escapeHtml(group.groupName || '未命名课程组')}</span>
+        <span class="course-group-meta">${children.length} 门 · 平台完成 ${complete}/${children.length} · ${escapeHtml(groupSource)}</span>
+      </button>
+      <div class="course-group-body${collapsed ? ' collapsed' : ''}">${children.map(renderCourseCard).join('')}</div>
+    </section>`;
+  }).join('');
+  container.innerHTML = html;
+}
+
+function renderCourseSummary() {
+  const el = $('courseSummary');
+  if (!el) return;
+  const total = state.courseCourses.length;
+  const pending = state.courseCourses.filter(courseHasPending).length;
+  const expired = state.courseCourses.filter(course => course?.eligibility?.status === 'expired').length;
+  const platformCompleted = state.courseGroups.reduce((sum, group) => sum + Number(group.completedCount || 0), 0);
+  const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
+  el.innerHTML = `<span class="course-summary-item"><strong>${total}</strong> 门课程</span>
+    <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
+    <span class="course-summary-item danger"><strong>${pending}</strong> 门待完成</span>
+    <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
+    <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>`;
+}
+
+function renderCourseSessionState() {
+  const badge = $('courseAuthBadge');
+  const sessionBadge = $('courseSessionBadge');
+  const message = $('courseSessionMessage');
+  const challengePanel = $('courseChallengePanel');
+  if (!badge || !sessionBadge || !message || !challengePanel) return;
+
+  sessionBadge.textContent = `会话 ${state.courseSessionId.slice(0, 12)}…`;
+  const sessionStatus = state.courseSessionStatus || '';
+  badge.className = 'course-badge ' + (state.courseAuthenticated ? 'online' : state.courseChallenge ? 'challenge' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : 'offline');
+  badge.textContent = state.courseAuthenticated ? '已连接' : state.courseChallenge ? '待验证' : sessionStatus === 'expired' ? '已失效' : sessionStatus === 'failed' ? '登录失败' : '未连接';
+  message.className = 'course-session-message ' + (state.courseAuthenticated ? 'success' : state.courseChallenge ? '' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : '');
+  message.textContent = state.courseSessionMessage || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '请先输入网课账号和密码登录。');
+
+  if (!state.courseChallenge) {
+    challengePanel.classList.add('hidden');
+    return;
+  }
+  const challenge = state.courseChallenge;
+  challengePanel.classList.remove('hidden');
+  const type = challenge.type || 'manual';
+  $('courseChallengeTitle').textContent = type === 'continueLogin' ? '平台要求确认继续登录' : type === 'sms' ? '平台要求短信验证码' : '平台要求验证码';
+  $('courseChallengeMessage').textContent = challenge.message || '请完成平台验证后继续。';
+  const image = $('courseCaptchaImage');
+  if (challenge.image) { image.src = challenge.image; image.classList.remove('hidden'); }
+  else { image.removeAttribute('src'); image.classList.add('hidden'); }
+  $('courseChallengeCode').classList.toggle('hidden', type === 'continueLogin');
+  $('courseChallengePhone').classList.toggle('hidden', type !== 'sms');
+  $('courseSendSmsBtn').classList.toggle('hidden', type !== 'sms');
+  $('courseChallengeBtn').textContent = type === 'continueLogin' ? '确认继续登录' : '提交验证';
+}
+
+function setCourseSessionResult(data) {
+  state.courseAuthenticated = data?.loggedIn === true || data?.status === 'authenticated';
+  state.courseSessionStatus = data?.status || (state.courseAuthenticated ? 'authenticated' : 'failed');
+  state.courseChallenge = data?.challenge || null;
+  state.courseSessionMessage = data?.message || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '尚未连接网课会话。');
+  renderCourseSessionState();
+  if (!state.courseAuthenticated) $('courseListPanel').classList.add('hidden');
+}
+
+async function loadCourseStatus() {
+  if (!state.isAdmin) return;
+  const btn = $('courseStatusBtn');
+  const orig = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = '读取中...'; }
+  try {
+    const data = await courseFetch('status');
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) await loadCourseList();
+  } catch (e) {
+    state.courseSessionMessage = e.message || '网课会话状态读取失败';
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; }
+    renderCourseSessionState();
+    showToast(`网课状态读取失败：${e.message}`, true);
+  } finally { if (btn) { btn.disabled = false; btn.textContent = orig; } }
+}
+
+async function loginCourse() {
+  const username = $('courseUsername').value.trim();
+  const password = $('coursePassword').value;
+  if (!username || !password) { showToast('请输入网课账号和密码', true); return; }
+  const btn = $('courseLoginBtn'); const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '登录中...';
+  try {
+    const data = await courseFetch('login', { courseUsername: username, coursePassword: password });
+    // 密码只在本次请求中使用；挑战期间由服务端加密暂存。
+    $('coursePassword').value = '';
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) { showToast('网课登录成功'); await loadCourseList(); }
+    else if (state.courseChallenge) showToast('需要完成网课登录验证');
+  } catch (e) {
+    $('coursePassword').value = '';
+    state.courseSessionMessage = e.message || '网课登录失败';
+    renderCourseSessionState();
+    showToast(`网课登录失败：${e.message}`, true);
+  } finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function submitCourseChallenge(sendOnly = false) {
+  const challenge = state.courseChallenge;
+  if (!challenge?.id) { showToast('当前没有待处理的登录验证', true); return; }
+  const btn = sendOnly ? $('courseSendSmsBtn') : $('courseChallengeBtn');
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = sendOnly ? '发送中...' : '验证中...';
+  try {
+    const data = await courseFetch('challenge', {
+      challengeId: challenge.id,
+      challengeAction: sendOnly ? 'sendCode' : undefined,
+      code: sendOnly ? undefined : $('courseChallengeCode').value.trim(),
+      phone: $('courseChallengePhone').value.trim(),
+    });
+    $('courseChallengeCode').value = '';
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) { showToast('网课登录验证成功'); await loadCourseList(); }
+    else showToast('验证状态已更新');
+  } catch (e) {
+    state.courseSessionMessage = e.message || '网课登录验证失败';
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseChallenge = null; }
+    renderCourseSessionState();
+    showToast(`验证失败：${e.message}`, true);
+  } finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function logoutCourse() {
+  const ok = await showConfirm('退出网课会话', '确定清除当前浏览器对应的网课会话吗？');
+  if (!ok) return;
+  const btn = $('courseLogoutBtn'); const orig = btn.textContent; btn.disabled = true; btn.textContent = '退出中...';
+  try {
+    const data = await courseFetch('logout');
+    state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
+    setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
+    showToast('网课会话已清除');
+  } catch (e) { showToast(`退出失败：${e.message}`, true); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function loadCourseList({ forceRefresh = false } = {}) {
+  if (!state.courseAuthenticated) { $('courseListPanel').classList.add('hidden'); return; }
+  if (state.courseLoading) return;
+  state.courseLoading = true;
+  const container = $('courseListContainer');
+  const btn = $('courseRefreshBtn'); const orig = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = '读取中...'; }
+  if (container) container.innerHTML = '<div class="empty">正在读取平台课程与学习地图…</div>';
+  $('courseListPanel').classList.remove('hidden');
+  try {
+    const data = await courseFetch('list', {
+      includeExpired: $('courseIncludeExpired').checked,
+      pendingOnly: $('coursePendingOnly').checked,
+      includeMapOnly: $('courseIncludeMapOnly').checked,
+      forceRefresh,
+    });
+    state.courseCourses = Array.isArray(data.courses) ? data.courses : [];
+    state.courseGroups = Array.isArray(data.groups) ? data.groups : [];
+    if (!state.courseGroups.length) {
+      state.courseGroups = state.courseCourses.map(course => ({
+        groupKey: `single:${course.courseId}`,
+        groupName: course.courseName,
+        groupSource: 'single',
+        courses: [course],
+        count: 1,
+        completedCount: courseCompleteText(course) === '已完成' ? 1 : 0,
+      }));
+    }
+    state.courseById = new Map(state.courseCourses.map(course => [String(course.courseId), course]));
+    if (!state.courseGroupsInitialized) {
+      state.courseGroups.filter(group => group.collapsible === true || Number(group.count || group.courses?.length || 0) > 1).forEach(group => state.courseCollapsed.add(courseGroupKey(group)));
+      state.courseGroupsInitialized = true;
+    }
+    renderCourseSummary(); renderCourseList();
+  } catch (e) {
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; renderCourseSessionState(); $('courseListPanel').classList.add('hidden'); }
+    if (container) container.innerHTML = `<div class="empty" style="color:var(--danger);">课程读取失败：${escapeHtml(e.message)}</div>`;
+    showToast(`课程读取失败：${e.message}`, true);
+  } finally { state.courseLoading = false; if (btn) { btn.disabled = false; btn.textContent = orig; } }
+}
+
+function courseResultJson(value) {
+  try {
+    return JSON.stringify(value, (key, item) => {
+      if (/^(password|coursePassword|pending|cookies|cookie|hyperEspCode|image)$/i.test(key)) return '[已隐藏]';
+      return item;
+    }, 2);
+  } catch (_) { return ''; }
+}
+
+function showCourseOutput(title, detail, tone = 'success', raw = null) {
+  const output = $('courseOutput');
+  if (!output) return;
+  const json = raw ? courseResultJson(raw) : '';
+  output.innerHTML = `<div class="course-output-card ${tone}"><div class="course-output-title">${escapeHtml(title)}</div><div class="course-output-detail">${escapeHtml(detail)}</div>${json ? `<details><summary>查看返回摘要</summary><pre>${escapeHtml(json)}</pre></details>` : ''}</div>`;
+  output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function previewCourse(courseId, workflow) {
+  try {
+    const data = await courseFetch('preview', { courseId, workflow });
+    const steps = Array.isArray(data.steps) ? data.steps : [];
+    const detail = `${data.readyForConfirmation ? '可以确认执行' : '当前不可执行'}\n步骤：${courseWorkflowLabel(data.workflow || workflow)}\n${data.reason || '平台预览完成'}\n待提交动作：${Array.isArray(data.actions) ? data.actions.length : 0} 个`;
+    showCourseOutput(`预览：${courseWorkflowLabel(data.workflow || workflow)}`, detail, data.readyForConfirmation ? 'success' : 'warning', data);
+  } catch (e) { showCourseOutput('预览失败', e.message, 'error'); showToast(`预览失败：${e.message}`, true); }
+}
+
+async function inspectCourse(courseId) {
+  try {
+    const data = await courseFetch('inspect', { courseId });
+    const course = data.course || {};
+    const status = courseStatusData(course);
+    showCourseOutput('平台复核完成', `课程：${course.courseName || courseId}\n视频学习：${status.video[0]}\n课程评估：${status.evaluation[0]}\n课程考试：${status.exam[0]}\n得分：${status.score[0]}`, 'success', data);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('平台复核失败', e.message, 'error'); showToast(`平台复核失败：${e.message}`, true); }
+}
+
+async function verifyCourse(courseId, workflow) {
+  try {
+    const data = await courseFetch('verify', { courseId, workflow: workflow || 'auto' });
+    showCourseOutput('验证结果', data.verified === true ? '平台复读验证通过。' : `平台复读验证未通过：${data.reason || '状态仍未满足完成条件'}`, data.verified === true ? 'success' : 'warning', data);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('验证失败', e.message, 'error'); showToast(`验证失败：${e.message}`, true); }
+}
+
+async function executeCourse(courseId, workflow) {
+  if (state.courseBusy) return;
+  const course = state.courseById.get(String(courseId));
+  if (!course || course.eligibility?.allowed !== true) { showToast('当前课程不可执行', true); return; }
+  const currentWorkflow = courseNextWorkflow(course);
+  if (!currentWorkflow || (workflow && workflow !== 'auto' && workflow !== currentWorkflow)) {
+    showToast('课程状态可能已经变化，请先刷新课程后重试', true);
+    return;
+  }
+  const selectedWorkflow = currentWorkflow;
+  state.courseBusy = true;
+  try {
+    // 先确认、后联网：确认后由服务端做唯一一次权威预览，复核不通过时不会写入。
+    const ok = await showConfirm('确认执行网课步骤', `课程：${course.courseName || courseId}\n本次只执行：${courseWorkflowLabel(selectedWorkflow)}\n确认后会先进行平台最终复核，复核通过才会写入，并在完成后再次验证。`);
+    if (!ok) return;
+    showCourseOutput('正在复核并执行', '已确认，正在读取平台最新状态；如果平台状态已变化，将停止写入。', 'warning');
+    const result = await courseFetch('execute', { courseId, workflow: selectedWorkflow, confirm: true });
+    const task = result.task || {};
+    const verification = result.verification || task.verification || {};
+    const detail = `执行状态：${task.status || '已返回'}\n平台验证：${verification.verified === true ? '通过' : '未通过或未返回'}\n${task.reason || result.reason || '执行请求已返回'}`;
+    showCourseOutput(`执行：${courseWorkflowLabel(selectedWorkflow)}`, detail, verification.verified === true ? 'success' : 'warning', result);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('执行失败', e.message, 'error'); showToast(`执行失败：${e.message}`, true); }
+  finally { state.courseBusy = false; }
+}
+
+async function loadCourseTasks() {
+  try {
+    const data = await courseFetch('tasks');
+    const tasks = Array.isArray(data.tasks) ? data.tasks : [];
+    const list = tasks.length ? `<div class="course-task-list">${tasks.slice(0, 20).map(task => `<div class="course-task-item"><strong>${escapeHtml(task.status || '未知')}</strong> · ${escapeHtml(task.workflow || 'auto')} · ${escapeHtml(task.courseId || '')}<br><span>${escapeHtml(task.reason || task.finishedAt || task.createdAt || '')}</span></div>`).join('')}</div>` : '<div class="text-muted">暂无执行记录</div>';
+    $('courseOutput').innerHTML = `<div class="course-output-card"><div class="course-output-title">最近执行记录（${tasks.length}）</div>${list}</div>`;
+  } catch (e) { showCourseOutput('执行记录读取失败', e.message, 'error'); showToast(`执行记录读取失败：${e.message}`, true); }
+}
+
+// 网课卡片和分组事件代理
+$('courseListContainer').addEventListener('click', async e => {
+  const groupToggle = e.target.closest('[data-course-group-toggle]');
+  if (groupToggle) {
+    const key = groupToggle.dataset.courseGroupToggle;
+    if (state.courseCollapsed.has(key)) state.courseCollapsed.delete(key); else state.courseCollapsed.add(key);
+    renderCourseList();
+    return;
+  }
+  const button = e.target.closest('[data-course-action]');
+  if (!button || state.courseBusy) return;
+  const action = button.dataset.courseAction;
+  const courseId = button.dataset.courseId;
+  const workflow = button.dataset.workflow || courseNextWorkflow(state.courseById.get(String(courseId))) || 'auto';
+  if (action === 'preview') await previewCourse(courseId, workflow);
+  if (action === 'inspect') await inspectCourse(courseId);
+  if (action === 'verify') await verifyCourse(courseId, workflow);
+  if (action === 'execute') await executeCourse(courseId, workflow);
+});
+
+// ═══════════════════════════════════════════
 //  Easter Egg
 // ═══════════════════════════════════════════
 $('mainTitle').addEventListener('click', async () => {
@@ -1398,6 +2055,19 @@ $('tokenInput').addEventListener('keypress', e => { if (e.key === 'Enter') userV
 // Admin login
 $('loginAdminBtn').addEventListener('click', adminLogin);
 $('adminPassword').addEventListener('keypress', e => { if (e.key === 'Enter') adminLogin(); });
+
+// Course automation
+$('courseLoginBtn').addEventListener('click', loginCourse);
+$('courseStatusBtn').addEventListener('click', loadCourseStatus);
+$('courseLogoutBtn').addEventListener('click', logoutCourse);
+$('courseChallengeBtn').addEventListener('click', () => submitCourseChallenge(false));
+$('courseSendSmsBtn').addEventListener('click', () => submitCourseChallenge(true));
+$('courseChallengeCode').addEventListener('keypress', e => { if (e.key === 'Enter') submitCourseChallenge(false); });
+$('courseRefreshBtn').addEventListener('click', () => loadCourseList({ forceRefresh: true }));
+$('courseTasksBtn').addEventListener('click', loadCourseTasks);
+['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
+  $(id).addEventListener('change', () => loadCourseList({ forceRefresh: true }));
+});
 
 // Token management toolbar
 $('toggleAddFormBtn').addEventListener('click', () => { $('addTokenForm').classList.toggle('open'); $('importForm').classList.remove('open'); });
