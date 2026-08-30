@@ -1,0 +1,3065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>新标签页</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   Link · Clean Light · Mobile-First · 8px Grid
+   ═══════════════════════════════════════════ */
+
+/* ── Design Tokens ── */
+:root {
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --surface-hover: #f3f4f6;
+  --surface-active: #eef2ff;
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-light: #eef2ff;
+  --accent-text: #ffffff;
+  --success: #059669;
+  --success-light: #ecfdf5;
+  --success-border: #a7f3d0;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-light: #fef2f2;
+  --danger-border: #fecaca;
+  --warning: #d97706;
+  --warning-light: #fffbeb;
+  --border: #e5e7eb;
+  --border-light: #f3f4f6;
+  --border-focus: #a5b4fc;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.15);
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; font-size:16px; scroll-behavior:smooth; }
+
+body {
+  font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.6;
+  min-height:100dvh; -webkit-font-smoothing:antialiased;
+  letter-spacing:0.01em; overflow-x:hidden;
+}
+
+/* ── Typography ── */
+h1,h2,h3{font-weight:600;letter-spacing:-0.02em;line-height:1.3;}
+pre,code,.mono{font-family:'JetBrains Mono','SF Mono','Cascadia Code',monospace;}
+
+/* ── Layout ── */
+.app{max-width:720px;margin:0 auto;padding:0 16px 40px;position:relative;z-index:1;}
+.panel{display:none;}
+.panel.active{display:block;}
+
+/* ── Header ── */
+.header{text-align:center;padding:24px 0 16px;position:sticky;top:0;z-index:100;background:linear-gradient(to bottom,var(--bg) 70%,transparent);}
+.header h1{font-size:1rem;font-weight:600;color:var(--text-muted);letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;user-select:none;display:inline-block;transition:color .2s var(--ease);}
+.header h1:active{color:var(--accent);}
+
+/* ── Segmented Control ── */
+.segmented{display:flex;gap:2px;margin-bottom:20px;padding:4px;background:var(--border-light);border-radius:var(--radius-lg);}
+.seg-btn{flex:1;text-align:center;padding:10px 18px;border-radius:var(--radius);font-weight:500;font-size:.88rem;cursor:pointer;color:var(--text-secondary);background:transparent;border:none;font-family:inherit;transition:all .25s var(--ease);min-height:44px;white-space:nowrap;}
+.seg-btn.active{background:var(--surface);color:var(--accent);box-shadow:var(--shadow-sm);font-weight:600;}
+.seg-btn:active:not(.active){background:var(--surface-hover);}
+
+/* ── Card ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:12px;box-shadow:var(--shadow-sm);}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.stat-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 10px;text-align:center;box-shadow:var(--shadow-sm);}
+.stat-num{font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.1;letter-spacing:-0.03em;}
+.stat-label{font-size:.68rem;color:var(--text-muted);font-weight:500;margin-top:4px;text-transform:uppercase;letter-spacing:.08em;}
+.stat-item.danger .stat-num{color:var(--danger);}
+
+/* ── Admin Sub-tabs ── */
+.subtabs{display:flex;gap:4px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
+.subtabs::-webkit-scrollbar{display:none;}
+.subtab{flex-shrink:0;padding:8px 16px;border-radius:20px;font-weight:500;font-size:.82rem;cursor:pointer;color:var(--text-secondary);background:var(--surface);border:1px solid var(--border);font-family:inherit;transition:all .2s var(--ease);min-height:36px;white-space:nowrap;}
+.subtab.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent);}
+.subtab:active:not(.active){background:var(--surface-hover);}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:var(--radius-sm);font-weight:500;font-size:.84rem;cursor:pointer;font-family:inherit;transition:all .15s var(--ease);white-space:nowrap;min-height:44px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);-webkit-tap-highlight-color:transparent;letter-spacing:.01em;}
+.btn:hover{background:var(--surface-hover);}
+.btn:active:not(:disabled){transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+.btn-primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600;}
+.btn-primary:hover{background:var(--accent-hover);}
+.btn-primary:active:not(:disabled){background:#3730a3;}
+
+.btn-danger{background:var(--danger-light);color:var(--danger);border-color:var(--danger-border);}
+.btn-danger:hover{background:#fee2e2;}
+
+.btn-ghost{background:transparent;color:var(--text-secondary);border-color:transparent;}
+.btn-ghost:hover{background:var(--surface-hover);color:var(--text);}
+
+.btn-sm{padding:7px 13px;font-size:.76rem;min-height:36px;border-radius:var(--radius-sm);}
+.btn-xs{padding:4px 10px;font-size:.7rem;min-height:30px;border-radius:var(--radius-sm);}
+.btn-full{width:100%;}
+
+/* ── Input ── */
+.input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:16px;font-family:inherit;color:var(--text);background:var(--surface);transition:all .2s var(--ease);outline:none;-webkit-appearance:none;min-height:48px;}
+.input::placeholder{color:var(--text-muted);}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.12);}
+select.input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+textarea.input{resize:vertical;min-height:80px;}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border-light);}
+.toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px;align-self:center;}
+
+/* ── Inline Form ── */
+.inline-form{max-height:0;opacity:0;overflow:hidden;transition:all .3s var(--ease);margin:0;}
+.inline-form.open{max-height:200px;opacity:1;margin:0 0 14px;}
+
+/* ── Token Cards (Mobile) ── */
+.token-list{display:flex;flex-direction:column;gap:6px;}
+.token-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-sm);transition:all .15s var(--ease);}
+.token-card.selected{border-color:var(--accent);background:var(--accent-light);}
+.token-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.token-card-info{flex:1;min-width:0;}
+.token-card-name{font-weight:600;color:var(--accent);cursor:pointer;font-size:.9rem;word-break:break-all;transition:color .15s;}
+.token-card-name:active{color:var(--accent-hover);}
+.token-card-orig{font-size:.72rem;color:var(--text-muted);margin-top:2px;}
+.token-card-meta{display:flex;gap:14px;margin-top:8px;font-size:.76rem;font-weight:500;}
+.token-card-remain{color:var(--success);}
+.token-card-used{color:var(--danger);}
+.token-card-acts{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);}
+
+/* ── Table (Tablet+) ── */
+.table-wrap{overflow-x:auto;margin:12px 0;border-radius:var(--radius);border:1px solid var(--border);-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:600px;}
+th,td{padding:10px 10px;text-align:left;vertical-align:middle;}
+th{background:var(--surface-hover);color:var(--text-muted);font-weight:500;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{border-bottom:1px solid var(--border-light);color:var(--text-secondary);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--accent-light);color:var(--text);}
+.token-name{color:var(--accent);font-weight:500;cursor:pointer;}
+.remain-val{color:var(--success);font-weight:500;}
+.used-val{color:var(--danger);font-weight:500;}
+.orig-token{color:var(--text-muted);font-size:.78rem;}
+.act-group{display:flex;gap:3px;flex-wrap:wrap;}
+
+/* ── Code Block ── */
+.code-block{background:#f1f5f9;color:#334155;padding:14px;border-radius:var(--radius-sm);overflow-x:auto;font-family:'JetBrains Mono','SF Mono','Cascadia Code',monospace;font-size:.7rem;line-height:1.7;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);}
+.copy-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin-top:8px;padding:10px 16px;background:var(--accent-light);color:var(--accent);border:1px solid rgba(79,70,229,.15);border-radius:var(--radius-sm);font-size:.82rem;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s var(--ease);min-height:44px;}
+.copy-btn:active{background:rgba(79,70,229,.15);transform:scale(.98);}
+
+/* ── Result Cards ── */
+.result-card{padding:14px;border-radius:var(--radius);margin-bottom:12px;font-weight:500;font-size:.85rem;}
+.result-card.success{background:var(--success-light);color:var(--success);border:1px solid var(--success-border);}
+.result-card.error{background:var(--danger-light);color:var(--danger);border:1px solid var(--danger-border);}
+.result-card.warning{background:var(--warning-light);color:var(--warning);border:1px solid #fde68a;}
+
+/* ── Log List ── */
+.log-list{max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;background:var(--surface-hover);border-radius:var(--radius);padding:10px;border:1px solid var(--border);-webkit-overflow-scrolling:touch;}
+.log-list:empty::before{content:"暂无日志";display:block;text-align:center;padding:36px;color:var(--text-muted);font-size:.85rem;}
+.log-entry{padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;gap:8px;}
+.log-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.log-time{color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:.68rem;}
+.log-badge{padding:2px 8px;border-radius:12px;font-size:.65rem;font-weight:500;}
+.log-badge.admin{background:var(--accent-light);color:var(--accent);}
+.log-badge.user{background:var(--surface-hover);color:var(--text-muted);}
+.log-body{color:var(--text);font-size:.82rem;font-weight:500;word-break:break-all;}
+.log-meta{display:flex;gap:8px;flex-wrap:wrap;}
+.log-ip{color:var(--accent);background:var(--accent-light);padding:2px 7px;border-radius:6px;font-size:.65rem;font-family:'JetBrains Mono',monospace;}
+.log-loc{color:var(--text-muted);background:var(--surface-hover);padding:2px 7px;border-radius:6px;font-size:.65rem;max-width:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* ── Rename Panel ── */
+.rename-panel{margin-top:14px;padding:14px;background:var(--surface-hover);border:1px solid var(--border);border-radius:var(--radius-sm);}
+
+/* ── Progress ── */
+.progress{width:100%;height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:10px;}
+.progress-fill{width:0%;height:100%;background:var(--accent);border-radius:2px;transition:width .3s var(--ease);}
+
+/* ── Pagination ── */
+.pagination{display:flex;justify-content:center;align-items:center;gap:14px;margin:16px 0;font-weight:500;font-size:.85rem;color:var(--text-secondary);}
+
+/* ── Empty State ── */
+.empty{text-align:center;padding:40px 20px;color:var(--text-muted);font-size:.85rem;}
+.empty-icon{font-size:2rem;margin-bottom:8px;display:block;}
+
+/* ── Tip ── */
+.tip{margin-top:16px;padding:12px 16px;background:var(--accent-light);border:1px solid rgba(79,70,229,.1);border-radius:var(--radius-sm);font-size:.82rem;color:var(--text-secondary);line-height:1.7;}
+
+/* ── Toast ── */
+.toast-stack{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column-reverse;gap:8px;pointer-events:none;width:calc(100% - 32px);max-width:400px;}
+.toast-item{padding:12px 20px;background:var(--text);color:#fff;border-radius:var(--radius);font-weight:500;font-size:.85rem;text-align:center;animation:toastIn .35s var(--ease-spring);pointer-events:auto;box-shadow:var(--shadow-lg);}
+.toast-item.err{background:var(--danger);}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.94);}}
+
+/* ── Confirm Dialog ── */
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10001;align-items:center;justify-content:center;}
+.confirm-overlay.show{display:flex;}
+.confirm-box{background:var(--surface);border-radius:var(--radius-xl);padding:24px;max-width:340px;width:90%;box-shadow:var(--shadow-lg);animation:modalIn .25s var(--ease-spring);}
+@keyframes modalIn{from{opacity:0;transform:scale(.92);}}
+.confirm-box h4{font-size:.95rem;margin-bottom:8px;}
+.confirm-box p{font-size:.82rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5;white-space:pre-wrap;}
+.confirm-actions{display:flex;gap:10px;justify-content:flex-end;}
+
+/* ── Modal ── */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10002;align-items:flex-end;justify-content:center;}
+.modal.show{display:flex;}
+.modal-card{background:var(--surface);border-radius:var(--radius-xl) var(--radius-xl) 0 0;max-width:640px;width:100%;max-height:85dvh;overflow-y:auto;padding:24px 20px;box-shadow:var(--shadow-lg);animation:sheetUp .3s var(--ease-spring);}
+@keyframes sheetUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.modal h3{font-size:1.05rem;margin-bottom:16px;}
+.modal .form-group{margin-bottom:14px;}
+.modal .form-group label{display:block;font-weight:500;margin-bottom:6px;color:var(--text-secondary);font-size:.82rem;}
+.modal .btn-row{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+
+/* Q-Stats Modal: wider */
+.qstats-card{max-width:860px;padding:0;overflow:hidden;border-radius:var(--radius-xl) var(--radius-xl) 0 0;}
+.qstats-hd{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px;background:var(--surface-hover);border-bottom:1px solid var(--border);}
+.qstats-hd h3{margin:0;font-size:1rem;}
+.qstats-hd p{margin:0;font-size:.76rem;color:var(--text-muted);}
+.qstats-bd{padding:18px 20px 20px;}
+.stats-grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;}
+.stat-card2{border-radius:var(--radius);padding:14px;background:var(--surface-hover);border:1px solid var(--border);}
+.stat-card2-label{font-size:.68rem;color:var(--text-muted);margin-bottom:4px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;}
+.stat-card2-value{font-size:1.3rem;font-weight:600;color:var(--accent);line-height:1.2;word-break:break-word;}
+.stat-card2-sub{margin-top:4px;font-size:.72rem;color:var(--text-muted);}
+.stats-sect2{background:var(--surface-hover);border-radius:var(--radius);padding:14px;margin-top:12px;border:1px solid var(--border);}
+.stats-sect2-title{font-size:.8rem;font-weight:500;color:var(--text-secondary);margin-bottom:10px;}
+.stats-hist-list{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow:auto;}
+.stats-hist-item{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);}
+.stats-hist-time{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted);}
+.stats-hist-cat{font-weight:500;color:var(--text);word-break:break-word;}
+.stats-hist-cnt{font-size:.72rem;font-weight:500;color:var(--text-secondary);background:var(--surface-hover);padding:2px 10px;border-radius:999px;align-self:flex-start;border:1px solid var(--border);}
+.question-batch-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;}
+.question-batch-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);}
+.question-batch-title{font-weight:600;color:var(--text);word-break:break-word;}
+.question-batch-meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:5px;font-size:.72rem;color:var(--text-muted);}
+.question-batch-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px;}
+.question-import-context{padding:10px 12px;margin-bottom:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;color:var(--text-secondary);line-height:1.55;}
+.question-import-context strong{color:var(--text);}
+.question-import-result{margin:12px 0;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;line-height:1.55;}
+.question-import-result.ok{border-color:var(--success-border);background:var(--success-light);}
+.question-import-result.error{border-color:var(--danger-border);background:var(--danger-light);}
+.question-import-issues{margin:8px 0 0;padding-left:20px;max-height:150px;overflow:auto;color:var(--danger);}
+.question-import-warnings{margin:8px 0 0;padding-left:20px;max-height:100px;overflow:auto;color:var(--warning);}
+.question-category-badge{display:inline-flex;margin-top:4px;padding:2px 7px;border-radius:999px;background:var(--accent-light);color:var(--accent);font-size:.68rem;font-weight:500;}
+
+/* ── Excel Modal ── */
+.excel-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10003;align-items:flex-end;justify-content:center;}
+.excel-modal.show{display:flex;}
+.excel-card{background:var(--surface);border-radius:var(--radius-xl) var(--radius-xl) 0 0;max-width:800px;width:100%;max-height:85dvh;overflow-y:auto;padding:24px 20px;box-shadow:var(--shadow-lg);animation:sheetUp .3s var(--ease-spring);}
+
+@media(max-width:640px){
+  .question-batch-card{grid-template-columns:1fr;}
+  .question-batch-actions{justify-content:flex-start;}
+}
+
+/* ── Course Automation ── */
+.course-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
+.course-head h3{font-size:1rem;margin-bottom:4px;}
+.course-head p{font-size:.76rem;color:var(--text-muted);line-height:1.6;}
+.course-badges{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;}
+.course-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;border:1px solid var(--border);background:var(--surface-hover);font-size:.68rem;font-weight:500;color:var(--text-secondary);white-space:nowrap;}
+.course-badge.online{color:var(--success);background:var(--success-light);border-color:var(--success-border);}
+.course-badge.challenge{color:var(--warning);background:var(--warning-light);border-color:#fde68a;}
+.course-badge.error{color:var(--danger);background:var(--danger-light);border-color:var(--danger-border);}
+.course-badge.offline{color:var(--text-muted);}
+.course-login-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;}
+.course-login-grid label{display:block;font-size:.78rem;color:var(--text-secondary);font-weight:500;}
+.course-login-grid .input{margin-top:5px;}
+.course-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.course-session-message{margin-top:10px;padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface-hover);border:1px solid var(--border);font-size:.78rem;color:var(--text-secondary);}
+.course-session-message.success{color:var(--success);background:var(--success-light);border-color:var(--success-border);}
+.course-session-message.error{color:var(--danger);background:var(--danger-light);border-color:var(--danger-border);}
+.course-challenge{margin-top:12px;padding:14px;border-radius:var(--radius);background:var(--warning-light);border:1px solid #fde68a;}
+.course-challenge h4{font-size:.86rem;margin-bottom:4px;color:var(--warning);}
+.course-challenge p{font-size:.78rem;color:var(--text-secondary);margin-bottom:10px;}
+.course-challenge-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.course-challenge-row .input{flex:1;min-width:160px;background:var(--surface);}
+.course-captcha{display:block;max-width:180px;max-height:64px;margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;object-fit:contain;}
+.course-list-panel{margin-top:12px;}
+.course-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--border-light);}
+.course-toolbar .checkbox{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;color:var(--text-secondary);white-space:nowrap;}
+.course-toolbar .checkbox input{accent-color:var(--accent);}
+.course-summary{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0;}
+.course-summary-item{padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-hover);font-size:.74rem;color:var(--text-secondary);}
+.course-summary-item strong{color:var(--text);font-size:.88rem;}
+.course-summary-item.danger strong{color:var(--danger);}
+.course-group{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px;background:var(--surface);}
+.course-group-header{display:flex;align-items:center;gap:8px;width:100%;padding:12px 13px;border:0;background:#f5f7ff;color:var(--text);font:inherit;text-align:left;cursor:pointer;}
+.course-group-header:hover{background:var(--accent-light);}
+.course-group-chevron{width:18px;color:var(--accent);font-size:.78rem;flex:0 0 18px;}
+.course-group-title{font-weight:600;font-size:.84rem;min-width:0;word-break:break-word;}
+.course-group-meta{margin-left:auto;color:var(--text-secondary);font-size:.7rem;white-space:nowrap;}
+.course-group-body{padding:8px;background:var(--surface-hover);}
+.course-group-body.collapsed{display:none;}
+.course-card{padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;box-shadow:var(--shadow-sm);}
+.course-card:last-child{margin-bottom:0;}
+.course-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.course-card-name{font-size:.86rem;font-weight:600;color:var(--text);line-height:1.45;word-break:break-word;}
+.course-card-id{margin-top:2px;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);word-break:break-all;}
+.course-card-score{flex:0 0 auto;font-size:.72rem;color:var(--warning);font-weight:600;white-space:nowrap;}
+.course-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+.course-status-item{min-width:0;padding:7px 8px;border-radius:var(--radius-sm);background:var(--surface-hover);border:1px solid var(--border-light);}
+.course-status-label{display:block;font-size:.64rem;color:var(--text-muted);margin-bottom:2px;}
+.course-status-value{display:block;font-size:.74rem;font-weight:600;word-break:break-word;}
+.course-status-value.done{color:var(--success);}
+.course-status-value.pending{color:var(--danger);}
+.course-status-value.neutral{color:var(--text-secondary);font-weight:500;}
+.course-status-value.warning{color:var(--warning);}
+.course-card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:.7rem;color:var(--text-muted);}
+.course-next-step{margin-top:9px;padding:7px 9px;border-left:3px solid var(--accent);background:var(--accent-light);color:var(--text-secondary);font-size:.74rem;}
+.course-next-step.blocked{border-left-color:var(--danger);background:var(--danger-light);color:var(--danger);}
+.course-card-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border-light);}
+.course-output{margin-top:12px;}
+.course-output-card{padding:12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;}
+.course-output-card.success{border-color:var(--success-border);background:var(--success-light);}
+.course-output-card.error{border-color:var(--danger-border);background:var(--danger-light);}
+.course-output-card.warning{border-color:#fde68a;background:var(--warning-light);}
+.course-output-title{font-weight:600;color:var(--text);margin-bottom:5px;}
+.course-output-detail{color:var(--text-secondary);line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.course-output-card details{margin-top:8px;}
+.course-output-card summary{cursor:pointer;color:var(--accent);font-size:.72rem;}
+.course-output-card pre{margin-top:6px;max-height:240px;overflow:auto;padding:9px;border-radius:var(--radius-sm);background:rgba(255,255,255,.72);font: .66rem/1.55 'JetBrains Mono','Cascadia Code',monospace;white-space:pre-wrap;word-break:break-word;}
+.course-task-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.course-task-item{padding:8px 10px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);}
+.course-task-item strong{color:var(--text);}
+.course-select{display:inline-flex;align-items:center;gap:5px;margin-bottom:5px;font-size:.66rem;color:var(--text-muted);cursor:pointer;}
+.course-select input{accent-color:var(--accent);}
+.course-batch-panel{margin:12px 0;padding:12px;border:1px solid #c7d2fe;border-radius:var(--radius);background:#f5f7ff;}
+.course-batch-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+.course-batch-title{font-size:.84rem;font-weight:700;color:var(--text);}
+.course-batch-status{font-size:.72rem;font-weight:600;color:var(--accent);}
+.course-batch-meta{margin-top:4px;font-size:.7rem;color:var(--text-secondary);line-height:1.6;}
+.course-batch-progress{height:8px;margin:10px 0 7px;border-radius:99px;background:#e0e7ff;overflow:hidden;}
+.course-batch-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),#22c55e);transition:width .25s ease;}
+.course-batch-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.course-batch-items{display:flex;flex-direction:column;gap:5px;margin-top:10px;max-height:240px;overflow:auto;}
+.course-batch-item{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm);background:rgba(255,255,255,.82);font-size:.69rem;color:var(--text-secondary);}
+.course-batch-item-state{flex:0 0 auto;font-weight:700;color:var(--text-muted);}
+.course-batch-item-state.done{color:var(--success);}.course-batch-item-state.failed{color:var(--danger);}.course-batch-item-state.running{color:var(--accent);}
+.course-batch-item-main{min-width:0;word-break:break-word;}.course-batch-item-main strong{color:var(--text);}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted);}
+
+/* ── Selection ── */
+::selection{background:rgba(79,70,229,.2);color:var(--text);}
+
+/* ── Utilities ── */
+.flex{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.flex-between{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.w-full{width:100%;}
+.mt-8{margin-top:8px;}
+.mt-12{margin-top:12px;}
+.mt-16{margin-top:16px;}
+.mb-8{margin-bottom:8px;}
+.mb-12{margin-bottom:12px;}
+.text-center{text-align:center;}
+.text-muted{color:var(--text-muted);}
+.text-sm{font-size:.82rem;}
+.hidden{display:none!important;}
+
+/* ═══════════════════════════════════════════
+   TABLET ≥ 768px
+   ═══════════════════════════════════════════ */
+@media(min-width:768px){
+  .app{padding:0 24px 40px;}
+  .header{padding:32px 0 20px;}
+  .header h1{font-size:1.15rem;}
+  .token-list-view{display:none;}
+  .token-table-view{display:block;}
+  .modal{align-items:center;}
+  .modal-card,.qstats-card{border-radius:var(--radius-xl);max-height:82dvh;}
+  .excel-modal{align-items:center;}
+  .excel-card{border-radius:var(--radius-xl);max-height:80dvh;}
+  .stats-grid2{grid-template-columns:repeat(4,1fr);}
+  .course-login-grid{grid-template-columns:1fr 1fr;}
+  .course-status-grid{grid-template-columns:repeat(4,1fr);}
+  .toast-stack{bottom:24px;}
+}
+
+/* ═══════════════════════════════════════════
+   DESKTOP ≥ 1024px
+   ═══════════════════════════════════════════ */
+@media(min-width:1024px){
+  .app{max-width:800px;}
+}
+
+/* ═══════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h4 id="confirmTitle"></h4>
+    <p id="confirmMsg"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost btn-sm" id="confirmCancel">取消</button>
+      <button class="btn btn-danger btn-sm" id="confirmOk">确认</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- Header -->
+  <header class="header"><h1 id="mainTitle">Link</h1></header>
+
+  <!-- Segmented Control -->
+  <nav class="segmented">
+    <button class="seg-btn active" data-panel="user">提取</button>
+    <button class="seg-btn" data-panel="admin">管理</button>
+  </nav>
+
+  <!-- ═══ User Panel ═══ -->
+  <div class="panel active" id="userPanel">
+    <div class="card">
+      <input type="text" id="tokenInput" class="input" placeholder="请输入token" autocomplete="off">
+      <button id="verifyBtn" class="btn btn-primary btn-full mt-12">验证并生成代码</button>
+      <div id="verifyResult" class="hidden mt-16"></div>
+      <div class="tip">复制代码 → 打开答题界面 → 粘贴到地址栏 → 删除最前方等号 → 回车</div>
+    </div>
+  </div>
+
+  <!-- ═══ Admin Panel ═══ -->
+  <div class="panel" id="adminPanel">
+    <!-- Login -->
+    <div class="card" id="adminLoginCard">
+      <div class="flex">
+        <input type="password" id="adminPassword" class="input" placeholder="请输入管理员密码" style="flex:2;">
+        <button id="loginAdminBtn" class="btn btn-primary" style="flex:1;">登录</button>
+      </div>
+    </div>
+
+    <!-- Admin Main (hidden until login) -->
+    <div id="adminMain" class="hidden">
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总数</div></div>
+        <div class="stat-item"><div class="stat-num" id="statActive">0</div><div class="stat-label">活跃</div></div>
+        <div class="stat-item danger"><div class="stat-num" id="statUsed">0</div><div class="stat-label">耗尽</div></div>
+      </div>
+
+      <!-- Sub-tabs -->
+      <nav class="subtabs" id="adminSubtabs">
+        <button class="subtab active" data-subtab="tokens">Token 管理</button>
+        <button class="subtab" data-subtab="logs">操作日志</button>
+        <button class="subtab" data-subtab="questions">题库管理</button>
+        <button class="subtab" data-subtab="emergency">应急代码</button>
+        <button class="subtab" data-subtab="devices">设备绑定</button>
+        <button class="subtab" data-subtab="course">网课管理</button>
+      </nav>
+
+      <!-- Sub-pane: Tokens -->
+      <div class="subpane active" id="subTokens">
+        <div class="toolbar">
+          <button class="btn btn-primary btn-sm" id="toggleAddFormBtn">+ 添加</button>
+          <button class="btn btn-ghost btn-sm" id="toggleImportBtn">批量导入</button>
+          <span class="toolbar-sep"></span>
+          <button class="btn btn-ghost btn-sm" id="filterRemainBtn">筛选</button>
+          <button class="btn btn-ghost btn-sm" id="clearFilterBtn">清除筛选</button>
+          <button class="btn btn-ghost btn-sm" id="refreshDataBtn">刷新</button>
+          <button class="btn btn-danger btn-sm" id="deleteSelectedBtn">删除选中</button>
+          <button class="btn btn-danger btn-sm" id="clearAllTokensBtn">清空全部</button>
+        </div>
+
+        <!-- Inline Add Form -->
+        <div class="inline-form" id="addTokenForm">
+          <div class="flex">
+            <input type="text" id="newTokenName" class="input" placeholder="Token 名称" style="flex:2;">
+            <input type="number" id="newTokenInitCount" class="input" placeholder="次数" value="3" style="flex:1;text-align:center;min-width:64px;">
+            <button class="btn btn-primary" id="addTokenBtn">确认添加</button>
+          </div>
+          <div id="addTokenMsg" class="text-sm mt-8"></div>
+        </div>
+
+        <!-- Inline Import Form -->
+        <div class="inline-form" id="importForm">
+          <textarea id="importTokensText" rows="3" class="input" placeholder="每行一个 Token，默认 3 次"></textarea>
+          <button id="confirmImportBtn" class="btn btn-primary btn-full mt-8">确认导入</button>
+        </div>
+
+        <div id="tokenTableContainer"></div>
+        <div id="paginationContainer"></div>
+        <button id="queryTokenBtn" class="btn btn-primary btn-full mt-8 hidden">查询全部 Token</button>
+      </div>
+
+      <!-- Sub-pane: Logs -->
+      <div class="subpane hidden" id="subLogs">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+          <button id="clearLogsBtn" class="btn btn-danger btn-sm">清空日志</button>
+        </div>
+        <div id="logsContainer" class="log-list"></div>
+      </div>
+
+      <!-- Sub-pane: Questions -->
+      <div class="subpane hidden" id="subQuestions">
+        <div class="flex mb-12">
+          <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
+            <option value="">全部题库</option>
+          </select>
+          <input type="text" id="questionSearchKeyword" class="input" placeholder="搜索题目" style="flex:3;">
+          <button id="questionSearchBtn" class="btn btn-primary btn-sm">搜索</button>
+          <button id="questionResetBtn" class="btn btn-ghost btn-sm">重置</button>
+        </div>
+        <div class="flex mb-12">
+          <button id="importExcelBtn" class="btn btn-primary btn-sm">新建题库</button>
+          <button id="questionStatsBtn" class="btn btn-ghost btn-sm">题库列表</button>
+          <button id="clearQuestionsBtn" class="btn btn-danger btn-sm">清空题库</button>
+        </div>
+        <div id="importProgress" class="hidden">
+          <div class="progress"><div id="importProgressFill" class="progress-fill"></div></div>
+          <div class="text-center text-muted text-sm mt-8" id="importProgressText">导入中 0%</div>
+        </div>
+        <div id="questionSearchResult"></div>
+        <div id="questionPagination"></div>
+      </div>
+
+      <!-- Sub-pane: Emergency -->
+      <div class="subpane hidden" id="subEmergency">
+        <div class="code-block" id="emergencyCodeBlock" style="margin-bottom:0;"></div>
+        <button id="copyEmergencyBtn" class="btn btn-primary btn-full mt-12">复制代码</button>
+      </div>
+
+      <!-- Sub-pane: Devices (设备绑定) -->
+      <div class="subpane hidden" id="subDevices">
+        <div class="toolbar">
+          <button class="btn btn-primary btn-sm" id="toggleAddDeviceFormBtn">+ 生成激活码</button>
+          <button class="btn btn-ghost btn-sm" id="toggleDeviceSearchBtn">搜索</button>
+          <span class="toolbar-sep"></span>
+          <button class="btn btn-ghost btn-sm" id="refreshActivationsBtn">刷新</button>
+          <button class="btn btn-danger btn-sm" id="deleteDeviceSelectedBtn">删除选中</button>
+          <button class="btn btn-danger btn-sm" id="clearAllDevicesBtn">清空全部</button>
+        </div>
+
+        <!-- 内联生成表单 -->
+        <div class="inline-form" id="addDeviceForm">
+          <div class="flex">
+            <input type="text" id="newDeviceLabel" class="input" placeholder="备注" style="flex:2;">
+            <input type="number" id="newDeviceDays" class="input" placeholder="天数" value="30" style="flex:1;text-align:center;min-width:64px;">
+            <input type="number" id="newDeviceUses" class="input" placeholder="次数" value="300" style="flex:1;text-align:center;min-width:64px;">
+            <button class="btn btn-primary" id="addDeviceBtn">确认</button>
+          </div>
+          <div id="addDeviceMsg" class="text-sm mt-8"></div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="inline-form" id="deviceSearchForm">
+          <div class="flex">
+            <input type="text" id="deviceSearchInput" class="input" placeholder="搜索激活码或备注..." style="flex:3;">
+            <button class="btn btn-primary btn-sm" id="deviceSearchBtn">搜索</button>
+            <button class="btn btn-ghost btn-sm" id="deviceSearchClearBtn">清除</button>
+          </div>
+        </div>
+
+        <div id="activationTableContainer"></div>
+      </div>
+
+      <!-- Sub-pane: Course automation -->
+      <div class="subpane hidden" id="subCourse">
+        <div class="card" style="margin-bottom:12px;">
+          <div class="course-head">
+            <div>
+              <h3>网课直连管理</h3>
+              <p>通过新云函数直接读取 21TB 数据，不打开 Edge；课程状态以平台复核结果为准。</p>
+            </div>
+            <div class="course-badges">
+              <span class="course-badge offline" id="courseAuthBadge">未连接</span>
+              <span class="course-badge" id="courseSessionBadge">会话准备中</span>
+              <span class="course-badge offline" id="courseApiBadge">接口待检测</span>
+            </div>
+          </div>
+          <div class="course-login-grid">
+            <label>网课账号
+              <input type="text" id="courseUsername" class="input" autocomplete="username" placeholder="请输入网课账号">
+            </label>
+            <label>网课密码
+              <input type="password" id="coursePassword" class="input" autocomplete="current-password" placeholder="仅本次登录使用，不保存到网页">
+            </label>
+          </div>
+          <div class="course-actions">
+            <button id="courseLoginBtn" class="btn btn-primary btn-sm">登录网课</button>
+            <button id="courseStatusBtn" class="btn btn-ghost btn-sm">读取会话状态</button>
+            <button id="courseLogoutBtn" class="btn btn-ghost btn-sm">退出网课</button>
+          </div>
+          <div id="courseSessionMessage" class="course-session-message">请先输入网课账号和密码登录。</div>
+          <div id="courseChallengePanel" class="course-challenge hidden">
+            <h4 id="courseChallengeTitle">需要完成登录验证</h4>
+            <p id="courseChallengeMessage"></p>
+            <img id="courseCaptchaImage" class="course-captcha hidden" alt="网课验证码">
+            <div class="course-challenge-row">
+              <input type="text" id="courseChallengeCode" class="input" autocomplete="one-time-code" placeholder="请输入验证码">
+              <input type="text" id="courseChallengePhone" class="input hidden" autocomplete="tel" placeholder="手机号（如平台要求）">
+              <button id="courseChallengeBtn" class="btn btn-primary btn-sm">提交验证</button>
+              <button id="courseSendSmsBtn" class="btn btn-ghost btn-sm hidden">重新发送</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="courseListPanel" class="card course-list-panel hidden">
+          <div class="course-toolbar">
+            <button id="courseRefreshBtn" class="btn btn-primary btn-sm">刷新课程</button>
+            <button id="courseTasksBtn" class="btn btn-ghost btn-sm">执行记录</button>
+            <button id="courseBatchAllBtn" class="btn btn-primary btn-sm">一键完成视频/评价</button>
+            <button id="courseBatchSelectedBtn" class="btn btn-ghost btn-sm" disabled>完成选中（0）</button>
+            <span class="toolbar-sep"></span>
+            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
+            <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
+            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
+          </div>
+          <div id="courseBatchPanel" class="course-batch-panel hidden"></div>
+          <div id="courseSummary" class="course-summary"></div>
+          <div id="courseListContainer"></div>
+        </div>
+        <div id="courseOutput" class="course-output"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Modals ═══ -->
+
+<!-- Q-Stats Modal -->
+<div class="modal" id="questionStatsModal">
+  <div class="modal-card qstats-card">
+    <div class="qstats-hd">
+      <div><h3>独立题库管理</h3><p>查看、筛选、整库替换或单独删除；不同题库互不影响</p></div>
+      <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
+    </div>
+    <div class="qstats-bd" id="questionStatsBody">
+      <div class="empty"><span class="empty-icon">📊</span>正在加载统计数据...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Excel Config Modal -->
+<div class="excel-modal" id="excelConfigModal">
+  <div class="excel-card">
+    <h3 id="excelConfigTitle" style="margin-bottom:12px;">新建题库</h3>
+    <div id="questionImportContext" class="question-import-context"></div>
+    <div id="excelPreviewArea" class="mb-12"></div>
+    <div class="flex mb-12"><select id="questionColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 题目</span></div>
+    <div class="flex mb-12"><select id="answerColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 答案</span></div>
+    <div class="flex mb-12"><select id="optionStartColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项起始</span></div>
+    <div class="flex mb-12"><select id="optionEndColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项结束</span></div>
+    <div id="previewTable" style="overflow-x:auto;margin-bottom:16px;"></div>
+    <div id="questionImportValidation" class="hidden"></div>
+    <div class="flex-between">
+      <button id="addCategoryBtn" class="btn btn-ghost btn-sm">题库名称</button>
+      <div class="flex gap-8">
+        <button id="cancelImportBtn" class="btn btn-ghost btn-sm">取消</button>
+        <button id="confirmImportConfigBtn" class="btn btn-primary">校验并预览</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Question Modal -->
+<div class="modal" id="editQuestionModal">
+  <div class="modal-card">
+    <h3>修改题目</h3>
+    <div class="form-group"><label>题干</label><textarea id="editQuestionText" class="input" rows="3" placeholder="请输入题目内容"></textarea></div>
+    <div class="form-group"><label>选项列表（每行一个）</label><textarea id="editQuestionOptions" class="input" rows="5" placeholder="例如：&#10;正确&#10;错误"></textarea></div>
+    <div class="form-group"><label>答案</label><input type="text" id="editQuestionAnswer" class="input" placeholder="请输入正确答案"></div>
+    <div class="btn-row">
+      <button id="cancelEditBtn" class="btn btn-ghost">取消</button>
+      <button id="saveEditBtn" class="btn btn-primary">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  State
+// ═══════════════════════════════════════════
+// 新 Node.js 20.19 云函数；原有管理员接口与网课接口共用此地址。
+const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
+const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
+const COURSE_FRONTEND_VERSION = '9.0.0';
+const COURSE_API_PROTOCOL_VERSION = 2;
+
+function createCourseSessionId() {
+  try {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  } catch (_) {}
+  return `web-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function loadCourseSessionId() {
+  try {
+    const saved = localStorage.getItem(COURSE_SESSION_STORAGE_KEY);
+    if (saved && /^[a-zA-Z0-9._:-]{1,80}$/.test(saved)) return saved;
+    const created = createCourseSessionId();
+    localStorage.setItem(COURSE_SESSION_STORAGE_KEY, created);
+    return created;
+  } catch (_) {
+    return createCourseSessionId();
+  }
+}
+
+const state = {
+  panel: 'user',
+  adminSubtab: 'tokens',
+  adminPwd: '',
+  adminSessionToken: '',
+  isAdmin: false,
+  // Tokens
+  allTokens: [],
+  filteredTokens: [],
+  tokenPage: 1,
+  tokenFilter: null,   // null | number
+  selectedTokens: new Set(),
+  // Logs
+  logPage: 1,
+  logHasMore: true,
+  logLoading: false,
+  // Questions
+  questions: [],
+  questionPage: 1,
+  questionTotal: 0,
+  questionKeyword: '',
+  questionBatches: [],
+  questionBatchFilter: '',
+  editId: null,
+  // Devices
+  activations: [],
+  deviceSelection: new Set(),
+  deviceFilter: null,
+  // Excel
+  excelData: null,
+  excelHeaders: [],
+  importCategory: '',
+  questionImportTarget: null,
+  questionImportPreview: null,
+  // Course automation
+  courseSessionId: loadCourseSessionId(),
+  courseAuthenticated: false,
+  courseSessionStatus: 'logged_out',
+  courseSessionMessage: '请先输入网课账号和密码登录。',
+  courseChallenge: null,
+  courseApi: null,
+  courseApiCompatible: false,
+  courseApiMessage: '尚未检测云函数版本。',
+  courseBatchDelayMs: 650,
+  courseBatchCurrentDelayMs: 650,
+  courseCourses: [],
+  courseGroups: [],
+  courseById: new Map(),
+  courseCollapsed: new Set(),
+  courseGroupsInitialized: false,
+  courseLoading: false,
+  courseBusy: false,
+  courseSelected: new Set(),
+  courseBatch: null,
+  courseBatchPumping: false,
+  courseBatchPauseRequested: false,
+  courseBatchCancelRequested: false,
+  // Easter egg
+  clickCount: 0,
+  clickTimer: null,
+};
+const PAGE_SIZE = 15;
+const LOG_PAGE_SIZE = 10;
+const QUESTION_PAGE_SIZE = 10;
+
+// ═══════════════════════════════════════════
+//  Utilities
+// ═══════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const escapeHtml = s => s ? String(s).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;') : '';
+const showToast = (msg, err) => {
+  const stack = $('toastStack');
+  const el = document.createElement('div');
+  el.className = 'toast-item' + (err ? ' err' : '');
+  el.textContent = msg;
+  stack.appendChild(el);
+  setTimeout(() => { el.style.animation = 'toastIn .2s reverse'; setTimeout(() => el.remove(), 250); }, 2800);
+};
+
+function showConfirm(title, msg) {
+  return new Promise(resolve => {
+    $('confirmTitle').textContent = title;
+    $('confirmMsg').textContent = msg;
+    $('confirmOverlay').classList.add('show');
+    const cleanup = () => { $('confirmOverlay').classList.remove('show'); $('confirmOk').removeEventListener('click', onOk); $('confirmCancel').removeEventListener('click', onCancel); };
+    const onOk = () => { cleanup(); resolve(true); };
+    const onCancel = () => { cleanup(); resolve(false); };
+    $('confirmOk').addEventListener('click', onOk);
+    $('confirmCancel').addEventListener('click', onCancel);
+  });
+}
+
+function copyToClipboard(text, btn) {
+  const done = () => {
+    const orig = btn.textContent, origBg = btn.style.background;
+    btn.textContent = '已复制 ✓'; btn.style.background = 'var(--success-light)';
+    showToast('代码已复制');
+    setTimeout(() => { btn.textContent = orig; btn.style.background = origBg; }, 1500);
+  };
+  if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done)); }
+  else { fallbackCopy(text, done); }
+}
+function fallbackCopy(text, cb) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-1000px';
+  document.body.appendChild(ta); ta.select();
+  try { if (document.execCommand('copy')) cb(); else showToast('复制失败，请手动选择复制', true); }
+  catch(e) { showToast('复制失败，请手动选择复制', true); }
+  finally { document.body.removeChild(ta); }
+}
+window.copyTokenText = function(text, el) {
+  const orig = el.style.color;
+  el.style.color = 'var(--success)';
+  showToast(`Token [${text}] 已复制`);
+  setTimeout(() => { el.style.color = orig; }, 800);
+  if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(text).catch(() => {}); }
+  else { fallbackCopy(text, () => {}); }
+};
+
+// ═══════════════════════════════════════════
+//  Panel & Subtab switching
+// ═══════════════════════════════════════════
+function switchPanel(name) {
+  state.panel = name;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  const panel = name === 'user' ? $('userPanel') : $('adminPanel');
+  panel.classList.add('active');
+  document.querySelector(`.seg-btn[data-panel="${name}"]`).classList.add('active');
+}
+
+function switchSubtab(name) {
+  state.adminSubtab = name;
+  document.querySelectorAll('.subtab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.subpane').forEach(p => p.classList.add('hidden'));
+  document.querySelector(`.subtab[data-subtab="${name}"]`).classList.add('active');
+  const pane = document.getElementById('sub' + name.charAt(0).toUpperCase() + name.slice(1));
+  if (pane) pane.classList.remove('hidden');
+  if (name === 'logs' && state.isAdmin) loadLogs(true);
+  if (name === 'questions' && state.isAdmin) initializeQuestionManagement();
+  if (name === 'devices' && state.isAdmin) loadActivations();
+  if (name === 'course' && state.isAdmin) {
+    renderCourseSessionState();
+    loadCourseStatus();
+  }
+}
+
+// ═══════════════════════════════════════════
+//  API wrappers
+// ═══════════════════════════════════════════
+function clearAdminSession(message = '管理后台登录已过期，请重新登录') {
+  state.adminPwd = '';
+  state.adminSessionToken = '';
+  state.isAdmin = false;
+  $('adminPassword').value = '';
+  $('adminLoginCard').classList.remove('hidden');
+  $('adminMain').classList.add('hidden');
+  showToast(message, true);
+}
+
+function acceptAdminSession(data) {
+  const token = typeof data?.adminSessionToken === 'string' ? data.adminSessionToken.trim() : '';
+  if (token) {
+    state.adminSessionToken = token;
+    // 管理员密码仅用于首次换取短期令牌，不再长期留在页面内存中。
+    state.adminPwd = '';
+    $('adminPassword').value = '';
+  }
+  return data;
+}
+
+async function adminFetch(action, params = {}) {
+  const payload = { admin: '1', action, ...params };
+  if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
+  else payload.password = state.adminPwd;
+  const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  let data = null;
+  try { data = await res.json(); } catch (_) { data = {}; }
+  if (!res.ok) {
+    const errMsg = data.error || data.message || '请求失败';
+    if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || errMsg === '密码错误' || /管理员会话/.test(errMsg)) {
+      clearAdminSession('管理后台登录已过期，请重新登录');
+      throw new Error(errMsg);
+    }
+    const error = new Error(errMsg);
+    error.code = data.code || '';
+    error.details = data.details || null;
+    error.payload = data;
+    throw error;
+  }
+  return acceptAdminSession(data);
+}
+
+function acceptCourseApiMetadata(data) {
+  const api = data?.courseApi;
+  state.courseApi = api && typeof api === 'object' ? api : null;
+  const capabilities = state.courseApi?.capabilities || {};
+  const workflows = Array.isArray(capabilities.batchWorkflows) ? capabilities.batchWorkflows : [];
+  state.courseApiCompatible = Number(state.courseApi?.protocolVersion || 0) >= COURSE_API_PROTOCOL_VERSION
+    && capabilities.batchExecution === true
+    && workflows.includes('video')
+    && workflows.includes('evaluation');
+  if (!state.courseApi) {
+    state.courseApiMessage = `云函数没有返回版本能力信息，请部署支持一键完成的 v${COURSE_FRONTEND_VERSION} 后端。`;
+  } else if (!state.courseApiCompatible) {
+    state.courseApiMessage = `当前云函数版本不支持一键完成（需要协议 v${COURSE_API_PROTOCOL_VERSION}）；单课程功能仍可使用。`;
+  } else {
+    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持视频/评价一键完成。`;
+    const delay = Number(capabilities.recommendedBatchStepDelayMs);
+    if (Number.isFinite(delay) && delay >= 300) state.courseBatchDelayMs = Math.min(Math.round(delay), 5000);
+  }
+  state.courseBatchCurrentDelayMs = state.courseBatchDelayMs;
+  renderCourseSessionState();
+  renderCourseBatchControls();
+}
+
+// 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
+// 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
+async function courseFetch(courseAction, params = {}) {
+  if (!state.isAdmin || (!state.adminPwd && !state.adminSessionToken)) throw new Error('请先登录管理后台');
+  const payload = {
+    module: 'course',
+    courseAction,
+    admin: '1',
+    courseSessionId: state.courseSessionId,
+    ...params,
+  };
+  if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
+  else payload.password = state.adminPwd;
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  let data = null;
+  try { data = await res.json(); } catch (_) { data = {}; }
+  acceptCourseApiMetadata(data);
+  if (!res.ok || data.ok === false) {
+    const message = data.error || data.message || `网课请求失败（HTTP ${res.status}）`;
+    if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
+      clearAdminSession('管理后台登录已过期，请重新登录');
+      throw new Error(message);
+    }
+    const error = new Error(message);
+    error.code = data.code || '';
+    error.sessionStatus = data.sessionStatus || '';
+    throw error;
+  }
+  return acceptAdminSession(data);
+}
+
+async function renameUserToken(oldToken, newToken) {
+  const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'renameToken', token: oldToken, newToken: newToken }) });
+  return await res.json();
+}
+
+// ═══════════════════════════════════════════
+//  User: Verify
+// ═══════════════════════════════════════════
+let currentVerifiedToken = null;
+
+async function userVerify() {
+  const token = $('tokenInput').value.trim();
+  if (!token) { showToast('请输入 Token', true); return; }
+  const btn = $('verifyBtn');
+  const orig = btn.textContent;
+  btn.textContent = '验证中...'; btn.disabled = true;
+  try {
+    const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
+    if (!res.ok) {
+      const t = await res.text(); let em = '验证失败';
+      try { em = JSON.parse(t).error || em; } catch(e) {}
+      throw new Error(em);
+    }
+    const data = await res.json();
+    const area = $('verifyResult');
+    area.classList.remove('hidden');
+
+    if (data.valid === false && data.reason === 'not_found') {
+      area.innerHTML = '<div class="result-card error">未找到该token<br><span style="font-size:.76rem;font-weight:400;">请检查输入是否正确</span></div>';
+      showToast('Token 不存在', true);
+      return;
+    }
+    if (data.valid === false && data.reason === 'no_remain') {
+      area.innerHTML = renderVerifyResult(token, 0, false);
+      showToast('验证通过，但次数已用完');
+      return;
+    }
+    if (data.valid) {
+      area.innerHTML = renderVerifyResult(token, data.remain, true);
+      currentVerifiedToken = token;
+      showToast('验证通过');
+    } else {
+      area.innerHTML = '<div class="result-card error">验证码无效</div>';
+      showToast('无效的 Token', true);
+    }
+  } catch(e) {
+    $('verifyResult').classList.remove('hidden');
+    $('verifyResult').innerHTML = `<div class="result-card error">${escapeHtml(e.message)}<br><span style="font-size:.76rem;font-weight:400;">请重试或检查网络</span></div>`;
+    showToast(e.message || '验证失败', true);
+  } finally {
+    btn.textContent = orig; btn.disabled = false;
+  }
+}
+
+function renderVerifyResult(token, remain, hasCode) {
+  const color = hasCode ? 'success' : 'warning';
+  const icon = hasCode ? '✅' : '⚠️';
+  let h = `<div class="result-card ${color}">${icon} 验证通过 · 剩余 <strong style="font-size:1.1rem;">${remain}</strong> 次
+    <button class="btn btn-ghost btn-sm" id="toggleRenameBtn" style="margin-left:12px;">修改token</button></div>
+    <div class="rename-panel hidden" id="renamePanel">
+      <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">输入新的token名称：</div>
+      <div class="flex">
+        <input type="text" id="newTokenNameInput" class="input" placeholder="新token名称" style="flex:2;">
+        <button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button>
+        <button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button>
+      </div>
+      <div id="renameMsg" class="text-sm mt-8"></div>
+    </div>`;
+  if (hasCode) {
+    const c1 = `=javascript:$.getScript('${API_URL}?token=${token}')`;
+    const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`;
+    h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
+      <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">📋 复制代码</button></div>
+      <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（备用）</div>
+      <div class="code-block">${escapeHtml(c2)}</div><button class="copy-btn" data-code="${escapeHtml(c2)}">📋 复制代码</button></div>`;
+  } else {
+    h += '<div class="tip mt-12">链接已失效，无法生成代码。如需继续使用，请联系管理员获取新token。</div>';
+  }
+  return h;
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Login
+// ═══════════════════════════════════════════
+async function adminLogin() {
+  const pwd = $('adminPassword').value;
+  if (!pwd) { showToast('请输入密码', true); return; }
+  const btn = $('loginAdminBtn'); const orig = btn.textContent;
+  btn.textContent = '解锁中...'; btn.disabled = true;
+  state.adminSessionToken = '';
+  state.adminPwd = pwd;
+  try {
+    const res = await adminFetch('login');
+    state.isAdmin = true;
+    $('adminLoginCard').classList.add('hidden');
+    $('adminMain').classList.remove('hidden');
+    state.allTokens = res.tokens || [];
+    updateStats(); applyTokenFilter(); renderTokenView();
+    switchSubtab('tokens');
+    adminFetch('getEmergencyCode').then(d => { $('emergencyCodeBlock').textContent = d?.code || '应急代码获取失败'; }).catch(() => { $('emergencyCodeBlock').textContent = '应急代码加载失败'; });
+    loadLogs(true);
+    loadQuestions();
+    showToast('管理后台已解锁');
+  } catch(e) {
+    if (e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
+    else showToast(e.message || '密码错误', true);
+    state.adminPwd = '';
+  } finally { btn.textContent = orig; btn.disabled = false; }
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Stats
+// ═══════════════════════════════════════════
+function updateStats() {
+  $('statTotal').textContent = state.allTokens.length;
+  $('statActive').textContent = state.allTokens.filter(t => t.remain > 0).length;
+  $('statUsed').textContent = state.allTokens.filter(t => t.remain <= 0).length;
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Token List
+// ═══════════════════════════════════════════
+async function loadAllTokens() {
+  const container = $('tokenTableContainer');
+  container.innerHTML = '<div class="empty">加载中...</div>';
+  try {
+    const data = await adminFetch('listAll');
+    state.allTokens = data.tokens || [];
+    updateStats();
+    state.tokenFilter = null;
+    state.selectedTokens.clear();
+    applyTokenFilter();
+    loadLogs(true);
+  } catch(e) {
+    container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+    showToast(`加载失败: ${e.message}`, true);
+  }
+}
+
+function applyTokenFilter() {
+  let f = [...state.allTokens];
+  if (state.tokenFilter !== null) f = f.filter(t => t.remain === state.tokenFilter);
+  state.filteredTokens = f;
+  state.tokenPage = 1;
+  renderTokenView();
+}
+
+function renderTokenView() {
+  const container = $('tokenTableContainer');
+  if (!state.filteredTokens.length) {
+    container.innerHTML = '<div class="empty"><span class="empty-icon">📭</span>暂无 Token 数据<br><span style="font-size:.78rem;">点击上方 [+ 添加] 创建第一个 Token</span></div>';
+    $('paginationContainer').innerHTML = '';
+    return;
+  }
+  const totalPages = Math.ceil(state.filteredTokens.length / PAGE_SIZE);
+  const start = (state.tokenPage - 1) * PAGE_SIZE;
+  const items = state.filteredTokens.slice(start, start + PAGE_SIZE);
+
+  if (window.innerWidth >= 768) {
+    container.innerHTML = renderTokenTable(items);
+    container.className = 'token-table-view';
+  } else {
+    container.innerHTML = renderTokenCards(items);
+    container.className = 'token-list-view';
+  }
+
+  $('paginationContainer').innerHTML = totalPages <= 1 ? '' : `
+    <div class="pagination">
+      <button class="btn btn-ghost btn-sm" id="prevPageBtn" ${state.tokenPage===1?'disabled':''}>上一页</button>
+      <span>${state.tokenPage} / ${totalPages}</span>
+      <button class="btn btn-ghost btn-sm" id="nextPageBtn" ${state.tokenPage===totalPages?'disabled':''}>下一页</button>
+    </div>`;
+  if (totalPages > 1) {
+    $('prevPageBtn').addEventListener('click', () => { if (state.tokenPage > 1) { state.tokenPage--; renderTokenView(); } });
+    $('nextPageBtn').addEventListener('click', () => { if (state.tokenPage < totalPages) { state.tokenPage++; renderTokenView(); } });
+  }
+}
+
+function renderTokenCards(items) {
+  let h = '<div class="token-list">';
+  items.forEach(t => {
+    const hasRenamed = t.originalToken && t.originalToken !== t.token;
+    h += `<div class="token-card${state.selectedTokens.has(t.token)?' selected':''}" data-token="${escapeHtml(t.token)}">
+      <div class="token-card-top">
+        <div class="token-card-info">
+          <div class="token-card-name" data-action="copyToken" data-token="${escapeHtml(t.token)}">${escapeHtml(t.token)}</div>
+          ${hasRenamed?`<div class="token-card-orig">原名: ${escapeHtml(t.originalToken)}</div>`:''}
+        </div>
+        <input type="checkbox" data-action="toggleSelect" data-token="${escapeHtml(t.token)}" ${state.selectedTokens.has(t.token)?'checked':''} style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;">
+      </div>
+      <div class="token-card-meta">
+        <span>初始 <strong style="color:var(--text);">${t.initCount}</strong></span>
+        <span class="token-card-remain">剩余 <strong>${t.remain}</strong></span>
+        <span class="token-card-used">已用 <strong>${t.used}</strong></span>
+      </div>
+      <div class="token-card-acts">
+        <button class="btn btn-xs" data-action="editToken" data-token="${escapeHtml(t.token)}">修改</button>
+        <button class="btn btn-xs" data-action="renameToken" data-token="${escapeHtml(t.token)}">改名</button>
+        <button class="btn btn-xs" data-action="resetToken" data-token="${escapeHtml(t.token)}">重置</button>
+        <button class="btn btn-xs btn-danger" data-action="deleteToken" data-token="${escapeHtml(t.token)}">删除</button>
+      </div></div>`;
+  });
+  h += '</div>';
+  return h;
+}
+
+function renderTokenTable(items) {
+  let h = '<div class="table-wrap"><table><thead><tr><th style="width:36px;"><input type="checkbox" id="selectAllCheck"></th><th>原Token</th><th>现Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>';
+  items.forEach(t => {
+    const hasRenamed = t.originalToken && t.originalToken !== t.token;
+    h += `<tr data-token="${escapeHtml(t.token)}">
+      <td><input type="checkbox" data-action="toggleSelect" data-token="${escapeHtml(t.token)}" ${state.selectedTokens.has(t.token)?'checked':''}></td>
+      <td class="orig-token">${escapeHtml(hasRenamed?t.originalToken:t.token)}</td>
+      <td class="token-name" data-action="copyToken" data-token="${escapeHtml(t.token)}">${escapeHtml(t.token)}</td>
+      <td>${t.initCount}</td><td class="remain-val">${t.remain}</td><td class="used-val">${t.used}</td>
+      <td class="act-group">
+        <button class="btn btn-xs" data-action="editToken" data-token="${escapeHtml(t.token)}">修改</button>
+        <button class="btn btn-xs" data-action="renameToken" data-token="${escapeHtml(t.token)}">改名</button>
+        <button class="btn btn-xs" data-action="resetToken" data-token="${escapeHtml(t.token)}">重置</button>
+        <button class="btn btn-xs btn-danger" data-action="deleteToken" data-token="${escapeHtml(t.token)}">删除</button>
+      </td></tr>`;
+  });
+  h += '</tbody></table></div>';
+  return h;
+}
+
+// Token actions (event delegation)
+async function handleTokenAction(action, token) {
+  if (action === 'copyToken') {
+    if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(token); }
+    else { fallbackCopy(token, () => {}); }
+    showToast(`Token [${token}] 已复制`);
+    return;
+  }
+  if (action === 'toggleSelect') {
+    if (state.selectedTokens.has(token)) state.selectedTokens.delete(token); else state.selectedTokens.add(token);
+    renderTokenView();
+    return;
+  }
+  if (action === 'editToken') {
+    const val = prompt('输入新的剩余次数:');
+    if (val === null) return;
+    const n = parseInt(val);
+    if (isNaN(n)) { showToast('请输入数字', true); return; }
+    try { await adminFetch('updateRemain', { token, newRemain: n }); await loadAllTokens(); showToast('修改成功'); }
+    catch(e) { showToast(`修改失败: ${e.message}`, true); }
+    return;
+  }
+  if (action === 'renameToken') {
+    const newName = prompt('输入新 Token 名称：', token);
+    if (!newName || newName.trim() === token) return;
+    try {
+      const r = await adminFetch('renameToken', { token, newToken: newName.trim() });
+      if (r.error) throw new Error(r.error);
+      showToast(`已将 "${token}" 改名为 "${newName.trim()}"`);
+      await loadAllTokens();
+    } catch(e) { showToast(`改名失败: ${e.message}`, true); }
+    return;
+  }
+  if (action === 'resetToken') {
+    const ok = await showConfirm('重置toekn', `确定将 "${token}" 的剩余次数重置为初始值吗？`);
+    if (!ok) return;
+    try { await adminFetch('reset', { token }); await loadAllTokens(); showToast('已重置'); }
+    catch(e) { showToast(`重置失败: ${e.message}`, true); }
+    return;
+  }
+  if (action === 'deleteToken') {
+    const ok = await showConfirm('删除toekn', `确定要删除 "${token}" 吗？此操作不可恢复。`);
+    if (!ok) return;
+    try { state.selectedTokens.delete(token); await adminFetch('delete', { token }); await loadAllTokens(); showToast('已删除'); }
+    catch(e) { showToast(`删除失败: ${e.message}`, true); }
+    return;
+  }
+}
+
+// Event delegation for token list
+$('tokenTableContainer').addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const { action, token } = el.dataset;
+  handleTokenAction(action, token);
+});
+
+// Select all
+$('tokenTableContainer').addEventListener('change', e => {
+  if (e.target.id === 'selectAllCheck') {
+    const checked = e.target.checked;
+    document.querySelectorAll('[data-action="toggleSelect"]').forEach(cb => {
+      cb.checked = checked;
+      const t = cb.dataset.token;
+      if (checked) state.selectedTokens.add(t); else state.selectedTokens.delete(t);
+    });
+  }
+});
+
+// Bulk actions
+async function deleteSelectedTokens() {
+  if (!state.selectedTokens.size) { showToast('未选中任何 Token', true); return; }
+  const ok = await showConfirm('批量删除', `确定删除选中的 ${state.selectedTokens.size} 个 Token 吗？此操作不可恢复。`);
+  if (!ok) return;
+  try {
+    await adminFetch('deleteBatch', { tokens: Array.from(state.selectedTokens) });
+    state.selectedTokens.clear();
+    await loadAllTokens(); showToast('批量删除成功');
+  } catch(e) { showToast(`批量删除失败: ${e.message}`, true); }
+}
+
+async function clearAllTokens() {
+  const ok = await showConfirm('清空全部', '此操作将清空所有 Token，不可恢复！确定继续吗？');
+  if (!ok) return;
+  try { state.selectedTokens.clear(); await adminFetch('clearAll'); await loadAllTokens(); showToast('已清空所有 Token'); }
+  catch(e) { showToast(`清空失败: ${e.message}`, true); }
+}
+
+async function filterByRemain() {
+  const vals = [...new Set(state.allTokens.map(t => t.remain))].sort((a,b)=>a-b);
+  const val = prompt(`当前剩余次数: ${vals.join(', ')}\n请输入要筛选的数字：`);
+  if (val !== null && !isNaN(parseInt(val))) {
+    state.tokenFilter = parseInt(val);
+    applyTokenFilter();
+    showToast(`已筛选剩余次数 = ${state.tokenFilter}`);
+  }
+}
+
+function clearFilter() { state.tokenFilter = null; applyTokenFilter(); showToast('已清除筛选'); }
+
+// Add & Import
+async function addSingleToken() {
+  const name = $('newTokenName').value.trim();
+  if (!name) { showToast('请输入 Token 名称', true); return; }
+  let init = parseInt($('newTokenInitCount').value);
+  if (isNaN(init) || init < 1) init = 3;
+  const btn = $('addTokenBtn'); const orig = btn.textContent;
+  btn.textContent = '添加中...'; btn.disabled = true;
+  try {
+    await adminFetch('add', { token: name, initCount: init });
+    $('addTokenMsg').innerHTML = `<span style="color:var(--success);">✅ 已添加: ${escapeHtml(name)} (${init} 次)</span>`;
+    $('newTokenName').value = ''; $('newTokenInitCount').value = '3';
+    await loadAllTokens();
+    setTimeout(() => { $('addTokenMsg').innerHTML = ''; }, 3000);
+  } catch(e) { $('addTokenMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(e.message)}</span>`; }
+  finally { btn.textContent = orig; btn.disabled = false; }
+}
+
+async function importTokens() {
+  const text = $('importTokensText').value.trim();
+  if (!text) { showToast('请粘贴 Token 列表', true); return; }
+  const btn = $('confirmImportBtn'); const orig = btn.textContent;
+  btn.textContent = '导入中...'; btn.disabled = true;
+  try {
+    const arr = text.split('\n').map(s => s.trim()).filter(s => s);
+    const res = await adminFetch('import', { tokens: arr });
+    showToast(`导入完成: 新增 ${res.added}，跳过 ${res.skipped}`);
+    $('importTokensText').value = ''; $('importForm').classList.remove('open');
+    await loadAllTokens();
+  } catch(e) { showToast(`导入失败: ${e.message}`, true); }
+  finally { btn.textContent = orig; btn.disabled = false; }
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Logs
+// ═══════════════════════════════════════════
+function renderLogEntry(log) {
+  const d = new Date(log.timestamp);
+  const pad = n => String(n).padStart(2,'0');
+  const ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  const adminActs = ['login','add','updateRemain','reset','renameToken','delete','deleteBatch','clearAll','import','importSimpleQuestions','commitQuestionImport','deleteQuestionBatch','updateSimpleQuestion','deleteSimpleQuestion','clearAllQuestions'];
+  const isAdmin = adminActs.includes(log.action);
+  let actText = '';
+  if (log.action === 'use') actText = `提取脚本 (剩余 ${(log.details||'').replace(/[^0-9]/g,'')||'0'} 次)`;
+  else if (log.action === 'add') actText = `添加 Token "${escapeHtml(log.token)}" ${log.details?'('+escapeHtml(log.details)+')':''}`;
+  else if (log.action === 'updateRemain') actText = `修改 "${escapeHtml(log.token)}" ${escapeHtml(log.details||'剩余次数')}`;
+  else if (log.action === 'reset') actText = `重置 "${escapeHtml(log.token)}" ${escapeHtml(log.details||'')}`;
+  else if (log.action === 'renameToken') actText = `改名 Token (${escapeHtml(log.details||'')})`;
+  else if (log.action === 'delete') actText = `删除 "${escapeHtml(log.token)}"`;
+  else if (log.action === 'deleteBatch') actText = `批量删除 (${escapeHtml(log.details||'')})`;
+  else if (log.action === 'clearAll') actText = `清空全站所有 Token`;
+  else if (log.action === 'import') actText = `批量导入 Token (${escapeHtml(log.details||'')})`;
+  else if (log.action === 'importSimpleQuestions') actText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0]||'?'} 条)`;
+  else if (log.action === 'commitQuestionImport') actText = escapeHtml(log.details||'新增或替换题库');
+  else if (log.action === 'deleteQuestionBatch') actText = escapeHtml(log.details||'删除独立题库');
+  else if (log.action === 'updateSimpleQuestion') actText = `修改题目 ${log.details||''}`;
+  else if (log.action === 'deleteSimpleQuestion') actText = `删除题目 ${log.details||''}`;
+  else if (log.action === 'clearAllQuestions') actText = `清空题库`;
+  else if (log.action === 'login') actText = `登录管理面板`;
+  else actText = `${log.action||''} ${log.details||''}`;
+
+  const div = document.createElement('div');
+  div.className = 'log-entry';
+  div.innerHTML = `<div class="log-top"><span class="log-time">[${ts}]</span><span class="log-badge ${isAdmin?'admin':'user'}">${isAdmin?'管理员':`用户(${escapeHtml(log.token||'未知')})`}</span></div>
+    <div class="log-body">${actText}</div>
+    <div class="log-meta"><span class="log-ip">${escapeHtml(log.ip||'未知IP')}</span><span class="log-loc" title="${escapeHtml(log.location||'未知属地')}">${escapeHtml(log.location||'未知属地')}</span></div>`;
+  return div;
+}
+
+async function loadLogs(reset = true) {
+  const c = $('logsContainer');
+  if (!c || state.logLoading) return;
+  if (reset) { state.logPage = 1; state.logHasMore = true; c.innerHTML = '<div class="text-center text-muted" style="padding:16px;">加载日志中...</div>'; c._scrollSetup = false; }
+  if (!state.logHasMore) return;
+  state.logLoading = true;
+  try {
+    const data = await adminFetch('logs', { page: state.logPage, pageSize: LOG_PAGE_SIZE });
+    const raw = data.logs || [];
+    state.logHasMore = data.hasMore !== false && raw.length >= LOG_PAGE_SIZE;
+    if (reset) c.innerHTML = '';
+    if (!raw.length && reset) { c.innerHTML = ''; return; }
+    for (const s of raw) { try { const log = JSON.parse(s); if (log?.timestamp) c.appendChild(renderLogEntry(log)); } catch(e) {} }
+    state.logPage++;
+    if (!c._scrollSetup) {
+      c._scrollSetup = true;
+      c.addEventListener('scroll', () => { if (c.scrollHeight - c.scrollTop - c.clientHeight < 60) loadLogs(false); });
+    }
+  } catch(e) {
+    if (reset) c.innerHTML = '<div class="empty" style="color:var(--danger);">日志加载异常</div>';
+    showToast('日志加载失败', true);
+  } finally { state.logLoading = false; }
+}
+
+async function clearLogs() {
+  const ok = await showConfirm('清空日志', '确定要清除所有操作日志吗？');
+  if (!ok) return;
+  try { await adminFetch('clearLogs'); await loadLogs(true); showToast('日志已清空'); }
+  catch(e) { showToast(`清空失败: ${e.message}`, true); }
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Questions
+// ═══════════════════════════════════════════
+function renderQuestionBatchFilter(selectedBatchId = null) {
+  const select = $('questionBatchFilter');
+  if (!select) return;
+  const desired = selectedBatchId === null ? (select.value || state.questionBatchFilter || '') : String(selectedBatchId || '');
+  select.innerHTML = '<option value="">全部题库</option>';
+  for (const batch of state.questionBatches) {
+    const option = document.createElement('option');
+    option.value = String(batch.batchId || '');
+    option.textContent = `${batch.category || '未命名题库'}（${Number(batch.count || 0)}题）`;
+    select.appendChild(option);
+  }
+  const exists = desired === '' || state.questionBatches.some(item => String(item.batchId) === desired);
+  select.value = exists ? desired : '';
+  state.questionBatchFilter = select.value;
+}
+
+async function loadQuestionBatches({ selectedBatchId = null } = {}) {
+  const data = await adminFetch('listQuestionBatches');
+  state.questionBatches = Array.isArray(data.batches) ? data.batches : [];
+  renderQuestionBatchFilter(selectedBatchId);
+  return data;
+}
+
+async function initializeQuestionManagement() {
+  try {
+    await loadQuestionBatches();
+    state.questionPage = 1;
+    await loadQuestions();
+  } catch (e) { showToast(`题库加载失败: ${e.message}`, true); }
+}
+
+async function loadQuestions() {
+  try {
+    const kw = $('questionSearchKeyword')?.value.trim() || '';
+    const batchId = $('questionBatchFilter')?.value || '';
+    state.questionBatchFilter = batchId;
+    const params = { keyword: kw, page: state.questionPage, pageSize: QUESTION_PAGE_SIZE };
+    if (batchId) params.batchId = batchId;
+    const data = await adminFetch('searchSimpleQuestions', params);
+    state.questions = Array.isArray(data.data) ? data.data : [];
+    state.questionTotal = Number(data.total || 0);
+    renderQuestionList();
+  } catch(e) { showToast(`加载题目失败: ${e.message}`, true); }
+}
+
+function renderQuestionList() {
+  const container = $('questionSearchResult');
+  const pagDiv = $('questionPagination');
+  const totalPages = Math.max(1, Math.ceil((state.questionTotal || 0) / QUESTION_PAGE_SIZE));
+
+  if (!state.questions.length) {
+    container.innerHTML = '<div class="empty"><span class="empty-icon">📝</span>未找到题目<br><span style="font-size:.78rem;">可切换题库、调整关键词或新建题库</span></div>';
+    pagDiv.innerHTML = state.questionTotal ? `<div class="text-center text-muted" style="font-weight:500;">共 ${state.questionTotal} 条 · 第 ${state.questionPage} 页</div>` : '';
+    return;
+  }
+
+  const isDesktop = window.innerWidth >= 768;
+  if (isDesktop) {
+    let h = '<div class="table-wrap"><table><thead><tr><th>ID</th><th>所属题库</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
+    state.questions.forEach(q => {
+      const opts = Array.isArray(q.options) ? q.options.map(o => escapeHtml(o)).join(' | ') : '';
+      h += `<tr data-qid="${escapeHtml(q.id)}">
+        <td>${escapeHtml(q.id)}</td><td>${escapeHtml(q.category || '未分组')}</td><td style="max-width:300px;word-break:break-word;">${escapeHtml(q.text)}</td>
+        <td style="max-width:250px;word-break:break-word;">${opts}</td><td>${escapeHtml(q.answer)}</td>
+        <td class="act-group"><button class="btn btn-xs" data-action="editQ">修改</button><button class="btn btn-xs btn-danger" data-action="deleteQ">删除</button></td></tr>`;
+    });
+    h += '</tbody></table></div>';
+    container.innerHTML = h;
+  } else {
+    let h = '<div class="token-list">';
+    state.questions.forEach(q => {
+      const opts = Array.isArray(q.options) ? q.options.map(o => escapeHtml(o)).join(' | ') : '';
+      h += `<div class="token-card" data-qid="${escapeHtml(q.id)}">
+        <div style="font-size:.72rem;color:var(--text-muted);">ID: ${escapeHtml(q.id)}</div>
+        <span class="question-category-badge">${escapeHtml(q.category || '未分组')}</span>
+        <div style="font-weight:500;margin-top:4px;word-break:break-word;">${escapeHtml(q.text)}</div>
+        <div style="font-size:.78rem;color:var(--text-secondary);margin-top:4px;">${opts}</div>
+        <div style="font-size:.78rem;color:var(--success);margin-top:2px;">答案: ${escapeHtml(q.answer)}</div>
+        <div class="flex" style="margin-top:8px;gap:4px;"><button class="btn btn-xs" data-action="editQ">修改</button><button class="btn btn-xs btn-danger" data-action="deleteQ">删除</button></div></div>`;
+    });
+    h += '</div>';
+    container.innerHTML = h;
+  }
+
+  pagDiv.innerHTML = totalPages <= 1 ? `<div class="text-center text-muted text-sm">共 ${state.questionTotal} 条</div>` : `
+    <div class="flex" style="justify-content:center;gap:12px;">
+      <button class="btn btn-ghost btn-sm" id="qPrevPage" ${state.questionPage===1?'disabled':''}>上一页</button>
+      <span style="font-weight:500;color:var(--text-secondary);">${state.questionPage} / ${totalPages} · 共 ${state.questionTotal} 条</span>
+      <button class="btn btn-ghost btn-sm" id="qNextPage" ${state.questionPage===totalPages?'disabled':''}>下一页</button>
+    </div>`;
+  if (totalPages > 1) {
+    $('qPrevPage')?.addEventListener('click', async () => { if (state.questionPage > 1) { state.questionPage--; await loadQuestions(); } });
+    $('qNextPage')?.addEventListener('click', async () => { if (state.questionPage < totalPages) { state.questionPage++; await loadQuestions(); } });
+  }
+}
+
+// DOM 只保存题目 ID，编辑数据从内存读取，避免题干或选项破坏 HTML 属性。
+$('questionSearchResult').addEventListener('click', async e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const row = btn.closest('[data-qid]');
+  const id = String(row?.dataset.qid || '');
+  const question = state.questions.find(item => String(item.id) === id);
+  if (!question) { showToast('题目状态已变化，请刷新后重试', true); return; }
+  if (btn.dataset.action === 'editQ') {
+    state.editId = id;
+    $('editQuestionText').value = question.text || '';
+    $('editQuestionOptions').value = Array.isArray(question.options) ? question.options.join('\n') : '';
+    $('editQuestionAnswer').value = question.answer || '';
+    $('editQuestionModal').classList.add('show');
+  }
+  if (btn.dataset.action === 'deleteQ') {
+    const ok = await showConfirm('删除单题', `确定从“${question.category || '当前题库'}”删除题目 ID:${id} 吗？`);
+    if (!ok) return;
+    try { await adminFetch('deleteSimpleQuestion', { id }); showToast('题目已删除'); await loadQuestionBatches(); await loadQuestions(); }
+    catch(e) { showToast(`删除失败: ${e.message}`, true); }
+  }
+});
+
+async function saveEditQuestion() {
+  const text = $('editQuestionText').value.trim();
+  const ans = $('editQuestionAnswer').value.trim();
+  const optsRaw = $('editQuestionOptions').value;
+  if (!text) { showToast('题目不能为空', true); return; }
+  if (!ans) { showToast('答案不能为空', true); return; }
+  const optsArr = optsRaw.split('\n').map(s => s.trim()).filter(s => s);
+  if (!optsArr.length) { showToast('至少需要一个选项', true); return; }
+  try {
+    await adminFetch('updateSimpleQuestion', { id: state.editId, text, options: JSON.stringify(optsArr), answer: ans });
+    showToast('修改成功'); $('editQuestionModal').classList.remove('show'); state.editId = null;
+    await loadQuestions();
+  } catch(e) { showToast(`修改失败: ${e.message}`, true); }
+}
+
+async function clearAllQuestions() {
+  const ok = await showConfirm('清空全部题库', '此操作会删除所有独立题库及全部题目，不可恢复。确定继续吗？');
+  if (!ok) return;
+  try {
+    const r = await adminFetch('clearAllQuestions');
+    showToast(`已清空 ${r.deleted} 条题目`);
+    state.questionPage = 1;
+    state.questionBatchFilter = '';
+    await loadQuestionBatches({ selectedBatchId: '' });
+    await loadQuestions();
+  }
+  catch(e) { showToast(`清空失败: ${e.message}`, true); }
+}
+
+// ═══════════════════════════════════════════
+//  Independent question libraries
+// ═══════════════════════════════════════════
+function formatQuestionBatchTime(value) {
+  if (!value) return '未知时间';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+async function showQuestionStats() {
+  const modal = $('questionStatsModal');
+  modal.classList.add('show');
+  const body = $('questionStatsBody');
+  body.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>正在读取独立题库...</div>';
+  try {
+    const data = await loadQuestionBatches();
+    const batches = state.questionBatches;
+    const history = Array.isArray(data.history) ? data.history : [];
+    const latest = batches[0] || null;
+    const cards = batches.map(batch => `<div class="question-batch-card" data-batch-id="${escapeHtml(batch.batchId)}">
+      <div><div class="question-batch-title">${escapeHtml(batch.category || '未命名题库')}</div>
+        <div class="question-batch-meta"><span>${Number(batch.count || 0)} 道题</span><span>版本 ${Number(batch.revision || 1)}</span><span>更新 ${escapeHtml(formatQuestionBatchTime(batch.updatedAt || batch.createdAt))}</span></div></div>
+      <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qbatch-action="view">查看</button><button class="btn btn-primary btn-sm" data-qbatch-action="replace">整库替换</button><button class="btn btn-danger btn-sm" data-qbatch-action="delete">删除</button></div>
+    </div>`).join('');
+    const historyItems = history.slice(0, 8).map(item => {
+      const label = item.operation === 'replace' ? '替换' : item.operation === 'delete' ? '删除' : '新建';
+      return `<div class="stats-hist-item"><div class="stats-hist-time">${escapeHtml(formatQuestionBatchTime(item.time))}</div><div class="stats-hist-cat">${escapeHtml(item.category || '未命名题库')}</div><div class="stats-hist-cnt">${label} · ${Number(item.previousCount || 0)} → ${Number(item.count || 0)} 题</div></div>`;
+    }).join('');
+    body.innerHTML = `<div class="stats-grid2">
+      <div class="stat-card2"><div class="stat-card2-label">当前题目总数</div><div class="stat-card2-value">${Number(data.total || 0)}</div><div class="stat-card2-sub">答题接口可检索题目</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">独立题库</div><div class="stat-card2-value">${batches.length}</div><div class="stat-card2-sub">可分别替换或删除</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">最近更新</div><div class="stat-card2-value" style="font-size:.95rem;">${escapeHtml(latest?.category || '暂无')}</div><div class="stat-card2-sub">${escapeHtml(latest ? formatQuestionBatchTime(latest.updatedAt || latest.createdAt) : '暂无')}</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">变更记录</div><div class="stat-card2-value">${history.length}</div><div class="stat-card2-sub">最近保留的题库操作</div></div>
+    </div>
+    <div class="stats-sect2"><div class="stats-sect2-title">当前独立题库</div><div class="question-batch-list">${cards || '<div class="empty">暂无题库，请点击“新建题库”导入</div>'}</div></div>
+    <div class="stats-sect2"><div class="stats-sect2-title">最近变更</div><div class="stats-hist-list">${historyItems || '<div class="empty">暂无变更记录</div>'}</div></div>`;
+  } catch(e) { body.innerHTML = `<div class="empty" style="color:var(--danger);">获取题库列表失败：${escapeHtml(e.message||'未知错误')}</div>`; }
+}
+
+$('questionStatsBody').addEventListener('click', async e => {
+  const button = e.target.closest('[data-qbatch-action]');
+  if (!button) return;
+  const batchId = String(button.closest('[data-batch-id]')?.dataset.batchId || '');
+  const batch = state.questionBatches.find(item => String(item.batchId) === batchId);
+  if (!batch) { showToast('题库状态已变化，请刷新后重试', true); return; }
+  if (button.dataset.qbatchAction === 'view') {
+    $('questionStatsModal').classList.remove('show'); renderQuestionBatchFilter(batchId); state.questionPage = 1; await loadQuestions(); return;
+  }
+  if (button.dataset.qbatchAction === 'replace') {
+    $('questionStatsModal').classList.remove('show'); importExcel(batch); return;
+  }
+  if (button.dataset.qbatchAction === 'delete') {
+    const ok = await showConfirm('删除独立题库', `确定删除“${batch.category}”及其中 ${Number(batch.count || 0)} 道题吗？其他题库不受影响。`);
+    if (!ok) return;
+    button.disabled = true;
+    try {
+      const result = await adminFetch('deleteQuestionBatch', { batchId, confirm: true });
+      showToast(`已删除“${batch.category}”及 ${Number(result.deleted || 0)} 道题`);
+      const selected = $('questionBatchFilter')?.value === batchId ? '' : null;
+      await loadQuestionBatches({ selectedBatchId: selected }); state.questionPage = 1; await loadQuestions(); await showQuestionStats();
+    } catch (error) { showToast(`删除失败: ${error.message}`, true); button.disabled = false; }
+  }
+});
+
+// ═══════════════════════════════════════════
+//  Excel import preview + atomic commit
+// ═══════════════════════════════════════════
+function updateQuestionImportContext() {
+  const target = state.questionImportTarget;
+  const category = state.importCategory || '';
+  $('excelConfigTitle').textContent = target ? '整库替换' : '新建题库';
+  $('addCategoryBtn').textContent = category ? `题库名称：${category}` : '设置题库名称（必填）';
+  $('questionImportContext').innerHTML = target
+    ? `<strong>将替换：</strong>${escapeHtml(target.category || '')}<br>当前 ${Number(target.count || 0)} 道题。提交后会一次性用新文件替换该题库，其他题库不受影响。`
+    : '<strong>新建独立题库</strong><br>请输入唯一题库名称。导入完成后可单独查看、替换或删除。';
+}
+
+function showExcelConfigModal(rows, headers) {
+  state.excelData = rows; state.excelHeaders = headers; state.questionImportPreview = null;
+  $('questionImportValidation').className = 'hidden';
+  $('questionImportValidation').innerHTML = '';
+  $('confirmImportConfigBtn').textContent = '校验并预览';
+  $('confirmImportConfigBtn').disabled = false;
+  updateQuestionImportContext();
+  $('excelPreviewArea').innerHTML = `<div class="text-sm text-muted">已读取 ${rows.length} 行数据；正式提交前会检查空行、重复题目和答案冲突。</div>`;
+  ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => { $(id).innerHTML = ''; });
+  headers.forEach((h, i) => {
+    const opt = document.createElement('option'); opt.value = i; opt.textContent = `${h || '未命名列'} (列${i+1})`;
+    ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => $(id).appendChild(opt.cloneNode(true)));
+  });
+  const findHeader = patterns => headers.findIndex(value => patterns.some(pattern => pattern.test(String(value || '').trim())));
+  const questionIndex = findHeader([/题目/, /题干/, /^question$/i]);
+  const answerIndex = findHeader([/答案/, /正确选项/, /^answer$/i]);
+  const optionIndexes = headers.map((value, index) => ({ value: String(value || '').trim(), index }))
+    .filter(item => /选项|^[A-H]$/i.test(item.value)).map(item => item.index);
+  $('questionColSelect').value = questionIndex >= 0 ? questionIndex : 0;
+  $('answerColSelect').value = answerIndex >= 0 ? answerIndex : Math.min(1, headers.length - 1);
+  $('optionStartColSelect').value = optionIndexes.length ? Math.min(...optionIndexes) : 0;
+  $('optionEndColSelect').value = optionIndexes.length ? Math.max(...optionIndexes) : headers.length - 1;
+  updateExcelPreview();
+  $('excelConfigModal').classList.add('show');
+}
+
+function updateExcelPreview() {
+  const qi = parseInt($('questionColSelect').value), ai = parseInt($('answerColSelect').value);
+  const si = parseInt($('optionStartColSelect').value), ei = parseInt($('optionEndColSelect').value);
+  if (isNaN(qi)||isNaN(ai)||isNaN(si)||isNaN(ei)) return;
+  const rows = state.excelData.slice(0, 5);
+  let h = '<div style="font-weight:500;margin-bottom:8px;color:var(--text-secondary);">预览前 5 行</div><div class="table-wrap"><table style="min-width:300px;"><thead><tr><th>Excel 行</th><th>题目</th><th>选项</th><th>答案</th></tr></thead><tbody>';
+  rows.forEach((r, index) => {
+    const q = r[qi]||'', a = r[ai]||'';
+    const opts = []; for (let i = si; i <= ei; i++) { const o = r[i]; if (o && String(o).trim()) opts.push(String(o).trim()); }
+    h += `<tr><td>${index + 2}</td><td style="max-width:200px;">${escapeHtml(q)}</td><td style="max-width:200px;">${escapeHtml(opts.join(' | '))}</td><td>${escapeHtml(a)}</td></tr>`;
+  });
+  h += '</tbody></table></div>';
+  $('previewTable').innerHTML = h;
+  $('questionImportValidation').className = 'hidden';
+  state.questionImportPreview = null;
+}
+
+function renderQuestionImportPreview(preview) {
+  const box = $('questionImportValidation');
+  const errors = Array.isArray(preview.errors) ? preview.errors : [];
+  const conflicts = Array.isArray(preview.conflicts) ? preview.conflicts : [];
+  const warnings = Array.isArray(preview.warnings) ? preview.warnings : [];
+  const issues = [...errors, ...conflicts];
+  const issueHtml = issues.slice(0, 30).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '数据错误')}</li>`).join('');
+  const warningHtml = warnings.slice(0, 20).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '重复题目')}</li>`).join('');
+  box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
+  box.innerHTML = `<strong>${preview.ready ? '✅ 校验通过，可以提交' : '❌ 校验未通过，尚未写入题库'}</strong><br>
+    输入 ${Number(preview.inputCount || 0)} 行 · 有效 ${Number(preview.validCount || 0)} 行 · 错误 ${Number(preview.errorCount || 0)} · 冲突 ${Number(preview.conflictCount || 0)} · 提醒 ${Number(preview.warningCount || 0)}
+    ${issueHtml ? `<ul class="question-import-issues">${issueHtml}</ul>` : ''}
+    ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}`;
+}
+
+async function confirmImportFromExcel() {
+  const button = $('confirmImportConfigBtn');
+  const qi = parseInt($('questionColSelect').value), ai = parseInt($('answerColSelect').value);
+  const si = parseInt($('optionStartColSelect').value), ei = parseInt($('optionEndColSelect').value);
+  if (isNaN(qi)||isNaN(ai)||isNaN(si)||isNaN(ei)||si>ei) { showToast('请正确选择列映射', true); return; }
+  if (!state.importCategory.trim()) { showToast('请先设置题库名称', true); return; }
+  const questions = state.excelData.map((row, index) => {
+    const options = [];
+    for (let column = si; column <= ei; column++) {
+      const value = row[column];
+      if (value !== null && value !== undefined && String(value).trim()) options.push(String(value).trim());
+    }
+    return {
+      sourceRow: index + 2,
+      text: row[qi] === null || row[qi] === undefined ? '' : String(row[qi]).trim(),
+      options,
+      answer: row[ai] === null || row[ai] === undefined ? '' : String(row[ai]).trim(),
+    };
+  });
+  if (!questions.length) { showToast('Excel 中没有数据行', true); return; }
+  button.disabled = true;
+  button.textContent = '正在校验...';
+  try {
+    const params = { questions: JSON.stringify(questions), category: state.importCategory.trim() };
+    if (state.questionImportTarget?.batchId) params.batchId = state.questionImportTarget.batchId;
+    const response = await adminFetch('previewQuestionImport', params);
+    const preview = response.preview || {};
+    state.questionImportPreview = preview;
+    renderQuestionImportPreview(preview);
+    if (!preview.ready || !preview.previewId) { showToast('校验未通过，题库未发生变化', true); return; }
+
+    const actionText = preview.mode === 'replace'
+      ? `将把“${preview.category}”从 ${Number(preview.oldCount || 0)} 道题整库替换为 ${Number(preview.validCount || 0)} 道题。其他题库不受影响。`
+      : `将新建题库“${preview.category}”，共 ${Number(preview.validCount || 0)} 道题。`;
+    const warningText = Number(preview.warningCount || 0) > 0 ? `\n另有 ${Number(preview.warningCount)} 条跨题库重复提醒，答案一致，允许导入。` : '';
+    const confirmed = await showConfirm(preview.mode === 'replace' ? '确认整库替换' : '确认新建题库', `${actionText}${warningText}\n提交采用原子操作，不会出现只替换一半的状态。`);
+    if (!confirmed) return;
+
+    $('excelConfigModal').classList.remove('show');
+    const progress = $('importProgress');
+    progress.classList.remove('hidden');
+    $('importProgressFill').style.width = '65%';
+    $('importProgressText').textContent = preview.mode === 'replace' ? '正在原子替换题库...' : '正在创建题库...';
+    const result = await adminFetch('commitQuestionImport', { previewId: preview.previewId, confirm: true });
+    $('importProgressFill').style.width = '100%';
+    $('importProgressText').textContent = `${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题`;
+    await loadQuestionBatches({ selectedBatchId: result.batch?.batchId || '' });
+    state.questionPage = 1;
+    await loadQuestions();
+    showToast(`${preview.mode === 'replace' ? '整库替换' : '题库创建'}成功：${Number(result.added || 0)} 道题`);
+    state.importCategory = '';
+    state.questionImportTarget = null;
+    state.questionImportPreview = null;
+    setTimeout(() => progress.classList.add('hidden'), 1800);
+  } catch(e) {
+    $('excelConfigModal').classList.add('show');
+    const box = $('questionImportValidation');
+    box.className = 'question-import-result error';
+    box.innerHTML = `<strong>❌ 操作失败，题库未改变</strong><br>${escapeHtml(e.message)}`;
+    showToast(`导入失败: ${e.message}`, true);
+    $('importProgress').classList.add('hidden');
+  } finally {
+    button.disabled = false;
+    button.textContent = '校验并预览';
+  }
+}
+
+function importExcel(targetBatch = null) {
+  state.questionImportTarget = targetBatch && targetBatch.batchId ? { ...targetBatch } : null;
+  state.importCategory = state.questionImportTarget?.category || '';
+  state.questionImportPreview = null;
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.xlsx, .xls, .csv';
+  input.onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+      if (!rows||rows.length<2) { showToast('Excel 至少需要表头和一行数据', true); return; }
+      const headers = rows[0].map(h => String(h||'').trim());
+      const dataRows = rows.slice(1).filter(row => row.some(cell => cell !== null && cell !== undefined && String(cell).trim()));
+      if (!dataRows.length) { showToast('Excel 没有可读取的数据行', true); return; }
+      showExcelConfigModal(dataRows, headers);
+    } catch (error) { showToast(`读取 Excel 失败: ${error.message || '文件格式不正确'}`, true); }
+  };
+  input.click();
+}
+
+// ═══════════════════════════════════════════
+//  Admin: Course automation
+// ═══════════════════════════════════════════
+const COURSE_WORKFLOW_LABELS = Object.freeze({ video: '视频学习', evaluation: '课程评价', exam: '内置考试' });
+
+function courseWorkflowLabel(workflow) {
+  return COURSE_WORKFLOW_LABELS[workflow] || workflow || '未知步骤';
+}
+
+function courseAttr(value) {
+  return escapeHtml(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function courseHasWorkflow(course, workflow) {
+  const values = [
+    ...(Array.isArray(course?.workflowCandidates) ? course.workflowCandidates : []),
+    ...(Array.isArray(course?.workflows) ? course.workflows : []),
+    course?.activeWorkflow,
+  ].filter(Boolean);
+  return values.includes(workflow);
+}
+
+function courseNextWorkflow(course) {
+  if (!course || course.mapOnly === true || course.eligibility?.allowed !== true) return null;
+  const candidates = new Set([
+    ...(Array.isArray(course.workflowCandidates) ? course.workflowCandidates : []),
+    ...(Array.isArray(course.workflows) ? course.workflows : []),
+    course.activeWorkflow,
+  ].filter(Boolean));
+  // 工作流不明确时不猜测、不执行；课程状态仍然照实展示。
+  if (!candidates.size) return null;
+  if (candidates.has('video') && Number(course.studyRate || 0) < 100) return 'video';
+  if (candidates.has('evaluation') && course.hasFinishEvaluate !== true) return 'evaluation';
+  if (candidates.has('exam') && course.examPassed !== true) return 'exam';
+  return null;
+}
+
+function courseHasPending(course) {
+  return Boolean(courseNextWorkflow(course));
+}
+
+function courseBatchWorkflow(course) {
+  if (!course || course.mapOnly === true || course.eligibility?.allowed !== true || course.statusSource === 'unverified') return null;
+  if (courseHasWorkflow(course, 'video') && Number(course.studyRate || 0) < 100) return 'video';
+  if (courseHasWorkflow(course, 'evaluation') && course.hasFinishEvaluate !== true) return 'evaluation';
+  return null;
+}
+
+function courseBatchable(course) {
+  return Boolean(courseBatchWorkflow(course));
+}
+
+const COURSE_BATCH_STATUS_LABELS = Object.freeze({
+  running: '执行中',
+  paused: '已暂停',
+  stopped: '遇到问题，已停止',
+  completed: '已完成',
+  completed_with_errors: '已完成，但有失败课程',
+  cancelled: '已取消',
+});
+
+const COURSE_BATCH_ITEM_LABELS = Object.freeze({
+  pending: '等待',
+  running: '执行中',
+  completed: '完成',
+  failed: '失败',
+  cancelled: '取消',
+});
+
+function courseBatchTerminal(batch) {
+  return ['completed', 'completed_with_errors', 'cancelled'].includes(batch?.status);
+}
+
+function courseBatchActive() {
+  return Boolean(state.courseBatch && !courseBatchTerminal(state.courseBatch));
+}
+
+function renderCourseBatchControls() {
+  const allBtn = $('courseBatchAllBtn');
+  const selectedBtn = $('courseBatchSelectedBtn');
+  if (!allBtn || !selectedBtn) return;
+  const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
+  for (const courseId of [...state.courseSelected]) {
+    if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+  }
+  const active = courseBatchActive();
+  const unavailable = !state.courseAuthenticated || !state.courseApiCompatible || state.courseBusy || state.courseBatchPumping || active;
+  allBtn.disabled = unavailable || selectableIds.size === 0;
+  selectedBtn.disabled = unavailable || state.courseSelected.size === 0;
+  selectedBtn.textContent = `完成选中（${state.courseSelected.size}）`;
+  const title = !state.courseApiCompatible
+    ? state.courseApiMessage
+    : active
+      ? '已有未结束的一键完成任务，请先继续或取消'
+      : '处理期限内待完成的视频和课程评价';
+  allBtn.title = title;
+  selectedBtn.title = !state.courseApiCompatible ? state.courseApiMessage : active ? '已有未结束的一键完成任务，请先继续或取消' : '只处理勾选课程的视频和课程评价';
+}
+
+function renderCourseBatchPanel() {
+  const panel = $('courseBatchPanel');
+  if (!panel) return;
+  const batch = state.courseBatch;
+  if (!batch) {
+    panel.classList.add('hidden');
+    panel.innerHTML = '';
+    return;
+  }
+
+  const items = Array.isArray(batch.items) ? batch.items : [];
+  const total = Number(batch.totalCourses ?? items.length ?? 0);
+  const completed = Number(batch.completedCourses ?? items.filter(item => item.status === 'completed').length);
+  const failed = Number(batch.failedCourses ?? items.filter(item => item.status === 'failed').length);
+  const cancelled = Number(batch.cancelledCourses ?? items.filter(item => item.status === 'cancelled').length);
+  const settled = completed + failed + cancelled;
+  const percent = total > 0 ? Math.min(100, Math.round(settled * 100 / total)) : 100;
+  const examSkipped = items.filter(item => item.examSkipped === true).length
+    + (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.examSkipped === true).length : 0);
+  const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
+  const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
+  const waitingHint = state.courseBatchPauseRequested
+    ? ' · 正在等待当前步骤结束后暂停'
+    : state.courseBatchCancelRequested
+      ? ' · 正在等待当前步骤结束后取消'
+      : '';
+
+  let actions = '';
+  if (batch.status === 'running') {
+    actions = state.courseBatchPumping
+      ? `<button class="btn btn-ghost btn-sm" data-course-batch-action="pause"${state.courseBatchPauseRequested ? ' disabled' : ''}>${state.courseBatchPauseRequested ? '暂停中…' : '暂停'}</button>`
+      : '<button class="btn btn-primary btn-sm" data-course-batch-action="resume">继续执行</button>';
+    actions += `<button class="btn btn-ghost btn-sm" data-course-batch-action="cancel"${state.courseBatchCancelRequested ? ' disabled' : ''}>取消任务</button>`;
+  } else if (['paused', 'stopped'].includes(batch.status)) {
+    actions = '<button class="btn btn-primary btn-sm" data-course-batch-action="resume">继续剩余课程</button><button class="btn btn-ghost btn-sm" data-course-batch-action="cancel">取消任务</button>';
+  } else {
+    actions = '<button class="btn btn-ghost btn-sm" data-course-batch-action="refresh">刷新课程状态</button>';
+  }
+
+  const itemHtml = items.map(item => {
+    const itemStatus = item.status || 'pending';
+    const stateClass = itemStatus === 'completed' ? 'done' : itemStatus === 'failed' ? 'failed' : itemStatus === 'running' ? 'running' : '';
+    const planned = (Array.isArray(item.plannedWorkflows) ? item.plannedWorkflows : []).map(courseWorkflowLabel).join(' → ');
+    const verifiedSteps = Array.isArray(item.steps) ? item.steps.filter(step => step.verified === true).length : 0;
+    return `<div class="course-batch-item">
+      <span class="course-batch-item-state ${stateClass}">${escapeHtml(COURSE_BATCH_ITEM_LABELS[itemStatus] || itemStatus)}</span>
+      <div class="course-batch-item-main"><strong>${escapeHtml(item.courseName || item.courseId || '未命名课程')}</strong><br>
+        <span>${planned ? `计划：${escapeHtml(planned)} · ` : ''}已验证 ${verifiedSteps} 步${item.examSkipped === true ? ' · 考试已跳过' : ''}${item.reason ? ` · ${escapeHtml(item.reason)}` : ''}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  panel.classList.remove('hidden');
+  panel.innerHTML = `<div class="course-batch-head">
+      <div><div class="course-batch-title">一键完成（视频与评价）</div><div class="course-batch-meta">完成 ${completed}/${total} · 失败 ${failed} · 取消 ${cancelled} · 平台已验证步骤 ${Number(batch.completedSteps || 0)} · 预览跳过 ${Number(batch.skippedCourses || 0)} · 步骤间隔约 ${stepDelay}ms</div></div>
+      <div class="course-batch-status">${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</div>
+    </div>
+    <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
+    <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
+    <div class="course-batch-actions">${actions}</div>
+    ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
+}
+
+function updateCourseBatchUi() {
+  renderCourseBatchControls();
+  renderCourseBatchPanel();
+}
+
+function courseStatusValue(label, value, kind = 'neutral') {
+  return `<div class="course-status-item"><span class="course-status-label">${escapeHtml(label)}</span><span class="course-status-value ${kind}">${escapeHtml(value)}</span></div>`;
+}
+
+function courseStatusData(course) {
+  const studyRate = Number(course?.studyRate || 0);
+  const video = studyRate >= 100
+    ? ['已完成', 'done']
+    : [`待完成（${Number.isFinite(studyRate) ? studyRate : 0}%）`, 'pending'];
+
+  const evaluationDeferred = studyRate < 100
+    && courseHasWorkflow(course, 'video')
+    && ['deferred', 'unavailable'].includes(course?.workflowDiscoveryStatus);
+  const evaluation = course?.hasFinishEvaluate === true
+    ? ['已完成', 'done']
+    : courseHasWorkflow(course, 'evaluation')
+      ? ['待完成', 'pending']
+      : evaluationDeferred
+        ? ['待视频完成后确认', 'pending']
+        : ['未要求/未返回', 'neutral'];
+
+  const hasExam = courseHasWorkflow(course, 'exam')
+    || course?.examPassed === true
+    || course?.lastExamScore !== null && course?.lastExamScore !== undefined;
+  const exam = !hasExam
+    ? ['未要求/未返回', 'neutral']
+    : course.examPassed === true
+      ? ['已完成', 'done']
+      : ['待完成', 'pending'];
+
+  const deadline = course?.eligibility?.allowed === true
+    ? ['期限内', 'done']
+    : course?.eligibility?.status === 'expired'
+      ? ['已过期', 'pending']
+      : ['期限未知', 'warning'];
+
+  const score = course?.getScore === null || course?.getScore === undefined || course?.getScore === ''
+    ? ['未返回', 'neutral']
+    : [String(course.getScore), 'neutral'];
+  return { video, evaluation, exam, deadline, score };
+}
+
+function courseCompleteText(course) {
+  const { video, evaluation, exam } = courseStatusData(course);
+  const required = [video, evaluation, exam].filter(item => item[1] !== 'neutral');
+  return required.length > 0 && required.every(item => item[1] === 'done') ? '已完成' : '待完成';
+}
+
+function courseGroupKey(group) {
+  return String(group?.groupKey || `single:${group?.groupName || ''}`);
+}
+
+function renderCourseCard(course) {
+  const status = courseStatusData(course);
+  const next = courseNextWorkflow(course);
+  const allowed = course?.eligibility?.allowed === true && course?.mapOnly !== true;
+  const courseId = courseAttr(course?.courseId || '');
+  const batchable = courseBatchable(course);
+  const selected = state.courseSelected.has(String(course?.courseId || ''));
+  const batchLocked = courseBatchActive() || state.courseBatchPumping;
+  const selectionHtml = batchable
+    ? `<label class="course-select"><input type="checkbox" data-course-select="${courseId}"${selected ? ' checked' : ''}${batchLocked ? ' disabled' : ''}>加入一键完成</label>`
+    : '';
+  const workflowAttr = courseAttr(next || 'auto');
+  const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
+  const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
+  let nextHtml = '';
+  let actionHtml = `<span class="text-muted text-sm">当前无需执行</span>`;
+
+  if (!allowed) {
+    nextHtml = `<div class="course-next-step blocked">${course?.mapOnly === true ? '学习地图额外条目：只读展示' : escapeHtml(course?.eligibility?.reason || '当前课程不可执行')}</div>`;
+    actionHtml = '<span class="text-muted text-sm">仅查看，不执行写入</span>';
+  } else if (next) {
+    nextHtml = `<div class="course-next-step">下一步：<strong>${escapeHtml(courseWorkflowLabel(next))}</strong> · 每次只执行这一项，执行后可再次平台复核</div>`;
+    actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}">预览下一步</button>
+      <button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="${workflowAttr}">执行下一步</button>`;
+  } else {
+    nextHtml = '<div class="course-next-step">当前已没有可识别的待执行步骤，以下状态仅供平台复核。</div>';
+  }
+
+  return `<article class="course-card" data-course-id="${courseId}">
+    <div class="course-card-top">
+      <div style="min-width:0;flex:1;">${selectionHtml}<div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div><div class="course-card-id">${escapeHtml(course?.courseId || '')}</div></div>
+      <div class="course-card-score">得分：${escapeHtml(status.score[0])}</div>
+    </div>
+    <div class="course-status-grid">
+      ${courseStatusValue('视频学习', status.video[0], status.video[1])}
+      ${courseStatusValue('课程评估', status.evaluation[0], status.evaluation[1])}
+      ${courseStatusValue('课程期限', status.deadline[0], status.deadline[1])}
+      ${courseStatusValue('课程考试', status.exam[0], status.exam[1])}
+    </div>
+    <div class="course-card-meta"><span>${escapeHtml(platformState)}</span><span>·</span><span>${escapeHtml(source)}</span>${course?.planEndTime ? `<span>· 截止 ${escapeHtml(course.planEndTime)}</span>` : ''}</div>
+    ${nextHtml}
+    <div class="course-card-actions">
+      ${actionHtml}
+      <button class="btn btn-xs" data-course-action="inspect" data-course-id="${courseId}">平台复核</button>
+      <button class="btn btn-xs" data-course-action="verify" data-course-id="${courseId}" data-workflow="${workflowAttr}">验证状态</button>
+    </div>
+  </article>`;
+}
+
+function renderCourseList() {
+  const container = $('courseListContainer');
+  if (!container) return;
+  if (!state.courseCourses.length) {
+    container.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">可勾选“显示过期课程”或点击刷新</span></div>';
+    return;
+  }
+  const html = state.courseGroups.map(group => {
+    const key = courseGroupKey(group);
+    const collapsed = state.courseCollapsed.has(key);
+    const children = Array.isArray(group.courses) ? group.courses : [];
+    const complete = Number(group.completedCount || 0);
+    const groupSource = group.groupSource === 'learning-map' ? '学习地图真实分组' : group.groupSource === 'platform' ? '平台课程组' : '单门课程';
+    return `<section class="course-group" data-course-group-key="${courseAttr(key)}">
+      <button class="course-group-header" type="button" data-course-group-toggle="${courseAttr(key)}" aria-expanded="${collapsed ? 'false' : 'true'}">
+        <span class="course-group-chevron">${collapsed ? '▸' : '▾'}</span>
+        <span class="course-group-title">${escapeHtml(group.groupName || '未命名课程组')}</span>
+        <span class="course-group-meta">${children.length} 门 · 平台完成 ${complete}/${children.length} · ${escapeHtml(groupSource)}</span>
+      </button>
+      <div class="course-group-body${collapsed ? ' collapsed' : ''}">${children.map(renderCourseCard).join('')}</div>
+    </section>`;
+  }).join('');
+  container.innerHTML = html;
+}
+
+function renderCourseSummary() {
+  const el = $('courseSummary');
+  if (!el) return;
+  const total = state.courseCourses.length;
+  const pending = state.courseCourses.filter(courseHasPending).length;
+  const expired = state.courseCourses.filter(course => course?.eligibility?.status === 'expired').length;
+  const platformCompleted = state.courseGroups.reduce((sum, group) => sum + Number(group.completedCount || 0), 0);
+  const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
+  el.innerHTML = `<span class="course-summary-item"><strong>${total}</strong> 门课程</span>
+    <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
+    <span class="course-summary-item danger"><strong>${pending}</strong> 门待完成</span>
+    <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
+    <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>`;
+}
+
+function renderCourseSessionState() {
+  const badge = $('courseAuthBadge');
+  const sessionBadge = $('courseSessionBadge');
+  const apiBadge = $('courseApiBadge');
+  const message = $('courseSessionMessage');
+  const challengePanel = $('courseChallengePanel');
+  if (!badge || !sessionBadge || !apiBadge || !message || !challengePanel) return;
+
+  sessionBadge.textContent = `会话 ${state.courseSessionId.slice(0, 12)}…`;
+  const sessionStatus = state.courseSessionStatus || '';
+  badge.className = 'course-badge ' + (state.courseAuthenticated ? 'online' : state.courseChallenge ? 'challenge' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : 'offline');
+  badge.textContent = state.courseAuthenticated ? '已连接' : state.courseChallenge ? '待验证' : sessionStatus === 'expired' ? '已失效' : sessionStatus === 'failed' ? '登录失败' : '未连接';
+  apiBadge.className = 'course-badge ' + (state.courseApiCompatible ? 'online' : state.courseApi ? 'error' : 'offline');
+  apiBadge.textContent = state.courseApiCompatible ? `接口 v${state.courseApi.protocolVersion}` : state.courseApi ? '接口不兼容' : '接口待检测';
+  apiBadge.title = state.courseApiMessage;
+  message.className = 'course-session-message ' + (state.courseAuthenticated ? 'success' : state.courseChallenge ? '' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : '');
+  message.textContent = state.courseSessionMessage || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '请先输入网课账号和密码登录。');
+
+  if (!state.courseChallenge) {
+    challengePanel.classList.add('hidden');
+    return;
+  }
+  const challenge = state.courseChallenge;
+  challengePanel.classList.remove('hidden');
+  const type = challenge.type || 'manual';
+  $('courseChallengeTitle').textContent = type === 'continueLogin' ? '平台要求确认继续登录' : type === 'sms' ? '平台要求短信验证码' : '平台要求验证码';
+  $('courseChallengeMessage').textContent = challenge.message || '请完成平台验证后继续。';
+  const image = $('courseCaptchaImage');
+  if (challenge.image) { image.src = challenge.image; image.classList.remove('hidden'); }
+  else { image.removeAttribute('src'); image.classList.add('hidden'); }
+  $('courseChallengeCode').classList.toggle('hidden', type === 'continueLogin');
+  $('courseChallengePhone').classList.toggle('hidden', type !== 'sms');
+  $('courseSendSmsBtn').classList.toggle('hidden', type !== 'sms');
+  $('courseChallengeBtn').textContent = type === 'continueLogin' ? '确认继续登录' : '提交验证';
+}
+
+function setCourseSessionResult(data) {
+  state.courseAuthenticated = data?.loggedIn === true || data?.status === 'authenticated';
+  state.courseSessionStatus = data?.status || (state.courseAuthenticated ? 'authenticated' : 'failed');
+  state.courseChallenge = data?.challenge || null;
+  state.courseSessionMessage = data?.message || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '尚未连接网课会话。');
+  renderCourseSessionState();
+  if (!state.courseAuthenticated) $('courseListPanel').classList.add('hidden');
+}
+
+async function loadCourseStatus() {
+  if (!state.isAdmin) return;
+  const btn = $('courseStatusBtn');
+  const orig = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = '读取中...'; }
+  try {
+    const data = await courseFetch('status');
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) { await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
+  } catch (e) {
+    state.courseSessionMessage = e.message || '网课会话状态读取失败';
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; }
+    renderCourseSessionState();
+    showToast(`网课状态读取失败：${e.message}`, true);
+  } finally { if (btn) { btn.disabled = false; btn.textContent = orig; } }
+}
+
+async function loginCourse() {
+  const username = $('courseUsername').value.trim();
+  const password = $('coursePassword').value;
+  if (!username || !password) { showToast('请输入网课账号和密码', true); return; }
+  const btn = $('courseLoginBtn'); const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '登录中...';
+  try {
+    const data = await courseFetch('login', { courseUsername: username, coursePassword: password });
+    // 密码只在本次请求中使用；挑战期间由服务端加密暂存。
+    $('coursePassword').value = '';
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) { showToast('网课登录成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
+    else if (state.courseChallenge) showToast('需要完成网课登录验证');
+  } catch (e) {
+    $('coursePassword').value = '';
+    state.courseSessionMessage = e.message || '网课登录失败';
+    renderCourseSessionState();
+    showToast(`网课登录失败：${e.message}`, true);
+  } finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function submitCourseChallenge(sendOnly = false) {
+  const challenge = state.courseChallenge;
+  if (!challenge?.id) { showToast('当前没有待处理的登录验证', true); return; }
+  const btn = sendOnly ? $('courseSendSmsBtn') : $('courseChallengeBtn');
+  const orig = btn.textContent; btn.disabled = true; btn.textContent = sendOnly ? '发送中...' : '验证中...';
+  try {
+    const data = await courseFetch('challenge', {
+      challengeId: challenge.id,
+      challengeAction: sendOnly ? 'sendCode' : undefined,
+      code: sendOnly ? undefined : $('courseChallengeCode').value.trim(),
+      phone: $('courseChallengePhone').value.trim(),
+    });
+    $('courseChallengeCode').value = '';
+    setCourseSessionResult(data);
+    if (state.courseAuthenticated) { showToast('网课登录验证成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
+    else showToast('验证状态已更新');
+  } catch (e) {
+    state.courseSessionMessage = e.message || '网课登录验证失败';
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseChallenge = null; }
+    renderCourseSessionState();
+    showToast(`验证失败：${e.message}`, true);
+  } finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function logoutCourse() {
+  const ok = await showConfirm('退出网课会话', '确定清除当前浏览器对应的网课会话吗？');
+  if (!ok) return;
+  const btn = $('courseLogoutBtn'); const orig = btn.textContent; btn.disabled = true; btn.textContent = '退出中...';
+  try {
+    const data = await courseFetch('logout');
+    state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
+    state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false;
+    setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
+    updateCourseBatchUi();
+    showToast('网课会话已清除');
+  } catch (e) { showToast(`退出失败：${e.message}`, true); }
+  finally { btn.disabled = false; btn.textContent = orig; }
+}
+
+async function loadCourseList({ forceRefresh = false } = {}) {
+  if (!state.courseAuthenticated) { $('courseListPanel').classList.add('hidden'); updateCourseBatchUi(); return; }
+  if (state.courseLoading) return;
+  state.courseLoading = true;
+  const container = $('courseListContainer');
+  const btn = $('courseRefreshBtn'); const orig = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = '读取中...'; }
+  if (container) container.innerHTML = '<div class="empty">正在读取平台课程与学习地图…</div>';
+  $('courseListPanel').classList.remove('hidden');
+  try {
+    const data = await courseFetch('list', {
+      includeExpired: $('courseIncludeExpired').checked,
+      pendingOnly: $('coursePendingOnly').checked,
+      includeMapOnly: $('courseIncludeMapOnly').checked,
+      forceRefresh,
+    });
+    state.courseCourses = Array.isArray(data.courses) ? data.courses : [];
+    state.courseGroups = Array.isArray(data.groups) ? data.groups : [];
+    if (!state.courseGroups.length) {
+      state.courseGroups = state.courseCourses.map(course => ({
+        groupKey: `single:${course.courseId}`,
+        groupName: course.courseName,
+        groupSource: 'single',
+        courses: [course],
+        count: 1,
+        completedCount: courseCompleteText(course) === '已完成' ? 1 : 0,
+      }));
+    }
+    state.courseById = new Map(state.courseCourses.map(course => [String(course.courseId), course]));
+    const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
+    for (const courseId of [...state.courseSelected]) {
+      if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+    }
+    if (!state.courseGroupsInitialized) {
+      state.courseGroups.filter(group => group.collapsible === true || Number(group.count || group.courses?.length || 0) > 1).forEach(group => state.courseCollapsed.add(courseGroupKey(group)));
+      state.courseGroupsInitialized = true;
+    }
+    renderCourseSummary(); renderCourseList(); updateCourseBatchUi();
+  } catch (e) {
+    if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; renderCourseSessionState(); $('courseListPanel').classList.add('hidden'); }
+    if (container) container.innerHTML = `<div class="empty" style="color:var(--danger);">课程读取失败：${escapeHtml(e.message)}</div>`;
+    showToast(`课程读取失败：${e.message}`, true);
+  } finally { state.courseLoading = false; if (btn) { btn.disabled = false; btn.textContent = orig; } renderCourseBatchControls(); }
+}
+
+function mergeCourseState(course) {
+  const courseId = String(course?.courseId || '');
+  if (!courseId) return;
+  let found = false;
+  state.courseCourses = state.courseCourses.map(item => {
+    if (String(item?.courseId || '') !== courseId) return item;
+    found = true;
+    return course;
+  });
+  if (!found) state.courseCourses.push(course);
+  state.courseGroups = state.courseGroups.map(group => {
+    const courses = (Array.isArray(group.courses) ? group.courses : []).map(item => String(item?.courseId || '') === courseId ? course : item);
+    return {
+      ...group,
+      courses,
+      completedCount: courses.filter(item => item?.courseFinished === true || item?.platformCompleted === true).length,
+    };
+  });
+  state.courseById.set(courseId, course);
+  if (!courseBatchable(course)) state.courseSelected.delete(courseId);
+  renderCourseSummary();
+  renderCourseList();
+  updateCourseBatchUi();
+}
+
+function courseResultJson(value) {
+  try {
+    return JSON.stringify(value, (key, item) => {
+      if (/^(password|coursePassword|pending|cookies|cookie|hyperEspCode|image)$/i.test(key)) return '[已隐藏]';
+      return item;
+    }, 2);
+  } catch (_) { return ''; }
+}
+
+function showCourseOutput(title, detail, tone = 'success', raw = null) {
+  const output = $('courseOutput');
+  if (!output) return;
+  const json = raw ? courseResultJson(raw) : '';
+  output.innerHTML = `<div class="course-output-card ${tone}"><div class="course-output-title">${escapeHtml(title)}</div><div class="course-output-detail">${escapeHtml(detail)}</div>${json ? `<details><summary>查看返回摘要</summary><pre>${escapeHtml(json)}</pre></details>` : ''}</div>`;
+  output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function loadCourseBatchStatus({ silent = false } = {}) {
+  if (!state.courseAuthenticated) {
+    state.courseBatch = null;
+    updateCourseBatchUi();
+    return null;
+  }
+  try {
+    const data = await courseFetch('batchStatus');
+    state.courseBatch = data.batch || null;
+    updateCourseBatchUi();
+    return state.courseBatch;
+  } catch (e) {
+    if (!silent) showToast(`一键完成状态读取失败：${e.message}`, true);
+    return null;
+  }
+}
+
+function courseBatchPreviewMessage(preview) {
+  const items = Array.isArray(preview?.items) ? preview.items : [];
+  const skipped = Array.isArray(preview?.skipped) ? preview.skipped : [];
+  const names = items.slice(0, 8).map((item, index) => `${index + 1}. ${item.courseName || item.courseId}`).join('\n');
+  const extra = items.length > 8 ? `\n……另有 ${items.length - 8} 门` : '';
+  const examSkipped = [...items, ...skipped].filter(item => item.examSkipped === true).length;
+  return `平台最新预览：可执行 ${items.length} 门，跳过 ${skipped.length} 门。\n\n只会依次完成视频学习和课程评价；不会进入或提交考试。${examSkipped ? `\n其中 ${examSkipped} 门涉及考试，考试部分将跳过。` : ''}\n任一步骤完成后都会复核平台状态；出现异常会自动停止。\n\n${names}${extra}`;
+}
+
+async function startCourseBatch(mode = 'all') {
+  if (state.courseBusy || state.courseBatchPumping) return;
+  if (!state.courseApiCompatible) {
+    showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
+    return;
+  }
+  if (courseBatchActive()) {
+    showToast('已有未结束的一键完成任务，请先继续或取消', true);
+    return;
+  }
+  const selectedCourseIds = mode === 'selected' ? [...state.courseSelected] : [];
+  if (mode === 'selected' && selectedCourseIds.length === 0) {
+    showToast('请先勾选至少一门课程', true);
+    return;
+  }
+
+  state.courseBusy = true;
+  renderCourseBatchControls();
+  try {
+    showCourseOutput('正在生成一键完成预览', '服务器正在重新读取平台课程状态，本步骤不会产生写入。', 'warning');
+    const previewResult = await courseFetch('batchPreview', { batchMode: mode, courseIds: selectedCourseIds });
+    const preview = previewResult.preview || {};
+    if (Number(preview.executableCount || 0) === 0) {
+      const skipped = Array.isArray(preview.skipped) ? preview.skipped : [];
+      const reasons = skipped.slice(0, 10).map(item => `${item.courseName || item.courseId}：${item.reason || '不可执行'}`).join('\n');
+      showCourseOutput('当前没有可一键完成的课程', reasons || '平台未返回待完成的视频或课程评价。', 'warning', previewResult);
+      return;
+    }
+    showCourseOutput('一键完成预览已生成', courseBatchPreviewMessage(preview), 'warning', previewResult);
+    const confirmed = await showConfirm('确认一键完成', courseBatchPreviewMessage(preview));
+    if (!confirmed) {
+      showToast('已取消，本次预览没有产生写入');
+      return;
+    }
+
+    const created = await courseFetch('batchCreate', { previewId: preview.previewId, confirm: true });
+    state.courseBatch = created.batch || null;
+    state.courseSelected.clear();
+    state.courseBatchPauseRequested = false;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    showCourseOutput('一键完成任务已创建', '开始逐门执行。每次只提交一个已确认的步骤，并在提交后复核平台状态。', 'warning', created);
+    await pumpCourseBatch();
+  } catch (e) {
+    showCourseOutput('一键完成启动失败', e.message, 'error');
+    showToast(`一键完成启动失败：${e.message}`, true);
+    await loadCourseBatchStatus({ silent: true });
+  } finally {
+    if (!state.courseBatchPumping) state.courseBusy = false;
+    renderCourseList();
+    updateCourseBatchUi();
+  }
+}
+
+function courseBatchDelayAfterStep(result, elapsedMs) {
+  const base = Math.max(500, Math.min(5000, Math.round(Number(state.courseBatchDelayMs) || 650)));
+  let delay = base;
+  // 平台刚完成视频后通常还需要一点时间刷新评价入口，给同一门课留出更长的只读状态同步时间。
+  if (result?.processed?.nextWorkflow === 'evaluation') delay = Math.max(delay, 1100);
+  // 请求过快时增加少量间隔；请求本身较慢时也不立即发起下一次，避免连续撞击上游。
+  if (elapsedMs < 1200) delay += 150;
+  else if (elapsedMs > 8000) delay += 300;
+  return Math.min(delay, 5000);
+}
+
+async function pumpCourseBatch() {
+  if (state.courseBatchPumping || !state.courseBatch || courseBatchTerminal(state.courseBatch)) return;
+  if (state.courseBatch.status !== 'running') return;
+  state.courseBatchPumping = true;
+  state.courseBusy = true;
+  state.courseBatchPauseRequested = false;
+  state.courseBatchCancelRequested = false;
+  state.courseBatchCurrentDelayMs = state.courseBatchDelayMs;
+  renderCourseList();
+  updateCourseBatchUi();
+  let processedSteps = 0;
+
+  try {
+    while (state.courseBatch?.status === 'running' && processedSteps < 500) {
+      if (state.courseBatchCancelRequested) {
+        const cancelled = await courseFetch('batchCancel', { batchId: state.courseBatch.batchId, confirm: true });
+        state.courseBatch = cancelled.batch || state.courseBatch;
+        break;
+      }
+      if (state.courseBatchPauseRequested) {
+        const paused = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+        state.courseBatch = paused.batch || state.courseBatch;
+        break;
+      }
+
+      const stepStartedAt = Date.now();
+      const result = await courseFetch('batchStep', { batchId: state.courseBatch.batchId });
+      state.courseBatch = result.batch || state.courseBatch;
+      if (result.course) mergeCourseState(result.course);
+      else updateCourseBatchUi();
+      processedSteps += result.processed ? 1 : 0;
+
+      if (state.courseBatch?.status !== 'running' || !result.processed) break;
+      state.courseBatchCurrentDelayMs = courseBatchDelayAfterStep(result, Date.now() - stepStartedAt);
+      updateCourseBatchUi();
+      await new Promise(resolve => setTimeout(resolve, state.courseBatchCurrentDelayMs));
+    }
+
+    if (processedSteps >= 500 && state.courseBatch?.status === 'running') {
+      const paused = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+      state.courseBatch = paused.batch || state.courseBatch;
+      showToast('为避免单次页面持续运行过久，任务已自动暂停', true);
+    }
+
+    const batch = state.courseBatch;
+    if (batch?.status === 'completed') {
+      showCourseOutput('一键完成已结束', `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门；所有写入步骤均已通过平台复核。考试没有执行。`, 'success', { batch });
+      showToast('一键完成任务已结束');
+    } else if (batch?.status === 'completed_with_errors') {
+      showCourseOutput('一键完成已结束，但存在失败课程', batch.reason || '请查看任务详情并人工复核。', 'warning', { batch });
+      showToast('任务结束，但有失败课程', true);
+    } else if (batch?.status === 'stopped') {
+      showCourseOutput('一键完成已停止', `${batch.reason || '平台复核未通过'}\n未开始的课程没有执行，可修复后点击“继续剩余课程”。`, 'error', { batch });
+      showToast('任务遇到问题，已停止', true);
+    } else if (batch?.status === 'paused') {
+      showCourseOutput('一键完成已暂停', '当前步骤已处理完毕，后续课程尚未执行。', 'warning', { batch });
+    } else if (batch?.status === 'cancelled') {
+      showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', { batch });
+    }
+  } catch (e) {
+    showCourseOutput('一键完成请求失败', `${e.message}\n浏览器已停止继续发送步骤，请读取任务状态后再决定是否继续。`, 'error');
+    showToast(`一键完成请求失败：${e.message}`, true);
+    await loadCourseBatchStatus({ silent: true });
+  } finally {
+    state.courseBatchPumping = false;
+    state.courseBusy = false;
+    state.courseBatchPauseRequested = false;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    if (state.courseAuthenticated) await loadCourseList({ forceRefresh: true });
+  }
+}
+
+async function pauseCourseBatch() {
+  if (!courseBatchActive() || state.courseBatch?.status !== 'running') return;
+  if (state.courseBatchPumping) {
+    state.courseBatchPauseRequested = true;
+    updateCourseBatchUi();
+    showToast('将在当前步骤完成后暂停');
+    return;
+  }
+  try {
+    const result = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+    state.courseBatch = result.batch || state.courseBatch;
+    updateCourseBatchUi();
+  } catch (e) { showToast(`暂停失败：${e.message}`, true); }
+}
+
+async function resumeCourseBatch() {
+  if (!state.courseBatch || courseBatchTerminal(state.courseBatch) || state.courseBatchPumping) return;
+  if (!state.courseApiCompatible) {
+    showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
+    return;
+  }
+  try {
+    if (['paused', 'stopped'].includes(state.courseBatch.status)) {
+      const result = await courseFetch('batchResume', { batchId: state.courseBatch.batchId });
+      state.courseBatch = result.batch || state.courseBatch;
+      updateCourseBatchUi();
+    }
+    if (state.courseBatch?.status === 'running') await pumpCourseBatch();
+  } catch (e) {
+    showCourseOutput('继续任务失败', e.message, 'error');
+    showToast(`继续任务失败：${e.message}`, true);
+  }
+}
+
+async function cancelCourseBatch() {
+  if (!courseBatchActive()) return;
+  const wasPumping = state.courseBatchPumping;
+  if (wasPumping) {
+    state.courseBatchPauseRequested = true;
+    updateCourseBatchUi();
+  }
+  const confirmed = await showConfirm('取消一键完成任务', '确定取消当前任务吗？\n正在执行的单个步骤会先等待平台返回；所有尚未开始的课程都不会执行。');
+  if (!confirmed) {
+    state.courseBatchPauseRequested = false;
+    updateCourseBatchUi();
+    if (!state.courseBatchPumping && state.courseBatch?.status === 'paused') await resumeCourseBatch();
+    return;
+  }
+
+  state.courseBatchPauseRequested = false;
+  state.courseBatchCancelRequested = true;
+  updateCourseBatchUi();
+  if (state.courseBatchPumping) {
+    showToast('将在当前步骤返回后取消任务');
+    return;
+  }
+  try {
+    const result = await courseFetch('batchCancel', { batchId: state.courseBatch.batchId, confirm: true });
+    state.courseBatch = result.batch || state.courseBatch;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', result);
+  } catch (e) {
+    state.courseBatchCancelRequested = false;
+    updateCourseBatchUi();
+    showToast(`取消任务失败：${e.message}`, true);
+  }
+}
+
+async function previewCourse(courseId, workflow) {
+  try {
+    const data = await courseFetch('preview', { courseId, workflow });
+    const steps = Array.isArray(data.steps) ? data.steps : [];
+    const detail = `${data.readyForConfirmation ? '可以确认执行' : '当前不可执行'}\n步骤：${courseWorkflowLabel(data.workflow || workflow)}\n${data.reason || '平台预览完成'}\n待提交动作：${Array.isArray(data.actions) ? data.actions.length : 0} 个`;
+    showCourseOutput(`预览：${courseWorkflowLabel(data.workflow || workflow)}`, detail, data.readyForConfirmation ? 'success' : 'warning', data);
+  } catch (e) { showCourseOutput('预览失败', e.message, 'error'); showToast(`预览失败：${e.message}`, true); }
+}
+
+async function inspectCourse(courseId) {
+  try {
+    const data = await courseFetch('inspect', { courseId });
+    const course = data.course || {};
+    const status = courseStatusData(course);
+    showCourseOutput('平台复核完成', `课程：${course.courseName || courseId}\n视频学习：${status.video[0]}\n课程评估：${status.evaluation[0]}\n课程考试：${status.exam[0]}\n得分：${status.score[0]}`, 'success', data);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('平台复核失败', e.message, 'error'); showToast(`平台复核失败：${e.message}`, true); }
+}
+
+async function verifyCourse(courseId, workflow) {
+  try {
+    const data = await courseFetch('verify', { courseId, workflow: workflow || 'auto' });
+    showCourseOutput('验证结果', data.verified === true ? '平台复读验证通过。' : `平台复读验证未通过：${data.reason || '状态仍未满足完成条件'}`, data.verified === true ? 'success' : 'warning', data);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('验证失败', e.message, 'error'); showToast(`验证失败：${e.message}`, true); }
+}
+
+async function executeCourse(courseId, workflow) {
+  if (state.courseBusy) return;
+  if (courseBatchActive()) { showToast('一键完成任务尚未结束，请先继续或取消该任务', true); return; }
+  const course = state.courseById.get(String(courseId));
+  if (!course || course.eligibility?.allowed !== true) { showToast('当前课程不可执行', true); return; }
+  const currentWorkflow = courseNextWorkflow(course);
+  if (!currentWorkflow || (workflow && workflow !== 'auto' && workflow !== currentWorkflow)) {
+    showToast('课程状态可能已经变化，请先刷新课程后重试', true);
+    return;
+  }
+  const selectedWorkflow = currentWorkflow;
+  state.courseBusy = true;
+  try {
+    // 先确认、后联网：确认后由服务端做唯一一次权威预览，复核不通过时不会写入。
+    const ok = await showConfirm('确认执行网课步骤', `课程：${course.courseName || courseId}\n本次只执行：${courseWorkflowLabel(selectedWorkflow)}\n确认后会先进行平台最终复核，复核通过才会写入，并在完成后再次验证。`);
+    if (!ok) return;
+    showCourseOutput('正在复核并执行', '已确认，正在读取平台最新状态；如果平台状态已变化，将停止写入。', 'warning');
+    const result = await courseFetch('execute', { courseId, workflow: selectedWorkflow, confirm: true });
+    const task = result.task || {};
+    const verification = result.verification || task.verification || {};
+    const detail = `执行状态：${task.status || '已返回'}\n平台验证：${verification.verified === true ? '通过' : '未通过或未返回'}\n${task.reason || result.reason || '执行请求已返回'}`;
+    showCourseOutput(`执行：${courseWorkflowLabel(selectedWorkflow)}`, detail, verification.verified === true ? 'success' : 'warning', result);
+    await loadCourseList({ forceRefresh: true });
+  } catch (e) { showCourseOutput('执行失败', e.message, 'error'); showToast(`执行失败：${e.message}`, true); }
+  finally { state.courseBusy = false; }
+}
+
+async function loadCourseTasks() {
+  try {
+    const data = await courseFetch('tasks');
+    const tasks = Array.isArray(data.tasks) ? data.tasks : [];
+    const list = tasks.length ? `<div class="course-task-list">${tasks.slice(0, 20).map(task => `<div class="course-task-item"><strong>${escapeHtml(task.status || '未知')}</strong> · ${escapeHtml(task.workflow || 'auto')} · ${escapeHtml(task.courseId || '')}<br><span>${escapeHtml(task.reason || task.finishedAt || task.createdAt || '')}</span></div>`).join('')}</div>` : '<div class="text-muted">暂无执行记录</div>';
+    $('courseOutput').innerHTML = `<div class="course-output-card"><div class="course-output-title">最近执行记录（${tasks.length}）</div>${list}</div>`;
+  } catch (e) { showCourseOutput('执行记录读取失败', e.message, 'error'); showToast(`执行记录读取失败：${e.message}`, true); }
+}
+
+// 网课卡片和分组事件代理
+$('courseListContainer').addEventListener('change', e => {
+  const checkbox = e.target.closest('input[data-course-select]');
+  if (!checkbox || courseBatchActive() || state.courseBatchPumping) return;
+  const courseId = String(checkbox.dataset.courseSelect || '');
+  if (!courseId || !courseBatchable(state.courseById.get(courseId))) {
+    checkbox.checked = false;
+    return;
+  }
+  if (checkbox.checked) state.courseSelected.add(courseId); else state.courseSelected.delete(courseId);
+  renderCourseBatchControls();
+});
+
+$('courseListContainer').addEventListener('click', async e => {
+  const groupToggle = e.target.closest('[data-course-group-toggle]');
+  if (groupToggle) {
+    const key = groupToggle.dataset.courseGroupToggle;
+    if (state.courseCollapsed.has(key)) state.courseCollapsed.delete(key); else state.courseCollapsed.add(key);
+    renderCourseList();
+    return;
+  }
+  const button = e.target.closest('[data-course-action]');
+  if (!button || state.courseBusy) return;
+  const action = button.dataset.courseAction;
+  const courseId = button.dataset.courseId;
+  const workflow = button.dataset.workflow || courseNextWorkflow(state.courseById.get(String(courseId))) || 'auto';
+  if (action === 'preview') await previewCourse(courseId, workflow);
+  if (action === 'inspect') await inspectCourse(courseId);
+  if (action === 'verify') await verifyCourse(courseId, workflow);
+  if (action === 'execute') await executeCourse(courseId, workflow);
+});
+
+$('courseBatchPanel').addEventListener('click', async e => {
+  const button = e.target.closest('[data-course-batch-action]');
+  if (!button || button.disabled) return;
+  const action = button.dataset.courseBatchAction;
+  if (action === 'pause') await pauseCourseBatch();
+  if (action === 'resume') await resumeCourseBatch();
+  if (action === 'cancel') await cancelCourseBatch();
+  if (action === 'refresh') { await loadCourseList({ forceRefresh: true }); await loadCourseBatchStatus({ silent: true }); }
+});
+
+// ═══════════════════════════════════════════
+//  Easter Egg
+// ═══════════════════════════════════════════
+$('mainTitle').addEventListener('click', async () => {
+  state.clickCount++;
+  if (state.clickTimer) clearTimeout(state.clickTimer);
+  state.clickTimer = setTimeout(() => { state.clickCount = 0; }, 1000);
+  if (state.clickCount >= 7) {
+    state.clickCount = 0;
+    try {
+      const res = await fetch(`${API_URL}?action=getHiddenUrl`);
+      const data = await res.json();
+      if (data.url) { window.location.href = data.url; } else { showToast('隐藏地址无效', true); }
+    } catch(e) { showToast('获取隐藏地址失败', true); }
+  }
+});
+
+// ═══════════════════════════════════════════
+//  User Rename (event delegation in verify result)
+// ═══════════════════════════════════════════
+$('verifyResult').addEventListener('click', async e => {
+  // Toggle rename panel
+  if (e.target.id === 'toggleRenameBtn') {
+    const panel = document.getElementById('renamePanel');
+    if (panel) panel.classList.toggle('hidden');
+  }
+  // Cancel rename
+  if (e.target.id === 'cancelRenameBtn') {
+    const panel = document.getElementById('renamePanel');
+    if (panel) { panel.classList.add('hidden'); document.getElementById('newTokenNameInput').value = ''; document.getElementById('renameMsg').innerHTML = ''; }
+  }
+  // Confirm rename
+  if (e.target.id === 'confirmRenameBtn') {
+    const newName = document.getElementById('newTokenNameInput')?.value.trim();
+    const msgEl = document.getElementById('renameMsg');
+    if (!newName) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">请输入新名称</span>'; return; }
+    if (newName === currentVerifiedToken) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">新名称不能与当前名称相同</span>'; return; }
+    const btn = e.target; btn.disabled = true; btn.textContent = '改名中...';
+    try {
+      const result = await renameUserToken(currentVerifiedToken, newName);
+      if (result.error) throw new Error(result.error);
+      currentVerifiedToken = newName;
+      $('tokenInput').value = newName;
+      const panel = document.getElementById('renamePanel');
+      if (panel) panel.classList.add('hidden');
+      document.getElementById('newTokenNameInput').value = '';
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">✅ 改名成功 · 新toekn：<strong>' + escapeHtml(newName) + '</strong></span>';
+      const nc1 = `=javascript:$.getScript('${API_URL}?token=${encodeURIComponent(newName)}')`;
+      const nc2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodeURIComponent(newName)}';document.body.appendChild(s);})();`;
+      const blocks = $('verifyResult').querySelectorAll('.code-block');
+      if (blocks[0]) blocks[0].textContent = nc1;
+      if (blocks[1]) blocks[1].textContent = nc2;
+      const btns = $('verifyResult').querySelectorAll('.copy-btn');
+      if (btns[0]) btns[0].dataset.code = nc1;
+      if (btns[1]) btns[1].dataset.code = nc2;
+      showToast('toekn已更名为：' + newName);
+    } catch(e) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">' + escapeHtml(e.message) + '</span>'; }
+    finally { btn.disabled = false; btn.textContent = '确认'; }
+  }
+  // Copy code buttons
+  if (e.target.classList.contains('copy-btn')) {
+    copyToClipboard(e.target.dataset.code, e.target);
+  }
+});
+
+// ═══════════════════════════════════════════
+//  Global Event Bindings
+// ═══════════════════════════════════════════
+
+// Segmented control
+document.querySelectorAll('.seg-btn').forEach(b => {
+  b.addEventListener('click', () => switchPanel(b.dataset.panel));
+});
+
+// Admin sub-tabs
+$('adminSubtabs').addEventListener('click', e => {
+  const tab = e.target.closest('.subtab');
+  if (!tab) return;
+  switchSubtab(tab.dataset.subtab);
+});
+
+// User verify
+$('verifyBtn').addEventListener('click', userVerify);
+$('tokenInput').addEventListener('keypress', e => { if (e.key === 'Enter') userVerify(); });
+
+// Admin login
+$('loginAdminBtn').addEventListener('click', adminLogin);
+$('adminPassword').addEventListener('keypress', e => { if (e.key === 'Enter') adminLogin(); });
+
+// Course automation
+$('courseLoginBtn').addEventListener('click', loginCourse);
+$('courseStatusBtn').addEventListener('click', loadCourseStatus);
+$('courseLogoutBtn').addEventListener('click', logoutCourse);
+$('courseChallengeBtn').addEventListener('click', () => submitCourseChallenge(false));
+$('courseSendSmsBtn').addEventListener('click', () => submitCourseChallenge(true));
+$('courseChallengeCode').addEventListener('keypress', e => { if (e.key === 'Enter') submitCourseChallenge(false); });
+$('courseRefreshBtn').addEventListener('click', () => loadCourseList({ forceRefresh: true }));
+$('courseTasksBtn').addEventListener('click', loadCourseTasks);
+$('courseBatchAllBtn').addEventListener('click', () => startCourseBatch('all'));
+$('courseBatchSelectedBtn').addEventListener('click', () => startCourseBatch('selected'));
+['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
+  $(id).addEventListener('change', () => loadCourseList({ forceRefresh: true }));
+});
+
+// Token management toolbar
+$('toggleAddFormBtn').addEventListener('click', () => { $('addTokenForm').classList.toggle('open'); $('importForm').classList.remove('open'); });
+$('toggleImportBtn').addEventListener('click', () => { $('importForm').classList.toggle('open'); $('addTokenForm').classList.remove('open'); });
+$('addTokenBtn').addEventListener('click', addSingleToken);
+$('confirmImportBtn').addEventListener('click', importTokens);
+$('deleteSelectedBtn').addEventListener('click', deleteSelectedTokens);
+$('refreshDataBtn').addEventListener('click', loadAllTokens);
+$('queryTokenBtn').addEventListener('click', loadAllTokens);
+$('filterRemainBtn').addEventListener('click', filterByRemain);
+$('clearFilterBtn').addEventListener('click', clearFilter);
+$('clearAllTokensBtn').addEventListener('click', clearAllTokens);
+
+// Logs
+$('clearLogsBtn').addEventListener('click', clearLogs);
+
+// Questions
+$('questionSearchBtn').addEventListener('click', () => { state.questionPage = 1; loadQuestions(); });
+$('questionResetBtn').addEventListener('click', () => { $('questionSearchKeyword').value = ''; renderQuestionBatchFilter(''); state.questionPage = 1; loadQuestions(); });
+$('questionBatchFilter').addEventListener('change', () => { state.questionBatchFilter = $('questionBatchFilter').value; state.questionPage = 1; loadQuestions(); });
+$('questionStatsBtn').addEventListener('click', showQuestionStats);
+$('clearQuestionsBtn').addEventListener('click', clearAllQuestions);
+$('importExcelBtn').addEventListener('click', () => importExcel(null));
+$('questionSearchKeyword').addEventListener('keypress', e => { if (e.key === 'Enter') { state.questionPage = 1; loadQuestions(); } });
+
+// Emergency
+$('copyEmergencyBtn').addEventListener('click', () => {
+  const code = $('emergencyCodeBlock').textContent;
+  if (code && !code.includes('失败')) copyToClipboard(code, $('copyEmergencyBtn'));
+  else showToast('应急代码不可用', true);
+});
+
+// Edit question modal
+$('cancelEditBtn').addEventListener('click', () => { $('editQuestionModal').classList.remove('show'); state.editId = null; });
+$('saveEditBtn').addEventListener('click', saveEditQuestion);
+$('editQuestionModal').addEventListener('click', e => { if (e.target === $('editQuestionModal')) { $('editQuestionModal').classList.remove('show'); } });
+
+// Q-Stats modal close
+$('closeQuestionStatsBtn').addEventListener('click', () => { $('questionStatsModal').classList.remove('show'); });
+$('questionStatsModal').addEventListener('click', e => { if (e.target === $('questionStatsModal')) $('questionStatsModal').classList.remove('show'); });
+
+// Excel modal
+$('cancelImportBtn').addEventListener('click', () => { $('excelConfigModal').classList.remove('show'); state.questionImportPreview = null; });
+$('excelConfigModal').addEventListener('click', e => { if (e.target === $('excelConfigModal')) $('excelConfigModal').classList.remove('show'); });
+$('confirmImportConfigBtn').addEventListener('click', confirmImportFromExcel);
+$('addCategoryBtn').addEventListener('click', () => {
+  const cat = prompt('请输入题库名称（例如：客户经理题库）', state.importCategory || '');
+  if (cat !== null) {
+    state.importCategory = cat.trim();
+    updateQuestionImportContext();
+    showToast(state.importCategory ? `题库名称：${state.importCategory}` : '题库名称不能为空', !state.importCategory);
+  }
+});
+['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => {
+  $(id)?.addEventListener('change', updateExcelPreview);
+});
+
+// Confirm overlay background click
+$('confirmOverlay').addEventListener('click', e => { if (e.target === $('confirmOverlay')) $('confirmCancel').click(); });
+
+// Resize: re-render token view (card vs table)
+window.addEventListener('resize', () => {
+  if (state.panel === 'admin' && state.isAdmin && state.filteredTokens.length > 0) {
+    const container = $('tokenTableContainer');
+    const wasDesktop = container.classList.contains('token-table-view') || !container.classList.contains('token-list-view');
+    const nowDesktop = window.innerWidth >= 768;
+    if (wasDesktop !== nowDesktop) renderTokenView();
+  }
+  if (state.panel === 'admin' && state.isAdmin && state.questions.length > 0) {
+    renderQuestionList();
+  }
+});
+
+// Init
+// ═══════════════════════════════════════════
+//  设备绑定管理
+// ═══════════════════════════════════════════
+
+// ═══════════════════════════════════════════
+//  设备绑定管理 v2
+// ═══════════════════════════════════════════
+
+// ── 表单切换 ────────────────────────────────
+document.getElementById('toggleAddDeviceFormBtn')?.addEventListener('click', () => {
+  document.getElementById('addDeviceForm').classList.toggle('open');
+  document.getElementById('deviceSearchForm').classList.remove('open');
+});
+document.getElementById('toggleDeviceSearchBtn')?.addEventListener('click', () => {
+  document.getElementById('deviceSearchForm').classList.toggle('open');
+  document.getElementById('addDeviceForm').classList.remove('open');
+});
+
+// ── 生成激活码（内联表单）───────────────────
+document.getElementById('addDeviceBtn')?.addEventListener('click', async () => {
+  const label = document.getElementById('newDeviceLabel').value.trim();
+  const expiresDays = parseInt(document.getElementById('newDeviceDays').value) || 30;
+  const maxUses = parseInt(document.getElementById('newDeviceUses').value) || 300;
+  const btn = document.getElementById('addDeviceBtn'); const orig = btn.textContent;
+  btn.textContent = '生成中...'; btn.disabled = true;
+  try {
+    const data = await adminFetch('createActivation', { label, expires_days: expiresDays, max_uses: maxUses });
+    if (data.ok) {
+      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--success);">✅ 已生成: ${escapeHtml(data.code)} (${expiresDays}天/${maxUses}次)</span>`;
+      document.getElementById('newDeviceLabel').value = '';
+      document.getElementById('newDeviceDays').value = '30';
+      document.getElementById('newDeviceUses').value = '300';
+      if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(data.code); showToast(`已复制: ${data.code}`); }
+      await loadActivations();
+      setTimeout(() => { document.getElementById('addDeviceMsg').innerHTML = ''; }, 3000);
+    } else {
+      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(data.message||'失败')}</span>`;
+    }
+  } catch(e) { document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(e.message)}</span>`; }
+  finally { btn.textContent = orig; btn.disabled = false; }
+});
+
+// ── 搜索 ────────────────────────────────────
+document.getElementById('deviceSearchBtn')?.addEventListener('click', () => {
+  applyDeviceFilter();
+});
+document.getElementById('deviceSearchClearBtn')?.addEventListener('click', () => {
+  document.getElementById('deviceSearchInput').value = '';
+  state.deviceFilter = null;
+  renderDeviceView();
+});
+function applyDeviceFilter() {
+  const kw = (document.getElementById('deviceSearchInput').value || '').trim().toLowerCase();
+  if (!kw) { state.deviceFilter = null; }
+  else {
+    state.deviceFilter = (a) => a.code.toLowerCase().includes(kw) || (a.label||'').toLowerCase().includes(kw);
+  }
+  state.deviceSelection = new Set();
+  renderDeviceView();
+}
+
+// ── 加载 & 渲染 ─────────────────────────────
+async function loadActivations() {
+  const container = document.getElementById('activationTableContainer');
+  if (!container) return;
+  container.innerHTML = '<div class="empty">加载中...</div>';
+  try {
+    const data = await adminFetch('listActivations');
+    state.activations = data.activations || [];
+    state.deviceSelection = state.deviceSelection || new Set();
+    renderDeviceView();
+  } catch(e) {
+    container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+  }
+}
+
+function getStatusInfo(s) {
+  const map = { unused:['未使用','var(--success)'], bound:['已绑定','var(--accent)'], revoked:['已暂停','var(--danger)'],
+    expired:['已过期','var(--text-muted)'], exhausted:['次数用完','#f59e0b'] };
+  return map[s] || [s||'未知','var(--text-secondary)'];
+}
+
+function renderDeviceView() {
+  const container = document.getElementById('activationTableContainer');
+  let items = state.activations || [];
+  // 过滤
+  if (state.deviceFilter) items = items.filter(state.deviceFilter);
+
+  if (!items.length) {
+    const msg = state.deviceFilter ? '无匹配结果' : '暂无激活码<br><span style="font-size:.78rem;">点击上方 [+ 生成激活码] 创建</span>';
+    container.innerHTML = `<div class="empty"><span class="empty-icon">🔐</span>${msg}</div>`;
+    return;
+  }
+  const isDesktop = window.innerWidth >= 768;
+  if (isDesktop) {
+    let h = '<div class="table-wrap"><table><thead><tr><th style="width:36px;"><input type="checkbox" id="selectAllDevices"></th><th>激活码</th><th>状态</th><th>备注</th><th>绑定设备</th><th>绑定时间</th><th>初始/剩余天数</th><th>初始/剩余次数</th><th>操作</th></tr></thead><tbody>';
+    items.forEach(a => {
+      const [stxt,scolor] = getStatusInfo(a.status);
+      const dev = a.device ? a.device.substring(0,12)+'...' : '-';
+      const bAt = a.bound_at ? new Date(a.bound_at).toLocaleString('zh-CN') : '-';
+      const initDays = a.init_expires_days ?? a.expires_days;
+      const initUses = a.init_max_uses ?? a.max_uses;
+      const daysInfo = initDays === -1 ? '不限' : `${initDays} / ${Math.max(0, a.remaining_days)}`;
+      const usesInfo = initUses === -1 ? '不限' : `${initUses} / ${Math.max(0, a.remaining_uses)}`;
+      const checked = (state.deviceSelection||new Set()).has(a.code) ? 'checked' : '';
+      h += `<tr data-code="${escapeHtml(a.code)}">
+        <td><input type="checkbox" data-action="toggleDeviceSelect" data-code="${escapeHtml(a.code)}" ${checked}></td>
+        <td class="token-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</td>
+        <td style="color:${scolor};font-weight:500;">${stxt}</td>
+        <td>${escapeHtml(a.label||'-')}</td>
+        <td style="font-family:monospace;font-size:.72rem;">${dev}</td>
+        <td style="font-size:.76rem;">${bAt}</td>
+        <td style="font-weight:500;">${daysInfo}</td>
+        <td style="font-weight:500;">${usesInfo}</td>
+        <td class="act-group">
+          <button class="btn btn-xs" data-action="editDeviceDays" data-code="${escapeHtml(a.code)}">天数</button>
+          <button class="btn btn-xs" data-action="editDeviceUses" data-code="${escapeHtml(a.code)}">次数</button>
+          ${a.status==='revoked'
+            ?`<button class="btn btn-xs" data-action="restoreActivation" data-code="${escapeHtml(a.code)}">恢复</button>`
+            :`<button class="btn btn-xs btn-danger" data-action="revokeActivation" data-code="${escapeHtml(a.code)}">暂停</button>`}
+          <button class="btn btn-xs btn-danger" data-action="deleteActivation" data-code="${escapeHtml(a.code)}">删除</button></td>
+      </tr>`;
+    });
+    h += '</tbody></table></div>';
+    container.innerHTML = h;
+    // 全选框事件
+    const checkAll = document.getElementById('selectAllDevices');
+    if (checkAll) checkAll.addEventListener('change', e => {
+      items.forEach(a => {
+        if (e.target.checked) (state.deviceSelection||new Set()).add(a.code);
+        else (state.deviceSelection||new Set()).delete(a.code);
+      });
+      renderDeviceView();
+    });
+  } else {
+    let h = '<div class="token-list">';
+    items.forEach(a => {
+      const [stxt,scolor] = getStatusInfo(a.status);
+      const dev = a.device ? a.device.substring(0,12)+'...' : '-';
+      const bAt = a.bound_at ? new Date(a.bound_at).toLocaleString('zh-CN') : '-';
+      const initDays = a.init_expires_days ?? a.expires_days;
+      const initUses = a.init_max_uses ?? a.max_uses;
+      const daysInfo = initDays === -1 ? '不限' : `${initDays} / ${Math.max(0, a.remaining_days)}`;
+      const usesInfo = initUses === -1 ? '不限' : `${initUses} / ${Math.max(0, a.remaining_uses)}`;
+      const checked = (state.deviceSelection||new Set()).has(a.code) ? 'selected' : '';
+      h += `<div class="token-card ${checked}" data-code="${escapeHtml(a.code)}">
+        <div class="token-card-top">
+          <div class="token-card-info">
+            <div class="token-card-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</div>
+            <div style="font-size:.72rem;color:${scolor};font-weight:500;margin-top:4px;">${stxt} · 备注: ${escapeHtml(a.label||'无')}</div>
+          </div>
+          <input type="checkbox" data-action="toggleDeviceSelect" data-code="${escapeHtml(a.code)}" ${checked?'checked':''} style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;">
+        </div>
+        <div style="font-size:.76rem;margin-top:6px;">设备: ${dev} | 绑定: ${bAt}</div>
+        <div style="font-size:.76rem;margin-top:2px;">天数: ${daysInfo} | 次数: ${usesInfo}</div>
+        <div class="token-card-acts">
+          <button class="btn btn-xs" data-action="editDeviceDays" data-code="${escapeHtml(a.code)}">天数</button>
+          <button class="btn btn-xs" data-action="editDeviceUses" data-code="${escapeHtml(a.code)}">次数</button>
+          ${a.status==='revoked'
+            ?`<button class="btn btn-xs" data-action="restoreActivation" data-code="${escapeHtml(a.code)}">恢复</button>`
+            :`<button class="btn btn-xs btn-danger" data-action="revokeActivation" data-code="${escapeHtml(a.code)}">暂停</button>`}
+          <button class="btn btn-xs btn-danger" data-action="deleteActivation" data-code="${escapeHtml(a.code)}">删除</button>
+        </div>
+      </div>`;
+    });
+    h += '</div>';
+    container.innerHTML = h;
+  }
+}
+
+// ── 事件代理 ─────────────────────────────────
+document.getElementById('activationTableContainer')?.addEventListener('click', async e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const { action, code } = btn.dataset;
+  const sel = state.deviceSelection || new Set();
+
+  if (action === 'copyCode') {
+    if (navigator.clipboard?.writeText) { navigator.clipboard.writeText(code); showToast(`已复制: ${code}`); }
+  }
+  if (action === 'toggleDeviceSelect') {
+    if (sel.has(code)) sel.delete(code); else sel.add(code);
+    renderDeviceView();
+  }
+  if (action === 'editDeviceDays') {
+    const act = (state.activations||[]).find(a => a.code === code);
+    const cur = act ? (act.expires_days === -1 ? '不限' : act.expires_days) : '?';
+    const val = prompt('当前天数: ' + cur + '\n新值（0=到期, -1=不限）：');
+    if (val === null) return;
+    const n = parseInt(val);
+    if (isNaN(n) || n < -1) { showToast('请输入有效数字(-1/0/正整数)', true); return; }
+    try { await adminFetch('updateActivationDays', { code, expires_days: n }); showToast('已更新'); await loadActivations(); }
+    catch(e) { showToast(`失败: ${e.message}`, true); }
+  }
+  if (action === 'editDeviceUses') {
+    const act = (state.activations||[]).find(a => a.code === code);
+    const cur = act ? (act.max_uses === -1 ? '不限' : act.max_uses) : '?';
+    const val = prompt('当前次数: ' + cur + '\n新值（0=用完, -1=不限）：');
+    if (val === null) return;
+    const n = parseInt(val);
+    if (isNaN(n) || n < -1) { showToast('请输入有效数字(-1/0/正整数)', true); return; }
+    try { await adminFetch('updateActivationUses', { code, max_uses: n }); showToast('已更新'); await loadActivations(); }
+    catch(e) { showToast(`失败: ${e.message}`, true); }
+  }
+  if (action === 'revokeActivation') {
+    const ok = await showConfirm('暂停激活码', `确定要暂停 "${code}" 吗？`);
+    if (!ok) return;
+    try { await adminFetch('revokeActivation', { code }); showToast('已暂停'); await loadActivations(); }
+    catch(e) { showToast(`失败: ${e.message}`, true); }
+  }
+  if (action === 'restoreActivation') {
+    try { await adminFetch('restoreActivation', { code }); showToast('已恢复'); await loadActivations(); }
+    catch(e) { showToast(`失败: ${e.message}`, true); }
+  }
+  if (action === 'deleteActivation') {
+    const ok = await showConfirm('删除激活码', `确定要彻底删除 "${code}" 吗？`);
+    if (!ok) return;
+    try { await adminFetch('deleteActivation', { code }); showToast('已删除'); await loadActivations(); }
+    catch(e) { showToast(`失败: ${e.message}`, true); }
+  }
+});
+
+// ── 批量操作 ─────────────────────────────────
+document.getElementById('deleteDeviceSelectedBtn')?.addEventListener('click', async () => {
+  const sel = state.deviceSelection || new Set();
+  if (!sel.size) { showToast('未选中任何激活码', true); return; }
+  const ok = await showConfirm('批量删除', `确定删除选中的 ${sel.size} 个激活码吗？`);
+  if (!ok) return;
+  try {
+    await adminFetch('deleteActivationsBatch', { codes: JSON.stringify(Array.from(sel)) });
+    sel.clear(); showToast('批量删除成功'); await loadActivations();
+  } catch(e) { showToast(`失败: ${e.message}`, true); }
+});
+
+document.getElementById('clearAllDevicesBtn')?.addEventListener('click', async () => {
+  const ok = await showConfirm('清空全部', '此操作将清空所有激活码，不可恢复！');
+  if (!ok) return;
+  try {
+    (state.deviceSelection||new Set()).clear();
+    await adminFetch('clearAllActivations'); showToast('已清空'); await loadActivations();
+  } catch(e) { showToast(`失败: ${e.message}`, true); }
+});
+
+document.getElementById('refreshActivationsBtn')?.addEventListener('click', loadActivations);
+
+console.log('Link · toekn管理 — 已就绪');
+</script>
+</body>
+</html>
