@@ -212,7 +212,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .confirm-box{background:var(--surface);border-radius:var(--radius-xl);padding:24px;max-width:340px;width:90%;box-shadow:var(--shadow-lg);animation:modalIn .25s var(--ease-spring);}
 @keyframes modalIn{from{opacity:0;transform:scale(.92);}}
 .confirm-box h4{font-size:.95rem;margin-bottom:8px;}
-.confirm-box p{font-size:.82rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5;}
+.confirm-box p{font-size:.82rem;color:var(--text-secondary);margin-bottom:20px;line-height:1.5;white-space:pre-wrap;}
 .confirm-actions{display:flex;gap:10px;justify-content:flex-end;}
 
 /* ── Modal ── */
@@ -243,11 +243,29 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .stats-hist-time{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted);}
 .stats-hist-cat{font-weight:500;color:var(--text);word-break:break-word;}
 .stats-hist-cnt{font-size:.72rem;font-weight:500;color:var(--text-secondary);background:var(--surface-hover);padding:2px 10px;border-radius:999px;align-self:flex-start;border:1px solid var(--border);}
+.question-batch-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;}
+.question-batch-card{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:12px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);}
+.question-batch-title{font-weight:600;color:var(--text);word-break:break-word;}
+.question-batch-meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:5px;font-size:.72rem;color:var(--text-muted);}
+.question-batch-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px;}
+.question-import-context{padding:10px 12px;margin-bottom:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;color:var(--text-secondary);line-height:1.55;}
+.question-import-context strong{color:var(--text);}
+.question-import-result{margin:12px 0;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-hover);font-size:.78rem;line-height:1.55;}
+.question-import-result.ok{border-color:var(--success-border);background:var(--success-light);}
+.question-import-result.error{border-color:var(--danger-border);background:var(--danger-light);}
+.question-import-issues{margin:8px 0 0;padding-left:20px;max-height:150px;overflow:auto;color:var(--danger);}
+.question-import-warnings{margin:8px 0 0;padding-left:20px;max-height:100px;overflow:auto;color:var(--warning);}
+.question-category-badge{display:inline-flex;margin-top:4px;padding:2px 7px;border-radius:999px;background:var(--accent-light);color:var(--accent);font-size:.68rem;font-weight:500;}
 
 /* ── Excel Modal ── */
 .excel-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10003;align-items:flex-end;justify-content:center;}
 .excel-modal.show{display:flex;}
 .excel-card{background:var(--surface);border-radius:var(--radius-xl) var(--radius-xl) 0 0;max-width:800px;width:100%;max-height:85dvh;overflow-y:auto;padding:24px 20px;box-shadow:var(--shadow-lg);animation:sheetUp .3s var(--ease-spring);}
+
+@media(max-width:640px){
+  .question-batch-card{grid-template-columns:1fr;}
+  .question-batch-actions{justify-content:flex-start;}
+}
 
 /* ── Course Automation ── */
 .course-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;}
@@ -319,6 +337,21 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .course-task-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
 .course-task-item{padding:8px 10px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);}
 .course-task-item strong{color:var(--text);}
+.course-select{display:inline-flex;align-items:center;gap:5px;margin-bottom:5px;font-size:.66rem;color:var(--text-muted);cursor:pointer;}
+.course-select input{accent-color:var(--accent);}
+.course-batch-panel{margin:12px 0;padding:12px;border:1px solid #c7d2fe;border-radius:var(--radius);background:#f5f7ff;}
+.course-batch-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+.course-batch-title{font-size:.84rem;font-weight:700;color:var(--text);}
+.course-batch-status{font-size:.72rem;font-weight:600;color:var(--accent);}
+.course-batch-meta{margin-top:4px;font-size:.7rem;color:var(--text-secondary);line-height:1.6;}
+.course-batch-progress{height:8px;margin:10px 0 7px;border-radius:99px;background:#e0e7ff;overflow:hidden;}
+.course-batch-progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),#22c55e);transition:width .25s ease;}
+.course-batch-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+.course-batch-items{display:flex;flex-direction:column;gap:5px;margin-top:10px;max-height:240px;overflow:auto;}
+.course-batch-item{display:flex;gap:8px;align-items:flex-start;padding:7px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm);background:rgba(255,255,255,.82);font-size:.69rem;color:var(--text-secondary);}
+.course-batch-item-state{flex:0 0 auto;font-weight:700;color:var(--text-muted);}
+.course-batch-item-state.done{color:var(--success);}.course-batch-item-state.failed{color:var(--danger);}.course-batch-item-state.running{color:var(--accent);}
+.course-batch-item-main{min-width:0;word-break:break-word;}.course-batch-item-main strong{color:var(--text);}
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar{width:5px;height:5px;}
@@ -489,13 +522,16 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
       <!-- Sub-pane: Questions -->
       <div class="subpane hidden" id="subQuestions">
         <div class="flex mb-12">
+          <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
+            <option value="">全部题库</option>
+          </select>
           <input type="text" id="questionSearchKeyword" class="input" placeholder="搜索题目" style="flex:3;">
           <button id="questionSearchBtn" class="btn btn-primary btn-sm">搜索</button>
           <button id="questionResetBtn" class="btn btn-ghost btn-sm">重置</button>
         </div>
         <div class="flex mb-12">
-          <button id="importExcelBtn" class="btn btn-primary btn-sm">导入 Excel</button>
-          <button id="questionStatsBtn" class="btn btn-ghost btn-sm">统计</button>
+          <button id="importExcelBtn" class="btn btn-primary btn-sm">新建题库</button>
+          <button id="questionStatsBtn" class="btn btn-ghost btn-sm">题库列表</button>
           <button id="clearQuestionsBtn" class="btn btn-danger btn-sm">清空题库</button>
         </div>
         <div id="importProgress" class="hidden">
@@ -557,6 +593,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
             <div class="course-badges">
               <span class="course-badge offline" id="courseAuthBadge">未连接</span>
               <span class="course-badge" id="courseSessionBadge">会话准备中</span>
+              <span class="course-badge offline" id="courseApiBadge">接口待检测</span>
             </div>
           </div>
           <div class="course-login-grid">
@@ -590,11 +627,14 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
           <div class="course-toolbar">
             <button id="courseRefreshBtn" class="btn btn-primary btn-sm">刷新课程</button>
             <button id="courseTasksBtn" class="btn btn-ghost btn-sm">执行记录</button>
+            <button id="courseBatchAllBtn" class="btn btn-primary btn-sm">一键完成视频/评价</button>
+            <button id="courseBatchSelectedBtn" class="btn btn-ghost btn-sm" disabled>完成选中（0）</button>
             <span class="toolbar-sep"></span>
             <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
             <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
             <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
           </div>
+          <div id="courseBatchPanel" class="course-batch-panel hidden"></div>
           <div id="courseSummary" class="course-summary"></div>
           <div id="courseListContainer"></div>
         </div>
@@ -610,7 +650,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-      <div><h3>题库统计</h3><p>查看当前题库总量与最近导入记录</p></div>
+      <div><h3>独立题库管理</h3><p>查看、筛选、整库替换或单独删除；不同题库互不影响</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -622,18 +662,20 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <!-- Excel Config Modal -->
 <div class="excel-modal" id="excelConfigModal">
   <div class="excel-card">
-    <h3 style="margin-bottom:16px;">导入 Excel 配置</h3>
+    <h3 id="excelConfigTitle" style="margin-bottom:12px;">新建题库</h3>
+    <div id="questionImportContext" class="question-import-context"></div>
     <div id="excelPreviewArea" class="mb-12"></div>
     <div class="flex mb-12"><select id="questionColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 题目</span></div>
     <div class="flex mb-12"><select id="answerColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 答案</span></div>
     <div class="flex mb-12"><select id="optionStartColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项起始</span></div>
     <div class="flex mb-12"><select id="optionEndColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项结束</span></div>
     <div id="previewTable" style="overflow-x:auto;margin-bottom:16px;"></div>
+    <div id="questionImportValidation" class="hidden"></div>
     <div class="flex-between">
       <button id="addCategoryBtn" class="btn btn-ghost btn-sm">题库名称</button>
       <div class="flex gap-8">
         <button id="cancelImportBtn" class="btn btn-ghost btn-sm">取消</button>
-        <button id="confirmImportConfigBtn" class="btn btn-primary">确认导入</button>
+        <button id="confirmImportConfigBtn" class="btn btn-primary">校验并预览</button>
       </div>
     </div>
   </div>
@@ -660,6 +702,8 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 // 新 Node.js 20.19 云函数；原有管理员接口与网课接口共用此地址。
 const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
 const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
+const COURSE_FRONTEND_VERSION = '9.0.0';
+const COURSE_API_PROTOCOL_VERSION = 2;
 
 function createCourseSessionId() {
   try {
@@ -701,6 +745,8 @@ const state = {
   questionPage: 1,
   questionTotal: 0,
   questionKeyword: '',
+  questionBatches: [],
+  questionBatchFilter: '',
   editId: null,
   // Devices
   activations: [],
@@ -710,12 +756,19 @@ const state = {
   excelData: null,
   excelHeaders: [],
   importCategory: '',
+  questionImportTarget: null,
+  questionImportPreview: null,
   // Course automation
   courseSessionId: loadCourseSessionId(),
   courseAuthenticated: false,
   courseSessionStatus: 'logged_out',
   courseSessionMessage: '请先输入网课账号和密码登录。',
   courseChallenge: null,
+  courseApi: null,
+  courseApiCompatible: false,
+  courseApiMessage: '尚未检测云函数版本。',
+  courseBatchDelayMs: 650,
+  courseBatchCurrentDelayMs: 650,
   courseCourses: [],
   courseGroups: [],
   courseById: new Map(),
@@ -723,6 +776,11 @@ const state = {
   courseGroupsInitialized: false,
   courseLoading: false,
   courseBusy: false,
+  courseSelected: new Set(),
+  courseBatch: null,
+  courseBatchPumping: false,
+  courseBatchPauseRequested: false,
+  courseBatchCancelRequested: false,
   // Easter egg
   clickCount: 0,
   clickTimer: null,
@@ -805,7 +863,7 @@ function switchSubtab(name) {
   const pane = document.getElementById('sub' + name.charAt(0).toUpperCase() + name.slice(1));
   if (pane) pane.classList.remove('hidden');
   if (name === 'logs' && state.isAdmin) loadLogs(true);
-  if (name === 'questions' && state.isAdmin && state.questions.length === 0) loadQuestions();
+  if (name === 'questions' && state.isAdmin) initializeQuestionManagement();
   if (name === 'devices' && state.isAdmin) loadActivations();
   if (name === 'course' && state.isAdmin) {
     renderCourseSessionState();
@@ -850,9 +908,36 @@ async function adminFetch(action, params = {}) {
       clearAdminSession('管理后台登录已过期，请重新登录');
       throw new Error(errMsg);
     }
-    throw new Error(errMsg);
+    const error = new Error(errMsg);
+    error.code = data.code || '';
+    error.details = data.details || null;
+    error.payload = data;
+    throw error;
   }
   return acceptAdminSession(data);
+}
+
+function acceptCourseApiMetadata(data) {
+  const api = data?.courseApi;
+  state.courseApi = api && typeof api === 'object' ? api : null;
+  const capabilities = state.courseApi?.capabilities || {};
+  const workflows = Array.isArray(capabilities.batchWorkflows) ? capabilities.batchWorkflows : [];
+  state.courseApiCompatible = Number(state.courseApi?.protocolVersion || 0) >= COURSE_API_PROTOCOL_VERSION
+    && capabilities.batchExecution === true
+    && workflows.includes('video')
+    && workflows.includes('evaluation');
+  if (!state.courseApi) {
+    state.courseApiMessage = `云函数没有返回版本能力信息，请部署支持一键完成的 v${COURSE_FRONTEND_VERSION} 后端。`;
+  } else if (!state.courseApiCompatible) {
+    state.courseApiMessage = `当前云函数版本不支持一键完成（需要协议 v${COURSE_API_PROTOCOL_VERSION}）；单课程功能仍可使用。`;
+  } else {
+    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持视频/评价一键完成。`;
+    const delay = Number(capabilities.recommendedBatchStepDelayMs);
+    if (Number.isFinite(delay) && delay >= 300) state.courseBatchDelayMs = Math.min(Math.round(delay), 5000);
+  }
+  state.courseBatchCurrentDelayMs = state.courseBatchDelayMs;
+  renderCourseSessionState();
+  renderCourseBatchControls();
 }
 
 // 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
@@ -875,6 +960,7 @@ async function courseFetch(courseAction, params = {}) {
   });
   let data = null;
   try { data = await res.json(); } catch (_) { data = {}; }
+  acceptCourseApiMetadata(data);
   if (!res.ok || data.ok === false) {
     const message = data.error || data.message || `网课请求失败（HTTP ${res.status}）`;
     if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
@@ -1255,7 +1341,7 @@ function renderLogEntry(log) {
   const d = new Date(log.timestamp);
   const pad = n => String(n).padStart(2,'0');
   const ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  const adminActs = ['login','add','updateRemain','reset','renameToken','delete','deleteBatch','clearAll','import','importSimpleQuestions','updateSimpleQuestion','deleteSimpleQuestion','clearAllQuestions'];
+  const adminActs = ['login','add','updateRemain','reset','renameToken','delete','deleteBatch','clearAll','import','importSimpleQuestions','commitQuestionImport','deleteQuestionBatch','updateSimpleQuestion','deleteSimpleQuestion','clearAllQuestions'];
   const isAdmin = adminActs.includes(log.action);
   let actText = '';
   if (log.action === 'use') actText = `提取脚本 (剩余 ${(log.details||'').replace(/[^0-9]/g,'')||'0'} 次)`;
@@ -1268,6 +1354,8 @@ function renderLogEntry(log) {
   else if (log.action === 'clearAll') actText = `清空全站所有 Token`;
   else if (log.action === 'import') actText = `批量导入 Token (${escapeHtml(log.details||'')})`;
   else if (log.action === 'importSimpleQuestions') actText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0]||'?'} 条)`;
+  else if (log.action === 'commitQuestionImport') actText = escapeHtml(log.details||'新增或替换题库');
+  else if (log.action === 'deleteQuestionBatch') actText = escapeHtml(log.details||'删除独立题库');
   else if (log.action === 'updateSimpleQuestion') actText = `修改题目 ${log.details||''}`;
   else if (log.action === 'deleteSimpleQuestion') actText = `删除题目 ${log.details||''}`;
   else if (log.action === 'clearAllQuestions') actText = `清空题库`;
@@ -1316,10 +1404,45 @@ async function clearLogs() {
 // ═══════════════════════════════════════════
 //  Admin: Questions
 // ═══════════════════════════════════════════
+function renderQuestionBatchFilter(selectedBatchId = null) {
+  const select = $('questionBatchFilter');
+  if (!select) return;
+  const desired = selectedBatchId === null ? (select.value || state.questionBatchFilter || '') : String(selectedBatchId || '');
+  select.innerHTML = '<option value="">全部题库</option>';
+  for (const batch of state.questionBatches) {
+    const option = document.createElement('option');
+    option.value = String(batch.batchId || '');
+    option.textContent = `${batch.category || '未命名题库'}（${Number(batch.count || 0)}题）`;
+    select.appendChild(option);
+  }
+  const exists = desired === '' || state.questionBatches.some(item => String(item.batchId) === desired);
+  select.value = exists ? desired : '';
+  state.questionBatchFilter = select.value;
+}
+
+async function loadQuestionBatches({ selectedBatchId = null } = {}) {
+  const data = await adminFetch('listQuestionBatches');
+  state.questionBatches = Array.isArray(data.batches) ? data.batches : [];
+  renderQuestionBatchFilter(selectedBatchId);
+  return data;
+}
+
+async function initializeQuestionManagement() {
+  try {
+    await loadQuestionBatches();
+    state.questionPage = 1;
+    await loadQuestions();
+  } catch (e) { showToast(`题库加载失败: ${e.message}`, true); }
+}
+
 async function loadQuestions() {
   try {
     const kw = $('questionSearchKeyword')?.value.trim() || '';
-    const data = await adminFetch('searchSimpleQuestions', { keyword: kw, page: state.questionPage, pageSize: QUESTION_PAGE_SIZE });
+    const batchId = $('questionBatchFilter')?.value || '';
+    state.questionBatchFilter = batchId;
+    const params = { keyword: kw, page: state.questionPage, pageSize: QUESTION_PAGE_SIZE };
+    if (batchId) params.batchId = batchId;
+    const data = await adminFetch('searchSimpleQuestions', params);
     state.questions = Array.isArray(data.data) ? data.data : [];
     state.questionTotal = Number(data.total || 0);
     renderQuestionList();
@@ -1332,18 +1455,18 @@ function renderQuestionList() {
   const totalPages = Math.max(1, Math.ceil((state.questionTotal || 0) / QUESTION_PAGE_SIZE));
 
   if (!state.questions.length) {
-    container.innerHTML = '<div class="empty"><span class="empty-icon">📝</span>未找到题目<br><span style="font-size:.78rem;">尝试其他关键词或导入 Excel</span></div>';
+    container.innerHTML = '<div class="empty"><span class="empty-icon">📝</span>未找到题目<br><span style="font-size:.78rem;">可切换题库、调整关键词或新建题库</span></div>';
     pagDiv.innerHTML = state.questionTotal ? `<div class="text-center text-muted" style="font-weight:500;">共 ${state.questionTotal} 条 · 第 ${state.questionPage} 页</div>` : '';
     return;
   }
 
   const isDesktop = window.innerWidth >= 768;
   if (isDesktop) {
-    let h = '<div class="table-wrap"><table><thead><tr><th>ID</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
+    let h = '<div class="table-wrap"><table><thead><tr><th>ID</th><th>所属题库</th><th>题目</th><th>选项</th><th>答案</th><th>操作</th></tr></thead><tbody>';
     state.questions.forEach(q => {
       const opts = Array.isArray(q.options) ? q.options.map(o => escapeHtml(o)).join(' | ') : '';
-      h += `<tr data-qid="${escapeHtml(q.id)}" data-qtext="${escapeHtml(q.text)}" data-qopts='${escapeHtml(JSON.stringify(q.options||[]))}' data-qans="${escapeHtml(q.answer)}">
-        <td>${escapeHtml(q.id)}</td><td style="max-width:300px;word-break:break-word;">${escapeHtml(q.text)}</td>
+      h += `<tr data-qid="${escapeHtml(q.id)}">
+        <td>${escapeHtml(q.id)}</td><td>${escapeHtml(q.category || '未分组')}</td><td style="max-width:300px;word-break:break-word;">${escapeHtml(q.text)}</td>
         <td style="max-width:250px;word-break:break-word;">${opts}</td><td>${escapeHtml(q.answer)}</td>
         <td class="act-group"><button class="btn btn-xs" data-action="editQ">修改</button><button class="btn btn-xs btn-danger" data-action="deleteQ">删除</button></td></tr>`;
     });
@@ -1353,8 +1476,9 @@ function renderQuestionList() {
     let h = '<div class="token-list">';
     state.questions.forEach(q => {
       const opts = Array.isArray(q.options) ? q.options.map(o => escapeHtml(o)).join(' | ') : '';
-      h += `<div class="token-card" data-qid="${escapeHtml(q.id)}" data-qtext="${escapeHtml(q.text)}" data-qopts='${escapeHtml(JSON.stringify(q.options||[]))}' data-qans="${escapeHtml(q.answer)}">
+      h += `<div class="token-card" data-qid="${escapeHtml(q.id)}">
         <div style="font-size:.72rem;color:var(--text-muted);">ID: ${escapeHtml(q.id)}</div>
+        <span class="question-category-badge">${escapeHtml(q.category || '未分组')}</span>
         <div style="font-weight:500;margin-top:4px;word-break:break-word;">${escapeHtml(q.text)}</div>
         <div style="font-size:.78rem;color:var(--text-secondary);margin-top:4px;">${opts}</div>
         <div style="font-size:.78rem;color:var(--success);margin-top:2px;">答案: ${escapeHtml(q.answer)}</div>
@@ -1364,10 +1488,10 @@ function renderQuestionList() {
     container.innerHTML = h;
   }
 
-  pagDiv.innerHTML = totalPages <= 1 ? '' : `
+  pagDiv.innerHTML = totalPages <= 1 ? `<div class="text-center text-muted text-sm">共 ${state.questionTotal} 条</div>` : `
     <div class="flex" style="justify-content:center;gap:12px;">
       <button class="btn btn-ghost btn-sm" id="qPrevPage" ${state.questionPage===1?'disabled':''}>上一页</button>
-      <span style="font-weight:500;color:var(--text-secondary);">${state.questionPage} / ${totalPages}</span>
+      <span style="font-weight:500;color:var(--text-secondary);">${state.questionPage} / ${totalPages} · 共 ${state.questionTotal} 条</span>
       <button class="btn btn-ghost btn-sm" id="qNextPage" ${state.questionPage===totalPages?'disabled':''}>下一页</button>
     </div>`;
   if (totalPages > 1) {
@@ -1376,23 +1500,25 @@ function renderQuestionList() {
   }
 }
 
-// Event delegation for questions
+// DOM 只保存题目 ID，编辑数据从内存读取，避免题干或选项破坏 HTML 属性。
 $('questionSearchResult').addEventListener('click', async e => {
   const btn = e.target.closest('[data-action]');
   if (!btn) return;
   const row = btn.closest('[data-qid]');
-  const id = row?.dataset.qid, text = row?.dataset.qtext, opts = row?.dataset.qopts, ans = row?.dataset.qans;
+  const id = String(row?.dataset.qid || '');
+  const question = state.questions.find(item => String(item.id) === id);
+  if (!question) { showToast('题目状态已变化，请刷新后重试', true); return; }
   if (btn.dataset.action === 'editQ') {
     state.editId = id;
-    $('editQuestionText').value = text;
-    $('editQuestionOptions').value = (() => { try { return JSON.parse(opts).join('\n'); } catch(e) { return ''; } })();
-    $('editQuestionAnswer').value = ans;
+    $('editQuestionText').value = question.text || '';
+    $('editQuestionOptions').value = Array.isArray(question.options) ? question.options.join('\n') : '';
+    $('editQuestionAnswer').value = question.answer || '';
     $('editQuestionModal').classList.add('show');
   }
   if (btn.dataset.action === 'deleteQ') {
-    const ok = await showConfirm('删除题目', `确定要删除题目 ID:${id} 吗？`);
+    const ok = await showConfirm('删除单题', `确定从“${question.category || '当前题库'}”删除题目 ID:${id} 吗？`);
     if (!ok) return;
-    try { await adminFetch('deleteSimpleQuestion', { id }); showToast('删除成功'); await loadQuestions(); }
+    try { await adminFetch('deleteSimpleQuestion', { id }); showToast('题目已删除'); await loadQuestionBatches(); await loadQuestions(); }
     catch(e) { showToast(`删除失败: ${e.message}`, true); }
   }
 });
@@ -1413,59 +1539,120 @@ async function saveEditQuestion() {
 }
 
 async function clearAllQuestions() {
-  const ok = await showConfirm('清空题库', '此操作将清空整个题库，不可恢复！确定继续吗？');
+  const ok = await showConfirm('清空全部题库', '此操作会删除所有独立题库及全部题目，不可恢复。确定继续吗？');
   if (!ok) return;
-  try { const r = await adminFetch('clearAllQuestions'); showToast(`已清空 ${r.deleted} 条题目`); state.questionPage = 1; await loadQuestions(); }
+  try {
+    const r = await adminFetch('clearAllQuestions');
+    showToast(`已清空 ${r.deleted} 条题目`);
+    state.questionPage = 1;
+    state.questionBatchFilter = '';
+    await loadQuestionBatches({ selectedBatchId: '' });
+    await loadQuestions();
+  }
   catch(e) { showToast(`清空失败: ${e.message}`, true); }
 }
 
 // ═══════════════════════════════════════════
-//  Question Stats Modal
+//  Independent question libraries
 // ═══════════════════════════════════════════
+function formatQuestionBatchTime(value) {
+  if (!value) return '未知时间';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value);
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 async function showQuestionStats() {
   const modal = $('questionStatsModal');
   modal.classList.add('show');
   const body = $('questionStatsBody');
-  body.innerHTML = '<div class="empty"><span class="empty-icon">📊</span>正在加载统计数据...</div>';
+  body.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>正在读取独立题库...</div>';
   try {
-    const res = await fetch(`${API_URL}?action=getImportHistory`);
-    const data = await res.json();
-    if (data.total === undefined || !Array.isArray(data.history)) throw new Error('格式错误');
-    const hist = [...data.history].sort((a,b) => new Date(b.time) - new Date(a.time));
-    const latest = hist[0] || null;
-    const pad = n => String(n).padStart(2,'0');
-    const lt = latest ? new Date(latest.time) : null;
-    const ltText = lt ? `${lt.getFullYear()}-${pad(lt.getMonth()+1)}-${pad(lt.getDate())} ${pad(lt.getHours())}:${pad(lt.getMinutes())}:${pad(lt.getSeconds())}` : '暂无';
-    const totalBatches = hist.length;
-    const totalImported = hist.reduce((s,i) => s + (Number(i.count)||0), 0);
-    const recentList = hist.slice(0, 8).map(i => {
-      const d = new Date(i.time);
-      return `<div class="stats-hist-item"><div class="stats-hist-time">${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}</div>
-        <div class="stats-hist-cat">${escapeHtml(i.category||'未命名')}</div><div class="stats-hist-cnt">导入 ${Number(i.count)||0} 条</div></div>`;
+    const data = await loadQuestionBatches();
+    const batches = state.questionBatches;
+    const history = Array.isArray(data.history) ? data.history : [];
+    const latest = batches[0] || null;
+    const cards = batches.map(batch => `<div class="question-batch-card" data-batch-id="${escapeHtml(batch.batchId)}">
+      <div><div class="question-batch-title">${escapeHtml(batch.category || '未命名题库')}</div>
+        <div class="question-batch-meta"><span>${Number(batch.count || 0)} 道题</span><span>版本 ${Number(batch.revision || 1)}</span><span>更新 ${escapeHtml(formatQuestionBatchTime(batch.updatedAt || batch.createdAt))}</span></div></div>
+      <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qbatch-action="view">查看</button><button class="btn btn-primary btn-sm" data-qbatch-action="replace">整库替换</button><button class="btn btn-danger btn-sm" data-qbatch-action="delete">删除</button></div>
+    </div>`).join('');
+    const historyItems = history.slice(0, 8).map(item => {
+      const label = item.operation === 'replace' ? '替换' : item.operation === 'delete' ? '删除' : '新建';
+      return `<div class="stats-hist-item"><div class="stats-hist-time">${escapeHtml(formatQuestionBatchTime(item.time))}</div><div class="stats-hist-cat">${escapeHtml(item.category || '未命名题库')}</div><div class="stats-hist-cnt">${label} · ${Number(item.previousCount || 0)} → ${Number(item.count || 0)} 题</div></div>`;
     }).join('');
-
     body.innerHTML = `<div class="stats-grid2">
-      <div class="stat-card2"><div class="stat-card2-label">当前题库总数</div><div class="stat-card2-value">${escapeHtml(String(data.total))}</div><div class="stat-card2-sub">来自题库管理统计</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">导入批次</div><div class="stat-card2-value">${escapeHtml(String(totalBatches))}</div><div class="stat-card2-sub">最近 ${Math.min(totalBatches,8)} 条记录</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">最近导入</div><div class="stat-card2-value">${escapeHtml(String(latest?Number(latest.count)||0:0))}</div><div class="stat-card2-sub">${escapeHtml(latest?latest.category||'未命名':'暂无')} · ${escapeHtml(ltText)}</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">累计导入量</div><div class="stat-card2-value">${escapeHtml(String(totalImported))}</div><div class="stat-card2-sub">历史导入总题量</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">当前题目总数</div><div class="stat-card2-value">${Number(data.total || 0)}</div><div class="stat-card2-sub">答题接口可检索题目</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">独立题库</div><div class="stat-card2-value">${batches.length}</div><div class="stat-card2-sub">可分别替换或删除</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">最近更新</div><div class="stat-card2-value" style="font-size:.95rem;">${escapeHtml(latest?.category || '暂无')}</div><div class="stat-card2-sub">${escapeHtml(latest ? formatQuestionBatchTime(latest.updatedAt || latest.createdAt) : '暂无')}</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">变更记录</div><div class="stat-card2-value">${history.length}</div><div class="stat-card2-sub">最近保留的题库操作</div></div>
     </div>
-    <div class="stats-sect2"><div class="stats-sect2-title">最近导入记录</div><div class="stats-hist-list">${recentList||'<div class="empty">暂无导入记录</div>'}</div></div>`;
-  } catch(e) { body.innerHTML = `<div class="empty" style="color:var(--danger);">获取统计失败：${escapeHtml(e.message||'未知错误')}</div>`; }
+    <div class="stats-sect2"><div class="stats-sect2-title">当前独立题库</div><div class="question-batch-list">${cards || '<div class="empty">暂无题库，请点击“新建题库”导入</div>'}</div></div>
+    <div class="stats-sect2"><div class="stats-sect2-title">最近变更</div><div class="stats-hist-list">${historyItems || '<div class="empty">暂无变更记录</div>'}</div></div>`;
+  } catch(e) { body.innerHTML = `<div class="empty" style="color:var(--danger);">获取题库列表失败：${escapeHtml(e.message||'未知错误')}</div>`; }
 }
 
+$('questionStatsBody').addEventListener('click', async e => {
+  const button = e.target.closest('[data-qbatch-action]');
+  if (!button) return;
+  const batchId = String(button.closest('[data-batch-id]')?.dataset.batchId || '');
+  const batch = state.questionBatches.find(item => String(item.batchId) === batchId);
+  if (!batch) { showToast('题库状态已变化，请刷新后重试', true); return; }
+  if (button.dataset.qbatchAction === 'view') {
+    $('questionStatsModal').classList.remove('show'); renderQuestionBatchFilter(batchId); state.questionPage = 1; await loadQuestions(); return;
+  }
+  if (button.dataset.qbatchAction === 'replace') {
+    $('questionStatsModal').classList.remove('show'); importExcel(batch); return;
+  }
+  if (button.dataset.qbatchAction === 'delete') {
+    const ok = await showConfirm('删除独立题库', `确定删除“${batch.category}”及其中 ${Number(batch.count || 0)} 道题吗？其他题库不受影响。`);
+    if (!ok) return;
+    button.disabled = true;
+    try {
+      const result = await adminFetch('deleteQuestionBatch', { batchId, confirm: true });
+      showToast(`已删除“${batch.category}”及 ${Number(result.deleted || 0)} 道题`);
+      const selected = $('questionBatchFilter')?.value === batchId ? '' : null;
+      await loadQuestionBatches({ selectedBatchId: selected }); state.questionPage = 1; await loadQuestions(); await showQuestionStats();
+    } catch (error) { showToast(`删除失败: ${error.message}`, true); button.disabled = false; }
+  }
+});
+
 // ═══════════════════════════════════════════
-//  Excel Import
+//  Excel import preview + atomic commit
 // ═══════════════════════════════════════════
+function updateQuestionImportContext() {
+  const target = state.questionImportTarget;
+  const category = state.importCategory || '';
+  $('excelConfigTitle').textContent = target ? '整库替换' : '新建题库';
+  $('addCategoryBtn').textContent = category ? `题库名称：${category}` : '设置题库名称（必填）';
+  $('questionImportContext').innerHTML = target
+    ? `<strong>将替换：</strong>${escapeHtml(target.category || '')}<br>当前 ${Number(target.count || 0)} 道题。提交后会一次性用新文件替换该题库，其他题库不受影响。`
+    : '<strong>新建独立题库</strong><br>请输入唯一题库名称。导入完成后可单独查看、替换或删除。';
+}
+
 function showExcelConfigModal(rows, headers) {
-  state.excelData = rows; state.excelHeaders = headers;
-  $('excelPreviewArea').innerHTML = `<div class="text-sm text-muted">已加载 ${rows.length} 行数据</div>`;
+  state.excelData = rows; state.excelHeaders = headers; state.questionImportPreview = null;
+  $('questionImportValidation').className = 'hidden';
+  $('questionImportValidation').innerHTML = '';
+  $('confirmImportConfigBtn').textContent = '校验并预览';
+  $('confirmImportConfigBtn').disabled = false;
+  updateQuestionImportContext();
+  $('excelPreviewArea').innerHTML = `<div class="text-sm text-muted">已读取 ${rows.length} 行数据；正式提交前会检查空行、重复题目和答案冲突。</div>`;
   ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => { $(id).innerHTML = ''; });
   headers.forEach((h, i) => {
-    const opt = document.createElement('option'); opt.value = i; opt.textContent = `${h} (列${i+1})`;
+    const opt = document.createElement('option'); opt.value = i; opt.textContent = `${h || '未命名列'} (列${i+1})`;
     ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => $(id).appendChild(opt.cloneNode(true)));
   });
-  $('optionEndColSelect').value = headers.length - 1;
+  const findHeader = patterns => headers.findIndex(value => patterns.some(pattern => pattern.test(String(value || '').trim())));
+  const questionIndex = findHeader([/题目/, /题干/, /^question$/i]);
+  const answerIndex = findHeader([/答案/, /正确选项/, /^answer$/i]);
+  const optionIndexes = headers.map((value, index) => ({ value: String(value || '').trim(), index }))
+    .filter(item => /选项|^[A-H]$/i.test(item.value)).map(item => item.index);
+  $('questionColSelect').value = questionIndex >= 0 ? questionIndex : 0;
+  $('answerColSelect').value = answerIndex >= 0 ? answerIndex : Math.min(1, headers.length - 1);
+  $('optionStartColSelect').value = optionIndexes.length ? Math.min(...optionIndexes) : 0;
+  $('optionEndColSelect').value = optionIndexes.length ? Math.max(...optionIndexes) : headers.length - 1;
   updateExcelPreview();
   $('excelConfigModal').classList.add('show');
 }
@@ -1475,62 +1662,119 @@ function updateExcelPreview() {
   const si = parseInt($('optionStartColSelect').value), ei = parseInt($('optionEndColSelect').value);
   if (isNaN(qi)||isNaN(ai)||isNaN(si)||isNaN(ei)) return;
   const rows = state.excelData.slice(0, 5);
-  let h = '<div style="font-weight:500;margin-bottom:8px;color:var(--text-secondary);">预览前 5 行</div><div class="table-wrap"><table style="min-width:300px;"><thead><tr><th>题目</th><th>选项</th><th>答案</th></tr></thead><tbody>';
-  rows.forEach(r => {
+  let h = '<div style="font-weight:500;margin-bottom:8px;color:var(--text-secondary);">预览前 5 行</div><div class="table-wrap"><table style="min-width:300px;"><thead><tr><th>Excel 行</th><th>题目</th><th>选项</th><th>答案</th></tr></thead><tbody>';
+  rows.forEach((r, index) => {
     const q = r[qi]||'', a = r[ai]||'';
     const opts = []; for (let i = si; i <= ei; i++) { const o = r[i]; if (o && String(o).trim()) opts.push(String(o).trim()); }
-    h += `<tr><td style="max-width:200px;">${escapeHtml(q)}</td><td style="max-width:200px;">${escapeHtml(opts.join(' | '))}</td><td>${escapeHtml(a)}</td></tr>`;
+    h += `<tr><td>${index + 2}</td><td style="max-width:200px;">${escapeHtml(q)}</td><td style="max-width:200px;">${escapeHtml(opts.join(' | '))}</td><td>${escapeHtml(a)}</td></tr>`;
   });
   h += '</tbody></table></div>';
   $('previewTable').innerHTML = h;
+  $('questionImportValidation').className = 'hidden';
+  state.questionImportPreview = null;
+}
+
+function renderQuestionImportPreview(preview) {
+  const box = $('questionImportValidation');
+  const errors = Array.isArray(preview.errors) ? preview.errors : [];
+  const conflicts = Array.isArray(preview.conflicts) ? preview.conflicts : [];
+  const warnings = Array.isArray(preview.warnings) ? preview.warnings : [];
+  const issues = [...errors, ...conflicts];
+  const issueHtml = issues.slice(0, 30).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '数据错误')}</li>`).join('');
+  const warningHtml = warnings.slice(0, 20).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '重复题目')}</li>`).join('');
+  box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
+  box.innerHTML = `<strong>${preview.ready ? '✅ 校验通过，可以提交' : '❌ 校验未通过，尚未写入题库'}</strong><br>
+    输入 ${Number(preview.inputCount || 0)} 行 · 有效 ${Number(preview.validCount || 0)} 行 · 错误 ${Number(preview.errorCount || 0)} · 冲突 ${Number(preview.conflictCount || 0)} · 提醒 ${Number(preview.warningCount || 0)}
+    ${issueHtml ? `<ul class="question-import-issues">${issueHtml}</ul>` : ''}
+    ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}`;
 }
 
 async function confirmImportFromExcel() {
+  const button = $('confirmImportConfigBtn');
   const qi = parseInt($('questionColSelect').value), ai = parseInt($('answerColSelect').value);
   const si = parseInt($('optionStartColSelect').value), ei = parseInt($('optionEndColSelect').value);
   if (isNaN(qi)||isNaN(ai)||isNaN(si)||isNaN(ei)||si>ei) { showToast('请正确选择列映射', true); return; }
-  const qs = [];
-  for (const row of state.excelData) {
-    const text = row[qi] ? String(row[qi]).trim() : '';
-    const ans = row[ai] ? String(row[ai]).trim() : '';
-    if (!text||!ans) continue;
-    const opts = []; for (let i = si; i <= ei; i++) { const o = row[i]; if (o && String(o).trim()) opts.push(String(o).trim()); }
-    if (!opts.length) continue;
-    qs.push({ text, options: opts, answer: ans });
-  }
-  if (!qs.length) { showToast('没有有效的题目数据', true); return; }
-  $('excelConfigModal').classList.remove('show');
-  const progDiv = $('importProgress'); progDiv.classList.remove('hidden');
-  const fill = $('importProgressFill'), txt = $('importProgressText');
-  fill.style.width = '0%'; txt.textContent = `准备导入 ${qs.length} 条...`;
-
-  let pct = 0;
-  const iv = setInterval(() => { if (pct < 90) { pct += 10; fill.style.width = pct+'%'; txt.textContent = `导入中 ${pct}%...`; } }, 300);
-
+  if (!state.importCategory.trim()) { showToast('请先设置题库名称', true); return; }
+  const questions = state.excelData.map((row, index) => {
+    const options = [];
+    for (let column = si; column <= ei; column++) {
+      const value = row[column];
+      if (value !== null && value !== undefined && String(value).trim()) options.push(String(value).trim());
+    }
+    return {
+      sourceRow: index + 2,
+      text: row[qi] === null || row[qi] === undefined ? '' : String(row[qi]).trim(),
+      options,
+      answer: row[ai] === null || row[ai] === undefined ? '' : String(row[ai]).trim(),
+    };
+  });
+  if (!questions.length) { showToast('Excel 中没有数据行', true); return; }
+  button.disabled = true;
+  button.textContent = '正在校验...';
   try {
-    const params = { questions: JSON.stringify(qs) };
-    if (state.importCategory) params.category = state.importCategory;
-    const res = await adminFetch('importSimpleQuestions', params);
-    clearInterval(iv); fill.style.width = '100%'; txt.textContent = `导入完成！新增 ${res.added} 条`;
-    showToast(`导入完成: 新增 ${res.added} 条`);
-    await loadQuestions(); state.importCategory = '';
-  } catch(e) { clearInterval(iv); showToast(`导入失败: ${e.message}`, true); progDiv.classList.add('hidden'); }
-  finally { setTimeout(() => { progDiv.classList.add('hidden'); }, 2500); }
+    const params = { questions: JSON.stringify(questions), category: state.importCategory.trim() };
+    if (state.questionImportTarget?.batchId) params.batchId = state.questionImportTarget.batchId;
+    const response = await adminFetch('previewQuestionImport', params);
+    const preview = response.preview || {};
+    state.questionImportPreview = preview;
+    renderQuestionImportPreview(preview);
+    if (!preview.ready || !preview.previewId) { showToast('校验未通过，题库未发生变化', true); return; }
+
+    const actionText = preview.mode === 'replace'
+      ? `将把“${preview.category}”从 ${Number(preview.oldCount || 0)} 道题整库替换为 ${Number(preview.validCount || 0)} 道题。其他题库不受影响。`
+      : `将新建题库“${preview.category}”，共 ${Number(preview.validCount || 0)} 道题。`;
+    const warningText = Number(preview.warningCount || 0) > 0 ? `\n另有 ${Number(preview.warningCount)} 条跨题库重复提醒，答案一致，允许导入。` : '';
+    const confirmed = await showConfirm(preview.mode === 'replace' ? '确认整库替换' : '确认新建题库', `${actionText}${warningText}\n提交采用原子操作，不会出现只替换一半的状态。`);
+    if (!confirmed) return;
+
+    $('excelConfigModal').classList.remove('show');
+    const progress = $('importProgress');
+    progress.classList.remove('hidden');
+    $('importProgressFill').style.width = '65%';
+    $('importProgressText').textContent = preview.mode === 'replace' ? '正在原子替换题库...' : '正在创建题库...';
+    const result = await adminFetch('commitQuestionImport', { previewId: preview.previewId, confirm: true });
+    $('importProgressFill').style.width = '100%';
+    $('importProgressText').textContent = `${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题`;
+    await loadQuestionBatches({ selectedBatchId: result.batch?.batchId || '' });
+    state.questionPage = 1;
+    await loadQuestions();
+    showToast(`${preview.mode === 'replace' ? '整库替换' : '题库创建'}成功：${Number(result.added || 0)} 道题`);
+    state.importCategory = '';
+    state.questionImportTarget = null;
+    state.questionImportPreview = null;
+    setTimeout(() => progress.classList.add('hidden'), 1800);
+  } catch(e) {
+    $('excelConfigModal').classList.add('show');
+    const box = $('questionImportValidation');
+    box.className = 'question-import-result error';
+    box.innerHTML = `<strong>❌ 操作失败，题库未改变</strong><br>${escapeHtml(e.message)}`;
+    showToast(`导入失败: ${e.message}`, true);
+    $('importProgress').classList.add('hidden');
+  } finally {
+    button.disabled = false;
+    button.textContent = '校验并预览';
+  }
 }
 
-function importExcel() {
+function importExcel(targetBatch = null) {
+  state.questionImportTarget = targetBatch && targetBatch.batchId ? { ...targetBatch } : null;
+  state.importCategory = state.questionImportTarget?.category || '';
+  state.questionImportPreview = null;
   const input = document.createElement('input');
   input.type = 'file'; input.accept = '.xlsx, .xls, .csv';
   input.onchange = async e => {
     const file = e.target.files[0]; if (!file) return;
-    const data = await file.arrayBuffer();
-    const wb = XLSX.read(data);
-    const sheet = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
-    if (!rows||rows.length<2) { showToast('Excel 至少需要两行数据', true); return; }
-    const headers = rows[0].map(h => String(h||'').trim());
-    const dataRows = rows.slice(1).filter(r => r.some(c => c && String(c).trim()));
-    showExcelConfigModal(dataRows, headers);
+    try {
+      const data = await file.arrayBuffer();
+      const wb = XLSX.read(data);
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+      if (!rows||rows.length<2) { showToast('Excel 至少需要表头和一行数据', true); return; }
+      const headers = rows[0].map(h => String(h||'').trim());
+      const dataRows = rows.slice(1).filter(row => row.some(cell => cell !== null && cell !== undefined && String(cell).trim()));
+      if (!dataRows.length) { showToast('Excel 没有可读取的数据行', true); return; }
+      showExcelConfigModal(dataRows, headers);
+    } catch (error) { showToast(`读取 Excel 失败: ${error.message || '文件格式不正确'}`, true); }
   };
   input.click();
 }
@@ -1574,6 +1818,132 @@ function courseNextWorkflow(course) {
 
 function courseHasPending(course) {
   return Boolean(courseNextWorkflow(course));
+}
+
+function courseBatchWorkflow(course) {
+  if (!course || course.mapOnly === true || course.eligibility?.allowed !== true || course.statusSource === 'unverified') return null;
+  if (courseHasWorkflow(course, 'video') && Number(course.studyRate || 0) < 100) return 'video';
+  if (courseHasWorkflow(course, 'evaluation') && course.hasFinishEvaluate !== true) return 'evaluation';
+  return null;
+}
+
+function courseBatchable(course) {
+  return Boolean(courseBatchWorkflow(course));
+}
+
+const COURSE_BATCH_STATUS_LABELS = Object.freeze({
+  running: '执行中',
+  paused: '已暂停',
+  stopped: '遇到问题，已停止',
+  completed: '已完成',
+  completed_with_errors: '已完成，但有失败课程',
+  cancelled: '已取消',
+});
+
+const COURSE_BATCH_ITEM_LABELS = Object.freeze({
+  pending: '等待',
+  running: '执行中',
+  completed: '完成',
+  failed: '失败',
+  cancelled: '取消',
+});
+
+function courseBatchTerminal(batch) {
+  return ['completed', 'completed_with_errors', 'cancelled'].includes(batch?.status);
+}
+
+function courseBatchActive() {
+  return Boolean(state.courseBatch && !courseBatchTerminal(state.courseBatch));
+}
+
+function renderCourseBatchControls() {
+  const allBtn = $('courseBatchAllBtn');
+  const selectedBtn = $('courseBatchSelectedBtn');
+  if (!allBtn || !selectedBtn) return;
+  const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
+  for (const courseId of [...state.courseSelected]) {
+    if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+  }
+  const active = courseBatchActive();
+  const unavailable = !state.courseAuthenticated || !state.courseApiCompatible || state.courseBusy || state.courseBatchPumping || active;
+  allBtn.disabled = unavailable || selectableIds.size === 0;
+  selectedBtn.disabled = unavailable || state.courseSelected.size === 0;
+  selectedBtn.textContent = `完成选中（${state.courseSelected.size}）`;
+  const title = !state.courseApiCompatible
+    ? state.courseApiMessage
+    : active
+      ? '已有未结束的一键完成任务，请先继续或取消'
+      : '处理期限内待完成的视频和课程评价';
+  allBtn.title = title;
+  selectedBtn.title = !state.courseApiCompatible ? state.courseApiMessage : active ? '已有未结束的一键完成任务，请先继续或取消' : '只处理勾选课程的视频和课程评价';
+}
+
+function renderCourseBatchPanel() {
+  const panel = $('courseBatchPanel');
+  if (!panel) return;
+  const batch = state.courseBatch;
+  if (!batch) {
+    panel.classList.add('hidden');
+    panel.innerHTML = '';
+    return;
+  }
+
+  const items = Array.isArray(batch.items) ? batch.items : [];
+  const total = Number(batch.totalCourses ?? items.length ?? 0);
+  const completed = Number(batch.completedCourses ?? items.filter(item => item.status === 'completed').length);
+  const failed = Number(batch.failedCourses ?? items.filter(item => item.status === 'failed').length);
+  const cancelled = Number(batch.cancelledCourses ?? items.filter(item => item.status === 'cancelled').length);
+  const settled = completed + failed + cancelled;
+  const percent = total > 0 ? Math.min(100, Math.round(settled * 100 / total)) : 100;
+  const examSkipped = items.filter(item => item.examSkipped === true).length
+    + (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.examSkipped === true).length : 0);
+  const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
+  const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
+  const waitingHint = state.courseBatchPauseRequested
+    ? ' · 正在等待当前步骤结束后暂停'
+    : state.courseBatchCancelRequested
+      ? ' · 正在等待当前步骤结束后取消'
+      : '';
+
+  let actions = '';
+  if (batch.status === 'running') {
+    actions = state.courseBatchPumping
+      ? `<button class="btn btn-ghost btn-sm" data-course-batch-action="pause"${state.courseBatchPauseRequested ? ' disabled' : ''}>${state.courseBatchPauseRequested ? '暂停中…' : '暂停'}</button>`
+      : '<button class="btn btn-primary btn-sm" data-course-batch-action="resume">继续执行</button>';
+    actions += `<button class="btn btn-ghost btn-sm" data-course-batch-action="cancel"${state.courseBatchCancelRequested ? ' disabled' : ''}>取消任务</button>`;
+  } else if (['paused', 'stopped'].includes(batch.status)) {
+    actions = '<button class="btn btn-primary btn-sm" data-course-batch-action="resume">继续剩余课程</button><button class="btn btn-ghost btn-sm" data-course-batch-action="cancel">取消任务</button>';
+  } else {
+    actions = '<button class="btn btn-ghost btn-sm" data-course-batch-action="refresh">刷新课程状态</button>';
+  }
+
+  const itemHtml = items.map(item => {
+    const itemStatus = item.status || 'pending';
+    const stateClass = itemStatus === 'completed' ? 'done' : itemStatus === 'failed' ? 'failed' : itemStatus === 'running' ? 'running' : '';
+    const planned = (Array.isArray(item.plannedWorkflows) ? item.plannedWorkflows : []).map(courseWorkflowLabel).join(' → ');
+    const verifiedSteps = Array.isArray(item.steps) ? item.steps.filter(step => step.verified === true).length : 0;
+    return `<div class="course-batch-item">
+      <span class="course-batch-item-state ${stateClass}">${escapeHtml(COURSE_BATCH_ITEM_LABELS[itemStatus] || itemStatus)}</span>
+      <div class="course-batch-item-main"><strong>${escapeHtml(item.courseName || item.courseId || '未命名课程')}</strong><br>
+        <span>${planned ? `计划：${escapeHtml(planned)} · ` : ''}已验证 ${verifiedSteps} 步${item.examSkipped === true ? ' · 考试已跳过' : ''}${item.reason ? ` · ${escapeHtml(item.reason)}` : ''}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  panel.classList.remove('hidden');
+  panel.innerHTML = `<div class="course-batch-head">
+      <div><div class="course-batch-title">一键完成（视频与评价）</div><div class="course-batch-meta">完成 ${completed}/${total} · 失败 ${failed} · 取消 ${cancelled} · 平台已验证步骤 ${Number(batch.completedSteps || 0)} · 预览跳过 ${Number(batch.skippedCourses || 0)} · 步骤间隔约 ${stepDelay}ms</div></div>
+      <div class="course-batch-status">${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</div>
+    </div>
+    <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
+    <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
+    <div class="course-batch-actions">${actions}</div>
+    ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
+}
+
+function updateCourseBatchUi() {
+  renderCourseBatchControls();
+  renderCourseBatchPanel();
 }
 
 function courseStatusValue(label, value, kind = 'neutral') {
@@ -1633,6 +2003,12 @@ function renderCourseCard(course) {
   const next = courseNextWorkflow(course);
   const allowed = course?.eligibility?.allowed === true && course?.mapOnly !== true;
   const courseId = courseAttr(course?.courseId || '');
+  const batchable = courseBatchable(course);
+  const selected = state.courseSelected.has(String(course?.courseId || ''));
+  const batchLocked = courseBatchActive() || state.courseBatchPumping;
+  const selectionHtml = batchable
+    ? `<label class="course-select"><input type="checkbox" data-course-select="${courseId}"${selected ? ' checked' : ''}${batchLocked ? ' disabled' : ''}>加入一键完成</label>`
+    : '';
   const workflowAttr = courseAttr(next || 'auto');
   const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
   const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
@@ -1652,7 +2028,7 @@ function renderCourseCard(course) {
 
   return `<article class="course-card" data-course-id="${courseId}">
     <div class="course-card-top">
-      <div style="min-width:0;flex:1;"><div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div><div class="course-card-id">${escapeHtml(course?.courseId || '')}</div></div>
+      <div style="min-width:0;flex:1;">${selectionHtml}<div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div><div class="course-card-id">${escapeHtml(course?.courseId || '')}</div></div>
       <div class="course-card-score">得分：${escapeHtml(status.score[0])}</div>
     </div>
     <div class="course-status-grid">
@@ -1714,14 +2090,18 @@ function renderCourseSummary() {
 function renderCourseSessionState() {
   const badge = $('courseAuthBadge');
   const sessionBadge = $('courseSessionBadge');
+  const apiBadge = $('courseApiBadge');
   const message = $('courseSessionMessage');
   const challengePanel = $('courseChallengePanel');
-  if (!badge || !sessionBadge || !message || !challengePanel) return;
+  if (!badge || !sessionBadge || !apiBadge || !message || !challengePanel) return;
 
   sessionBadge.textContent = `会话 ${state.courseSessionId.slice(0, 12)}…`;
   const sessionStatus = state.courseSessionStatus || '';
   badge.className = 'course-badge ' + (state.courseAuthenticated ? 'online' : state.courseChallenge ? 'challenge' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : 'offline');
   badge.textContent = state.courseAuthenticated ? '已连接' : state.courseChallenge ? '待验证' : sessionStatus === 'expired' ? '已失效' : sessionStatus === 'failed' ? '登录失败' : '未连接';
+  apiBadge.className = 'course-badge ' + (state.courseApiCompatible ? 'online' : state.courseApi ? 'error' : 'offline');
+  apiBadge.textContent = state.courseApiCompatible ? `接口 v${state.courseApi.protocolVersion}` : state.courseApi ? '接口不兼容' : '接口待检测';
+  apiBadge.title = state.courseApiMessage;
   message.className = 'course-session-message ' + (state.courseAuthenticated ? 'success' : state.courseChallenge ? '' : sessionStatus === 'expired' || sessionStatus === 'failed' ? 'error' : '');
   message.textContent = state.courseSessionMessage || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '请先输入网课账号和密码登录。');
 
@@ -1760,7 +2140,7 @@ async function loadCourseStatus() {
   try {
     const data = await courseFetch('status');
     setCourseSessionResult(data);
-    if (state.courseAuthenticated) await loadCourseList();
+    if (state.courseAuthenticated) { await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
   } catch (e) {
     state.courseSessionMessage = e.message || '网课会话状态读取失败';
     if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; }
@@ -1780,7 +2160,7 @@ async function loginCourse() {
     // 密码只在本次请求中使用；挑战期间由服务端加密暂存。
     $('coursePassword').value = '';
     setCourseSessionResult(data);
-    if (state.courseAuthenticated) { showToast('网课登录成功'); await loadCourseList(); }
+    if (state.courseAuthenticated) { showToast('网课登录成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
     else if (state.courseChallenge) showToast('需要完成网课登录验证');
   } catch (e) {
     $('coursePassword').value = '';
@@ -1804,7 +2184,7 @@ async function submitCourseChallenge(sendOnly = false) {
     });
     $('courseChallengeCode').value = '';
     setCourseSessionResult(data);
-    if (state.courseAuthenticated) { showToast('网课登录验证成功'); await loadCourseList(); }
+    if (state.courseAuthenticated) { showToast('网课登录验证成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
     else showToast('验证状态已更新');
   } catch (e) {
     state.courseSessionMessage = e.message || '网课登录验证失败';
@@ -1821,14 +2201,16 @@ async function logoutCourse() {
   try {
     const data = await courseFetch('logout');
     state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
+    state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false;
     setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
+    updateCourseBatchUi();
     showToast('网课会话已清除');
   } catch (e) { showToast(`退出失败：${e.message}`, true); }
   finally { btn.disabled = false; btn.textContent = orig; }
 }
 
 async function loadCourseList({ forceRefresh = false } = {}) {
-  if (!state.courseAuthenticated) { $('courseListPanel').classList.add('hidden'); return; }
+  if (!state.courseAuthenticated) { $('courseListPanel').classList.add('hidden'); updateCourseBatchUi(); return; }
   if (state.courseLoading) return;
   state.courseLoading = true;
   const container = $('courseListContainer');
@@ -1856,16 +2238,45 @@ async function loadCourseList({ forceRefresh = false } = {}) {
       }));
     }
     state.courseById = new Map(state.courseCourses.map(course => [String(course.courseId), course]));
+    const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
+    for (const courseId of [...state.courseSelected]) {
+      if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+    }
     if (!state.courseGroupsInitialized) {
       state.courseGroups.filter(group => group.collapsible === true || Number(group.count || group.courses?.length || 0) > 1).forEach(group => state.courseCollapsed.add(courseGroupKey(group)));
       state.courseGroupsInitialized = true;
     }
-    renderCourseSummary(); renderCourseList();
+    renderCourseSummary(); renderCourseList(); updateCourseBatchUi();
   } catch (e) {
     if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; renderCourseSessionState(); $('courseListPanel').classList.add('hidden'); }
     if (container) container.innerHTML = `<div class="empty" style="color:var(--danger);">课程读取失败：${escapeHtml(e.message)}</div>`;
     showToast(`课程读取失败：${e.message}`, true);
-  } finally { state.courseLoading = false; if (btn) { btn.disabled = false; btn.textContent = orig; } }
+  } finally { state.courseLoading = false; if (btn) { btn.disabled = false; btn.textContent = orig; } renderCourseBatchControls(); }
+}
+
+function mergeCourseState(course) {
+  const courseId = String(course?.courseId || '');
+  if (!courseId) return;
+  let found = false;
+  state.courseCourses = state.courseCourses.map(item => {
+    if (String(item?.courseId || '') !== courseId) return item;
+    found = true;
+    return course;
+  });
+  if (!found) state.courseCourses.push(course);
+  state.courseGroups = state.courseGroups.map(group => {
+    const courses = (Array.isArray(group.courses) ? group.courses : []).map(item => String(item?.courseId || '') === courseId ? course : item);
+    return {
+      ...group,
+      courses,
+      completedCount: courses.filter(item => item?.courseFinished === true || item?.platformCompleted === true).length,
+    };
+  });
+  state.courseById.set(courseId, course);
+  if (!courseBatchable(course)) state.courseSelected.delete(courseId);
+  renderCourseSummary();
+  renderCourseList();
+  updateCourseBatchUi();
 }
 
 function courseResultJson(value) {
@@ -1883,6 +2294,242 @@ function showCourseOutput(title, detail, tone = 'success', raw = null) {
   const json = raw ? courseResultJson(raw) : '';
   output.innerHTML = `<div class="course-output-card ${tone}"><div class="course-output-title">${escapeHtml(title)}</div><div class="course-output-detail">${escapeHtml(detail)}</div>${json ? `<details><summary>查看返回摘要</summary><pre>${escapeHtml(json)}</pre></details>` : ''}</div>`;
   output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+async function loadCourseBatchStatus({ silent = false } = {}) {
+  if (!state.courseAuthenticated) {
+    state.courseBatch = null;
+    updateCourseBatchUi();
+    return null;
+  }
+  try {
+    const data = await courseFetch('batchStatus');
+    state.courseBatch = data.batch || null;
+    updateCourseBatchUi();
+    return state.courseBatch;
+  } catch (e) {
+    if (!silent) showToast(`一键完成状态读取失败：${e.message}`, true);
+    return null;
+  }
+}
+
+function courseBatchPreviewMessage(preview) {
+  const items = Array.isArray(preview?.items) ? preview.items : [];
+  const skipped = Array.isArray(preview?.skipped) ? preview.skipped : [];
+  const names = items.slice(0, 8).map((item, index) => `${index + 1}. ${item.courseName || item.courseId}`).join('\n');
+  const extra = items.length > 8 ? `\n……另有 ${items.length - 8} 门` : '';
+  const examSkipped = [...items, ...skipped].filter(item => item.examSkipped === true).length;
+  return `平台最新预览：可执行 ${items.length} 门，跳过 ${skipped.length} 门。\n\n只会依次完成视频学习和课程评价；不会进入或提交考试。${examSkipped ? `\n其中 ${examSkipped} 门涉及考试，考试部分将跳过。` : ''}\n任一步骤完成后都会复核平台状态；出现异常会自动停止。\n\n${names}${extra}`;
+}
+
+async function startCourseBatch(mode = 'all') {
+  if (state.courseBusy || state.courseBatchPumping) return;
+  if (!state.courseApiCompatible) {
+    showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
+    return;
+  }
+  if (courseBatchActive()) {
+    showToast('已有未结束的一键完成任务，请先继续或取消', true);
+    return;
+  }
+  const selectedCourseIds = mode === 'selected' ? [...state.courseSelected] : [];
+  if (mode === 'selected' && selectedCourseIds.length === 0) {
+    showToast('请先勾选至少一门课程', true);
+    return;
+  }
+
+  state.courseBusy = true;
+  renderCourseBatchControls();
+  try {
+    showCourseOutput('正在生成一键完成预览', '服务器正在重新读取平台课程状态，本步骤不会产生写入。', 'warning');
+    const previewResult = await courseFetch('batchPreview', { batchMode: mode, courseIds: selectedCourseIds });
+    const preview = previewResult.preview || {};
+    if (Number(preview.executableCount || 0) === 0) {
+      const skipped = Array.isArray(preview.skipped) ? preview.skipped : [];
+      const reasons = skipped.slice(0, 10).map(item => `${item.courseName || item.courseId}：${item.reason || '不可执行'}`).join('\n');
+      showCourseOutput('当前没有可一键完成的课程', reasons || '平台未返回待完成的视频或课程评价。', 'warning', previewResult);
+      return;
+    }
+    showCourseOutput('一键完成预览已生成', courseBatchPreviewMessage(preview), 'warning', previewResult);
+    const confirmed = await showConfirm('确认一键完成', courseBatchPreviewMessage(preview));
+    if (!confirmed) {
+      showToast('已取消，本次预览没有产生写入');
+      return;
+    }
+
+    const created = await courseFetch('batchCreate', { previewId: preview.previewId, confirm: true });
+    state.courseBatch = created.batch || null;
+    state.courseSelected.clear();
+    state.courseBatchPauseRequested = false;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    showCourseOutput('一键完成任务已创建', '开始逐门执行。每次只提交一个已确认的步骤，并在提交后复核平台状态。', 'warning', created);
+    await pumpCourseBatch();
+  } catch (e) {
+    showCourseOutput('一键完成启动失败', e.message, 'error');
+    showToast(`一键完成启动失败：${e.message}`, true);
+    await loadCourseBatchStatus({ silent: true });
+  } finally {
+    if (!state.courseBatchPumping) state.courseBusy = false;
+    renderCourseList();
+    updateCourseBatchUi();
+  }
+}
+
+function courseBatchDelayAfterStep(result, elapsedMs) {
+  const base = Math.max(500, Math.min(5000, Math.round(Number(state.courseBatchDelayMs) || 650)));
+  let delay = base;
+  // 平台刚完成视频后通常还需要一点时间刷新评价入口，给同一门课留出更长的只读状态同步时间。
+  if (result?.processed?.nextWorkflow === 'evaluation') delay = Math.max(delay, 1100);
+  // 请求过快时增加少量间隔；请求本身较慢时也不立即发起下一次，避免连续撞击上游。
+  if (elapsedMs < 1200) delay += 150;
+  else if (elapsedMs > 8000) delay += 300;
+  return Math.min(delay, 5000);
+}
+
+async function pumpCourseBatch() {
+  if (state.courseBatchPumping || !state.courseBatch || courseBatchTerminal(state.courseBatch)) return;
+  if (state.courseBatch.status !== 'running') return;
+  state.courseBatchPumping = true;
+  state.courseBusy = true;
+  state.courseBatchPauseRequested = false;
+  state.courseBatchCancelRequested = false;
+  state.courseBatchCurrentDelayMs = state.courseBatchDelayMs;
+  renderCourseList();
+  updateCourseBatchUi();
+  let processedSteps = 0;
+
+  try {
+    while (state.courseBatch?.status === 'running' && processedSteps < 500) {
+      if (state.courseBatchCancelRequested) {
+        const cancelled = await courseFetch('batchCancel', { batchId: state.courseBatch.batchId, confirm: true });
+        state.courseBatch = cancelled.batch || state.courseBatch;
+        break;
+      }
+      if (state.courseBatchPauseRequested) {
+        const paused = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+        state.courseBatch = paused.batch || state.courseBatch;
+        break;
+      }
+
+      const stepStartedAt = Date.now();
+      const result = await courseFetch('batchStep', { batchId: state.courseBatch.batchId });
+      state.courseBatch = result.batch || state.courseBatch;
+      if (result.course) mergeCourseState(result.course);
+      else updateCourseBatchUi();
+      processedSteps += result.processed ? 1 : 0;
+
+      if (state.courseBatch?.status !== 'running' || !result.processed) break;
+      state.courseBatchCurrentDelayMs = courseBatchDelayAfterStep(result, Date.now() - stepStartedAt);
+      updateCourseBatchUi();
+      await new Promise(resolve => setTimeout(resolve, state.courseBatchCurrentDelayMs));
+    }
+
+    if (processedSteps >= 500 && state.courseBatch?.status === 'running') {
+      const paused = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+      state.courseBatch = paused.batch || state.courseBatch;
+      showToast('为避免单次页面持续运行过久，任务已自动暂停', true);
+    }
+
+    const batch = state.courseBatch;
+    if (batch?.status === 'completed') {
+      showCourseOutput('一键完成已结束', `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门；所有写入步骤均已通过平台复核。考试没有执行。`, 'success', { batch });
+      showToast('一键完成任务已结束');
+    } else if (batch?.status === 'completed_with_errors') {
+      showCourseOutput('一键完成已结束，但存在失败课程', batch.reason || '请查看任务详情并人工复核。', 'warning', { batch });
+      showToast('任务结束，但有失败课程', true);
+    } else if (batch?.status === 'stopped') {
+      showCourseOutput('一键完成已停止', `${batch.reason || '平台复核未通过'}\n未开始的课程没有执行，可修复后点击“继续剩余课程”。`, 'error', { batch });
+      showToast('任务遇到问题，已停止', true);
+    } else if (batch?.status === 'paused') {
+      showCourseOutput('一键完成已暂停', '当前步骤已处理完毕，后续课程尚未执行。', 'warning', { batch });
+    } else if (batch?.status === 'cancelled') {
+      showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', { batch });
+    }
+  } catch (e) {
+    showCourseOutput('一键完成请求失败', `${e.message}\n浏览器已停止继续发送步骤，请读取任务状态后再决定是否继续。`, 'error');
+    showToast(`一键完成请求失败：${e.message}`, true);
+    await loadCourseBatchStatus({ silent: true });
+  } finally {
+    state.courseBatchPumping = false;
+    state.courseBusy = false;
+    state.courseBatchPauseRequested = false;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    if (state.courseAuthenticated) await loadCourseList({ forceRefresh: true });
+  }
+}
+
+async function pauseCourseBatch() {
+  if (!courseBatchActive() || state.courseBatch?.status !== 'running') return;
+  if (state.courseBatchPumping) {
+    state.courseBatchPauseRequested = true;
+    updateCourseBatchUi();
+    showToast('将在当前步骤完成后暂停');
+    return;
+  }
+  try {
+    const result = await courseFetch('batchPause', { batchId: state.courseBatch.batchId });
+    state.courseBatch = result.batch || state.courseBatch;
+    updateCourseBatchUi();
+  } catch (e) { showToast(`暂停失败：${e.message}`, true); }
+}
+
+async function resumeCourseBatch() {
+  if (!state.courseBatch || courseBatchTerminal(state.courseBatch) || state.courseBatchPumping) return;
+  if (!state.courseApiCompatible) {
+    showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
+    return;
+  }
+  try {
+    if (['paused', 'stopped'].includes(state.courseBatch.status)) {
+      const result = await courseFetch('batchResume', { batchId: state.courseBatch.batchId });
+      state.courseBatch = result.batch || state.courseBatch;
+      updateCourseBatchUi();
+    }
+    if (state.courseBatch?.status === 'running') await pumpCourseBatch();
+  } catch (e) {
+    showCourseOutput('继续任务失败', e.message, 'error');
+    showToast(`继续任务失败：${e.message}`, true);
+  }
+}
+
+async function cancelCourseBatch() {
+  if (!courseBatchActive()) return;
+  const wasPumping = state.courseBatchPumping;
+  if (wasPumping) {
+    state.courseBatchPauseRequested = true;
+    updateCourseBatchUi();
+  }
+  const confirmed = await showConfirm('取消一键完成任务', '确定取消当前任务吗？\n正在执行的单个步骤会先等待平台返回；所有尚未开始的课程都不会执行。');
+  if (!confirmed) {
+    state.courseBatchPauseRequested = false;
+    updateCourseBatchUi();
+    if (!state.courseBatchPumping && state.courseBatch?.status === 'paused') await resumeCourseBatch();
+    return;
+  }
+
+  state.courseBatchPauseRequested = false;
+  state.courseBatchCancelRequested = true;
+  updateCourseBatchUi();
+  if (state.courseBatchPumping) {
+    showToast('将在当前步骤返回后取消任务');
+    return;
+  }
+  try {
+    const result = await courseFetch('batchCancel', { batchId: state.courseBatch.batchId, confirm: true });
+    state.courseBatch = result.batch || state.courseBatch;
+    state.courseBatchCancelRequested = false;
+    renderCourseList();
+    updateCourseBatchUi();
+    showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', result);
+  } catch (e) {
+    state.courseBatchCancelRequested = false;
+    updateCourseBatchUi();
+    showToast(`取消任务失败：${e.message}`, true);
+  }
 }
 
 async function previewCourse(courseId, workflow) {
@@ -1914,6 +2561,7 @@ async function verifyCourse(courseId, workflow) {
 
 async function executeCourse(courseId, workflow) {
   if (state.courseBusy) return;
+  if (courseBatchActive()) { showToast('一键完成任务尚未结束，请先继续或取消该任务', true); return; }
   const course = state.courseById.get(String(courseId));
   if (!course || course.eligibility?.allowed !== true) { showToast('当前课程不可执行', true); return; }
   const currentWorkflow = courseNextWorkflow(course);
@@ -1948,6 +2596,18 @@ async function loadCourseTasks() {
 }
 
 // 网课卡片和分组事件代理
+$('courseListContainer').addEventListener('change', e => {
+  const checkbox = e.target.closest('input[data-course-select]');
+  if (!checkbox || courseBatchActive() || state.courseBatchPumping) return;
+  const courseId = String(checkbox.dataset.courseSelect || '');
+  if (!courseId || !courseBatchable(state.courseById.get(courseId))) {
+    checkbox.checked = false;
+    return;
+  }
+  if (checkbox.checked) state.courseSelected.add(courseId); else state.courseSelected.delete(courseId);
+  renderCourseBatchControls();
+});
+
 $('courseListContainer').addEventListener('click', async e => {
   const groupToggle = e.target.closest('[data-course-group-toggle]');
   if (groupToggle) {
@@ -1965,6 +2625,16 @@ $('courseListContainer').addEventListener('click', async e => {
   if (action === 'inspect') await inspectCourse(courseId);
   if (action === 'verify') await verifyCourse(courseId, workflow);
   if (action === 'execute') await executeCourse(courseId, workflow);
+});
+
+$('courseBatchPanel').addEventListener('click', async e => {
+  const button = e.target.closest('[data-course-batch-action]');
+  if (!button || button.disabled) return;
+  const action = button.dataset.courseBatchAction;
+  if (action === 'pause') await pauseCourseBatch();
+  if (action === 'resume') await resumeCourseBatch();
+  if (action === 'cancel') await cancelCourseBatch();
+  if (action === 'refresh') { await loadCourseList({ forceRefresh: true }); await loadCourseBatchStatus({ silent: true }); }
 });
 
 // ═══════════════════════════════════════════
@@ -2065,6 +2735,8 @@ $('courseSendSmsBtn').addEventListener('click', () => submitCourseChallenge(true
 $('courseChallengeCode').addEventListener('keypress', e => { if (e.key === 'Enter') submitCourseChallenge(false); });
 $('courseRefreshBtn').addEventListener('click', () => loadCourseList({ forceRefresh: true }));
 $('courseTasksBtn').addEventListener('click', loadCourseTasks);
+$('courseBatchAllBtn').addEventListener('click', () => startCourseBatch('all'));
+$('courseBatchSelectedBtn').addEventListener('click', () => startCourseBatch('selected'));
 ['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
   $(id).addEventListener('change', () => loadCourseList({ forceRefresh: true }));
 });
@@ -2086,10 +2758,11 @@ $('clearLogsBtn').addEventListener('click', clearLogs);
 
 // Questions
 $('questionSearchBtn').addEventListener('click', () => { state.questionPage = 1; loadQuestions(); });
-$('questionResetBtn').addEventListener('click', () => { $('questionSearchKeyword').value = ''; state.questionPage = 1; loadQuestions(); });
+$('questionResetBtn').addEventListener('click', () => { $('questionSearchKeyword').value = ''; renderQuestionBatchFilter(''); state.questionPage = 1; loadQuestions(); });
+$('questionBatchFilter').addEventListener('change', () => { state.questionBatchFilter = $('questionBatchFilter').value; state.questionPage = 1; loadQuestions(); });
 $('questionStatsBtn').addEventListener('click', showQuestionStats);
 $('clearQuestionsBtn').addEventListener('click', clearAllQuestions);
-$('importExcelBtn').addEventListener('click', importExcel);
+$('importExcelBtn').addEventListener('click', () => importExcel(null));
 $('questionSearchKeyword').addEventListener('keypress', e => { if (e.key === 'Enter') { state.questionPage = 1; loadQuestions(); } });
 
 // Emergency
@@ -2109,12 +2782,16 @@ $('closeQuestionStatsBtn').addEventListener('click', () => { $('questionStatsMod
 $('questionStatsModal').addEventListener('click', e => { if (e.target === $('questionStatsModal')) $('questionStatsModal').classList.remove('show'); });
 
 // Excel modal
-$('cancelImportBtn').addEventListener('click', () => { $('excelConfigModal').classList.remove('show'); });
+$('cancelImportBtn').addEventListener('click', () => { $('excelConfigModal').classList.remove('show'); state.questionImportPreview = null; });
 $('excelConfigModal').addEventListener('click', e => { if (e.target === $('excelConfigModal')) $('excelConfigModal').classList.remove('show'); });
 $('confirmImportConfigBtn').addEventListener('click', confirmImportFromExcel);
 $('addCategoryBtn').addEventListener('click', () => {
-  const cat = prompt('请输入本次导入的题库名称（例如：客户经理题库）');
-  if (cat !== null) { state.importCategory = cat.trim(); showToast(`已设置题库名称: ${state.importCategory || '未命名'}`); }
+  const cat = prompt('请输入题库名称（例如：客户经理题库）', state.importCategory || '');
+  if (cat !== null) {
+    state.importCategory = cat.trim();
+    updateQuestionImportContext();
+    showToast(state.importCategory ? `题库名称：${state.importCategory}` : '题库名称不能为空', !state.importCategory);
+  }
 });
 ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => {
   $(id)?.addEventListener('change', updateExcelPreview);
