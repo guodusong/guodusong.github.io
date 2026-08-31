@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>新标签页</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -100,6 +99,7 @@ pre,code,.mono{font-family:'JetBrains Mono','SF Mono','Cascadia Code',monospace;
 .btn:hover{background:var(--surface-hover);}
 .btn:active:not(:disabled){transform:scale(.97);}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+:where(button,[role="button"],input,select,textarea,a):focus-visible{outline:3px solid var(--border-focus);outline-offset:2px;}
 
 .btn-primary{background:var(--accent);color:var(--accent-text);border-color:var(--accent);font-weight:600;}
 .btn-primary:hover{background:var(--accent-hover);}
@@ -206,9 +206,17 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .toast-item.err{background:var(--danger);}
 @keyframes toastIn{from{opacity:0;transform:translateY(12px) scale(.94);}}
 
+/* ── Global Network Status ── */
+.network-status{position:fixed;top:max(12px,env(safe-area-inset-top));right:12px;z-index:10001;display:flex;align-items:center;gap:8px;max-width:min(360px,calc(100vw - 24px));padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,.96);color:var(--text-secondary);font-size:.76rem;font-weight:500;box-shadow:var(--shadow-md);opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s var(--ease),transform .2s var(--ease);}
+.network-status.show{opacity:1;transform:translateY(0);}
+.network-status.slow{color:var(--warning);border-color:#fcd34d;background:var(--warning-light);}
+.network-spinner{width:13px;height:13px;flex:0 0 auto;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:networkSpin .75s linear infinite;}
+@keyframes networkSpin{to{transform:rotate(360deg);}}
+
 /* ── Confirm Dialog ── */
-.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:10001;align-items:center;justify-content:center;}
+.confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10100;align-items:center;justify-content:center;}
 .confirm-overlay.show{display:flex;}
+.dialog-open{overflow:hidden;}
 .confirm-box{background:var(--surface);border-radius:var(--radius-xl);padding:24px;max-width:340px;width:90%;box-shadow:var(--shadow-lg);animation:modalIn .25s var(--ease-spring);}
 @keyframes modalIn{from{opacity:0;transform:scale(.92);}}
 .confirm-box h4{font-size:.95rem;margin-bottom:8px;}
@@ -265,6 +273,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 @media(max-width:640px){
   .question-batch-card{grid-template-columns:1fr;}
   .question-batch-actions{justify-content:flex-start;}
+  .network-status{left:12px;right:12px;justify-content:center;}
 }
 
 /* ── Course Automation ── */
@@ -414,23 +423,29 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <body>
 
 <!-- Toast -->
-<div class="toast-stack" id="toastStack"></div>
+<div class="toast-stack" id="toastStack" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<!-- Network activity: all API wrappers update this immediately and warn on slow responses. -->
+<div class="network-status" id="networkStatus" role="status" aria-live="polite" aria-atomic="true">
+  <span class="network-spinner" aria-hidden="true"></span>
+  <span id="networkStatusText">正在连接云函数…</span>
+</div>
 
 <!-- Confirm Dialog -->
-<div class="confirm-overlay" id="confirmOverlay">
-  <div class="confirm-box">
+<div class="confirm-overlay" id="confirmOverlay" aria-hidden="true">
+  <div class="confirm-box" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMsg">
     <h4 id="confirmTitle"></h4>
     <p id="confirmMsg"></p>
     <div class="confirm-actions">
-      <button class="btn btn-ghost btn-sm" id="confirmCancel">取消</button>
-      <button class="btn btn-danger btn-sm" id="confirmOk">确认</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="confirmCancel">取消</button>
+      <button type="button" class="btn btn-danger btn-sm" id="confirmOk">确认</button>
     </div>
   </div>
 </div>
 
 <div class="app">
   <!-- Header -->
-  <header class="header"><h1 id="mainTitle">Link</h1></header>
+  <header class="header"><h1 id="mainTitle" role="button" tabindex="0" aria-label="Link 管理入口">Link</h1></header>
 
   <!-- Segmented Control -->
   <nav class="segmented">
@@ -475,6 +490,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         <button class="subtab" data-subtab="emergency">应急代码</button>
         <button class="subtab" data-subtab="devices">设备绑定</button>
         <button class="subtab" data-subtab="course">网课管理</button>
+        <button class="subtab" data-subtab="health">系统状态</button>
       </nav>
 
       <!-- Sub-pane: Tokens -->
@@ -520,7 +536,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
       </div>
 
       <!-- Sub-pane: Questions -->
-      <div class="subpane hidden" id="subQuestions" data-question-bank-version="10.2">
+<div class="subpane hidden" id="subQuestions" data-question-bank-version="10.7">
         <div class="flex mb-12">
           <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
             <option value="">全部题库</option>
@@ -532,6 +548,9 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         <div class="flex mb-12">
           <button id="importExcelBtn" class="btn btn-primary btn-sm">新建题库</button>
           <button id="questionStatsBtn" class="btn btn-ghost btn-sm">题库列表</button>
+          <button id="exportQuestionBankBtn" class="btn btn-ghost btn-sm">导出整库备份</button>
+          <button id="restoreQuestionBankBtn" class="btn btn-ghost btn-sm">从备份恢复</button>
+          <input type="file" id="questionBackupFileInput" accept=".gssqb,application/json" class="hidden">
           <button id="clearQuestionsBtn" class="btn btn-danger btn-sm">清空题库</button>
         </div>
         <div id="importProgress" class="hidden">
@@ -580,6 +599,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         </div>
 
         <div id="activationTableContainer"></div>
+        <div id="activationPagination"></div>
       </div>
 
       <!-- Sub-pane: Course automation -->
@@ -640,6 +660,12 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
         </div>
         <div id="courseOutput" class="course-output"></div>
       </div>
+
+      <!-- Sub-pane: Redacted system health -->
+      <div class="subpane hidden" id="subHealth">
+        <div class="toolbar"><button id="refreshHealthBtn" class="btn btn-primary btn-sm">重新检测</button></div>
+        <div id="healthStatusBody"><div class="empty">点击“重新检测”读取云函数、Redis 和模块状态；不会显示密码或密钥。</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -650,7 +676,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-      <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v10.2</span></h3><p>查看、筛选、整库替换或单独删除；支持同题干不同选项变体</p></div>
+          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v10.7</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -702,14 +728,57 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 // 新 Node.js 20.19 云函数；原有管理员接口与网课接口共用此地址。
 const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
 const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
-const COURSE_FRONTEND_VERSION = '9.0.0';
+const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
+const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
+const COURSE_FRONTEND_VERSION = '9.3.0';
 const COURSE_API_PROTOCOL_VERSION = 2;
+const API_CLIENT_VERSION = '10.7';
+const API_DEFAULT_TIMEOUT_MS = 30000;
+const API_LONG_TIMEOUT_MS = 60000;
+const API_COURSE_TIMEOUT_MS = 125000;
+const SHEETJS_URL = 'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';
+let sheetJsPromise = null;
 
 function createCourseSessionId() {
   try {
     if (window.crypto?.randomUUID) return window.crypto.randomUUID();
   } catch (_) {}
   return `web-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function createCourseRequestId() {
+  try {
+    if (window.crypto?.randomUUID) return window.crypto.randomUUID();
+  } catch (_) {}
+  return `req-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+}
+
+function loadPendingCourseExecutions() {
+  try {
+    const value = JSON.parse(localStorage.getItem(COURSE_EXECUTION_PENDING_STORAGE_KEY) || '{}');
+    return new Map(Object.entries(value).filter(([key, id]) => key.length <= 360 && /^[a-zA-Z0-9._:-]{8,120}$/.test(String(id))));
+  } catch (_) { return new Map(); }
+}
+
+function savePendingCourseExecutions() {
+  try { localStorage.setItem(COURSE_EXECUTION_PENDING_STORAGE_KEY, JSON.stringify(Object.fromEntries(state.courseExecutionKeys))); } catch (_) {}
+}
+
+function loadPendingAdminOperations() {
+  try {
+    const value = JSON.parse(localStorage.getItem(ADMIN_OPERATION_PENDING_STORAGE_KEY) || '{}');
+    return new Map(Object.entries(value)
+      .filter(([key, id]) => key.length <= 360 && /^[a-zA-Z0-9._:-]{8,120}$/.test(String(id)))
+      .slice(-100));
+  } catch (_) { return new Map(); }
+}
+
+function savePendingAdminOperations() {
+  try {
+    const entries = [...state.adminOperationKeys.entries()].slice(-100);
+    state.adminOperationKeys = new Map(entries);
+    localStorage.setItem(ADMIN_OPERATION_PENDING_STORAGE_KEY, JSON.stringify(Object.fromEntries(entries)));
+  } catch (_) {}
 }
 
 function loadCourseSessionId() {
@@ -730,10 +799,14 @@ const state = {
   adminPwd: '',
   adminSessionToken: '',
   isAdmin: false,
+  adminOperationKeys: loadPendingAdminOperations(),
   // Tokens
   allTokens: [],
   filteredTokens: [],
   tokenPage: 1,
+  tokenTotal: 0,
+  tokenSummary: { total: 0, active: 0, exhausted: 0 },
+  tokenServerPagination: false,
   tokenFilter: null,   // null | number
   selectedTokens: new Set(),
   // Logs
@@ -746,12 +819,17 @@ const state = {
   questionTotal: 0,
   questionKeyword: '',
   questionBatches: [],
+  questionBackups: [],
+  questionFullBackup: null,
   questionBatchFilter: '',
   editId: null,
   // Devices
   activations: [],
   deviceSelection: new Set(),
-  deviceFilter: null,
+  deviceKeyword: '',
+  devicePage: 1,
+  deviceTotal: 0,
+  deviceServerPagination: false,
   // Excel
   excelData: null,
   excelHeaders: [],
@@ -769,14 +847,18 @@ const state = {
   courseApiMessage: '尚未检测云函数版本。',
   courseBatchDelayMs: 650,
   courseBatchCurrentDelayMs: 650,
+  courseAllCourses: [],
+  courseAllGroups: [],
   courseCourses: [],
   courseGroups: [],
   courseById: new Map(),
+  courseListCache: null,
   courseCollapsed: new Set(),
   courseGroupsInitialized: false,
   courseLoading: false,
   courseBusy: false,
   courseSelected: new Set(),
+  courseExecutionKeys: loadPendingCourseExecutions(),
   courseBatch: null,
   courseBatchPumping: false,
   courseBatchPauseRequested: false,
@@ -788,12 +870,47 @@ const state = {
 const PAGE_SIZE = 15;
 const LOG_PAGE_SIZE = 10;
 const QUESTION_PAGE_SIZE = 10;
+const DEVICE_PAGE_SIZE = 20;
 
 // ═══════════════════════════════════════════
 //  Utilities
 // ═══════════════════════════════════════════
 const $ = id => document.getElementById(id);
-const escapeHtml = s => s ? String(s).replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;') : '';
+const escapeHtml = value => value === null || value === undefined ? '' : String(value).replace(/[&<>"']/g, char => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+})[char]);
+function ensureSheetJs() {
+  if (window.XLSX?.read && window.XLSX?.utils?.sheet_to_json) return Promise.resolve(window.XLSX);
+  if (sheetJsPromise) return sheetJsPromise;
+  sheetJsPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    let settled = false;
+    const finish = (error = null) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (!error && window.XLSX?.read && window.XLSX?.utils?.sheet_to_json) resolve(window.XLSX);
+      else reject(error || new Error('Excel 解析组件加载后不可用'));
+    };
+    const timer = setTimeout(() => finish(new Error('Excel 解析组件加载超时')), 20000);
+    script.src = SHEETJS_URL;
+    script.async = true;
+    script.onload = () => finish();
+    script.onerror = () => finish(new Error('Excel 解析组件下载失败'));
+    document.head.appendChild(script);
+  }).catch(error => {
+    sheetJsPromise = null;
+    throw error;
+  });
+  return sheetJsPromise;
+}
+function tokenNameError(value) {
+  const token = String(value ?? '').trim();
+  if (!token) return 'Token 名称不能为空';
+  if (token.length > 100) return 'Token 名称不能超过 100 个字符';
+  if (!/^[\p{L}\p{N}._:-]+$/u.test(token)) return 'Token 仅允许中文、字母、数字、点、下划线、冒号和短横线';
+  return '';
+}
 const showToast = (msg, err) => {
   const stack = $('toastStack');
   const el = document.createElement('div');
@@ -803,17 +920,50 @@ const showToast = (msg, err) => {
   setTimeout(() => { el.style.animation = 'toastIn .2s reverse'; setTimeout(() => el.remove(), 250); }, 2800);
 };
 
+let confirmQueue = Promise.resolve();
 function showConfirm(title, msg) {
-  return new Promise(resolve => {
+  const openDialog = () => new Promise(resolve => {
+    const overlay = $('confirmOverlay');
+    const okButton = $('confirmOk');
+    const cancelButton = $('confirmCancel');
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     $('confirmTitle').textContent = title;
     $('confirmMsg').textContent = msg;
-    $('confirmOverlay').classList.add('show');
-    const cleanup = () => { $('confirmOverlay').classList.remove('show'); $('confirmOk').removeEventListener('click', onOk); $('confirmCancel').removeEventListener('click', onCancel); };
-    const onOk = () => { cleanup(); resolve(true); };
-    const onCancel = () => { cleanup(); resolve(false); };
-    $('confirmOk').addEventListener('click', onOk);
-    $('confirmCancel').addEventListener('click', onCancel);
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('dialog-open');
+    requestAnimationFrame(() => okButton.focus());
+    const cleanup = () => {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('dialog-open');
+      okButton.removeEventListener('click', onOk);
+      cancelButton.removeEventListener('click', onCancel);
+      document.removeEventListener('keydown', onKeydown);
+      if (previousFocus?.isConnected) previousFocus.focus();
+    };
+    const finish = value => { cleanup(); resolve(value); };
+    const onOk = () => finish(true);
+    const onCancel = () => finish(false);
+    const onKeydown = event => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onCancel();
+      } else if (event.key === 'Tab') {
+        const target = event.shiftKey ? cancelButton : okButton;
+        if (document.activeElement === target) {
+          event.preventDefault();
+          (event.shiftKey ? okButton : cancelButton).focus();
+        }
+      }
+    };
+    okButton.addEventListener('click', onOk);
+    cancelButton.addEventListener('click', onCancel);
+    document.addEventListener('keydown', onKeydown);
   });
+  const queued = confirmQueue.then(openDialog, openDialog);
+  confirmQueue = queued.catch(() => false);
+  return queued;
 }
 
 function copyToClipboard(text, btn) {
@@ -865,6 +1015,7 @@ function switchSubtab(name) {
   if (name === 'logs' && state.isAdmin) loadLogs(true);
   if (name === 'questions' && state.isAdmin) initializeQuestionManagement();
   if (name === 'devices' && state.isAdmin) loadActivations();
+  if (name === 'health' && state.isAdmin) loadSystemHealth();
   if (name === 'course' && state.isAdmin) {
     renderCourseSessionState();
     loadCourseStatus();
@@ -874,6 +1025,162 @@ function switchSubtab(name) {
 // ═══════════════════════════════════════════
 //  API wrappers
 // ═══════════════════════════════════════════
+const apiInflight = new Map();
+const apiAbortGroups = new Map();
+const ADMIN_READ_ONLY_ACTIONS = new Set([
+  'health', 'listAll', 'logs', 'getEmergencyCode', 'listQuestionBatches', 'searchSimpleQuestions',
+  'countQuestions', 'listActivations', 'adminOperationStatus', 'exportQuestionBank',
+  'previewQuestionBankRestore', 'previewLastQuestionBankRestore'
+]);
+const ADMIN_MUTATING_ACTIONS = new Set([
+  'add', 'updateRemain', 'reset', 'renameToken', 'delete', 'deleteBatch', 'clearAll', 'import',
+  'clearLogs', 'importSimpleQuestions', 'commitQuestionImport', 'deleteQuestionBatch',
+  'restoreQuestionBatch', 'updateSimpleQuestion', 'deleteSimpleQuestion', 'clearAllQuestions',
+  'commitQuestionBankRestore', 'createActivation', 'revokeActivation', 'restoreActivation',
+  'deleteActivation', 'updateActivationDays', 'updateActivationUses', 'deleteActivationsBatch',
+  'clearAllActivations'
+]);
+const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus']);
+let activeApiRequests = 0;
+let networkShowTimer = null;
+let networkSlowTimer = null;
+
+function apiActivityLabel(namespace) {
+  if (namespace === 'course') return '正在连接网课平台…';
+  if (namespace === 'admin') return '正在连接管理服务…';
+  return '正在连接云函数…';
+}
+
+function beginApiActivity(namespace) {
+  activeApiRequests += 1;
+  if (activeApiRequests !== 1) return;
+  const indicator = $('networkStatus');
+  $('networkStatusText').textContent = apiActivityLabel(namespace);
+  indicator.classList.remove('slow');
+  clearTimeout(networkShowTimer);
+  clearTimeout(networkSlowTimer);
+  networkShowTimer = setTimeout(() => indicator.classList.add('show'), 120);
+  networkSlowTimer = setTimeout(() => {
+    indicator.classList.add('show', 'slow');
+    $('networkStatusText').textContent = '响应时间较长，请勿重复点击…';
+  }, 6000);
+}
+
+function endApiActivity() {
+  activeApiRequests = Math.max(0, activeApiRequests - 1);
+  if (activeApiRequests !== 0) return;
+  clearTimeout(networkShowTimer);
+  clearTimeout(networkSlowTimer);
+  const indicator = $('networkStatus');
+  indicator.classList.remove('show', 'slow');
+  $('networkStatusText').textContent = '正在连接云函数…';
+}
+
+function stableRequestValue(value, key = '') {
+  if (['password', 'adminSessionToken', 'coursePassword'].includes(key)) return '<redacted>';
+  if (Array.isArray(value)) return value.map(item => stableRequestValue(item));
+  if (value && typeof value === 'object') {
+    return Object.keys(value).sort().reduce((result, name) => {
+      result[name] = stableRequestValue(value[name], name);
+      return result;
+    }, {});
+  }
+  return value;
+}
+
+function compactRequestFingerprint(value) {
+  const source = JSON.stringify(stableRequestValue(value));
+  let first = 2166136261;
+  let second = 2246822519;
+  for (let index = 0; index < source.length; index += 1) {
+    const code = source.charCodeAt(index);
+    first = Math.imul(first ^ code, 16777619);
+    second = Math.imul(second ^ code, 3266489917);
+  }
+  return `${source.length}:${(first >>> 0).toString(36)}:${(second >>> 0).toString(36)}`;
+}
+
+function apiTimeoutFor(namespace, action) {
+  if (namespace === 'course') {
+    const longCourseActions = new Set(['login', 'challenge', 'list', 'inspect', 'verify', 'preview', 'execute', 'executeStatus', 'batchPreview', 'batchCreate', 'batchStep']);
+    return longCourseActions.has(action) ? API_COURSE_TIMEOUT_MS : API_LONG_TIMEOUT_MS;
+  }
+  if (namespace === 'admin') {
+    const longAdminActions = new Set([
+      'previewQuestionImport', 'commitQuestionImport', 'restoreQuestionBatch', 'deleteQuestionBatch',
+      'clearAllQuestions', 'import', 'exportQuestionBank', 'previewQuestionBankRestore',
+      'previewLastQuestionBankRestore', 'commitQuestionBankRestore'
+    ]);
+    return longAdminActions.has(action) ? API_LONG_TIMEOUT_MS : API_DEFAULT_TIMEOUT_MS;
+  }
+  return API_DEFAULT_TIMEOUT_MS;
+}
+
+async function apiJsonRequest({ namespace = 'public', action = '', url = API_URL, method = 'POST', payload = null, timeoutMs, cancelGroup = '' }) {
+  const requestKey = `${namespace}:${action}:${method}:${url}:${compactRequestFingerprint(payload)}`;
+  if (apiInflight.has(requestKey)) return apiInflight.get(requestKey);
+
+  let abortReason = '';
+  const controller = new AbortController();
+  if (cancelGroup) {
+    const previous = apiAbortGroups.get(cancelGroup);
+    if (previous) {
+      previous.abortReason('superseded');
+      previous.controller.abort();
+    }
+    apiAbortGroups.set(cancelGroup, {
+      controller,
+      abortReason(reason) { abortReason = reason; },
+    });
+  }
+
+  const clientRequestId = createCourseRequestId();
+  const effectiveTimeout = Number(timeoutMs) > 0 ? Number(timeoutMs) : apiTimeoutFor(namespace, action);
+  const operation = (async () => {
+    beginApiActivity(namespace);
+    const timer = setTimeout(() => {
+      abortReason = 'timeout';
+      controller.abort();
+    }, effectiveTimeout);
+    try {
+      const options = {
+        method,
+        headers: method === 'GET' ? {} : { 'Content-Type': 'application/json', 'X-Request-Id': clientRequestId },
+        signal: controller.signal,
+      };
+      if (payload !== null && method !== 'GET') options.body = JSON.stringify(payload);
+      const response = await fetch(url, options);
+      const responseRequestId = response.headers.get('x-request-id') || clientRequestId;
+      const responseText = await response.text();
+      let data = {};
+      if (responseText) {
+        try { data = JSON.parse(responseText); }
+        catch (_) { data = { message: responseText }; }
+      }
+      return { response, data, requestId: responseRequestId };
+    } catch (cause) {
+      const error = new Error(
+        abortReason === 'superseded'
+          ? '请求已被更新的操作替代'
+          : abortReason === 'timeout'
+            ? `请求超过 ${Math.round(effectiveTimeout / 1000)} 秒仍未返回`
+            : '无法连接云函数，请检查网络后重试'
+      );
+      error.code = abortReason === 'superseded' ? 'REQUEST_SUPERSEDED' : abortReason === 'timeout' ? 'CLIENT_TIMEOUT' : 'NETWORK_ERROR';
+      error.requestId = clientRequestId;
+      error.cause = cause;
+      throw error;
+    } finally {
+      clearTimeout(timer);
+      endApiActivity();
+      if (apiInflight.get(requestKey) === operation) apiInflight.delete(requestKey);
+      if (cancelGroup && apiAbortGroups.get(cancelGroup)?.controller === controller) apiAbortGroups.delete(cancelGroup);
+    }
+  })();
+  apiInflight.set(requestKey, operation);
+  return operation;
+}
+
 function clearAdminSession(message = '管理后台登录已过期，请重新登录') {
   state.adminPwd = '';
   state.adminSessionToken = '';
@@ -895,14 +1202,68 @@ function acceptAdminSession(data) {
   return data;
 }
 
-async function adminFetch(action, params = {}) {
+async function adminFetch(action, params = {}, requestOptions = {}) {
+  const isMutation = ADMIN_MUTATING_ACTIONS.has(action) && !ADMIN_READ_ONLY_ACTIONS.has(action);
+  const operationSlot = isMutation ? `${action}:${compactRequestFingerprint(params)}` : '';
+  const operationId = isMutation
+    ? (state.adminOperationKeys.get(operationSlot) || createCourseRequestId())
+    : '';
+  if (isMutation) {
+    state.adminOperationKeys.set(operationSlot, operationId);
+    savePendingAdminOperations();
+  }
   const payload = { admin: '1', action, ...params };
+  if (operationId) payload.operationId = operationId;
   if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
   else payload.password = state.adminPwd;
-  const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-  let data = null;
-  try { data = await res.json(); } catch (_) { data = {}; }
-  if (!res.ok) {
+  let transport;
+  try {
+    transport = await apiJsonRequest({ namespace: 'admin', action, payload, ...requestOptions });
+  } catch (error) {
+    if (isMutation && ['CLIENT_TIMEOUT', 'NETWORK_ERROR'].includes(error.code)) {
+      try {
+        const statusData = await adminFetch('adminOperationStatus', { operationId }, { timeoutMs: API_DEFAULT_TIMEOUT_MS });
+        const receipt = statusData?.adminOperation || {};
+        if (receipt.status === 'completed') {
+          state.adminOperationKeys.delete(operationSlot);
+          savePendingAdminOperations();
+          const statusCode = Number(receipt.resultStatusCode || 200);
+          if (statusCode >= 400) {
+            const result = receipt.result && typeof receipt.result === 'object' ? receipt.result : {};
+            const recoveredError = new Error(result.error || result.message || `操作失败 (${statusCode})`);
+            recoveredError.code = result.code || 'ADMIN_OPERATION_FAILED';
+            recoveredError.payload = result;
+            recoveredError.reconciled = true;
+            throw recoveredError;
+          }
+          const recovered = receipt.result && typeof receipt.result === 'object' ? receipt.result : {};
+          recovered.adminOperation = { ...receipt, replayed: true };
+          return acceptAdminSession(recovered);
+        }
+        error.code = receipt.status === 'running'
+          ? 'ADMIN_OPERATION_IN_PROGRESS'
+          : 'ADMIN_OPERATION_RECONCILIATION_REQUIRED';
+        error.unknownResult = true;
+        error.message = receipt.status === 'running'
+          ? '操作仍在云端处理中，请稍后刷新列表；系统不会重复提交'
+          : '操作结果暂不确定，请先刷新对应列表并人工核对；系统不会重复提交';
+      } catch (statusError) {
+        if (statusError?.code === 'ADMIN_OPERATION_NOT_FOUND') {
+          state.adminOperationKeys.delete(operationSlot);
+          savePendingAdminOperations();
+          error.message += '；云端未找到操作收据，本次没有自动重发，请刷新列表后再决定是否重试';
+        } else if (statusError?.reconciled) {
+          throw statusError;
+        } else {
+          error.unknownResult = true;
+          error.message += '；暂时无法查询操作状态，请刷新对应列表，不要立即重复提交';
+        }
+      }
+    }
+    throw error;
+  }
+  const { response, data, requestId } = transport;
+  if (!response.ok) {
     const errMsg = data.error || data.message || '请求失败';
     if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || errMsg === '密码错误' || /管理员会话/.test(errMsg)) {
       clearAdminSession('管理后台登录已过期，请重新登录');
@@ -912,7 +1273,17 @@ async function adminFetch(action, params = {}) {
     error.code = data.code || '';
     error.details = data.details || null;
     error.payload = data;
+    error.requestId = requestId;
+    const receiptStatus = data?.adminOperation?.status || '';
+    if (isMutation && receiptStatus === 'completed') {
+      state.adminOperationKeys.delete(operationSlot);
+      savePendingAdminOperations();
+    }
     throw error;
+  }
+  if (isMutation && (!data?.adminOperation || data.adminOperation.status === 'completed')) {
+    state.adminOperationKeys.delete(operationSlot);
+    savePendingAdminOperations();
   }
   return acceptAdminSession(data);
 }
@@ -942,7 +1313,7 @@ function acceptCourseApiMetadata(data) {
 
 // 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
 // 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
-async function courseFetch(courseAction, params = {}) {
+async function courseFetch(courseAction, params = {}, requestOptions = {}) {
   if (!state.isAdmin || (!state.adminPwd && !state.adminSessionToken)) throw new Error('请先登录管理后台');
   const payload = {
     module: 'course',
@@ -953,16 +1324,20 @@ async function courseFetch(courseAction, params = {}) {
   };
   if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
   else payload.password = state.adminPwd;
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  let data = null;
-  try { data = await res.json(); } catch (_) { data = {}; }
+  let transport;
+  try {
+    transport = await apiJsonRequest({ namespace: 'course', action: courseAction, payload, ...requestOptions });
+  } catch (error) {
+    if (['CLIENT_TIMEOUT', 'NETWORK_ERROR'].includes(error.code) && !COURSE_READ_ONLY_ACTIONS.has(courseAction)) {
+      error.unknownResult = true;
+      error.message += '；结果可能已经写入平台，系统不会自动重复提交';
+    }
+    throw error;
+  }
+  const { response, data, requestId } = transport;
   acceptCourseApiMetadata(data);
-  if (!res.ok || data.ok === false) {
-    const message = data.error || data.message || `网课请求失败（HTTP ${res.status}）`;
+  if (!response.ok || data.ok === false) {
+    const message = data.error || data.message || `网课请求失败（HTTP ${response.status}）`;
     if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
       clearAdminSession('管理后台登录已过期，请重新登录');
       throw new Error(message);
@@ -970,14 +1345,24 @@ async function courseFetch(courseAction, params = {}) {
     const error = new Error(message);
     error.code = data.code || '';
     error.sessionStatus = data.sessionStatus || '';
+    error.requestId = requestId;
     throw error;
   }
   return acceptAdminSession(data);
 }
 
 async function renameUserToken(oldToken, newToken) {
-  const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'renameToken', token: oldToken, newToken: newToken }) });
-  return await res.json();
+  const { response, data, requestId } = await apiJsonRequest({
+    namespace: 'public',
+    action: 'renameToken',
+    payload: { action: 'renameToken', token: oldToken, newToken: newToken },
+  });
+  if (!response.ok) {
+    const error = new Error(data.error || data.message || '改名失败');
+    error.requestId = requestId;
+    throw error;
+  }
+  return data;
 }
 
 // ═══════════════════════════════════════════
@@ -992,13 +1377,17 @@ async function userVerify() {
   const orig = btn.textContent;
   btn.textContent = '验证中...'; btn.disabled = true;
   try {
-    const res = await fetch(`${API_URL}?token=${encodeURIComponent(token)}&check=1`);
-    if (!res.ok) {
-      const t = await res.text(); let em = '验证失败';
-      try { em = JSON.parse(t).error || em; } catch(e) {}
-      throw new Error(em);
+    const { response, data, requestId } = await apiJsonRequest({
+      namespace: 'public',
+      action: 'checkToken',
+      method: 'GET',
+      url: `${API_URL}?token=${encodeURIComponent(token)}&check=1`,
+    });
+    if (!response.ok) {
+      const error = new Error(data.error || data.message || '验证失败');
+      error.requestId = requestId;
+      throw error;
     }
-    const data = await res.json();
     const area = $('verifyResult');
     area.classList.remove('hidden');
 
@@ -1044,8 +1433,9 @@ function renderVerifyResult(token, remain, hasCode) {
       <div id="renameMsg" class="text-sm mt-8"></div>
     </div>`;
   if (hasCode) {
-    const c1 = `=javascript:$.getScript('${API_URL}?token=${token}')`;
-    const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${token}';document.body.appendChild(s);})();`;
+    const encodedToken = encodeURIComponent(String(token));
+    const c1 = `=javascript:$.getScript('${API_URL}?token=${encodedToken}')`;
+    const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodedToken}';document.body.appendChild(s);})();`;
     h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
       <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">📋 复制代码</button></div>
       <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（备用）</div>
@@ -1067,16 +1457,15 @@ async function adminLogin() {
   state.adminSessionToken = '';
   state.adminPwd = pwd;
   try {
-    const res = await adminFetch('login');
+    state.tokenPage = 1;
+    const res = await adminFetch('login', { page: 1, pageSize: PAGE_SIZE });
     state.isAdmin = true;
     $('adminLoginCard').classList.add('hidden');
     $('adminMain').classList.remove('hidden');
-    state.allTokens = res.tokens || [];
-    updateStats(); applyTokenFilter(); renderTokenView();
+    acceptTokenListData(res);
+    renderTokenView();
     switchSubtab('tokens');
     adminFetch('getEmergencyCode').then(d => { $('emergencyCodeBlock').textContent = d?.code || '应急代码获取失败'; }).catch(() => { $('emergencyCodeBlock').textContent = '应急代码加载失败'; });
-    loadLogs(true);
-    loadQuestions();
     showToast('管理后台已解锁');
   } catch(e) {
     if (e.message.includes('锁定')) showToast('失败次数过多，已被锁定15分钟', true);
@@ -1089,36 +1478,71 @@ async function adminLogin() {
 //  Admin: Stats
 // ═══════════════════════════════════════════
 function updateStats() {
-  $('statTotal').textContent = state.allTokens.length;
-  $('statActive').textContent = state.allTokens.filter(t => t.remain > 0).length;
-  $('statUsed').textContent = state.allTokens.filter(t => t.remain <= 0).length;
+  const summary = state.tokenServerPagination
+    ? state.tokenSummary
+    : {
+        total: state.allTokens.length,
+        active: state.allTokens.filter(t => t.remain > 0).length,
+        exhausted: state.allTokens.filter(t => t.remain <= 0).length,
+      };
+  $('statTotal').textContent = Number(summary.total || 0);
+  $('statActive').textContent = Number(summary.active || 0);
+  $('statUsed').textContent = Number(summary.exhausted || 0);
 }
 
 // ═══════════════════════════════════════════
 //  Admin: Token List
 // ═══════════════════════════════════════════
-async function loadAllTokens() {
+function acceptTokenListData(data) {
+  state.allTokens = Array.isArray(data?.tokens) ? data.tokens : [];
+  state.tokenServerPagination = data?.pagination?.enabled === true;
+  if (state.tokenServerPagination) {
+    state.tokenPage = Math.max(1, Number(data.page || state.tokenPage || 1));
+    state.tokenTotal = Math.max(0, Number(data.total || 0));
+    state.tokenSummary = {
+      total: Math.max(0, Number(data.summary?.total || 0)),
+      active: Math.max(0, Number(data.summary?.active || 0)),
+      exhausted: Math.max(0, Number(data.summary?.exhausted || 0)),
+    };
+    state.filteredTokens = [...state.allTokens];
+  } else {
+    let filtered = [...state.allTokens];
+    if (state.tokenFilter !== null) filtered = filtered.filter(token => token.remain === state.tokenFilter);
+    state.filteredTokens = filtered;
+    state.tokenTotal = filtered.length;
+  }
+  updateStats();
+}
+
+async function loadAllTokens({ resetPage = false } = {}) {
   const container = $('tokenTableContainer');
-  container.innerHTML = '<div class="empty">加载中...</div>';
+  const hadData = state.allTokens.length > 0;
+  if (resetPage) state.tokenPage = 1;
+  if (!hadData) container.innerHTML = '<div class="empty">加载中...</div>';
   try {
-    const data = await adminFetch('listAll');
-    state.allTokens = data.tokens || [];
-    updateStats();
-    state.tokenFilter = null;
-    state.selectedTokens.clear();
-    applyTokenFilter();
-    loadLogs(true);
+    const params = { page: state.tokenPage, pageSize: PAGE_SIZE };
+    if (state.tokenFilter !== null) params.remain = state.tokenFilter;
+    const data = await adminFetch('listAll', params, { cancelGroup: 'token-list' });
+    acceptTokenListData(data);
+    if (state.tokenServerPagination && !state.allTokens.length && state.tokenTotal > 0 && state.tokenPage > 1) {
+      state.tokenPage -= 1;
+      return loadAllTokens();
+    }
+    renderTokenView();
   } catch(e) {
-    container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+    if (hadData) renderTokenView();
+    else container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
     showToast(`加载失败: ${e.message}`, true);
   }
 }
 
 function applyTokenFilter() {
-  let f = [...state.allTokens];
-  if (state.tokenFilter !== null) f = f.filter(t => t.remain === state.tokenFilter);
-  state.filteredTokens = f;
   state.tokenPage = 1;
+  if (state.tokenServerPagination) return loadAllTokens();
+  let filtered = [...state.allTokens];
+  if (state.tokenFilter !== null) filtered = filtered.filter(token => token.remain === state.tokenFilter);
+  state.filteredTokens = filtered;
+  state.tokenTotal = filtered.length;
   renderTokenView();
 }
 
@@ -1129,9 +1553,10 @@ function renderTokenView() {
     $('paginationContainer').innerHTML = '';
     return;
   }
-  const totalPages = Math.ceil(state.filteredTokens.length / PAGE_SIZE);
+  const totalItems = state.tokenServerPagination ? state.tokenTotal : state.filteredTokens.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
   const start = (state.tokenPage - 1) * PAGE_SIZE;
-  const items = state.filteredTokens.slice(start, start + PAGE_SIZE);
+  const items = state.tokenServerPagination ? state.filteredTokens : state.filteredTokens.slice(start, start + PAGE_SIZE);
 
   if (window.innerWidth >= 768) {
     container.innerHTML = renderTokenTable(items);
@@ -1144,12 +1569,22 @@ function renderTokenView() {
   $('paginationContainer').innerHTML = totalPages <= 1 ? '' : `
     <div class="pagination">
       <button class="btn btn-ghost btn-sm" id="prevPageBtn" ${state.tokenPage===1?'disabled':''}>上一页</button>
-      <span>${state.tokenPage} / ${totalPages}</span>
+      <span>${state.tokenPage} / ${totalPages} · 共 ${totalItems} 条</span>
       <button class="btn btn-ghost btn-sm" id="nextPageBtn" ${state.tokenPage===totalPages?'disabled':''}>下一页</button>
     </div>`;
   if (totalPages > 1) {
-    $('prevPageBtn').addEventListener('click', () => { if (state.tokenPage > 1) { state.tokenPage--; renderTokenView(); } });
-    $('nextPageBtn').addEventListener('click', () => { if (state.tokenPage < totalPages) { state.tokenPage++; renderTokenView(); } });
+    $('prevPageBtn').addEventListener('click', () => {
+      if (state.tokenPage > 1) {
+        state.tokenPage--;
+        if (state.tokenServerPagination) loadAllTokens(); else renderTokenView();
+      }
+    });
+    $('nextPageBtn').addEventListener('click', () => {
+      if (state.tokenPage < totalPages) {
+        state.tokenPage++;
+        if (state.tokenServerPagination) loadAllTokens(); else renderTokenView();
+      }
+    });
   }
 }
 
@@ -1235,14 +1670,14 @@ async function handleTokenAction(action, token) {
     return;
   }
   if (action === 'resetToken') {
-    const ok = await showConfirm('重置toekn', `确定将 "${token}" 的剩余次数重置为初始值吗？`);
+    const ok = await showConfirm('重置 Token', `确定将 "${token}" 的剩余次数重置为初始值吗？`);
     if (!ok) return;
     try { await adminFetch('reset', { token }); await loadAllTokens(); showToast('已重置'); }
     catch(e) { showToast(`重置失败: ${e.message}`, true); }
     return;
   }
   if (action === 'deleteToken') {
-    const ok = await showConfirm('删除toekn', `确定要删除 "${token}" 吗？此操作不可恢复。`);
+    const ok = await showConfirm('删除 Token', `确定要删除 "${token}" 吗？此操作不可恢复。`);
     if (!ok) return;
     try { state.selectedTokens.delete(token); await adminFetch('delete', { token }); await loadAllTokens(); showToast('已删除'); }
     catch(e) { showToast(`删除失败: ${e.message}`, true); }
@@ -1290,8 +1725,7 @@ async function clearAllTokens() {
 }
 
 async function filterByRemain() {
-  const vals = [...new Set(state.allTokens.map(t => t.remain))].sort((a,b)=>a-b);
-  const val = prompt(`当前剩余次数: ${vals.join(', ')}\n请输入要筛选的数字：`);
+  const val = prompt('请输入要筛选的剩余次数（精确数字）：');
   if (val !== null && !isNaN(parseInt(val))) {
     state.tokenFilter = parseInt(val);
     applyTokenFilter();
@@ -1304,9 +1738,11 @@ function clearFilter() { state.tokenFilter = null; applyTokenFilter(); showToast
 // Add & Import
 async function addSingleToken() {
   const name = $('newTokenName').value.trim();
-  if (!name) { showToast('请输入 Token 名称', true); return; }
-  let init = parseInt($('newTokenInitCount').value);
-  if (isNaN(init) || init < 1) init = 3;
+  const nameError = tokenNameError(name);
+  if (nameError) { showToast(nameError, true); return; }
+  let init = Number($('newTokenInitCount').value);
+  if (!Number.isInteger(init) || init < 1) init = 3;
+  if (init > 1000000) { showToast('初始次数不能超过 1000000', true); return; }
   const btn = $('addTokenBtn'); const orig = btn.textContent;
   btn.textContent = '添加中...'; btn.disabled = true;
   try {
@@ -1326,6 +1762,8 @@ async function importTokens() {
   btn.textContent = '导入中...'; btn.disabled = true;
   try {
     const arr = text.split('\n').map(s => s.trim()).filter(s => s);
+    const invalid = arr.filter(item => tokenNameError(item));
+    if (invalid.length) throw new Error(`有 ${invalid.length} 个 Token 名称不符合规则，请先修改：${invalid.slice(0, 3).join('、')}`);
     const res = await adminFetch('import', { tokens: arr });
     showToast(`导入完成: 新增 ${res.added}，跳过 ${res.skipped}`);
     $('importTokensText').value = ''; $('importForm').classList.remove('open');
@@ -1341,7 +1779,7 @@ function renderLogEntry(log) {
   const d = new Date(log.timestamp);
   const pad = n => String(n).padStart(2,'0');
   const ts = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  const adminActs = ['login','add','updateRemain','reset','renameToken','delete','deleteBatch','clearAll','import','importSimpleQuestions','commitQuestionImport','deleteQuestionBatch','updateSimpleQuestion','deleteSimpleQuestion','clearAllQuestions'];
+  const adminActs = ['login','add','updateRemain','reset','renameToken','delete','deleteBatch','clearAll','import','importSimpleQuestions','commitQuestionImport','deleteQuestionBatch','restoreQuestionBatch','commitQuestionBankRestore','updateSimpleQuestion','deleteSimpleQuestion','clearAllQuestions'];
   const isAdmin = adminActs.includes(log.action);
   let actText = '';
   if (log.action === 'use') actText = `提取脚本 (剩余 ${(log.details||'').replace(/[^0-9]/g,'')||'0'} 次)`;
@@ -1356,6 +1794,8 @@ function renderLogEntry(log) {
   else if (log.action === 'importSimpleQuestions') actText = `导入题库 (新增 ${log.details?.match(/\d+/)?.[0]||'?'} 条)`;
   else if (log.action === 'commitQuestionImport') actText = escapeHtml(log.details||'新增或替换题库');
   else if (log.action === 'deleteQuestionBatch') actText = escapeHtml(log.details||'删除独立题库');
+  else if (log.action === 'restoreQuestionBatch') actText = escapeHtml(log.details||'回滚独立题库');
+  else if (log.action === 'commitQuestionBankRestore') actText = escapeHtml(log.details||'整库恢复');
   else if (log.action === 'updateSimpleQuestion') actText = `修改题目 ${log.details||''}`;
   else if (log.action === 'deleteSimpleQuestion') actText = `删除题目 ${log.details||''}`;
   else if (log.action === 'clearAllQuestions') actText = `清空题库`;
@@ -1420,9 +1860,42 @@ function renderQuestionBatchFilter(selectedBatchId = null) {
   state.questionBatchFilter = select.value;
 }
 
+async function loadSystemHealth() {
+  const body = $('healthStatusBody');
+  const button = $('refreshHealthBtn');
+  if (!body || !button) return;
+  const original = button.textContent;
+  button.disabled = true;
+  button.textContent = '检测中...';
+  body.innerHTML = '<div class="empty">正在检测云函数、Redis、题库和网课配置...</div>';
+  try {
+    const data = await adminFetch('health');
+    const redisOk = data.redis?.connected === true && data.redis?.clientReady !== false;
+    const courseOk = data.course?.configured === true;
+    const redisLastError = data.redis?.lastErrorAt
+      ? ` · 最近异常 ${escapeHtml(data.redis.lastErrorCode || 'REDIS_ERROR')} / ${escapeHtml(formatQuestionBatchTime(data.redis.lastErrorAt))}`
+      : '';
+    body.innerHTML = `<div class="stats-grid2">
+      <div class="stat-card2"><div class="stat-card2-label">云函数运行时</div><div class="stat-card2-value" style="font-size:1rem;">${escapeHtml(data.runtime?.node || '未知')}</div><div class="stat-card2-sub">内存 ${Number(data.runtime?.memoryMb || 0)} MB · 启动 ${Number(data.runtime?.uptimeSeconds || 0)} 秒</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">Redis</div><div class="stat-card2-value" style="color:${redisOk ? 'var(--success)' : 'var(--danger)'};">${redisOk ? '正常' : '异常'}</div><div class="stat-card2-sub">TLS ${data.redis?.tlsEnabled ? '已启用' : '未启用'} · ${escapeHtml(data.redis?.ping || '')} · 连接超时 ${Number(data.redis?.connectTimeoutMs || 0)} ms${redisLastError}</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">题库</div><div class="stat-card2-value">${Number(data.data?.questionCount || 0)}</div><div class="stat-card2-sub">${Number(data.data?.questionBatchCount || 0)} 个独立题库 · 数据版本 ${Number(data.data?.questionVersion || 0)}</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">网课配置</div><div class="stat-card2-value" style="color:${courseOk ? 'var(--success)' : 'var(--danger)'};">${courseOk ? '完整' : '缺失'}</div><div class="stat-card2-sub">列表缓存 ${Number(data.course?.listCacheTtlSeconds || 0)} 秒 · 执行凭据 ${Math.round(Number(data.course?.executionReceiptTtlSeconds || 0) / 86400)} 天</div></div>
+    </div>
+    <div class="result-card ${redisOk && courseOk ? 'success' : 'warning'}">检测时间：${escapeHtml(formatQuestionBatchTime(data.checkedAt))} · 后端耗时 ${Number(data.latencyMs || 0)} ms · 激活码 ${Number(data.data?.activationCount || 0)} 个 · 管理写入收据 ${Math.round(Number(data.safeguards?.adminOperationReceiptTtlSeconds || 0) / 86400)} 天 · 幂等事件上限 ${Number(data.safeguards?.activationUsageEventLimit || 0)} 条</div>
+    <div class="tip">前端请求层 v${escapeHtml(API_CLIENT_VERSION)}。这里只返回布尔状态和数量，不返回 Redis 密码、管理员密码、JWT 密钥或网课加密密钥。</div>`;
+  } catch (error) {
+    body.innerHTML = `<div class="result-card error">健康检查失败：${escapeHtml(error.message || '未知错误')}</div>`;
+  } finally {
+    button.disabled = false;
+    button.textContent = original;
+  }
+}
+
 async function loadQuestionBatches({ selectedBatchId = null } = {}) {
   const data = await adminFetch('listQuestionBatches');
   state.questionBatches = Array.isArray(data.batches) ? data.batches : [];
+  state.questionBackups = Array.isArray(data.backups) ? data.backups : [];
+  state.questionFullBackup = data.fullBackup && typeof data.fullBackup === 'object' ? data.fullBackup : null;
   renderQuestionBatchFilter(selectedBatchId);
   return data;
 }
@@ -1442,11 +1915,14 @@ async function loadQuestions() {
     state.questionBatchFilter = batchId;
     const params = { keyword: kw, page: state.questionPage, pageSize: QUESTION_PAGE_SIZE };
     if (batchId) params.batchId = batchId;
-    const data = await adminFetch('searchSimpleQuestions', params);
+    const data = await adminFetch('searchSimpleQuestions', params, { cancelGroup: 'question-search' });
     state.questions = Array.isArray(data.data) ? data.data : [];
     state.questionTotal = Number(data.total || 0);
     renderQuestionList();
-  } catch(e) { showToast(`加载题目失败: ${e.message}`, true); }
+  } catch(e) {
+    if (e.code === 'REQUEST_SUPERSEDED') return;
+    showToast(`加载题目失败: ${e.message}`, true);
+  }
 }
 
 function renderQuestionList() {
@@ -1563,6 +2039,97 @@ function formatQuestionBatchTime(value) {
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+function formatFileBytes(value) {
+  const bytes = Math.max(0, Number(value || 0));
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+}
+
+async function exportQuestionBank(source = 'current') {
+  const actionLabel = source === 'lastBackup' ? '下载整库自动备份' : '导出当前整库备份';
+  try {
+    const data = await adminFetch('exportQuestionBank', { source });
+    const file = {
+      format: data.format,
+      version: data.version,
+      encoding: data.encoding,
+      createdAt: new Date().toISOString(),
+      source: data.source,
+      sha256: data.sha256,
+      rawBytes: data.rawBytes,
+      compressedBytes: data.compressedBytes,
+      totalQuestions: data.totalQuestions,
+      totalBatches: data.totalBatches,
+      exportedAt: data.exportedAt,
+      payload: data.payload,
+    };
+    const blob = new Blob([JSON.stringify(file)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = data.filename || `gss-question-bank-backup-${Date.now()}.gssqb`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast(`${actionLabel}完成：${Number(data.totalBatches || 0)} 个题库、${Number(data.totalQuestions || 0)} 道题`);
+    return data;
+  } catch (error) {
+    showToast(`${actionLabel}失败：${error.message}`, true);
+    throw error;
+  }
+}
+
+function questionRestoreIssueSummary(preview) {
+  const issues = [...(preview?.errors || []), ...(preview?.warnings || [])].slice(0, 3);
+  return issues.map(item => `${item.category ? `“${item.category}”` : '备份文件'}${item.row ? `第 ${item.row} 题` : ''}：${item.message}`).join('\n');
+}
+
+async function confirmQuestionBankRestore(preview, sourceLabel = '备份文件') {
+  if (!preview?.ready || !preview.previewId) {
+    const details = questionRestoreIssueSummary(preview);
+    throw new Error(details ? `备份校验未通过：\n${details}` : '备份校验未通过，未写入题库');
+  }
+  const warningText = Number(preview.warningCount || 0) > 0
+    ? `\n另有 ${Number(preview.warningCount)} 条重复提醒，不阻止恢复。`
+    : '';
+  const ok = await showConfirm(
+    '确认整库恢复',
+    `来源：${sourceLabel}\n当前：${Number(preview.currentBatches || 0)} 个题库、${Number(preview.currentQuestions || 0)} 道题\n恢复后：${Number(preview.inputBatches || 0)} 个题库、${Number(preview.inputQuestions || 0)} 道题${warningText}\n\n提交后将原子替换整个题库；系统会先自动保存当前整库备份。`,
+  );
+  if (!ok) return null;
+  const result = await adminFetch('commitQuestionBankRestore', { previewId: preview.previewId, confirm: true });
+  state.questionPage = 1;
+  await loadQuestionBatches();
+  await loadQuestions();
+  showToast(`整库恢复完成：${Number(result.restoredBatches || 0)} 个题库、${Number(result.restoredQuestions || 0)} 道题`);
+  return result;
+}
+
+async function restoreQuestionBankFromFile(file) {
+  if (!file) return;
+  if (file.size > 24 * 1024 * 1024) throw new Error('备份文件超过 24 MB，浏览器端已停止上传');
+  let wrapper;
+  try { wrapper = JSON.parse(await file.text()); }
+  catch (_) { throw new Error('文件不是有效的 GSS 题库备份'); }
+  if (wrapper?.format !== 'gss-question-bank-backup' || Number(wrapper?.version) !== 1
+      || wrapper?.encoding !== 'gzip-base64' || typeof wrapper?.payload !== 'string') {
+    throw new Error('备份格式或版本不受支持');
+  }
+  const data = await adminFetch('previewQuestionBankRestore', {
+    payload: wrapper.payload,
+    sha256: wrapper.sha256 || '',
+  });
+  return confirmQuestionBankRestore(data.preview, file.name || '本地备份文件');
+}
+
+async function restoreLastAutomaticQuestionBankBackup() {
+  const data = await adminFetch('previewLastQuestionBankRestore');
+  const savedAt = data.backup?.savedAt ? formatQuestionBatchTime(data.backup.savedAt) : '未知时间';
+  return confirmQuestionBankRestore(data.preview, `自动备份（${savedAt}）`);
+}
+
 async function showQuestionStats() {
   const modal = $('questionStatsModal');
   modal.classList.add('show');
@@ -1573,31 +2140,85 @@ async function showQuestionStats() {
     const batches = state.questionBatches;
     const history = Array.isArray(data.history) ? data.history : [];
     const latest = batches[0] || null;
+    const backupMap = new Map(state.questionBackups.map(item => [String(item.batchId || ''), item]));
+    const fullBackup = state.questionFullBackup;
     const cards = batches.map(batch => `<div class="question-batch-card" data-batch-id="${escapeHtml(batch.batchId)}">
       <div><div class="question-batch-title">${escapeHtml(batch.category || '未命名题库')}</div>
         <div class="question-batch-meta"><span>${Number(batch.count || 0)} 道题</span><span>版本 ${Number(batch.revision || 1)}</span><span>更新 ${escapeHtml(formatQuestionBatchTime(batch.updatedAt || batch.createdAt))}</span></div></div>
-      <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qbatch-action="view">查看</button><button class="btn btn-primary btn-sm" data-qbatch-action="replace">整库替换</button><button class="btn btn-danger btn-sm" data-qbatch-action="delete">删除</button></div>
+      <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qbatch-action="view">查看</button><button class="btn btn-primary btn-sm" data-qbatch-action="replace">整库替换</button>${backupMap.has(String(batch.batchId)) ? '<button class="btn btn-ghost btn-sm" data-qbatch-action="restore">回滚上一版</button>' : ''}<button class="btn btn-danger btn-sm" data-qbatch-action="delete">删除</button></div>
+    </div>`).join('');
+    const currentIds = new Set(batches.map(item => String(item.batchId || '')));
+    const deletedBackupCards = state.questionBackups.filter(item => !currentIds.has(String(item.batchId || ''))).map(backup => `<div class="question-batch-card" data-batch-id="${escapeHtml(backup.batchId)}">
+      <div><div class="question-batch-title">${escapeHtml(backup.category || '已删除题库')}（可恢复）</div>
+        <div class="question-batch-meta"><span>${Number(backup.count || 0)} 道题</span><span>备份版本 ${Number(backup.revision || 1)}</span><span>备份 ${escapeHtml(formatQuestionBatchTime(backup.savedAt))}</span></div></div>
+      <div class="question-batch-actions"><button class="btn btn-primary btn-sm" data-qbatch-action="restore">恢复题库</button></div>
     </div>`).join('');
     const historyItems = history.slice(0, 8).map(item => {
-      const label = item.operation === 'replace' ? '替换' : item.operation === 'delete' ? '删除' : '新建';
+      const label = item.operation === 'replace' ? '替换' : item.operation === 'delete' ? '删除' : item.operation === 'restore' ? '回滚' : '新建';
       return `<div class="stats-hist-item"><div class="stats-hist-time">${escapeHtml(formatQuestionBatchTime(item.time))}</div><div class="stats-hist-cat">${escapeHtml(item.category || '未命名题库')}</div><div class="stats-hist-cnt">${label} · ${Number(item.previousCount || 0)} → ${Number(item.count || 0)} 题</div></div>`;
     }).join('');
+    const fullBackupSection = `<div class="stats-sect2"><div class="stats-sect2-title">整库安全备份</div>
+      <div class="question-batch-card">
+        <div><div class="question-batch-title">当前整库可导出为本地文件</div>
+          <div class="question-batch-meta"><span>恢复前先做完整校验</span><span>提交时原子替换</span><span>不会保存管理员密码</span></div></div>
+        <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qfull-action="export-current">导出当前整库</button><button class="btn btn-primary btn-sm" data-qfull-action="choose-file">从文件恢复</button></div>
+      </div>
+      ${fullBackup ? `<div class="question-batch-card">
+        <div><div class="question-batch-title">最近一次恢复前自动备份</div>
+          <div class="question-batch-meta"><span>${Number(fullBackup.totalBatches || 0)} 个题库</span><span>${Number(fullBackup.totalQuestions || 0)} 道题</span><span>${escapeHtml(formatQuestionBatchTime(fullBackup.savedAt))}</span><span>${escapeHtml(formatFileBytes(fullBackup.compressedBytes))}</span></div></div>
+        <div class="question-batch-actions"><button class="btn btn-ghost btn-sm" data-qfull-action="download-automatic">下载备份</button><button class="btn btn-primary btn-sm" data-qfull-action="restore-automatic">恢复此版本</button></div>
+      </div>` : '<div class="tip">尚无整库自动备份；第一次执行整库恢复前会自动生成并默认保留 7 天。</div>'}
+    </div>`;
     body.innerHTML = `<div class="stats-grid2">
       <div class="stat-card2"><div class="stat-card2-label">当前题目总数</div><div class="stat-card2-value">${Number(data.total || 0)}</div><div class="stat-card2-sub">答题接口可检索题目</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">独立题库</div><div class="stat-card2-value">${batches.length}</div><div class="stat-card2-sub">可分别替换或删除</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">独立题库</div><div class="stat-card2-value">${batches.length}</div><div class="stat-card2-sub">可分别替换、删除或回滚</div></div>
       <div class="stat-card2"><div class="stat-card2-label">最近更新</div><div class="stat-card2-value" style="font-size:.95rem;">${escapeHtml(latest?.category || '暂无')}</div><div class="stat-card2-sub">${escapeHtml(latest ? formatQuestionBatchTime(latest.updatedAt || latest.createdAt) : '暂无')}</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">变更记录</div><div class="stat-card2-value">${history.length}</div><div class="stat-card2-sub">最近保留的题库操作</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">单库备份</div><div class="stat-card2-value">${state.questionBackups.length}</div><div class="stat-card2-sub">默认保留 7 天的上一版</div></div>
     </div>
+    ${fullBackupSection}
     <div class="stats-sect2"><div class="stats-sect2-title">当前独立题库</div><div class="question-batch-list">${cards || '<div class="empty">暂无题库，请点击“新建题库”导入</div>'}</div></div>
+    ${deletedBackupCards ? `<div class="stats-sect2"><div class="stats-sect2-title">最近删除、仍可恢复</div><div class="question-batch-list">${deletedBackupCards}</div></div>` : ''}
     <div class="stats-sect2"><div class="stats-sect2-title">最近变更</div><div class="stats-hist-list">${historyItems || '<div class="empty">暂无变更记录</div>'}</div></div>`;
   } catch(e) { body.innerHTML = `<div class="empty" style="color:var(--danger);">获取题库列表失败：${escapeHtml(e.message||'未知错误')}</div>`; }
 }
 
 $('questionStatsBody').addEventListener('click', async e => {
+  const fullButton = e.target.closest('[data-qfull-action]');
+  if (fullButton) {
+    fullButton.disabled = true;
+    try {
+      const action = fullButton.dataset.qfullAction;
+      if (action === 'export-current') await exportQuestionBank('current');
+      else if (action === 'choose-file') { $('questionStatsModal').classList.remove('show'); $('questionBackupFileInput').click(); }
+      else if (action === 'download-automatic') await exportQuestionBank('lastBackup');
+      else if (action === 'restore-automatic') {
+        await restoreLastAutomaticQuestionBankBackup();
+        await showQuestionStats();
+      }
+    } catch (error) {
+      if (!/失败/.test(error.message || '')) showToast(`整库备份操作失败：${error.message}`, true);
+    } finally {
+      if (fullButton.isConnected) fullButton.disabled = false;
+    }
+    return;
+  }
   const button = e.target.closest('[data-qbatch-action]');
   if (!button) return;
   const batchId = String(button.closest('[data-batch-id]')?.dataset.batchId || '');
   const batch = state.questionBatches.find(item => String(item.batchId) === batchId);
+  const backup = state.questionBackups.find(item => String(item.batchId) === batchId);
+  if (button.dataset.qbatchAction === 'restore') {
+    if (!backup) { showToast('备份已过期，请刷新后重试', true); return; }
+    const ok = await showConfirm('回滚题库上一版', `将“${backup.category}”恢复为 ${Number(backup.count || 0)} 道题的备份版本。\n备份时间：${formatQuestionBatchTime(backup.savedAt)}\n其他题库不受影响。`);
+    if (!ok) return;
+    button.disabled = true;
+    try {
+      const result = await adminFetch('restoreQuestionBatch', { batchId, confirm: true });
+      showToast(`已恢复“${result.batch?.category || backup.category}”共 ${Number(result.restored || 0)} 道题`);
+      await loadQuestionBatches({ selectedBatchId: batchId }); state.questionPage = 1; await loadQuestions(); await showQuestionStats();
+    } catch (error) { showToast(`回滚失败: ${error.message}`, true); button.disabled = false; }
+    return;
+  }
   if (!batch) { showToast('题库状态已变化，请刷新后重试', true); return; }
   if (button.dataset.qbatchAction === 'view') {
     $('questionStatsModal').classList.remove('show'); renderQuestionBatchFilter(batchId); state.questionPage = 1; await loadQuestions(); return;
@@ -1765,6 +2386,8 @@ function importExcel(targetBatch = null) {
   input.onchange = async e => {
     const file = e.target.files[0]; if (!file) return;
     try {
+      if (!window.XLSX) showToast('首次使用，正在加载 Excel 解析组件…');
+      await ensureSheetJs();
       const data = await file.arrayBuffer();
       const wb = XLSX.read(data);
       const sheet = wb.Sheets[wb.SheetNames[0]];
@@ -1789,7 +2412,7 @@ function courseWorkflowLabel(workflow) {
 }
 
 function courseAttr(value) {
-  return escapeHtml(value).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return escapeHtml(value);
 }
 
 function courseHasWorkflow(course, workflow) {
@@ -1812,12 +2435,19 @@ function courseNextWorkflow(course) {
   if (!candidates.size) return null;
   if (candidates.has('video') && Number(course.studyRate || 0) < 100) return 'video';
   if (candidates.has('evaluation') && course.hasFinishEvaluate !== true) return 'evaluation';
-  if (candidates.has('exam') && course.examPassed !== true) return 'exam';
   return null;
 }
 
+function courseHasPendingExam(course) {
+  return Boolean(course
+    && course.mapOnly !== true
+    && course.eligibility?.allowed === true
+    && courseHasWorkflow(course, 'exam')
+    && course.examPassed !== true);
+}
+
 function courseHasPending(course) {
-  return Boolean(courseNextWorkflow(course));
+  return Boolean(courseNextWorkflow(course) || courseHasPendingExam(course));
 }
 
 function courseBatchWorkflow(course) {
@@ -1998,9 +2628,73 @@ function courseGroupKey(group) {
   return String(group?.groupKey || `single:${group?.groupName || ''}`);
 }
 
+function coursePlatformComplete(course) {
+  if (course?.courseFinished === true || course?.platformCompleted === true || course?.examPassed === true) return true;
+  const rate = Number(course?.studyRate ?? 0);
+  const workflows = course?.workflowCandidates || course?.workflows || [];
+  const remaining = workflows.some(workflow => workflow === 'evaluation' && course?.hasFinishEvaluate !== true
+    || workflow === 'exam' && course?.examPassed !== true);
+  return rate >= 100 && !remaining;
+}
+
+function makeStandaloneCourseGroup(course) {
+  return {
+    groupKey: `single:${course.courseId}`,
+    groupName: course.courseName,
+    groupSource: 'single',
+    courses: [course],
+    count: 1,
+    completedCount: coursePlatformComplete(course) ? 1 : 0,
+    videoCompletedCount: Number(course?.studyRate ?? 0) >= 100 ? 1 : 0,
+    allowedCount: course?.eligibility?.allowed === true ? 1 : 0,
+  };
+}
+
+function applyCourseFilters({ render = true } = {}) {
+  const includeExpired = $('courseIncludeExpired')?.checked === true;
+  const pendingOnly = $('coursePendingOnly')?.checked === true;
+  const includeMapOnly = $('courseIncludeMapOnly')?.checked === true;
+  const courses = (state.courseAllCourses || [])
+    .filter(course => includeMapOnly || course?.mapOnly !== true)
+    .filter(course => includeExpired || course?.eligibility?.allowed === true || includeMapOnly && course?.mapOnly === true)
+    .filter(course => !pendingOnly || courseHasPending(course));
+  const visibleIds = new Set(courses.map(course => String(course?.courseId || '')));
+  const groups = [];
+  const groupedIds = new Set();
+  for (const group of state.courseAllGroups || []) {
+    const children = (Array.isArray(group?.courses) ? group.courses : []).filter(course => visibleIds.has(String(course?.courseId || '')));
+    if (!children.length) continue;
+    children.forEach(course => groupedIds.add(String(course?.courseId || '')));
+    groups.push({
+      ...group,
+      courses: children,
+      count: children.length,
+      completedCount: children.filter(coursePlatformComplete).length,
+      videoCompletedCount: children.filter(course => Number(course?.studyRate ?? 0) >= 100).length,
+      allowedCount: children.filter(course => course?.eligibility?.allowed === true).length,
+    });
+  }
+  for (const course of courses) {
+    if (!groupedIds.has(String(course?.courseId || ''))) groups.push(makeStandaloneCourseGroup(course));
+  }
+  state.courseCourses = courses;
+  state.courseGroups = groups;
+  state.courseById = new Map(courses.map(course => [String(course.courseId), course]));
+  const selectableIds = new Set(courses.filter(courseBatchable).map(course => String(course.courseId)));
+  for (const courseId of [...state.courseSelected]) {
+    if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+  }
+  if (render) {
+    renderCourseSummary();
+    renderCourseList();
+    updateCourseBatchUi();
+  }
+}
+
 function renderCourseCard(course) {
   const status = courseStatusData(course);
   const next = courseNextWorkflow(course);
+  const pendingExam = courseHasPendingExam(course);
   const allowed = course?.eligibility?.allowed === true && course?.mapOnly !== true;
   const courseId = courseAttr(course?.courseId || '');
   const batchable = courseBatchable(course);
@@ -2009,7 +2703,7 @@ function renderCourseCard(course) {
   const selectionHtml = batchable
     ? `<label class="course-select"><input type="checkbox" data-course-select="${courseId}"${selected ? ' checked' : ''}${batchLocked ? ' disabled' : ''}>加入一键完成</label>`
     : '';
-  const workflowAttr = courseAttr(next || 'auto');
+  const workflowAttr = courseAttr(next || (pendingExam ? 'exam' : 'auto'));
   const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
   const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
   let nextHtml = '';
@@ -2022,6 +2716,9 @@ function renderCourseCard(course) {
     nextHtml = `<div class="course-next-step">下一步：<strong>${escapeHtml(courseWorkflowLabel(next))}</strong> · 每次只执行这一项，执行后可再次平台复核</div>`;
     actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}">预览下一步</button>
       <button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="${workflowAttr}">执行下一步</button>`;
+  } else if (pendingExam) {
+    nextHtml = '<div class="course-next-step blocked">课程考试待完成 · 自动执行未启用，请进入网课平台人工处理；本站仅核对考试状态。</div>';
+    actionHtml = '<span class="text-muted text-sm">考试需人工处理</span>';
   } else {
     nextHtml = '<div class="course-next-step">当前已没有可识别的待执行步骤，以下状态仅供平台复核。</div>';
   }
@@ -2080,11 +2777,14 @@ function renderCourseSummary() {
   const expired = state.courseCourses.filter(course => course?.eligibility?.status === 'expired').length;
   const platformCompleted = state.courseGroups.reduce((sum, group) => sum + Number(group.completedCount || 0), 0);
   const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
+  const cacheLayer = state.courseListCache?.layer;
+  const cacheText = cacheLayer === 'redis' ? 'Redis 短缓存' : cacheLayer === 'memory' ? '函数内短缓存' : cacheLayer === 'upstream' ? '平台实时读取' : '读取来源未知';
   el.innerHTML = `<span class="course-summary-item"><strong>${total}</strong> 门课程</span>
     <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
     <span class="course-summary-item danger"><strong>${pending}</strong> 门待完成</span>
     <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
-    <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>`;
+    <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>
+    <span class="course-summary-item">${escapeHtml(cacheText)}</span>`;
 }
 
 function renderCourseSessionState() {
@@ -2200,7 +2900,11 @@ async function logoutCourse() {
   const btn = $('courseLogoutBtn'); const orig = btn.textContent; btn.disabled = true; btn.textContent = '退出中...';
   try {
     const data = await courseFetch('logout');
-    state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
+    for (const key of [...state.courseExecutionKeys.keys()]) {
+      if (key.startsWith(`${state.courseSessionId}:`)) state.courseExecutionKeys.delete(key);
+    }
+    savePendingCourseExecutions();
+    state.courseAllCourses = []; state.courseAllGroups = []; state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseListCache = null; state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
     state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false;
     setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
     updateCourseBatchUi();
@@ -2216,32 +2920,23 @@ async function loadCourseList({ forceRefresh = false } = {}) {
   const container = $('courseListContainer');
   const btn = $('courseRefreshBtn'); const orig = btn?.textContent;
   if (btn) { btn.disabled = true; btn.textContent = '读取中...'; }
-  if (container) container.innerHTML = '<div class="empty">正在读取平台课程与学习地图…</div>';
+  const hadCourses = state.courseAllCourses.length > 0;
+  if (container && !hadCourses) container.innerHTML = '<div class="empty">正在读取平台课程与学习地图…</div>';
   $('courseListPanel').classList.remove('hidden');
   try {
     const data = await courseFetch('list', {
-      includeExpired: $('courseIncludeExpired').checked,
-      pendingOnly: $('coursePendingOnly').checked,
-      includeMapOnly: $('courseIncludeMapOnly').checked,
+      // 一次读取完整库存，三个显示筛选均在浏览器本地完成；手动刷新才访问平台。
+      includeExpired: true,
+      pendingOnly: false,
+      includeMapOnly: true,
       forceRefresh,
     });
-    state.courseCourses = Array.isArray(data.courses) ? data.courses : [];
-    state.courseGroups = Array.isArray(data.groups) ? data.groups : [];
-    if (!state.courseGroups.length) {
-      state.courseGroups = state.courseCourses.map(course => ({
-        groupKey: `single:${course.courseId}`,
-        groupName: course.courseName,
-        groupSource: 'single',
-        courses: [course],
-        count: 1,
-        completedCount: courseCompleteText(course) === '已完成' ? 1 : 0,
-      }));
-    }
-    state.courseById = new Map(state.courseCourses.map(course => [String(course.courseId), course]));
-    const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
-    for (const courseId of [...state.courseSelected]) {
-      if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
-    }
+    state.courseAllCourses = Array.isArray(data.courses) ? data.courses : [];
+    state.courseAllGroups = Array.isArray(data.groups) && data.groups.length
+      ? data.groups
+      : state.courseAllCourses.map(makeStandaloneCourseGroup);
+    state.courseListCache = data.cache && typeof data.cache === 'object' ? data.cache : null;
+    applyCourseFilters({ render: false });
     if (!state.courseGroupsInitialized) {
       state.courseGroups.filter(group => group.collapsible === true || Number(group.count || group.courses?.length || 0) > 1).forEach(group => state.courseCollapsed.add(courseGroupKey(group)));
       state.courseGroupsInitialized = true;
@@ -2249,7 +2944,8 @@ async function loadCourseList({ forceRefresh = false } = {}) {
     renderCourseSummary(); renderCourseList(); updateCourseBatchUi();
   } catch (e) {
     if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; renderCourseSessionState(); $('courseListPanel').classList.add('hidden'); }
-    if (container) container.innerHTML = `<div class="empty" style="color:var(--danger);">课程读取失败：${escapeHtml(e.message)}</div>`;
+    if (container && !hadCourses) container.innerHTML = `<div class="empty" style="color:var(--danger);">课程读取失败：${escapeHtml(e.message)}</div>`;
+    else if (hadCourses) { renderCourseSummary(); renderCourseList(); }
     showToast(`课程读取失败：${e.message}`, true);
   } finally { state.courseLoading = false; if (btn) { btn.disabled = false; btn.textContent = orig; } renderCourseBatchControls(); }
 }
@@ -2258,25 +2954,27 @@ function mergeCourseState(course) {
   const courseId = String(course?.courseId || '');
   if (!courseId) return;
   let found = false;
-  state.courseCourses = state.courseCourses.map(item => {
+  state.courseAllCourses = state.courseAllCourses.map(item => {
     if (String(item?.courseId || '') !== courseId) return item;
     found = true;
     return course;
   });
-  if (!found) state.courseCourses.push(course);
-  state.courseGroups = state.courseGroups.map(group => {
+  if (!found) state.courseAllCourses.push(course);
+  let grouped = false;
+  state.courseAllGroups = state.courseAllGroups.map(group => {
     const courses = (Array.isArray(group.courses) ? group.courses : []).map(item => String(item?.courseId || '') === courseId ? course : item);
+    if (courses.some(item => String(item?.courseId || '') === courseId)) grouped = true;
     return {
       ...group,
       courses,
-      completedCount: courses.filter(item => item?.courseFinished === true || item?.platformCompleted === true).length,
+      count: courses.length,
+      completedCount: courses.filter(coursePlatformComplete).length,
+      videoCompletedCount: courses.filter(item => Number(item?.studyRate ?? 0) >= 100).length,
+      allowedCount: courses.filter(item => item?.eligibility?.allowed === true).length,
     };
   });
-  state.courseById.set(courseId, course);
-  if (!courseBatchable(course)) state.courseSelected.delete(courseId);
-  renderCourseSummary();
-  renderCourseList();
-  updateCourseBatchUi();
+  if (!grouped) state.courseAllGroups.push(makeStandaloneCourseGroup(course));
+  applyCourseFilters();
 }
 
 function courseResultJson(value) {
@@ -2570,19 +3268,63 @@ async function executeCourse(courseId, workflow) {
     return;
   }
   const selectedWorkflow = currentWorkflow;
+  const executionSlot = `${state.courseSessionId}:${courseId}:${selectedWorkflow}`;
+  const idempotencyKey = state.courseExecutionKeys.get(executionSlot) || createCourseRequestId();
+  state.courseExecutionKeys.set(executionSlot, idempotencyKey);
+  savePendingCourseExecutions();
   state.courseBusy = true;
   try {
     // 先确认、后联网：确认后由服务端做唯一一次权威预览，复核不通过时不会写入。
     const ok = await showConfirm('确认执行网课步骤', `课程：${course.courseName || courseId}\n本次只执行：${courseWorkflowLabel(selectedWorkflow)}\n确认后会先进行平台最终复核，复核通过才会写入，并在完成后再次验证。`);
     if (!ok) return;
     showCourseOutput('正在复核并执行', '已确认，正在读取平台最新状态；如果平台状态已变化，将停止写入。', 'warning');
-    const result = await courseFetch('execute', { courseId, workflow: selectedWorkflow, confirm: true });
+    const result = await courseFetch('execute', { courseId, workflow: selectedWorkflow, confirm: true, idempotencyKey });
     const task = result.task || {};
     const verification = result.verification || task.verification || {};
     const detail = `执行状态：${task.status || '已返回'}\n平台验证：${verification.verified === true ? '通过' : '未通过或未返回'}\n${task.reason || result.reason || '执行请求已返回'}`;
     showCourseOutput(`执行：${courseWorkflowLabel(selectedWorkflow)}`, detail, verification.verified === true ? 'success' : 'warning', result);
+    if (result.executionReceipt?.status === 'completed') {
+      state.courseExecutionKeys.delete(executionSlot);
+      savePendingCourseExecutions();
+    }
     await loadCourseList({ forceRefresh: true });
-  } catch (e) { showCourseOutput('执行失败', e.message, 'error'); showToast(`执行失败：${e.message}`, true); }
+  } catch (e) {
+    const shouldReconcile = !e.code || ['COURSE_EXECUTION_RECONCILIATION_REQUIRED', 'INTERNAL_ERROR', 'CLIENT_TIMEOUT', 'NETWORK_ERROR', 'SERVICE_UNAVAILABLE'].includes(e.code)
+      || String(e.code).startsWith('UPSTREAM_');
+    if (shouldReconcile) {
+      try {
+        const status = await courseFetch('executeStatus', { idempotencyKey });
+        const receipt = status.executionReceipt || {};
+        if (receipt.status === 'completed') {
+          const recovered = status.result || {};
+          showCourseOutput(`执行：${courseWorkflowLabel(selectedWorkflow)}`, '原执行响应未正常返回，但已通过平台只读复核确认完成；系统没有重复提交。', 'success', status);
+          if (recovered.course) mergeCourseState(recovered.course);
+          state.courseExecutionKeys.delete(executionSlot);
+          savePendingCourseExecutions();
+          await loadCourseList({ forceRefresh: true });
+          showToast('已通过平台复核确认执行完成');
+          return;
+        }
+        if (receipt.status === 'unknown' || receipt.status === 'running') {
+          showCourseOutput('执行结果待人工复核', `${receipt.reason || '平台尚未确认完成。'}\n为避免重复提交，本站已停止自动重试。请点击“平台复核”确认实际状态。`, 'warning', status);
+          showToast('执行结果不明确，已停止重复提交', true);
+          return;
+        }
+      } catch (statusError) {
+        // 状态记录不存在时保留原始错误；绝不在这里自动重发执行请求。
+        if (statusError?.code === 'COURSE_EXECUTION_RECEIPT_NOT_FOUND') {
+          state.courseExecutionKeys.delete(executionSlot);
+          savePendingCourseExecutions();
+        }
+      }
+    }
+    if (!shouldReconcile) {
+      state.courseExecutionKeys.delete(executionSlot);
+      savePendingCourseExecutions();
+    }
+    showCourseOutput('执行失败', e.message, 'error');
+    showToast(`执行失败：${e.message}`, true);
+  }
   finally { state.courseBusy = false; }
 }
 
@@ -2647,8 +3389,13 @@ $('mainTitle').addEventListener('click', async () => {
   if (state.clickCount >= 7) {
     state.clickCount = 0;
     try {
-      const res = await fetch(`${API_URL}?action=getHiddenUrl`);
-      const data = await res.json();
+      const { response, data } = await apiJsonRequest({
+        namespace: 'public',
+        action: 'getHiddenUrl',
+        method: 'GET',
+        url: `${API_URL}?action=getHiddenUrl`,
+      });
+      if (!response.ok) throw new Error(data.error || data.message || '隐藏地址请求失败');
       if (data.url) { window.location.href = data.url; } else { showToast('隐藏地址无效', true); }
     } catch(e) { showToast('获取隐藏地址失败', true); }
   }
@@ -2672,7 +3419,8 @@ $('verifyResult').addEventListener('click', async e => {
   if (e.target.id === 'confirmRenameBtn') {
     const newName = document.getElementById('newTokenNameInput')?.value.trim();
     const msgEl = document.getElementById('renameMsg');
-    if (!newName) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">请输入新名称</span>'; return; }
+    const nameError = tokenNameError(newName);
+    if (nameError) { if (msgEl) msgEl.innerHTML = `<span style="color:var(--danger);">${escapeHtml(nameError)}</span>`; return; }
     if (newName === currentVerifiedToken) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">新名称不能与当前名称相同</span>'; return; }
     const btn = e.target; btn.disabled = true; btn.textContent = '改名中...';
     try {
@@ -2683,7 +3431,7 @@ $('verifyResult').addEventListener('click', async e => {
       const panel = document.getElementById('renamePanel');
       if (panel) panel.classList.add('hidden');
       document.getElementById('newTokenNameInput').value = '';
-      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">✅ 改名成功 · 新toekn：<strong>' + escapeHtml(newName) + '</strong></span>';
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">✅ 改名成功 · 新 Token：<strong>' + escapeHtml(newName) + '</strong></span>';
       const nc1 = `=javascript:$.getScript('${API_URL}?token=${encodeURIComponent(newName)}')`;
       const nc2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodeURIComponent(newName)}';document.body.appendChild(s);})();`;
       const blocks = $('verifyResult').querySelectorAll('.code-block');
@@ -2692,7 +3440,7 @@ $('verifyResult').addEventListener('click', async e => {
       const btns = $('verifyResult').querySelectorAll('.copy-btn');
       if (btns[0]) btns[0].dataset.code = nc1;
       if (btns[1]) btns[1].dataset.code = nc2;
-      showToast('toekn已更名为：' + newName);
+      showToast('Token 已更名为：' + newName);
     } catch(e) { if (msgEl) msgEl.innerHTML = '<span style="color:var(--danger);">' + escapeHtml(e.message) + '</span>'; }
     finally { btn.disabled = false; btn.textContent = '确认'; }
   }
@@ -2738,7 +3486,7 @@ $('courseTasksBtn').addEventListener('click', loadCourseTasks);
 $('courseBatchAllBtn').addEventListener('click', () => startCourseBatch('all'));
 $('courseBatchSelectedBtn').addEventListener('click', () => startCourseBatch('selected'));
 ['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
-  $(id).addEventListener('change', () => loadCourseList({ forceRefresh: true }));
+  $(id).addEventListener('change', () => applyCourseFilters());
 });
 
 // Token management toolbar
@@ -2755,12 +3503,35 @@ $('clearAllTokensBtn').addEventListener('click', clearAllTokens);
 
 // Logs
 $('clearLogsBtn').addEventListener('click', clearLogs);
+$('refreshHealthBtn').addEventListener('click', loadSystemHealth);
 
 // Questions
 $('questionSearchBtn').addEventListener('click', () => { state.questionPage = 1; loadQuestions(); });
 $('questionResetBtn').addEventListener('click', () => { $('questionSearchKeyword').value = ''; renderQuestionBatchFilter(''); state.questionPage = 1; loadQuestions(); });
 $('questionBatchFilter').addEventListener('change', () => { state.questionBatchFilter = $('questionBatchFilter').value; state.questionPage = 1; loadQuestions(); });
 $('questionStatsBtn').addEventListener('click', showQuestionStats);
+$('exportQuestionBankBtn').addEventListener('click', async () => {
+  const button = $('exportQuestionBankBtn');
+  button.disabled = true;
+  try { await exportQuestionBank('current'); } catch (_) {}
+  finally { button.disabled = false; }
+});
+$('restoreQuestionBankBtn').addEventListener('click', () => $('questionBackupFileInput').click());
+$('questionBackupFileInput').addEventListener('change', async event => {
+  const input = event.currentTarget;
+  const file = input.files?.[0];
+  if (!file) return;
+  $('restoreQuestionBankBtn').disabled = true;
+  try {
+    await restoreQuestionBankFromFile(file);
+    if ($('questionStatsModal').classList.contains('show')) await showQuestionStats();
+  } catch (error) {
+    showToast(`整库恢复失败：${error.message}`, true);
+  } finally {
+    input.value = '';
+    $('restoreQuestionBankBtn').disabled = false;
+  }
+});
 $('clearQuestionsBtn').addEventListener('click', clearAllQuestions);
 $('importExcelBtn').addEventListener('click', () => importExcel(null));
 $('questionSearchKeyword').addEventListener('keypress', e => { if (e.key === 'Enter') { state.questionPage = 1; loadQuestions(); } });
@@ -2793,12 +3564,21 @@ $('addCategoryBtn').addEventListener('click', () => {
     showToast(state.importCategory ? `题库名称：${state.importCategory}` : '题库名称不能为空', !state.importCategory);
   }
 });
+$('mainTitle').addEventListener('keydown', event => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    $('mainTitle').click();
+  }
+});
 ['questionColSelect','answerColSelect','optionStartColSelect','optionEndColSelect'].forEach(id => {
   $(id)?.addEventListener('change', updateExcelPreview);
 });
 
 // Confirm overlay background click
 $('confirmOverlay').addEventListener('click', e => { if (e.target === $('confirmOverlay')) $('confirmCancel').click(); });
+
+window.addEventListener('offline', () => showToast('网络连接已断开，尚未返回的操作结果可能不明确', true));
+window.addEventListener('online', () => showToast('网络连接已恢复'));
 
 // Resize: re-render token view (card vs table)
 window.addEventListener('resize', () => {
@@ -2860,33 +3640,52 @@ document.getElementById('addDeviceBtn')?.addEventListener('click', async () => {
 document.getElementById('deviceSearchBtn')?.addEventListener('click', () => {
   applyDeviceFilter();
 });
+document.getElementById('deviceSearchInput')?.addEventListener('keypress', event => {
+  if (event.key === 'Enter') applyDeviceFilter();
+});
 document.getElementById('deviceSearchClearBtn')?.addEventListener('click', () => {
   document.getElementById('deviceSearchInput').value = '';
-  state.deviceFilter = null;
-  renderDeviceView();
+  state.deviceKeyword = '';
+  state.devicePage = 1;
+  state.deviceSelection = new Set();
+  loadActivations();
 });
 function applyDeviceFilter() {
-  const kw = (document.getElementById('deviceSearchInput').value || '').trim().toLowerCase();
-  if (!kw) { state.deviceFilter = null; }
-  else {
-    state.deviceFilter = (a) => a.code.toLowerCase().includes(kw) || (a.label||'').toLowerCase().includes(kw);
-  }
+  state.deviceKeyword = (document.getElementById('deviceSearchInput').value || '').trim();
+  state.devicePage = 1;
   state.deviceSelection = new Set();
-  renderDeviceView();
+  loadActivations();
 }
 
 // ── 加载 & 渲染 ─────────────────────────────
-async function loadActivations() {
+async function loadActivations({ resetPage = false } = {}) {
   const container = document.getElementById('activationTableContainer');
   if (!container) return;
-  container.innerHTML = '<div class="empty">加载中...</div>';
+  if (resetPage) state.devicePage = 1;
+  const hadData = state.activations.length > 0;
+  if (!hadData) container.innerHTML = '<div class="empty">加载中...</div>';
   try {
-    const data = await adminFetch('listActivations');
+    const params = { page: state.devicePage, pageSize: DEVICE_PAGE_SIZE };
+    if (state.deviceKeyword) params.query = state.deviceKeyword;
+    const data = await adminFetch('listActivations', params, { cancelGroup: 'activation-list' });
     state.activations = data.activations || [];
+    state.deviceServerPagination = data?.pagination?.enabled === true;
+    state.deviceTotal = state.deviceServerPagination
+      ? Math.max(0, Number(data.total || 0))
+      : state.activations.length;
+    state.devicePage = state.deviceServerPagination
+      ? Math.max(1, Number(data.page || state.devicePage || 1))
+      : 1;
+    if (state.deviceServerPagination && !state.activations.length && state.deviceTotal > 0 && state.devicePage > 1) {
+      state.devicePage -= 1;
+      return loadActivations();
+    }
     state.deviceSelection = state.deviceSelection || new Set();
     renderDeviceView();
   } catch(e) {
-    container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+    if (hadData) renderDeviceView();
+    else container.innerHTML = `<div class="empty" style="color:var(--danger);">加载失败: ${escapeHtml(e.message)}</div>`;
+    showToast(`激活码加载失败: ${e.message}`, true);
   }
 }
 
@@ -2899,12 +3698,18 @@ function getStatusInfo(s) {
 function renderDeviceView() {
   const container = document.getElementById('activationTableContainer');
   let items = state.activations || [];
-  // 过滤
-  if (state.deviceFilter) items = items.filter(state.deviceFilter);
+  if (!state.deviceServerPagination && state.deviceKeyword) {
+    const keyword = state.deviceKeyword.toLocaleLowerCase('zh-CN');
+    items = items.filter(item => String(item.code || '').toLocaleLowerCase('zh-CN').includes(keyword)
+      || String(item.label || '').toLocaleLowerCase('zh-CN').includes(keyword)
+      || String(item.device || '').toLocaleLowerCase('zh-CN').includes(keyword));
+    state.deviceTotal = items.length;
+  }
 
   if (!items.length) {
-    const msg = state.deviceFilter ? '无匹配结果' : '暂无激活码<br><span style="font-size:.78rem;">点击上方 [+ 生成激活码] 创建</span>';
+    const msg = state.deviceKeyword ? '无匹配结果' : '暂无激活码<br><span style="font-size:.78rem;">点击上方 [+ 生成激活码] 创建</span>';
     container.innerHTML = `<div class="empty"><span class="empty-icon">🔐</span>${msg}</div>`;
+    renderDevicePagination();
     return;
   }
   const isDesktop = window.innerWidth >= 768;
@@ -2922,12 +3727,12 @@ function renderDeviceView() {
       h += `<tr data-code="${escapeHtml(a.code)}">
         <td><input type="checkbox" data-action="toggleDeviceSelect" data-code="${escapeHtml(a.code)}" ${checked}></td>
         <td class="token-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</td>
-        <td style="color:${scolor};font-weight:500;">${stxt}</td>
+        <td style="color:${scolor};font-weight:500;">${escapeHtml(stxt)}</td>
         <td>${escapeHtml(a.label||'-')}</td>
-        <td style="font-family:monospace;font-size:.72rem;">${dev}</td>
-        <td style="font-size:.76rem;">${bAt}</td>
-        <td style="font-weight:500;">${daysInfo}</td>
-        <td style="font-weight:500;">${usesInfo}</td>
+        <td style="font-family:monospace;font-size:.72rem;">${escapeHtml(dev)}</td>
+        <td style="font-size:.76rem;">${escapeHtml(bAt)}</td>
+        <td style="font-weight:500;">${escapeHtml(daysInfo)}</td>
+        <td style="font-weight:500;">${escapeHtml(usesInfo)}</td>
         <td class="act-group">
           <button class="btn btn-xs" data-action="editDeviceDays" data-code="${escapeHtml(a.code)}">天数</button>
           <button class="btn btn-xs" data-action="editDeviceUses" data-code="${escapeHtml(a.code)}">次数</button>
@@ -2963,12 +3768,12 @@ function renderDeviceView() {
         <div class="token-card-top">
           <div class="token-card-info">
             <div class="token-card-name" data-action="copyCode" data-code="${escapeHtml(a.code)}">${escapeHtml(a.code)}</div>
-            <div style="font-size:.72rem;color:${scolor};font-weight:500;margin-top:4px;">${stxt} · 备注: ${escapeHtml(a.label||'无')}</div>
+            <div style="font-size:.72rem;color:${scolor};font-weight:500;margin-top:4px;">${escapeHtml(stxt)} · 备注: ${escapeHtml(a.label||'无')}</div>
           </div>
           <input type="checkbox" data-action="toggleDeviceSelect" data-code="${escapeHtml(a.code)}" ${checked?'checked':''} style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;">
         </div>
-        <div style="font-size:.76rem;margin-top:6px;">设备: ${dev} | 绑定: ${bAt}</div>
-        <div style="font-size:.76rem;margin-top:2px;">天数: ${daysInfo} | 次数: ${usesInfo}</div>
+        <div style="font-size:.76rem;margin-top:6px;">设备: ${escapeHtml(dev)} | 绑定: ${escapeHtml(bAt)}</div>
+        <div style="font-size:.76rem;margin-top:2px;">天数: ${escapeHtml(daysInfo)} | 次数: ${escapeHtml(usesInfo)}</div>
         <div class="token-card-acts">
           <button class="btn btn-xs" data-action="editDeviceDays" data-code="${escapeHtml(a.code)}">天数</button>
           <button class="btn btn-xs" data-action="editDeviceUses" data-code="${escapeHtml(a.code)}">次数</button>
@@ -2982,6 +3787,29 @@ function renderDeviceView() {
     h += '</div>';
     container.innerHTML = h;
   }
+  renderDevicePagination();
+}
+
+function renderDevicePagination() {
+  const container = document.getElementById('activationPagination');
+  if (!container) return;
+  const total = Math.max(0, Number(state.deviceTotal || 0));
+  const totalPages = Math.max(1, Math.ceil(total / DEVICE_PAGE_SIZE));
+  if (!state.deviceServerPagination || totalPages <= 1) {
+    container.innerHTML = total ? `<div class="text-center text-muted text-sm mt-8">共 ${total} 条</div>` : '';
+    return;
+  }
+  container.innerHTML = `<div class="pagination">
+    <button class="btn btn-ghost btn-sm" id="prevDevicePageBtn" ${state.devicePage === 1 ? 'disabled' : ''}>上一页</button>
+    <span>${state.devicePage} / ${totalPages} · 共 ${total} 条</span>
+    <button class="btn btn-ghost btn-sm" id="nextDevicePageBtn" ${state.devicePage >= totalPages ? 'disabled' : ''}>下一页</button>
+  </div>`;
+  document.getElementById('prevDevicePageBtn')?.addEventListener('click', () => {
+    if (state.devicePage > 1) { state.devicePage -= 1; loadActivations(); }
+  });
+  document.getElementById('nextDevicePageBtn')?.addEventListener('click', () => {
+    if (state.devicePage < totalPages) { state.devicePage += 1; loadActivations(); }
+  });
 }
 
 // ── 事件代理 ─────────────────────────────────
@@ -3059,7 +3887,8 @@ document.getElementById('clearAllDevicesBtn')?.addEventListener('click', async (
 
 document.getElementById('refreshActivationsBtn')?.addEventListener('click', loadActivations);
 
-console.log('Link · toekn管理 — 已就绪');
+console.log('Link · Token 管理 — 已就绪');
 </script>
 </body>
 </html>
+
