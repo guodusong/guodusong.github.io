@@ -536,7 +536,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
       </div>
 
       <!-- Sub-pane: Questions -->
-<div class="subpane hidden" id="subQuestions" data-question-bank-version="10.7">
+<div class="subpane hidden" id="subQuestions" data-question-bank-version="10.8">
         <div class="flex mb-12">
           <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
             <option value="">全部题库</option>
@@ -676,7 +676,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v10.7</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
+          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v10.8</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -730,9 +730,9 @@ const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
 const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
-const COURSE_FRONTEND_VERSION = '9.3.0';
+const COURSE_FRONTEND_VERSION = '10.8.0';
 const COURSE_API_PROTOCOL_VERSION = 2;
-const API_CLIENT_VERSION = '10.7';
+const API_CLIENT_VERSION = '10.8';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 const API_COURSE_TIMEOUT_MS = 125000;
@@ -863,6 +863,11 @@ const state = {
   courseBatchPumping: false,
   courseBatchPauseRequested: false,
   courseBatchCancelRequested: false,
+  courseDiagnostics: null,
+  courseLastStep: '请求准备',
+  courseLastRequestMs: 0,
+  courseLastClientRequestMs: 0,
+  courseClientWaitMs: 0,
   // Easter egg
   clickCount: 0,
   clickTimer: null,
@@ -1311,6 +1316,21 @@ function acceptCourseApiMetadata(data) {
   renderCourseBatchControls();
 }
 
+function acceptCourseDiagnostics(data) {
+  const diagnostics = data?.diagnostics;
+  if (!diagnostics || typeof diagnostics !== 'object') return;
+  state.courseDiagnostics = diagnostics;
+  state.courseLastStep = String(diagnostics.currentStep || '请求准备');
+  state.courseLastRequestMs = Math.max(0, Math.round(Number(diagnostics.elapsedMs || 0)));
+  updateCourseBatchUi();
+}
+
+function formatCourseDuration(value) {
+  const ms = Math.max(0, Math.round(Number(value || 0)));
+  if (ms < 1000) return `${ms}ms`;
+  return `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s`;
+}
+
 // 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
 // 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
 async function courseFetch(courseAction, params = {}, requestOptions = {}) {
@@ -1325,6 +1345,7 @@ async function courseFetch(courseAction, params = {}, requestOptions = {}) {
   if (state.adminSessionToken) payload.adminSessionToken = state.adminSessionToken;
   else payload.password = state.adminPwd;
   let transport;
+  const clientRequestStartedAt = Date.now();
   try {
     transport = await apiJsonRequest({ namespace: 'course', action: courseAction, payload, ...requestOptions });
   } catch (error) {
@@ -1333,9 +1354,13 @@ async function courseFetch(courseAction, params = {}, requestOptions = {}) {
       error.message += '；结果可能已经写入平台，系统不会自动重复提交';
     }
     throw error;
+  } finally {
+    state.courseLastClientRequestMs = Date.now() - clientRequestStartedAt;
+    updateCourseBatchUi();
   }
   const { response, data, requestId } = transport;
   acceptCourseApiMetadata(data);
+  acceptCourseDiagnostics(data);
   if (!response.ok || data.ok === false) {
     const message = data.error || data.message || `网课请求失败（HTTP ${response.status}）`;
     if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
@@ -2303,11 +2328,14 @@ function renderQuestionImportPreview(preview) {
   const issues = [...errors, ...conflicts];
   const issueHtml = issues.slice(0, 30).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '数据错误')}</li>`).join('');
   const warningHtml = warnings.slice(0, 20).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '重复题目')}</li>`).join('');
+  const timing = preview.timing || {};
+  const timingHtml = `<div style="margin-top:8px;color:var(--text-muted);font-size:.78rem;">校验耗时：浏览器总等待 ${escapeHtml(formatCourseDuration(preview.clientElapsedMs || timing.totalMs || 0))} · 题库核心 ${escapeHtml(formatCourseDuration(timing.totalMs || 0))} · 元数据 ${escapeHtml(formatCourseDuration(timing.metadataMs || 0))} · 本地校验 ${escapeHtml(formatCourseDuration(timing.validationMs || 0))} · Redis 冲突查询 ${escapeHtml(formatCourseDuration(timing.conflictLookupMs || 0))} · 暂存 ${escapeHtml(formatCourseDuration(timing.previewStoreMs || 0))}</div>`;
   box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
   box.innerHTML = `<strong>${preview.ready ? '✅ 校验通过，可以提交' : '❌ 校验未通过，尚未写入题库'}</strong><br>
     输入 ${Number(preview.inputCount || 0)} 行 · 有效 ${Number(preview.validCount || 0)} 行 · 错误 ${Number(preview.errorCount || 0)} · 冲突 ${Number(preview.conflictCount || 0)} · 提醒 ${Number(preview.warningCount || 0)}
     ${issueHtml ? `<ul class="question-import-issues">${issueHtml}</ul>` : ''}
-    ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}`;
+    ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}
+    ${timingHtml}`;
 }
 
 async function confirmImportFromExcel() {
@@ -2335,8 +2363,10 @@ async function confirmImportFromExcel() {
   try {
     const params = { questions: JSON.stringify(questions), category: state.importCategory.trim() };
     if (state.questionImportTarget?.batchId) params.batchId = state.questionImportTarget.batchId;
+    const previewRequestStartedAt = Date.now();
     const response = await adminFetch('previewQuestionImport', params);
     const preview = response.preview || {};
+    preview.clientElapsedMs = Date.now() - previewRequestStartedAt;
     state.questionImportPreview = preview;
     renderQuestionImportPreview(preview);
     if (!preview.ready || !preview.previewId) { showToast('校验未通过，题库未发生变化', true); return; }
@@ -2353,9 +2383,12 @@ async function confirmImportFromExcel() {
     progress.classList.remove('hidden');
     $('importProgressFill').style.width = '65%';
     $('importProgressText').textContent = preview.mode === 'replace' ? '正在原子替换题库...' : '正在创建题库...';
+    const commitRequestStartedAt = Date.now();
     const result = await adminFetch('commitQuestionImport', { previewId: preview.previewId, confirm: true });
+    const commitClientElapsedMs = Date.now() - commitRequestStartedAt;
     $('importProgressFill').style.width = '100%';
-    $('importProgressText').textContent = `${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题`;
+    const commitTiming = result.timing || {};
+    $('importProgressText').textContent = `${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题 · 浏览器总等待 ${formatCourseDuration(commitClientElapsedMs)} · 题库核心 ${formatCourseDuration(commitTiming.totalMs || 0)}（Redis 事务 ${formatCourseDuration(commitTiming.transactionMs || 0)}）`;
     await loadQuestionBatches({ selectedBatchId: result.batch?.batchId || '' });
     state.questionPage = 1;
     await loadQuestions();
@@ -2534,6 +2567,24 @@ function renderCourseBatchPanel() {
     : state.courseBatchCancelRequested
       ? ' · 正在等待当前步骤结束后取消'
       : '';
+  const performance = batch.performance && typeof batch.performance === 'object' ? batch.performance : {};
+  const timing = performance.segments && typeof performance.segments === 'object' ? performance.segments : {};
+  const timingNames = [
+    ['redisLock', 'Redis锁'],
+    ['sessionRestore', '会话恢复'],
+    ['redisCache', 'Redis缓存'],
+    ['platformRead', '平台读取'],
+    ['platformWrite', '平台写入'],
+    ['verification', '平台复核'],
+    ['redisSave', 'Redis保存'],
+    ['humanWait', '等待/退避'],
+  ];
+  const timingHtml = timingNames.map(([name, label]) => {
+    const segment = timing[name] || {};
+    return `${label} ${formatCourseDuration(segment.totalMs || 0)}`;
+  }).join(' · ');
+  const currentStep = state.courseLastStep || state.courseDiagnostics?.currentStep || performance.last?.currentStep || '请求准备';
+  const lastRequestMs = state.courseLastRequestMs || performance.last?.elapsedMs || 0;
 
   let actions = '';
   if (batch.status === 'running') {
@@ -2566,7 +2617,8 @@ function renderCourseBatchPanel() {
       <div class="course-batch-status">${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</div>
     </div>
     <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
-    <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
+     <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
+     <div class="course-batch-meta"><strong>当前步骤：</strong>${escapeHtml(currentStep)} · 本次浏览器请求 ${escapeHtml(formatCourseDuration(state.courseLastClientRequestMs))} / 服务端 ${escapeHtml(formatCourseDuration(lastRequestMs))} · 累计服务端 ${escapeHtml(formatCourseDuration(performance.serverElapsedMs || 0))}<br>${escapeHtml(timingHtml)} · 浏览器步骤间等待 ${escapeHtml(formatCourseDuration(state.courseClientWaitMs))}</div>
     <div class="course-batch-actions">${actions}</div>
     ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
 }
@@ -2905,7 +2957,7 @@ async function logoutCourse() {
     }
     savePendingCourseExecutions();
     state.courseAllCourses = []; state.courseAllGroups = []; state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseListCache = null; state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
-    state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false;
+    state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false; state.courseDiagnostics = null; state.courseClientWaitMs = 0; state.courseLastStep = '请求准备'; state.courseLastRequestMs = 0; state.courseLastClientRequestMs = 0;
     setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
     updateCourseBatchUi();
     showToast('网课会话已清除');
@@ -3037,6 +3089,11 @@ async function startCourseBatch(mode = 'all') {
   }
 
   state.courseBusy = true;
+  state.courseDiagnostics = null;
+  state.courseLastStep = '请求准备';
+  state.courseLastRequestMs = 0;
+  state.courseLastClientRequestMs = 0;
+  state.courseClientWaitMs = 0;
   renderCourseBatchControls();
   try {
     showCourseOutput('正在生成一键完成预览', '服务器正在重新读取平台课程状态，本步骤不会产生写入。', 'warning');
@@ -3121,6 +3178,9 @@ async function pumpCourseBatch() {
       if (state.courseBatch?.status !== 'running' || !result.processed) break;
       state.courseBatchCurrentDelayMs = courseBatchDelayAfterStep(result, Date.now() - stepStartedAt);
       updateCourseBatchUi();
+      state.courseClientWaitMs += state.courseBatchCurrentDelayMs;
+      state.courseLastStep = '等待下一步骤';
+      updateCourseBatchUi();
       await new Promise(resolve => setTimeout(resolve, state.courseBatchCurrentDelayMs));
     }
 
@@ -3156,7 +3216,6 @@ async function pumpCourseBatch() {
     state.courseBatchCancelRequested = false;
     renderCourseList();
     updateCourseBatchUi();
-    if (state.courseAuthenticated) await loadCourseList({ forceRefresh: true });
   }
 }
 
