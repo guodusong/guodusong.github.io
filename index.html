@@ -263,6 +263,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .question-import-result.error{border-color:var(--danger-border);background:var(--danger-light);}
 .question-import-issues{margin:8px 0 0;padding-left:20px;max-height:150px;overflow:auto;color:var(--danger);}
 .question-import-warnings{margin:8px 0 0;padding-left:20px;max-height:100px;overflow:auto;color:var(--warning);}
+.question-import-timing{margin-top:6px;color:var(--text-muted);font-size:.76rem;line-height:1.55;overflow-wrap:anywhere;}
 .question-category-badge{display:inline-flex;margin-top:4px;padding:2px 7px;border-radius:999px;background:var(--accent-light);color:var(--accent);font-size:.68rem;font-weight:500;}
 
 /* ── Excel Modal ── */
@@ -346,6 +347,25 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 .course-task-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
 .course-task-item{padding:8px 10px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);font-size:.72rem;color:var(--text-secondary);}
 .course-task-item strong{color:var(--text);}
+.operation-center{margin-top:14px;padding:13px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface-hover);}
+.operation-center-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:9px;}
+.operation-center-title{font-size:.86rem;font-weight:700;color:var(--text);}
+.operation-center-sub{margin-top:2px;font-size:.7rem;color:var(--text-muted);line-height:1.5;}
+.operation-list{display:flex;flex-direction:column;gap:6px;max-height:320px;overflow:auto;}
+.operation-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px 10px;border:1px solid var(--border-light);border-radius:var(--radius-sm);background:var(--surface);}
+.operation-item-main{min-width:0;font-size:.74rem;color:var(--text-secondary);line-height:1.55;word-break:break-word;}
+.operation-item-main strong{color:var(--text);}
+.operation-item-meta{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);overflow-wrap:anywhere;}
+.operation-state{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:.66rem;font-weight:600;white-space:nowrap;align-self:start;}
+.operation-state.running{color:var(--accent);background:var(--accent-light);}
+.operation-state.completed,.operation-state.reconciled{color:var(--success);background:var(--success-light);}
+.operation-state.failed{color:var(--danger);background:var(--danger-light);}
+.operation-state.unknown{color:var(--warning);background:var(--warning-light);}
+.deployment-warning{margin-bottom:12px;padding:10px 12px;border-radius:var(--radius-sm);font-size:.78rem;line-height:1.6;}
+.deployment-warning.ok{color:var(--success);background:var(--success-light);border:1px solid var(--success-border);}
+.deployment-warning.warn{color:var(--warning);background:var(--warning-light);border:1px solid #fde68a;}
+.deployment-warning.error{color:var(--danger);background:var(--danger-light);border:1px solid var(--danger-border);}
+@media(max-width:640px){.operation-item{grid-template-columns:1fr;}}
 .course-select{display:inline-flex;align-items:center;gap:5px;margin-bottom:5px;font-size:.66rem;color:var(--text-muted);cursor:pointer;}
 .course-select input{accent-color:var(--accent);}
 .course-batch-panel{margin:12px 0;padding:12px;border:1px solid #c7d2fe;border-radius:var(--radius);background:#f5f7ff;}
@@ -536,7 +556,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
       </div>
 
       <!-- Sub-pane: Questions -->
-<div class="subpane hidden" id="subQuestions" data-question-bank-version="10.8">
+<div class="subpane hidden" id="subQuestions" data-question-bank-version="11.1">
         <div class="flex mb-12">
           <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
             <option value="">全部题库</option>
@@ -663,8 +683,20 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
       <!-- Sub-pane: Redacted system health -->
       <div class="subpane hidden" id="subHealth">
-        <div class="toolbar"><button id="refreshHealthBtn" class="btn btn-primary btn-sm">重新检测</button></div>
-        <div id="healthStatusBody"><div class="empty">点击“重新检测”读取云函数、Redis 和模块状态；不会显示密码或密钥。</div></div>
+        <div class="toolbar">
+          <button id="refreshHealthBtn" class="btn btn-primary btn-sm">快速检测</button>
+          <button id="deepHealthBtn" class="btn btn-ghost btn-sm">深度检测</button>
+          <span class="text-muted text-sm">快速检测只做版本与 Redis PING；深度检测才读取题库、激活码和网课配置统计。</span>
+        </div>
+        <div id="deploymentStatus"></div>
+        <div id="healthStatusBody"><div class="empty">点击“快速检测”读取版本和 Redis 连通性；不会显示密码或密钥。</div></div>
+        <div class="operation-center">
+          <div class="operation-center-head">
+            <div><div class="operation-center-title">最近管理写操作</div><div class="operation-center-sub">仅保存在当前浏览器，记录状态、请求编号和防重 operationId，不保存密码或业务参数。</div></div>
+            <div class="flex"><button id="reconcileOperationsBtn" class="btn btn-ghost btn-sm">对账未完成操作</button><button id="clearOperationHistoryBtn" class="btn btn-ghost btn-sm">清理已结束</button></div>
+          </div>
+          <div id="adminOperationHistory" class="operation-list"><div class="empty">暂无管理写操作记录</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -676,7 +708,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v10.8</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
+          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v11.1</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -730,11 +762,16 @@ const API_URL = 'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
 const COURSE_SESSION_STORAGE_KEY = 'gss.course.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
-const COURSE_FRONTEND_VERSION = '10.8.0';
+const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
+const COURSE_FRONTEND_VERSION = '11.1.0';
 const COURSE_API_PROTOCOL_VERSION = 2;
-const API_CLIENT_VERSION = '10.8';
+const ADMIN_API_PROTOCOL_VERSION = 1;
+const API_CLIENT_VERSION = '11.1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
+// 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
+// 浏览器等待时间略长于云函数 120 秒执行上限，写入仍由 operationId 防重并可只读对账。
+const API_ADMIN_HEAVY_TIMEOUT_MS = 125000;
 const API_COURSE_TIMEOUT_MS = 125000;
 const SHEETJS_URL = 'https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js';
 let sheetJsPromise = null;
@@ -781,6 +818,24 @@ function savePendingAdminOperations() {
   } catch (_) {}
 }
 
+function loadAdminOperationHistory() {
+  try {
+    const value = JSON.parse(localStorage.getItem(ADMIN_OPERATION_HISTORY_STORAGE_KEY) || '[]');
+    if (!Array.isArray(value)) return [];
+    return value.filter(item => item && typeof item === 'object' && /^[a-zA-Z0-9._:-]{8,120}$/.test(String(item.operationId || '')))
+      .slice(0, 50)
+      .map(item => ({
+        operationId: String(item.operationId),
+        action: String(item.action || 'unknown').slice(0, 80),
+        status: ['running', 'completed', 'reconciled', 'failed', 'unknown'].includes(item.status) ? item.status : 'unknown',
+        startedAt: String(item.startedAt || ''),
+        updatedAt: String(item.updatedAt || ''),
+        requestId: String(item.requestId || '').slice(0, 120),
+        message: String(item.message || '').slice(0, 240),
+      }));
+  } catch (_) { return []; }
+}
+
 function loadCourseSessionId() {
   try {
     const saved = localStorage.getItem(COURSE_SESSION_STORAGE_KEY);
@@ -800,6 +855,10 @@ const state = {
   adminSessionToken: '',
   isAdmin: false,
   adminOperationKeys: loadPendingAdminOperations(),
+  adminOperationHistory: loadAdminOperationHistory(),
+  backendMetadata: null,
+  backendCompatibility: 'unknown',
+  lastApiRequest: null,
   // Tokens
   allTokens: [],
   filteredTokens: [],
@@ -821,6 +880,7 @@ const state = {
   questionBatches: [],
   questionBackups: [],
   questionFullBackup: null,
+  questionCatalogTiming: null,
   questionBatchFilter: '',
   editId: null,
   // Devices
@@ -1033,7 +1093,7 @@ function switchSubtab(name) {
 const apiInflight = new Map();
 const apiAbortGroups = new Map();
 const ADMIN_READ_ONLY_ACTIONS = new Set([
-  'health', 'listAll', 'logs', 'getEmergencyCode', 'listQuestionBatches', 'searchSimpleQuestions',
+  'probe', 'health', 'listAll', 'logs', 'getEmergencyCode', 'listQuestionBatches', 'searchSimpleQuestions',
   'countQuestions', 'listActivations', 'adminOperationStatus', 'exportQuestionBank',
   'previewQuestionBankRestore', 'previewLastQuestionBankRestore'
 ]);
@@ -1046,6 +1106,122 @@ const ADMIN_MUTATING_ACTIONS = new Set([
   'clearAllActivations'
 ]);
 const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus']);
+const ADMIN_OPERATION_LABELS = Object.freeze({
+  add: '新增 Token', updateRemain: '修改 Token 次数', reset: '重置 Token', renameToken: '重命名 Token',
+  delete: '删除 Token', deleteBatch: '批量删除 Token', clearAll: '清空 Token', import: '导入 Token',
+  clearLogs: '清空日志', importSimpleQuestions: '旧版题库导入', commitQuestionImport: '提交题库导入',
+  deleteQuestionBatch: '删除独立题库', restoreQuestionBatch: '恢复独立题库', updateSimpleQuestion: '修改题目',
+  deleteSimpleQuestion: '删除题目', clearAllQuestions: '清空题库', commitQuestionBankRestore: '恢复整库备份',
+  createActivation: '创建激活码', revokeActivation: '暂停激活码', restoreActivation: '恢复激活码',
+  deleteActivation: '删除激活码', updateActivationDays: '修改激活期限', updateActivationUses: '修改激活次数',
+  deleteActivationsBatch: '批量删除激活码', clearAllActivations: '清空激活码',
+});
+const ADMIN_OPERATION_STATUS_LABELS = Object.freeze({
+  running: '处理中', completed: '已完成', reconciled: '已对账', failed: '失败', unknown: '待对账',
+});
+
+function saveAdminOperationHistory() {
+  try {
+    state.adminOperationHistory = state.adminOperationHistory
+      .sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')))
+      .slice(0, 50);
+    localStorage.setItem(ADMIN_OPERATION_HISTORY_STORAGE_KEY, JSON.stringify(state.adminOperationHistory));
+  } catch (_) {}
+}
+
+function safeOperationHistoryCode(value, fallback = 'REQUEST_FAILED') {
+  const code = String(value || '').toUpperCase();
+  return /^[A-Z0-9_.:-]{1,60}$/.test(code) ? code : fallback;
+}
+
+function upsertAdminOperationHistory(operationId, patch = {}) {
+  if (!operationId) return;
+  const now = new Date().toISOString();
+  const existingIndex = state.adminOperationHistory.findIndex(item => item.operationId === operationId);
+  const existing = existingIndex >= 0 ? state.adminOperationHistory[existingIndex] : {
+    operationId, action: String(patch.action || 'unknown'), status: 'running', startedAt: now,
+    updatedAt: now, requestId: '', message: '',
+  };
+  const next = {
+    ...existing,
+    ...patch,
+    operationId,
+    action: String(patch.action || existing.action || 'unknown').slice(0, 80),
+    status: ['running', 'completed', 'reconciled', 'failed', 'unknown'].includes(patch.status || existing.status)
+      ? (patch.status || existing.status) : 'unknown',
+    startedAt: String(existing.startedAt || patch.startedAt || now),
+    updatedAt: now,
+    requestId: String(patch.requestId ?? existing.requestId ?? '').slice(0, 120),
+    message: String(patch.message ?? existing.message ?? '').slice(0, 240),
+  };
+  if (existingIndex >= 0) state.adminOperationHistory.splice(existingIndex, 1);
+  state.adminOperationHistory.unshift(next);
+  saveAdminOperationHistory();
+  renderAdminOperationHistory();
+}
+
+function renderAdminOperationHistory() {
+  const body = $('adminOperationHistory');
+  if (!body) return;
+  const items = state.adminOperationHistory.slice(0, 30);
+  if (!items.length) {
+    body.innerHTML = '<div class="empty">暂无管理写操作记录</div>';
+    return;
+  }
+  body.innerHTML = items.map(item => {
+    const status = ADMIN_OPERATION_STATUS_LABELS[item.status] || '待确认';
+    const label = ADMIN_OPERATION_LABELS[item.action] || item.action || '管理操作';
+    const canReconcile = ['running', 'unknown'].includes(item.status);
+    return `<div class="operation-item">
+      <div class="operation-item-main"><strong>${escapeHtml(label)}</strong> · ${escapeHtml(formatQuestionBatchTime(item.updatedAt || item.startedAt))}${item.message ? `<br>${escapeHtml(item.message)}` : ''}
+        <div class="operation-item-meta">operationId ${escapeHtml(item.operationId)}${item.requestId ? ` · requestId ${escapeHtml(item.requestId)}` : ''}</div>
+      </div>
+      <div class="flex"><span class="operation-state ${escapeHtml(item.status)}">${escapeHtml(status)}</span>${canReconcile ? `<button class="btn btn-ghost btn-sm" data-reconcile-operation="${escapeHtml(item.operationId)}">对账</button>` : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function acceptBackendMetadata(metadata = {}) {
+  const protocols = metadata.protocols && typeof metadata.protocols === 'object' ? metadata.protocols : {};
+  const version = String(metadata.version || '').trim();
+  const buildId = String(metadata.buildId || '').trim();
+  const adminProtocol = Number(protocols.admin || 0);
+  if (!version && !buildId && !adminProtocol) return;
+  state.backendMetadata = {
+    version: version || state.backendMetadata?.version || '',
+    buildId: buildId || state.backendMetadata?.buildId || '',
+    protocols: {
+      admin: adminProtocol || Number(state.backendMetadata?.protocols?.admin || 0),
+      answer: Number(protocols.answer || state.backendMetadata?.protocols?.answer || 0),
+      course: Number(protocols.course || state.backendMetadata?.protocols?.course || 0),
+    },
+  };
+  const currentAdminProtocol = Number(state.backendMetadata.protocols.admin || 0);
+  if (currentAdminProtocol < ADMIN_API_PROTOCOL_VERSION) state.backendCompatibility = 'incompatible';
+  else if (state.backendMetadata.version && state.backendMetadata.version !== COURSE_FRONTEND_VERSION) state.backendCompatibility = 'version-drift';
+  else state.backendCompatibility = 'compatible';
+  renderDeploymentStatus();
+}
+
+function renderDeploymentStatus() {
+  const body = $('deploymentStatus');
+  if (!body) return;
+  const meta = state.backendMetadata;
+  const last = state.lastApiRequest;
+  if (!meta) {
+    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}，尚未读取云函数版本。请先执行快速检测。</div>`;
+    return;
+  }
+  const lastText = last ? ` · 最近请求 ${escapeHtml(last.namespace)}/${escapeHtml(last.action || '-')} · ${escapeHtml(last.requestId || '无编号')} · ${escapeHtml(formatCourseDuration(last.durationMs || 0))}` : '';
+  if (state.backendCompatibility === 'incompatible') {
+    body.innerHTML = `<div class="deployment-warning error">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)} 与云函数 v${escapeHtml(meta.version || '未知')} 的管理协议不兼容（需要 ${ADMIN_API_PROTOCOL_VERSION}，返回 ${Number(meta.protocols?.admin || 0)}）。为防止错版写入，管理写操作已停止${lastText}</div>`;
+  } else if (state.backendCompatibility === 'version-drift') {
+    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}，云函数 v${escapeHtml(meta.version || '未知')}（${escapeHtml(meta.buildId || '无构建标识')}）；协议兼容，但建议部署成同一版本${lastText}</div>`;
+  } else {
+    body.innerHTML = `<div class="deployment-warning ok">前端与云函数版本一致：v${escapeHtml(meta.version || COURSE_FRONTEND_VERSION)} · ${escapeHtml(meta.buildId || '无构建标识')} · 管理/答题/网课协议 ${Number(meta.protocols?.admin || 0)}/${Number(meta.protocols?.answer || 0)}/${Number(meta.protocols?.course || 0)}${lastText}</div>`;
+  }
+}
+
 let activeApiRequests = 0;
 let networkShowTimer = null;
 let networkSlowTimer = null;
@@ -1111,10 +1287,14 @@ function apiTimeoutFor(namespace, action) {
     return longCourseActions.has(action) ? API_COURSE_TIMEOUT_MS : API_LONG_TIMEOUT_MS;
   }
   if (namespace === 'admin') {
-    const longAdminActions = new Set([
+    const heavyQuestionActions = new Set([
       'previewQuestionImport', 'commitQuestionImport', 'restoreQuestionBatch', 'deleteQuestionBatch',
       'clearAllQuestions', 'import', 'exportQuestionBank', 'previewQuestionBankRestore',
       'previewLastQuestionBankRestore', 'commitQuestionBankRestore'
+    ]);
+    if (heavyQuestionActions.has(action)) return API_ADMIN_HEAVY_TIMEOUT_MS;
+    const longAdminActions = new Set([
+      'deleteActivationsBatch', 'clearAllActivations'
     ]);
     return longAdminActions.has(action) ? API_LONG_TIMEOUT_MS : API_DEFAULT_TIMEOUT_MS;
   }
@@ -1142,6 +1322,7 @@ async function apiJsonRequest({ namespace = 'public', action = '', url = API_URL
   const clientRequestId = createCourseRequestId();
   const effectiveTimeout = Number(timeoutMs) > 0 ? Number(timeoutMs) : apiTimeoutFor(namespace, action);
   const operation = (async () => {
+    const requestStartedAt = Date.now();
     beginApiActivity(namespace);
     const timer = setTimeout(() => {
       abortReason = 'timeout';
@@ -1162,6 +1343,21 @@ async function apiJsonRequest({ namespace = 'public', action = '', url = API_URL
         try { data = JSON.parse(responseText); }
         catch (_) { data = { message: responseText }; }
       }
+      acceptBackendMetadata({
+        version: response.headers.get('x-gss-version') || '',
+        buildId: response.headers.get('x-gss-build-id') || '',
+        protocols: {
+          admin: Number(response.headers.get('x-gss-admin-protocol') || 0),
+          answer: Number(response.headers.get('x-gss-answer-protocol') || 0),
+          course: Number(response.headers.get('x-gss-course-protocol') || 0),
+        },
+      });
+      if (data?.application) acceptBackendMetadata(data.application);
+      state.lastApiRequest = {
+        namespace, action, requestId: responseRequestId, status: response.status,
+        durationMs: Date.now() - requestStartedAt, finishedAt: new Date().toISOString(),
+      };
+      renderDeploymentStatus();
       return { response, data, requestId: responseRequestId };
     } catch (cause) {
       const error = new Error(
@@ -1174,6 +1370,11 @@ async function apiJsonRequest({ namespace = 'public', action = '', url = API_URL
       error.code = abortReason === 'superseded' ? 'REQUEST_SUPERSEDED' : abortReason === 'timeout' ? 'CLIENT_TIMEOUT' : 'NETWORK_ERROR';
       error.requestId = clientRequestId;
       error.cause = cause;
+      state.lastApiRequest = {
+        namespace, action, requestId: clientRequestId, status: 0,
+        durationMs: Date.now() - requestStartedAt, finishedAt: new Date().toISOString(), errorCode: error.code,
+      };
+      renderDeploymentStatus();
       throw error;
     } finally {
       clearTimeout(timer);
@@ -1209,6 +1410,11 @@ function acceptAdminSession(data) {
 
 async function adminFetch(action, params = {}, requestOptions = {}) {
   const isMutation = ADMIN_MUTATING_ACTIONS.has(action) && !ADMIN_READ_ONLY_ACTIONS.has(action);
+  if (isMutation && state.backendCompatibility === 'incompatible') {
+    const error = new Error('前后端管理协议不兼容，已停止写入；请先部署匹配版本并执行快速检测');
+    error.code = 'BACKEND_PROTOCOL_INCOMPATIBLE';
+    throw error;
+  }
   const operationSlot = isMutation ? `${action}:${compactRequestFingerprint(params)}` : '';
   const operationId = isMutation
     ? (state.adminOperationKeys.get(operationSlot) || createCourseRequestId())
@@ -1216,6 +1422,9 @@ async function adminFetch(action, params = {}, requestOptions = {}) {
   if (isMutation) {
     state.adminOperationKeys.set(operationSlot, operationId);
     savePendingAdminOperations();
+    upsertAdminOperationHistory(operationId, {
+      action, status: 'running', message: '请求已发送；如网络中断将只查询收据，不会自动重复提交',
+    });
   }
   const payload = { admin: '1', action, ...params };
   if (operationId) payload.operationId = operationId;
@@ -1225,6 +1434,14 @@ async function adminFetch(action, params = {}, requestOptions = {}) {
   try {
     transport = await apiJsonRequest({ namespace: 'admin', action, payload, ...requestOptions });
   } catch (error) {
+    if (isMutation) {
+      upsertAdminOperationHistory(operationId, {
+        action,
+        status: ['CLIENT_TIMEOUT', 'NETWORK_ERROR'].includes(error.code) ? 'unknown' : 'failed',
+        requestId: error.requestId || '',
+        message: `请求未正常返回（${safeOperationHistoryCode(error.code)}）`,
+      });
+    }
     if (isMutation && ['CLIENT_TIMEOUT', 'NETWORK_ERROR'].includes(error.code)) {
       try {
         const statusData = await adminFetch('adminOperationStatus', { operationId }, { timeoutMs: API_DEFAULT_TIMEOUT_MS });
@@ -1239,10 +1456,18 @@ async function adminFetch(action, params = {}, requestOptions = {}) {
             recoveredError.code = result.code || 'ADMIN_OPERATION_FAILED';
             recoveredError.payload = result;
             recoveredError.reconciled = true;
+            upsertAdminOperationHistory(operationId, {
+              action, status: 'failed', requestId: error.requestId || '',
+              message: `已通过云端收据确认操作失败（${safeOperationHistoryCode(recoveredError.code, 'ADMIN_OPERATION_FAILED')}）`,
+            });
             throw recoveredError;
           }
           const recovered = receipt.result && typeof receipt.result === 'object' ? receipt.result : {};
           recovered.adminOperation = { ...receipt, replayed: true };
+          upsertAdminOperationHistory(operationId, {
+            action, status: 'reconciled', requestId: error.requestId || '',
+            message: '浏览器请求中断，但已通过云端收据确认操作完成',
+          });
           return acceptAdminSession(recovered);
         }
         error.code = receipt.status === 'running'
@@ -1252,16 +1477,26 @@ async function adminFetch(action, params = {}, requestOptions = {}) {
         error.message = receipt.status === 'running'
           ? '操作仍在云端处理中，请稍后刷新列表；系统不会重复提交'
           : '操作结果暂不确定，请先刷新对应列表并人工核对；系统不会重复提交';
+        upsertAdminOperationHistory(operationId, {
+          action, status: receipt.status === 'running' ? 'running' : 'unknown',
+          requestId: error.requestId || '', message: receipt.status === 'running' ? '云端仍在处理中，不会重复提交' : '操作结果暂不确定，请核对业务列表',
+        });
       } catch (statusError) {
         if (statusError?.code === 'ADMIN_OPERATION_NOT_FOUND') {
           state.adminOperationKeys.delete(operationSlot);
           savePendingAdminOperations();
           error.message += '；云端未找到操作收据，本次没有自动重发，请刷新列表后再决定是否重试';
+          upsertAdminOperationHistory(operationId, {
+            action, status: 'unknown', requestId: error.requestId || '', message: '云端未找到操作收据，请核对业务列表',
+          });
         } else if (statusError?.reconciled) {
           throw statusError;
         } else {
           error.unknownResult = true;
           error.message += '；暂时无法查询操作状态，请刷新对应列表，不要立即重复提交';
+          upsertAdminOperationHistory(operationId, {
+            action, status: 'unknown', requestId: error.requestId || '', message: '暂时无法查询操作状态，请稍后对账',
+          });
         }
       }
     }
@@ -1284,11 +1519,21 @@ async function adminFetch(action, params = {}, requestOptions = {}) {
       state.adminOperationKeys.delete(operationSlot);
       savePendingAdminOperations();
     }
+    if (isMutation) {
+      upsertAdminOperationHistory(operationId, {
+        action, status: receiptStatus === 'unknown' ? 'unknown' : 'failed', requestId,
+        message: `操作未成功（${safeOperationHistoryCode(data.code, response.status >= 500 ? 'SERVER_ERROR' : 'OPERATION_REJECTED')}）`,
+      });
+    }
     throw error;
   }
   if (isMutation && (!data?.adminOperation || data.adminOperation.status === 'completed')) {
     state.adminOperationKeys.delete(operationSlot);
     savePendingAdminOperations();
+    upsertAdminOperationHistory(operationId, {
+      action, status: 'completed', requestId,
+      message: data?.adminOperation?.replayed ? '云端返回既有收据，未重复执行' : '操作完成',
+    });
   }
   return acceptAdminSession(data);
 }
@@ -1885,42 +2130,114 @@ function renderQuestionBatchFilter(selectedBatchId = null) {
   state.questionBatchFilter = select.value;
 }
 
-async function loadSystemHealth() {
+async function loadSystemHealth({ deep = false } = {}) {
   const body = $('healthStatusBody');
-  const button = $('refreshHealthBtn');
+  const button = deep ? $('deepHealthBtn') : $('refreshHealthBtn');
   if (!body || !button) return;
   const original = button.textContent;
   button.disabled = true;
   button.textContent = '检测中...';
-  body.innerHTML = '<div class="empty">正在检测云函数、Redis、题库和网课配置...</div>';
+  body.innerHTML = `<div class="empty">${deep ? '正在读取云函数、Redis、题库、激活码和网课配置统计...' : '正在快速检测版本、运行时和 Redis PING...'}</div>`;
   try {
-    const data = await adminFetch('health');
+    const data = await adminFetch(deep ? 'health' : 'probe');
+    acceptBackendMetadata(data.application || {});
     const redisOk = data.redis?.connected === true && data.redis?.clientReady !== false;
-    const courseOk = data.course?.configured === true;
+    const courseOk = deep ? data.course?.configured === true : true;
     const redisLastError = data.redis?.lastErrorAt
       ? ` · 最近异常 ${escapeHtml(data.redis.lastErrorCode || 'REDIS_ERROR')} / ${escapeHtml(formatQuestionBatchTime(data.redis.lastErrorAt))}`
       : '';
+    const deepCards = deep ? `
+      <div class="stat-card2"><div class="stat-card2-label">题库</div><div class="stat-card2-value">${Number(data.data?.questionCount || 0)}</div><div class="stat-card2-sub">${Number(data.data?.questionBatchCount || 0)} 个独立题库 · 数据版本 ${Number(data.data?.questionVersion || 0)}</div></div>
+      <div class="stat-card2"><div class="stat-card2-label">网课配置</div><div class="stat-card2-value" style="color:${courseOk ? 'var(--success)' : 'var(--danger)'};">${courseOk ? '完整' : '缺失'}</div><div class="stat-card2-sub">列表缓存 ${Number(data.course?.listCacheTtlSeconds || 0)} 秒 · 执行凭据 ${Math.round(Number(data.course?.executionReceiptTtlSeconds || 0) / 86400)} 天</div></div>` : '';
+    const timingText = deep
+      ? `PING ${Number(data.diagnostics?.redisPingMs || 0)} ms · 统计 ${Number(data.diagnostics?.statisticsMs || 0)} ms`
+      : `PING ${Number(data.diagnostics?.redisPingMs || 0)} ms`;
     body.innerHTML = `<div class="stats-grid2">
       <div class="stat-card2"><div class="stat-card2-label">云函数运行时</div><div class="stat-card2-value" style="font-size:1rem;">${escapeHtml(data.runtime?.node || '未知')}</div><div class="stat-card2-sub">内存 ${Number(data.runtime?.memoryMb || 0)} MB · 启动 ${Number(data.runtime?.uptimeSeconds || 0)} 秒</div></div>
       <div class="stat-card2"><div class="stat-card2-label">Redis</div><div class="stat-card2-value" style="color:${redisOk ? 'var(--success)' : 'var(--danger)'};">${redisOk ? '正常' : '异常'}</div><div class="stat-card2-sub">TLS ${data.redis?.tlsEnabled ? '已启用' : '未启用'} · ${escapeHtml(data.redis?.ping || '')} · 连接超时 ${Number(data.redis?.connectTimeoutMs || 0)} ms${redisLastError}</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">题库</div><div class="stat-card2-value">${Number(data.data?.questionCount || 0)}</div><div class="stat-card2-sub">${Number(data.data?.questionBatchCount || 0)} 个独立题库 · 数据版本 ${Number(data.data?.questionVersion || 0)}</div></div>
-      <div class="stat-card2"><div class="stat-card2-label">网课配置</div><div class="stat-card2-value" style="color:${courseOk ? 'var(--success)' : 'var(--danger)'};">${courseOk ? '完整' : '缺失'}</div><div class="stat-card2-sub">列表缓存 ${Number(data.course?.listCacheTtlSeconds || 0)} 秒 · 执行凭据 ${Math.round(Number(data.course?.executionReceiptTtlSeconds || 0) / 86400)} 天</div></div>
+      ${deepCards}
     </div>
-    <div class="result-card ${redisOk && courseOk ? 'success' : 'warning'}">检测时间：${escapeHtml(formatQuestionBatchTime(data.checkedAt))} · 后端耗时 ${Number(data.latencyMs || 0)} ms · 激活码 ${Number(data.data?.activationCount || 0)} 个 · 管理写入收据 ${Math.round(Number(data.safeguards?.adminOperationReceiptTtlSeconds || 0) / 86400)} 天 · 幂等事件上限 ${Number(data.safeguards?.activationUsageEventLimit || 0)} 条</div>
-    <div class="tip">前端请求层 v${escapeHtml(API_CLIENT_VERSION)}。这里只返回布尔状态和数量，不返回 Redis 密码、管理员密码、JWT 密钥或网课加密密钥。</div>`;
+    <div class="result-card ${redisOk && courseOk ? 'success' : 'warning'}">${deep ? '深度' : '快速'}检测：${escapeHtml(formatQuestionBatchTime(data.checkedAt))} · 后端总耗时 ${Number(data.latencyMs || 0)} ms · ${timingText}${deep ? ` · 激活码 ${Number(data.data?.activationCount || 0)} 个 · 管理写入收据 ${Math.round(Number(data.safeguards?.adminOperationReceiptTtlSeconds || 0) / 86400)} 天` : ''}</div>
+    <div class="tip">前端请求层 v${escapeHtml(API_CLIENT_VERSION)}。快速检测不扫描业务数据；深度检测只返回脱敏状态、数量和耗时，不返回 Redis 密码、管理员密码、JWT 密钥或网课加密密钥。</div>`;
+    renderDeploymentStatus();
+    renderAdminOperationHistory();
   } catch (error) {
-    body.innerHTML = `<div class="result-card error">健康检查失败：${escapeHtml(error.message || '未知错误')}</div>`;
+    body.innerHTML = `<div class="result-card error">${deep ? '深度' : '快速'}检测失败：${escapeHtml(error.message || '未知错误')}${error.requestId ? `<br>请求编号：${escapeHtml(error.requestId)}` : ''}</div>`;
   } finally {
     button.disabled = false;
     button.textContent = original;
   }
 }
 
+async function reconcileAdminOperation(operationId, { quiet = false } = {}) {
+  const item = state.adminOperationHistory.find(entry => entry.operationId === operationId);
+  if (!item) return false;
+  upsertAdminOperationHistory(operationId, { action: item.action, status: 'running', message: '正在只读查询云端操作收据...' });
+  try {
+    const data = await adminFetch('adminOperationStatus', { operationId }, { timeoutMs: API_DEFAULT_TIMEOUT_MS });
+    const receipt = data?.adminOperation || {};
+    if (receipt.status === 'completed') {
+      const failed = Number(receipt.resultStatusCode || 200) >= 400;
+      upsertAdminOperationHistory(operationId, {
+        action: item.action, status: failed ? 'failed' : 'reconciled',
+        message: failed ? `云端收据确认操作失败（HTTP ${Number(receipt.resultStatusCode || 0)}）` : '云端收据确认操作已经完成',
+      });
+      if (!quiet) showToast(failed ? '已确认操作失败' : '已确认操作完成', failed);
+      return !failed;
+    }
+    upsertAdminOperationHistory(operationId, {
+      action: item.action, status: receipt.status === 'running' ? 'running' : 'unknown',
+      message: receipt.status === 'running' ? '云端仍在处理中，不会重复提交' : '云端结果仍不确定，请人工核对业务列表',
+    });
+    if (!quiet) showToast(receipt.status === 'running' ? '操作仍在云端处理中' : '操作结果仍需人工核对', true);
+    return false;
+  } catch (error) {
+    upsertAdminOperationHistory(operationId, {
+      action: item.action, status: 'unknown', requestId: error.requestId || item.requestId,
+      message: error.code === 'ADMIN_OPERATION_NOT_FOUND' ? '云端未找到收据；请核对业务列表，不要直接重复提交' : `收据查询失败（${safeOperationHistoryCode(error.code)}）`,
+    });
+    if (!quiet) showToast(`操作对账失败：${error.message}`, true);
+    return false;
+  }
+}
+
+async function reconcilePendingAdminOperations() {
+  for (const [slot, operationId] of state.adminOperationKeys.entries()) {
+    if (!state.adminOperationHistory.some(item => item.operationId === operationId)) {
+      upsertAdminOperationHistory(operationId, {
+        action: String(slot).split(':')[0] || 'unknown', status: 'unknown', message: '从旧版浏览器待处理记录恢复',
+      });
+    }
+  }
+  const pending = state.adminOperationHistory.filter(item => ['running', 'unknown'].includes(item.status));
+  if (!pending.length) { showToast('没有需要对账的管理操作'); return; }
+  const button = $('reconcileOperationsBtn');
+  if (button) { button.disabled = true; button.textContent = `对账中 0/${pending.length}`; }
+  for (let index = 0; index < pending.length; index += 1) {
+    if (button) button.textContent = `对账中 ${index + 1}/${pending.length}`;
+    await reconcileAdminOperation(pending[index].operationId, { quiet: true });
+  }
+  if (button) { button.disabled = false; button.textContent = '对账未完成操作'; }
+  showToast('未完成操作对账结束');
+}
+
+function clearCompletedAdminOperationHistory() {
+  state.adminOperationHistory = state.adminOperationHistory.filter(item => ['running', 'unknown'].includes(item.status));
+  saveAdminOperationHistory();
+  renderAdminOperationHistory();
+  showToast('已清理完成、已对账和失败记录');
+}
+
 async function loadQuestionBatches({ selectedBatchId = null } = {}) {
+  const startedAt = Date.now();
   const data = await adminFetch('listQuestionBatches');
   state.questionBatches = Array.isArray(data.batches) ? data.batches : [];
   state.questionBackups = Array.isArray(data.backups) ? data.backups : [];
   state.questionFullBackup = data.fullBackup && typeof data.fullBackup === 'object' ? data.fullBackup : null;
+  state.questionCatalogTiming = {
+    ...(data.timing && typeof data.timing === 'object' ? data.timing : {}),
+    clientElapsedMs: Date.now() - startedAt,
+  };
   renderQuestionBatchFilter(selectedBatchId);
   return data;
 }
@@ -2167,6 +2484,15 @@ async function showQuestionStats() {
     const latest = batches[0] || null;
     const backupMap = new Map(state.questionBackups.map(item => [String(item.batchId || ''), item]));
     const fullBackup = state.questionFullBackup;
+    const catalogTiming = state.questionCatalogTiming || {};
+    const catalogTimingHtml = '<div class="question-import-timing">列表读取：浏览器总等待 '
+      + escapeHtml(formatCourseDuration(catalogTiming.clientElapsedMs || 0))
+      + ' · 服务端并行总耗时 ' + escapeHtml(formatCourseDuration(catalogTiming.totalMs || 0))
+      + ' · 批次 ' + escapeHtml(formatCourseDuration(catalogTiming.batchesMs || 0))
+      + ' · 单库备份 ' + escapeHtml(formatCourseDuration(catalogTiming.backupsMs || 0))
+      + ' · 题目计数 ' + escapeHtml(formatCourseDuration(catalogTiming.countMs || 0))
+      + ' · 整库备份摘要 ' + escapeHtml(formatCourseDuration(catalogTiming.fullBackupMs || 0))
+      + '<br>以上服务端分段并行执行，不应直接相加。</div>';
     const cards = batches.map(batch => `<div class="question-batch-card" data-batch-id="${escapeHtml(batch.batchId)}">
       <div><div class="question-batch-title">${escapeHtml(batch.category || '未命名题库')}</div>
         <div class="question-batch-meta"><span>${Number(batch.count || 0)} 道题</span><span>版本 ${Number(batch.revision || 1)}</span><span>更新 ${escapeHtml(formatQuestionBatchTime(batch.updatedAt || batch.createdAt))}</span></div></div>
@@ -2200,6 +2526,7 @@ async function showQuestionStats() {
       <div class="stat-card2"><div class="stat-card2-label">最近更新</div><div class="stat-card2-value" style="font-size:.95rem;">${escapeHtml(latest?.category || '暂无')}</div><div class="stat-card2-sub">${escapeHtml(latest ? formatQuestionBatchTime(latest.updatedAt || latest.createdAt) : '暂无')}</div></div>
       <div class="stat-card2"><div class="stat-card2-label">单库备份</div><div class="stat-card2-value">${state.questionBackups.length}</div><div class="stat-card2-sub">默认保留 7 天的上一版</div></div>
     </div>
+    ${catalogTimingHtml}
     ${fullBackupSection}
     <div class="stats-sect2"><div class="stats-sect2-title">当前独立题库</div><div class="question-batch-list">${cards || '<div class="empty">暂无题库，请点击“新建题库”导入</div>'}</div></div>
     ${deletedBackupCards ? `<div class="stats-sect2"><div class="stats-sect2-title">最近删除、仍可恢复</div><div class="question-batch-list">${deletedBackupCards}</div></div>` : ''}
@@ -2329,13 +2656,35 @@ function renderQuestionImportPreview(preview) {
   const issueHtml = issues.slice(0, 30).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '数据错误')}</li>`).join('');
   const warningHtml = warnings.slice(0, 20).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '重复题目')}</li>`).join('');
   const timing = preview.timing || {};
-  const timingHtml = `<div style="margin-top:8px;color:var(--text-muted);font-size:.78rem;">校验耗时：浏览器总等待 ${escapeHtml(formatCourseDuration(preview.clientElapsedMs || timing.totalMs || 0))} · 题库核心 ${escapeHtml(formatCourseDuration(timing.totalMs || 0))} · 元数据 ${escapeHtml(formatCourseDuration(timing.metadataMs || 0))} · 本地校验 ${escapeHtml(formatCourseDuration(timing.validationMs || 0))} · Redis 冲突查询 ${escapeHtml(formatCourseDuration(timing.conflictLookupMs || 0))} · 暂存 ${escapeHtml(formatCourseDuration(timing.previewStoreMs || 0))}</div>`;
+  const compressionText = timing.previewEncoding === 'gzip-base64' && Number(timing.previewRawBytes || 0) > 0
+    ? `（已压缩 ${formatFileBytes(timing.previewRawBytes)} → ${formatFileBytes(timing.previewStoredBytes)}）`
+    : '';
+  const timingHtml = `<div class="question-import-timing">校验耗时：浏览器总等待 ${escapeHtml(formatCourseDuration(preview.clientElapsedMs || timing.totalMs || 0))} · 题库核心 ${escapeHtml(formatCourseDuration(timing.totalMs || 0))} · 元数据 ${escapeHtml(formatCourseDuration(timing.metadataMs || 0))} · 本地校验 ${escapeHtml(formatCourseDuration(timing.validationMs || 0))} · Redis 冲突查询 ${escapeHtml(formatCourseDuration(timing.conflictLookupMs || 0))} · 暂存 ${escapeHtml(formatCourseDuration(timing.previewStoreMs || 0))}${escapeHtml(compressionText)}</div>`;
   box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
   box.innerHTML = `<strong>${preview.ready ? '✅ 校验通过，可以提交' : '❌ 校验未通过，尚未写入题库'}</strong><br>
     输入 ${Number(preview.inputCount || 0)} 行 · 有效 ${Number(preview.validCount || 0)} 行 · 错误 ${Number(preview.errorCount || 0)} · 冲突 ${Number(preview.conflictCount || 0)} · 提醒 ${Number(preview.warningCount || 0)}
     ${issueHtml ? `<ul class="question-import-issues">${issueHtml}</ul>` : ''}
     ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}
     ${timingHtml}`;
+}
+
+function renderQuestionCommitTiming(timing) {
+  const value = timing || {};
+  const snapshotHits = Math.max(0, Number(value.indexSnapshotHits || 0));
+  const snapshotMisses = Math.max(0, Number(value.indexSnapshotMisses || 0));
+  const stages = [
+    `预览读取 ${formatCourseDuration(value.previewFetchMs || value.previewLoadMs || 0)}`,
+    `预览解压 ${formatCourseDuration(value.previewDecodeMs || 0)}`,
+    `Redis 锁获取 ${formatCourseDuration(value.lockAcquireMs || 0)}`,
+    `元数据/版本 ${formatCourseDuration(value.metadataAndVersionMs || 0)}`,
+    `旧题读取 ${formatCourseDuration(value.sourceReadMs || 0)}`,
+    `备份 ${formatCourseDuration(value.backupMs || 0)}`,
+    `索引准备 ${formatCourseDuration(value.indexBuildMs || 0)}`,
+    `Redis 索引读取 ${formatCourseDuration(value.indexRedisReadMs || 0)}`,
+    `原子写入 ${formatCourseDuration(value.transactionMs || 0)}`,
+    `Redis 锁释放 ${formatCourseDuration(value.lockReleaseMs || 0)}`,
+  ];
+  return `${stages.join(' · ')} · 索引快照命中/补读 ${snapshotHits}/${snapshotMisses}`;
 }
 
 async function confirmImportFromExcel() {
@@ -2388,7 +2737,7 @@ async function confirmImportFromExcel() {
     const commitClientElapsedMs = Date.now() - commitRequestStartedAt;
     $('importProgressFill').style.width = '100%';
     const commitTiming = result.timing || {};
-    $('importProgressText').textContent = `${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题 · 浏览器总等待 ${formatCourseDuration(commitClientElapsedMs)} · 题库核心 ${formatCourseDuration(commitTiming.totalMs || 0)}（Redis 事务 ${formatCourseDuration(commitTiming.transactionMs || 0)}）`;
+    $('importProgressText').innerHTML = `<div>${preview.mode === 'replace' ? '替换' : '导入'}完成：${Number(result.added || 0)} 道题 · 浏览器总等待 ${escapeHtml(formatCourseDuration(commitClientElapsedMs))} · 题库核心 ${escapeHtml(formatCourseDuration(commitTiming.totalMs || 0))}（Redis 事务 ${escapeHtml(formatCourseDuration(commitTiming.transactionMs || 0))}）</div><div class="question-import-timing">诊断分段（并行阶段不可直接相加）：${escapeHtml(renderQuestionCommitTiming(commitTiming))}</div>`;
     await loadQuestionBatches({ selectedBatchId: result.batch?.batchId || '' });
     state.questionPage = 1;
     await loadQuestions();
@@ -2396,7 +2745,8 @@ async function confirmImportFromExcel() {
     state.importCategory = '';
     state.questionImportTarget = null;
     state.questionImportPreview = null;
-    setTimeout(() => progress.classList.add('hidden'), 1800);
+    // 跨地域性能诊断保留更久，方便在手机端查看或截图。
+    setTimeout(() => progress.classList.add('hidden'), 8000);
   } catch(e) {
     $('excelConfigModal').classList.add('show');
     const box = $('questionImportValidation');
@@ -3562,7 +3912,17 @@ $('clearAllTokensBtn').addEventListener('click', clearAllTokens);
 
 // Logs
 $('clearLogsBtn').addEventListener('click', clearLogs);
-$('refreshHealthBtn').addEventListener('click', loadSystemHealth);
+$('refreshHealthBtn').addEventListener('click', () => loadSystemHealth({ deep: false }));
+$('deepHealthBtn').addEventListener('click', () => loadSystemHealth({ deep: true }));
+$('reconcileOperationsBtn').addEventListener('click', reconcilePendingAdminOperations);
+$('clearOperationHistoryBtn').addEventListener('click', clearCompletedAdminOperationHistory);
+$('adminOperationHistory').addEventListener('click', event => {
+  const button = event.target.closest('[data-reconcile-operation]');
+  if (!button) return;
+  const operationId = button.dataset.reconcileOperation || '';
+  button.disabled = true;
+  reconcileAdminOperation(operationId).finally(() => { button.disabled = false; });
+});
 
 // Questions
 $('questionSearchBtn').addEventListener('click', () => { state.questionPage = 1; loadQuestions(); });
@@ -3946,7 +4306,9 @@ document.getElementById('clearAllDevicesBtn')?.addEventListener('click', async (
 
 document.getElementById('refreshActivationsBtn')?.addEventListener('click', loadActivations);
 
-console.log('Link · Token 管理 — 已就绪');
+renderDeploymentStatus();
+renderAdminOperationHistory();
+console.log('Link · Token 管理 v11.1 — 已就绪');
 </script>
 </body>
 </html>
