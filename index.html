@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>新标签页</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<title>GSS 管理中心</title>
+<meta name="theme-color" content="#f4f7fb">
+<meta name="description" content="GSS 安全工具管理中心">
 <style>
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -447,6 +448,454 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GSS Responsive UI · v11.10 frontend-only refinement
+   CSS-first: existing IDs, event hooks and business logic unchanged.
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-hover: #f7f9fc;
+  --surface-active: #eef2ff;
+  --text: #172033;
+  --text-secondary: #637087;
+  --text-muted: #94a0b4;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-light: #eef2ff;
+  --success: #059669;
+  --success-light: #ecfdf5;
+  --success-border: #a7f3d0;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-light: #fef2f2;
+  --danger-border: #fecaca;
+  --warning: #d97706;
+  --warning-light: #fffbeb;
+  --border: #e1e7f0;
+  --border-light: #edf1f6;
+  --border-focus: #a5b4fc;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, .04);
+  --shadow: 0 8px 24px rgba(31, 41, 55, .06);
+  --shadow-md: 0 12px 32px rgba(31, 41, 55, .10);
+  --shadow-lg: 0 24px 64px rgba(15, 23, 42, .18);
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+}
+
+html { scroll-padding-top: 18px; }
+body {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, .10), transparent 28rem),
+    radial-gradient(circle at 100% 8%, rgba(14, 165, 233, .07), transparent 24rem),
+    var(--bg);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.30), transparent 42%);
+}
+img, svg, video { max-width: 100%; }
+
+.app {
+  width: 100%;
+  max-width: 1240px;
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+}
+
+/* Brand header: mainTitle remains the original seven-click entry point. */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 76px;
+  padding: 14px 0 16px;
+  text-align: left;
+  background: linear-gradient(to bottom, rgba(244,247,251,.96) 68%, rgba(244,247,251,0));
+  border-bottom: 1px solid rgba(225,231,240,.72);
+  backdrop-filter: blur(14px);
+}
+.brand-lockup { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 13px;
+  color: #fff;
+  font-size: .92rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  background: linear-gradient(145deg, #6366f1, #4338ca);
+  box-shadow: 0 7px 16px rgba(79,70,229,.28);
+}
+.brand-copy { min-width: 0; }
+.header h1 {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  font-size: 1.08rem;
+  font-weight: 750;
+  line-height: 1.2;
+  color: var(--text);
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.header h1:active { color: var(--accent); }
+.brand-subtitle {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: .68rem;
+  line-height: 1.2;
+  letter-spacing: .04em;
+}
+.header-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255,255,255,.72);
+  color: var(--text-secondary);
+  font-size: .68rem;
+  white-space: nowrap;
+}
+.header-meta-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(5,150,105,.10);
+}
+
+.segmented {
+  max-width: 480px;
+  margin: 12px auto 22px;
+  padding: 5px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.70);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+.seg-btn { padding-inline: 20px; }
+.seg-btn.active { box-shadow: 0 5px 14px rgba(31,41,55,.08); }
+
+.card {
+  border-color: rgba(219,226,237,.92);
+  border-radius: var(--radius-lg);
+  padding: clamp(16px, 2.4vw, 24px);
+  box-shadow: var(--shadow);
+}
+#userPanel > .card { max-width: 700px; margin-inline: auto; }
+#adminLoginCard { max-width: 620px; margin-inline: auto; }
+#adminMain { min-width: 0; }
+.subpane { min-width: 0; animation: gssPaneIn .22s var(--ease); }
+@keyframes gssPaneIn { from { opacity: .72; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+.stats { gap: 12px; margin-bottom: 18px; }
+.stat-item {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 12px;
+  border-color: rgba(219,226,237,.92);
+  background: linear-gradient(145deg, #fff, #f8faff);
+  box-shadow: var(--shadow);
+}
+.stat-item::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #818cf8, #4f46e5);
+  opacity: .82;
+}
+.stat-item.danger::before { background: linear-gradient(90deg, #fb7185, #dc2626); }
+.stat-num { color: var(--accent); }
+.stat-label { margin-top: 6px; color: var(--text-secondary); letter-spacing: .05em; }
+
+.subtabs {
+  position: sticky;
+  top: 74px;
+  z-index: 80;
+  gap: 5px;
+  padding: 5px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(247,249,252,.90);
+  box-shadow: 0 8px 20px rgba(31,41,55,.05);
+  backdrop-filter: blur(14px);
+  scroll-snap-type: x proximity;
+}
+.subtab { scroll-snap-align: start; }
+.subtab.active { box-shadow: 0 6px 14px rgba(79,70,229,.20); }
+
+.btn {
+  border-color: var(--border);
+  box-shadow: 0 1px 1px rgba(15,23,42,.03);
+}
+.btn-primary { box-shadow: 0 6px 14px rgba(79,70,229,.18); }
+.btn-danger { box-shadow: 0 1px 1px rgba(220,38,38,.04); }
+.btn:disabled { box-shadow: none; }
+.input {
+  border-color: #dbe2ec;
+  background: rgba(255,255,255,.94);
+  box-shadow: inset 0 1px 2px rgba(15,23,42,.025);
+}
+.input:focus { box-shadow: 0 0 0 3px rgba(79,70,229,.13), 0 2px 5px rgba(79,70,229,.06); }
+
+.toolbar {
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background: rgba(247,249,252,.72);
+}
+.toolbar-sep { background: #d7dfeb; }
+.inline-form.open {
+  padding: 12px;
+  border: 1px solid #dbe3f0;
+  border-radius: var(--radius);
+  background: #f8faff;
+}
+#adminLoginCard .flex {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(120px, .42fr);
+  gap: 10px;
+  align-items: stretch;
+}
+#adminLoginCard .flex .input { min-width: 0; }
+#adminLoginCard .flex .btn { width: 100%; }
+
+/* Question management: search and actions become clear responsive toolbars. */
+#subQuestions > .flex:first-child {
+  display: grid;
+  grid-template-columns: minmax(170px, 1.25fr) minmax(220px, 2fr) auto auto;
+  gap: 8px;
+  align-items: stretch;
+}
+#subQuestions > .flex:first-child > * { min-width: 0; }
+#subQuestions > .flex:first-child .btn { width: 100%; }
+#subQuestions > .flex:nth-child(2) {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+#subQuestions > .flex:nth-child(2) .btn { width: 100%; }
+#subQuestions .table-wrap { box-shadow: var(--shadow-sm); }
+#subQuestions .token-card {
+  border-color: rgba(219,226,237,.92);
+  box-shadow: var(--shadow);
+}
+
+/* Course area: keep the long-running workflow scannable. */
+#subCourse > .card { border-color: rgba(211,220,235,.94); }
+.course-head { align-items: center; }
+.course-badges { max-width: 52%; }
+.course-list-panel { overflow: visible; }
+.course-toolbar {
+  padding: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background: rgba(247,249,252,.72);
+}
+.course-summary { gap: 8px; }
+.course-summary-item {
+  border-color: #dbe3ef;
+  background: linear-gradient(145deg, #fff, #f7f9fc);
+}
+.course-group {
+  border-color: #dbe3ef;
+  box-shadow: var(--shadow-sm);
+}
+.course-group-header { background: linear-gradient(90deg, #f3f5ff, #f8faff); }
+.course-group-header:hover { background: #eef2ff; }
+.course-card { border-color: #dfe6f0; box-shadow: var(--shadow-sm); }
+.course-card:hover { border-color: #c7d2fe; box-shadow: var(--shadow); }
+.course-batch-panel {
+  border-color: #c7d2fe;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.70);
+}
+.course-output-card { box-shadow: var(--shadow-sm); }
+.operation-center { border-color: #dbe3ef; background: rgba(247,249,252,.78); }
+
+/* Dialogs and import preview. */
+.confirm-overlay, .input-overlay, .modal, .excel-modal { padding: 12px; }
+.confirm-box, .input-box { width: min(100%, 440px); }
+.modal-card, .excel-card {
+  border: 1px solid rgba(219,226,237,.94);
+  overscroll-behavior: contain;
+}
+.qstats-card { border: 1px solid rgba(219,226,237,.94); }
+.qstats-hd { background: linear-gradient(135deg, #f5f7ff, #f8fafc); }
+.qstats-bd { background: rgba(255,255,255,.96); }
+#excelConfigModal .excel-card > .flex {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+#excelConfigModal .excel-card > .flex > .input { min-width: 0; }
+#excelConfigModal .flex-between { gap: 12px; }
+
+.toast-stack {
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  width: min(460px, calc(100% - 24px));
+}
+.network-status { top: max(12px, env(safe-area-inset-top)); }
+
+/* Desktop: use the available width instead of leaving a narrow phone column. */
+@media (min-width: 768px) {
+  .app { padding-inline: 24px; }
+  .header { min-height: 82px; padding-block: 16px 18px; }
+  .header h1 { font-size: 1.16rem; }
+  .subtabs { top: 80px; flex-wrap: wrap; overflow: visible; }
+  .subtab { flex: 1 1 120px; text-align: center; }
+  .modal, .excel-modal, .confirm-overlay, .input-overlay { padding: 24px; }
+  .modal-card, .qstats-card, .excel-card { max-height: 86dvh; }
+  .course-toolbar { background: transparent; border: 0; padding: 0 0 12px; border-bottom: 1px solid var(--border-light); border-radius: 0; }
+  .course-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .app { max-width: 1240px; }
+  .header { margin-bottom: 4px; }
+  .stats { gap: 16px; }
+  .card { padding: 24px; }
+  .course-head h3 { font-size: 1.08rem; }
+  .course-card { padding: 16px; }
+}
+
+/* Mobile: larger touch targets, no page-level horizontal overflow, stacked actions. */
+@media (max-width: 767px) {
+  .app {
+    padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
+    padding-bottom: calc(36px + env(safe-area-inset-bottom));
+  }
+  .header { min-height: 68px; padding-top: max(12px, env(safe-area-inset-top)); }
+  .brand-mark { width: 34px; height: 34px; flex-basis: 34px; border-radius: 11px; }
+  .header h1 { font-size: 1rem; }
+  .header-meta { padding: 6px 8px; font-size: .64rem; }
+  .segmented { margin-bottom: 16px; }
+  .seg-btn { padding-inline: 12px; }
+  .card { border-radius: 16px; padding: 16px; }
+  .stats { gap: 6px; margin-bottom: 14px; }
+  .stat-item { padding: 15px 6px; border-radius: 12px; }
+  .stat-num { font-size: 1.32rem; }
+  .stat-label { font-size: .62rem; letter-spacing: .02em; }
+  .subtabs { top: 66px; margin-bottom: 14px; border-radius: 14px; }
+  .subtab { min-height: 42px; padding: 9px 14px; }
+  .btn-sm { min-height: 42px; padding-inline: 12px; }
+  .btn-xs { min-height: 38px; }
+  #adminLoginCard .flex { grid-template-columns: 1fr; }
+  #adminLoginCard .flex .btn { min-height: 48px; }
+  .toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  .toolbar .btn { width: 100%; }
+  .toolbar-sep { display: none; }
+  #subQuestions > .flex:first-child { grid-template-columns: 1fr 1fr; }
+  #subQuestions > .flex:first-child > #questionBatchFilter,
+  #subQuestions > .flex:first-child > #questionSearchKeyword { grid-column: 1 / -1; }
+  #subQuestions > .flex:nth-child(2) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #subQuestions > .flex:nth-child(2) .btn { min-height: 44px; }
+  #subQuestions .table-wrap { margin-inline: -2px; }
+  .course-head { flex-direction: column; align-items: flex-start; }
+  .course-badges { max-width: none; justify-content: flex-start; }
+  .course-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-actions .btn { width: 100%; min-height: 44px; }
+  #courseLoginBtn { grid-column: 1 / -1; }
+  .course-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+  .course-toolbar .btn { width: 100%; min-height: 44px; }
+  #courseBatchAllBtn, #courseBatchSelectedBtn { grid-column: 1 / -1; }
+  .course-toolbar .checkbox { grid-column: 1 / -1; min-height: 34px; }
+  .course-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-summary-item { min-width: 0; }
+  .course-challenge-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-challenge-row .input { grid-column: 1 / -1; min-width: 0; }
+  .course-challenge-row .btn { width: 100%; min-height: 44px; }
+  .course-card-actions .btn { min-height: 42px; }
+  .operation-center-head { align-items: stretch; }
+  .operation-center-head > .flex { width: 100%; }
+  .operation-center-head > .flex .btn { flex: 1 1 0; min-width: 0; }
+  .qstats-hd { align-items: flex-start; }
+  .qstats-hd > .btn { flex: 0 0 auto; }
+  .qstats-bd { padding: 14px; }
+  .stats-grid2 { gap: 7px; }
+  .stat-card2 { padding: 12px 10px; }
+  .question-batch-actions { width: 100%; justify-content: stretch; }
+  .question-batch-actions .btn { flex: 1 1 0; min-height: 42px; }
+  #excelConfigModal .excel-card { padding: 18px 14px calc(20px + env(safe-area-inset-bottom)); }
+  #excelConfigModal .excel-card > .flex-between { flex-direction: column; align-items: stretch; }
+  #excelConfigModal .flex-between > .flex { width: 100%; justify-content: stretch; }
+  #excelConfigModal .flex-between > .flex .btn { flex: 1 1 0; min-height: 44px; }
+  .confirm-overlay, .input-overlay { align-items: flex-end; padding: 0; }
+  .confirm-box, .input-box {
+    width: 100%;
+    max-width: none;
+    margin-top: auto;
+    border-radius: 22px 22px 0 0;
+    padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+    animation: sheetUp .28s var(--ease-spring);
+  }
+  .confirm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .confirm-actions .btn, .input-box .input-prompt-actions .btn { min-height: 44px; }
+  .input-box .input-prompt-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .modal-card { padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
+  .qstats-card { padding: 0; }
+  .qstats-hd { padding: 15px 16px; }
+}
+
+@media (max-width: 420px) {
+  .header-meta { padding-inline: 7px; }
+  .header-meta > span:last-child { display: none; }
+  .stats .stat-item { padding-inline: 4px; }
+  .stat-num { font-size: 1.2rem; }
+  .stat-label { font-size: .58rem; }
+  .course-summary-item { padding-inline: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { display: none; }
+  .subpane { animation: none; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   GSS Responsive UI · Phase 2: first-paint and touch stability
+   Keep the static page usable when third-party font requests fail.
+   ═══════════════════════════════════════════════════════════════ */
+html { overflow-x: hidden; }
+body { font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif; }
+pre, code, .mono { font-family: 'Cascadia Code', 'SF Mono', 'JetBrains Mono', Consolas, monospace; }
+button, [role="button"], a { touch-action: manipulation; }
+
+@media (pointer: coarse) {
+  .btn-xs { min-height: 40px; }
+  .act-group { gap: 5px; }
+}
+
+@media (max-width: 767px) {
+  .network-status {
+    width: auto;
+    max-width: none;
+    left: 12px;
+    right: 12px;
+  }
+  .table-wrap { scrollbar-width: thin; }
+}
 </style>
 </head>
 <body>
@@ -488,7 +937,16 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 <div class="app">
   <!-- Header -->
-  <header class="header"><h1 id="mainTitle" role="button" tabindex="0" aria-label="Link 管理入口">Link</h1></header>
+  <header class="header">
+  <div class="brand-lockup">
+    <span class="brand-mark" aria-hidden="true">G</span>
+    <div class="brand-copy">
+      <h1 id="mainTitle" role="button" tabindex="0" aria-label="GSS 管理入口">GSS</h1>
+      <span class="brand-subtitle">安全工具管理中心</span>
+    </div>
+  </div>
+  <div class="header-meta"><span class="header-meta-dot" aria-hidden="true"></span><span>管理控制台</span></div>
+</header>
 
   <!-- Segmented Control -->
   <nav class="segmented">
@@ -2847,8 +3305,14 @@ function renderQuestionImportPreview(preview) {
   const issueHtml = issues.slice(0, 30).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '数据错误')}</li>`).join('');
   const warningHtml = warnings.slice(0, 20).map(item => `<li>${item.row ? `Excel 第 ${Number(item.row)} 行：` : ''}${escapeHtml(item.message || '重复题目')}</li>`).join('');
   const timing = preview.timing || {};
-  const compressionText = timing.previewEncoding === 'gzip-base64' && Number(timing.previewRawBytes || 0) > 0
-    ? `（已压缩 ${formatFileBytes(timing.previewRawBytes)} → ${formatFileBytes(timing.previewStoredBytes)}）`
+  const compressionLabels = {
+    'gzip-base64': 'gzip',
+    'brotli-binary': 'Brotli二进制',
+    'brotli-base64': 'Brotli',
+  };
+  const compressionLabel = compressionLabels[timing.previewEncoding] || '';
+  const compressionText = compressionLabel && Number(timing.previewRawBytes || 0) > 0
+    ? `（${compressionLabel}压缩 ${formatFileBytes(timing.previewRawBytes)} → ${formatFileBytes(timing.previewStoredBytes)}）`
     : '';
   const timingHtml = `<div class="question-import-timing">校验耗时：浏览器总等待 ${escapeHtml(formatCourseDuration(preview.clientElapsedMs || timing.totalMs || 0))} · 题库核心 ${escapeHtml(formatCourseDuration(timing.totalMs || 0))} · 元数据 ${escapeHtml(formatCourseDuration(timing.metadataMs || 0))} · 本地校验 ${escapeHtml(formatCourseDuration(timing.validationMs || 0))} · Redis 冲突查询 ${escapeHtml(formatCourseDuration(timing.conflictLookupMs || 0))} · 暂存 ${escapeHtml(formatCourseDuration(timing.previewStoreMs || 0))}${escapeHtml(compressionText)}</div>`;
   box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
@@ -2861,6 +3325,11 @@ function renderQuestionImportPreview(preview) {
 
 function renderQuestionCommitTiming(timing) {
   const value = timing || {};
+  const previewStorageLabels = {
+    'warm-memory': '热实例内存',
+    redis: 'Redis',
+  };
+  const previewStorage = previewStorageLabels[value.previewStorage] || '兼容读取';
   const snapshotHits = Math.max(0, Number(value.indexSnapshotHits || 0));
   const snapshotMisses = Math.max(0, Number(value.indexSnapshotMisses || 0));
   const sourceReadLabels = {
@@ -2877,7 +3346,7 @@ function renderQuestionCommitTiming(timing) {
   const sourceReadMode = sourceReadLabels[value.sourceReadMode] || '兼容路径';
   const backupMode = backupLabels[value.backupStorage] || '兼容路径';
   const stages = [
-    `预览读取 ${formatCourseDuration(value.previewFetchMs || value.previewLoadMs || 0)}`,
+    `预览读取 ${formatCourseDuration(value.previewFetchMs || value.previewLoadMs || 0)}（${previewStorage}）`,
     `预览解压 ${formatCourseDuration(value.previewDecodeMs || 0)}`,
     `Redis 锁获取 ${formatCourseDuration(value.lockAcquireMs || 0)}`,
     `元数据/版本 ${formatCourseDuration(value.metadataAndVersionMs || 0)}`,
