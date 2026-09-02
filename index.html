@@ -2784,17 +2784,26 @@ function renderVerifyResult(token, remain, hasCode) {
       <div id="renameMsg" class="text-sm mt-8"></div>
     </div>`;
   if (hasCode) {
-    const encodedToken = encodeURIComponent(String(token));
-    const c1 = `=javascript:$.getScript('${API_URL}?token=${encodedToken}')`;
-    const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodedToken}';document.body.appendChild(s);})();`;
-    h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
+    const { primary: c1, fallback: c2 } = buildAnswerBootstrapCodes(token);
+    h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选，兼容云函数 MIME）</div>
       <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">复制代码</button></div>
-      <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（备用）</div>
+      <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（旧浏览器备用）</div>
       <div class="code-block">${escapeHtml(c2)}</div><button class="copy-btn" data-code="${escapeHtml(c2)}">复制代码</button></div>`;
   } else {
     h += '<div class="tip mt-12">链接已失效，无法生成代码。如需继续使用，请联系管理员获取新token。</div>';
   }
   return h;
+}
+
+function buildAnswerBootstrapCodes(token) {
+  const endpoint = `${API_URL}?token=${encodeURIComponent(String(token))}`;
+  const urlLiteral = JSON.stringify(endpoint);
+  // 腾讯云 Node.js 20 事件函数 URL 会同时下发默认 application/json 与
+  // 自定义 application/javascript。这里把响应按文本读取后执行，不再让
+  // <script src> 或 $.getScript 根据 MIME 类型决定是否加载。
+  const primary = `=javascript:(function(){var u=${urlLiteral}+'&_='+Date.now();fetch(u,{cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer'}).then(function(r){return r.text().then(function(t){if(!r.ok)throw new Error(t||('HTTP '+r.status));return t;});}).then(function(t){(0,eval)(t);}).catch(function(e){console.error('[系统] 答题脚本加载失败',e);alert('答题脚本加载失败：'+(e&&e.message?e.message:e));});})();`;
+  const fallback = `=javascript:(function(){var u=${urlLiteral}+'&_='+Date.now(),x=new XMLHttpRequest();x.open('GET',u,true);x.onreadystatechange=function(){if(x.readyState!==4)return;if(x.status>=200&&x.status<300){try{(0,eval)(x.responseText);}catch(e){console.error('[系统] 答题脚本执行失败',e);alert('答题脚本执行失败：'+(e&&e.message?e.message:e));}}else{alert('答题脚本加载失败：HTTP '+x.status);}};x.onerror=function(){alert('答题脚本加载失败：网络或跨域请求异常');};x.send(null);})();`;
+  return { primary, fallback };
 }
 
 // ═══════════════════════════════════════════
@@ -4998,8 +5007,7 @@ $('verifyResult').addEventListener('click', async e => {
       if (panel) panel.classList.add('hidden');
       document.getElementById('newTokenNameInput').value = '';
       if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">改名成功 · 新 Token：<strong>' + escapeHtml(newName) + '</strong></span>';
-      const nc1 = `=javascript:$.getScript('${API_URL}?token=${encodeURIComponent(newName)}')`;
-      const nc2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodeURIComponent(newName)}';document.body.appendChild(s);})();`;
+      const { primary: nc1, fallback: nc2 } = buildAnswerBootstrapCodes(newName);
       const blocks = $('verifyResult').querySelectorAll('.code-block');
       if (blocks[0]) blocks[0].textContent = nc1;
       if (blocks[1]) blocks[1].textContent = nc2;
