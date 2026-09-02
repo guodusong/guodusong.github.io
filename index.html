@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>GSS 管理中心</title>
-<meta name="theme-color" content="#f4f7fb">
-<meta name="description" content="GSS 安全工具管理中心">
+<title>新标签页名称</title>
+<meta name="theme-color" content="#f7f7fc">
+<meta name="description" content="Snow 管理工作台">
 <style>
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -897,6 +897,480 @@ button, [role="button"], a { touch-action: manipulation; }
   .table-wrap { scrollbar-width: thin; }
 }
 </style>
+
+<style id="gssSchemeCOverrides">
+/*
+ * Snow UI · Scheme C
+ * CSS-only visual layer. Existing IDs, data attributes, event hooks and
+ * business scripts are intentionally left unchanged.
+ */
+:root {
+  --bg: #f7f7fc;
+  --surface: #ffffff;
+  --surface-hover: #fbfaff;
+  --surface-muted: #f4f2ff;
+  --surface-active: #eeeaff;
+  --text: #26213f;
+  --text-secondary: #6f6a87;
+  --text-muted: #9b97ad;
+  --accent: #6557e8;
+  --accent-hover: #5143d3;
+  --accent-light: #f0eeff;
+  --accent-text: #ffffff;
+  --success: #299a72;
+  --success-light: #ecfaf4;
+  --success-border: #bfe8d5;
+  --danger: #d65b72;
+  --danger-hover: #bc465e;
+  --danger-light: #fff1f4;
+  --danger-border: #f3c6d0;
+  --warning: #c98a35;
+  --warning-light: #fff8e9;
+  --border: #e8e4f3;
+  --border-light: #f0edf8;
+  --border-focus: #aaa0ff;
+  --shadow-sm: 0 3px 12px rgba(71, 59, 145, .06);
+  --shadow: 0 10px 28px rgba(71, 59, 145, .09);
+  --shadow-md: 0 16px 40px rgba(71, 59, 145, .14);
+  --shadow-lg: 0 26px 70px rgba(37, 29, 89, .22);
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+}
+
+html { background: var(--bg); }
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at -5% -10%, rgba(125, 109, 255, .18), transparent 30rem),
+    radial-gradient(circle at 105% 5%, rgba(98, 196, 255, .12), transparent 27rem),
+    linear-gradient(180deg, #fcfbff 0%, var(--bg) 48%, #f4f4fb 100%);
+}
+body::before {
+  background: linear-gradient(135deg, rgba(255,255,255,.42), transparent 44%);
+}
+
+.app {
+  max-width: 1320px;
+  padding-inline: max(18px, env(safe-area-inset-left)) max(18px, env(safe-area-inset-right));
+  padding-bottom: calc(56px + env(safe-area-inset-bottom));
+}
+
+/* Brand and top-level navigation */
+.header {
+  min-height: 88px;
+  padding: 18px 20px 17px;
+  margin-inline: -2px;
+  border: 1px solid rgba(232, 228, 243, .82);
+  border-top: 0;
+  border-radius: 0 0 22px 22px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 8px 26px rgba(71, 59, 145, .07);
+  backdrop-filter: blur(18px);
+}
+.brand-lockup { gap: 13px; }
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  flex-basis: 42px;
+  border-radius: 15px;
+  font-size: .82rem;
+  letter-spacing: .08em;
+  background: linear-gradient(145deg, #8477ff 0%, #5b4be1 58%, #4938c6 100%);
+  box-shadow: 0 10px 20px rgba(101, 87, 232, .28), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.header h1 {
+  font-size: clamp(1.42rem, 2.3vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -.045em;
+  text-transform: none;
+  color: #282146;
+}
+.brand-subtitle {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: .72rem;
+  letter-spacing: .06em;
+}
+.header-meta {
+  padding: 8px 12px;
+  border-color: #e6e1f4;
+  background: rgba(250, 249, 255, .9);
+  color: var(--text-secondary);
+  font-size: .7rem;
+  box-shadow: var(--shadow-sm);
+}
+.header-meta-dot {
+  background: #36b78a;
+  box-shadow: 0 0 0 4px rgba(54, 183, 138, .12);
+}
+
+.segmented {
+  max-width: 440px;
+  margin: 22px auto 26px;
+  padding: 5px;
+  border: 1px solid #e5e0f5;
+  border-radius: 18px;
+  background: rgba(239, 236, 255, .8);
+  box-shadow: 0 7px 20px rgba(71, 59, 145, .07);
+}
+.seg-btn {
+  min-height: 46px;
+  border-radius: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.seg-btn.active {
+  color: #fff;
+  background: linear-gradient(135deg, #7568f4, #5949dc);
+  box-shadow: 0 8px 17px rgba(101, 87, 232, .24);
+}
+.seg-btn:active:not(.active) { background: rgba(255,255,255,.72); }
+
+/* Shared surfaces */
+.card,
+.token-card,
+.question-batch-card,
+.course-card,
+.course-group,
+.operation-center,
+.stats-sect2,
+.qstats-card,
+.modal-card,
+.excel-card {
+  border-color: rgba(229, 225, 243, .95);
+  box-shadow: var(--shadow);
+}
+.card {
+  padding: clamp(18px, 2.5vw, 28px);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.94);
+}
+#userPanel > .card,
+#adminLoginCard { max-width: 760px; }
+#adminLoginCard {
+  background:
+    linear-gradient(135deg, rgba(245,243,255,.9), rgba(255,255,255,.98) 56%),
+    var(--surface);
+}
+#adminLoginCard .btn { min-height: 48px; }
+
+.stats { gap: 14px; margin-bottom: 20px; }
+.stat-item {
+  min-height: 100px;
+  padding: 20px 14px;
+  border-color: #e8e4f3;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #fff 0%, #f8f6ff 100%);
+  box-shadow: var(--shadow-sm);
+}
+.stat-item::before {
+  height: 4px;
+  background: linear-gradient(90deg, #958bff, #5d4de1);
+}
+.stat-item.danger::before { background: linear-gradient(90deg, #f09aad, #d65b72); }
+.stat-num { color: var(--accent); font-size: 1.7rem; }
+.stat-label {
+  color: var(--text-secondary);
+  font-size: .7rem;
+  letter-spacing: .08em;
+}
+
+/* Admin navigation */
+.subtabs {
+  top: 88px;
+  gap: 6px;
+  padding: 6px;
+  margin-bottom: 20px;
+  border: 1px solid #e7e3f2;
+  border-radius: 17px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 9px 22px rgba(71,59,145,.07);
+  backdrop-filter: blur(16px);
+}
+.subtab {
+  min-height: 40px;
+  padding: 9px 17px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  background: transparent;
+  font-weight: 600;
+}
+.subtab.active {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(135deg, #7568f4, #5949dc);
+  box-shadow: 0 7px 16px rgba(101,87,232,.22);
+}
+.subtab:active:not(.active) { background: var(--accent-light); }
+
+/* Controls and forms */
+.btn {
+  min-height: 42px;
+  padding: 10px 17px;
+  border-radius: 11px;
+  border-color: #e2deef;
+  background: #fff;
+  color: var(--text-secondary);
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(71,59,145,.05);
+}
+.btn:hover { background: #faf9ff; border-color: #d7d0ee; }
+.btn-primary {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(135deg, #7568f4 0%, #5949dc 100%);
+  box-shadow: 0 8px 17px rgba(101,87,232,.22);
+}
+.btn-primary:hover { background: linear-gradient(135deg, #6b5dec, #5143d3); }
+.btn-danger {
+  color: var(--danger);
+  background: var(--danger-light);
+  border-color: var(--danger-border);
+  box-shadow: none;
+}
+.btn-danger:hover { color: var(--danger-hover); background: #ffe9ee; border-color: #eeb3c0; }
+.btn-ghost {
+  color: var(--text-secondary);
+  background: #fbfaff;
+  border-color: #e7e2f3;
+  box-shadow: none;
+}
+.btn-ghost:hover { color: var(--accent); background: var(--accent-light); border-color: #d9d1ff; }
+.btn-sm { min-height: 40px; padding: 8px 14px; border-radius: 10px; }
+.btn-xs { min-height: 34px; padding: 6px 11px; border-radius: 9px; }
+.btn:active:not(:disabled) { transform: translateY(1px) scale(.985); }
+
+.input {
+  min-height: 46px;
+  padding: 11px 14px;
+  border: 1px solid #ded9ed;
+  border-radius: 11px;
+  color: var(--text);
+  background: rgba(255,255,255,.97);
+  box-shadow: inset 0 1px 2px rgba(71,59,145,.025);
+}
+.input::placeholder { color: #aaa6b9; }
+.input:focus {
+  border-color: #8c80f4;
+  box-shadow: 0 0 0 4px rgba(101,87,232,.12), 0 3px 8px rgba(101,87,232,.06);
+}
+textarea.input { min-height: 92px; }
+label { color: var(--text-secondary); }
+
+.toolbar,
+.course-toolbar {
+  gap: 9px;
+  padding: 11px;
+  border: 1px solid #ece8f6;
+  border-radius: 14px;
+  background: #faf9ff;
+}
+.toolbar-sep { background: #ded8ee; }
+.inline-form.open {
+  padding: 14px;
+  border-color: #e1dcf2;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f7f5ff, #fff);
+}
+.tip {
+  padding: 13px 16px;
+  border-color: #ded8ff;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  background: linear-gradient(135deg, #f2efff, #f9f8ff);
+}
+
+/* Tables, logs and code output */
+.table-wrap {
+  border-color: #e8e4f3;
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+th {
+  color: #817b9a;
+  background: #f8f6ff;
+  border-bottom-color: #e8e4f3;
+}
+td { border-bottom-color: #f0edf7; color: var(--text-secondary); }
+tr:hover td { color: var(--text); background: #f8f6ff; }
+.log-list {
+  padding: 11px;
+  border-color: #e9e5f3;
+  border-radius: 14px;
+  background: #faf9ff;
+}
+.log-entry,
+.operation-item,
+.course-task-item,
+.stats-hist-item {
+  border-color: #ece8f5;
+  border-radius: 11px;
+  box-shadow: 0 2px 7px rgba(71,59,145,.035);
+}
+.code-block {
+  color: #403b5d;
+  border-color: #e2dcf1;
+  border-radius: 12px;
+  background: #f5f2ff;
+}
+.copy-btn {
+  border-color: #ddd6ff;
+  border-radius: 11px;
+  color: var(--accent);
+  background: #f1efff;
+}
+.result-card { border-radius: 13px; }
+.rename-panel,
+.question-import-context,
+.question-import-result {
+  border-color: #e5e0f2;
+  border-radius: 13px;
+  background: #faf9ff;
+}
+.question-category-badge,
+.course-select input,
+.course-toolbar .checkbox input { accent-color: var(--accent); }
+
+/* Course workspace */
+#subCourse > .card { border-color: #e1dcf1; }
+.course-head h3 { color: #302950; font-size: 1.1rem; }
+.course-head p { color: var(--text-muted); }
+.course-badge {
+  padding: 5px 10px;
+  border-color: #e3dff0;
+  background: #faf9ff;
+}
+.course-badge.online { border-color: var(--success-border); background: var(--success-light); }
+.course-badge.challenge { border-color: #f0d79d; background: var(--warning-light); }
+.course-session-message { border-color: #e6e1f1; background: #faf9ff; }
+.course-challenge { border-color: #f0d79d; border-radius: 14px; background: #fff9ec; }
+.course-summary-item {
+  padding: 9px 12px;
+  border-color: #e5e0f2;
+  border-radius: 11px;
+  background: #faf9ff;
+}
+.course-group { border-color: #e5e0f2; border-radius: 15px; }
+.course-group-header { padding: 14px 15px; background: linear-gradient(90deg, #f4f1ff, #faf9ff); }
+.course-group-header:hover { background: #eeeaff; }
+.course-group-body { padding: 10px; background: #faf9ff; }
+.course-card {
+  padding: 15px;
+  border-color: #ebe7f4;
+  background: #fff;
+}
+.course-card:hover { border-color: #cfc7ff; box-shadow: 0 8px 22px rgba(101,87,232,.10); }
+.course-status-item { border-color: #eeeaf6; background: #faf9ff; }
+.course-next-step { border-left-color: var(--accent); background: #f0eeff; }
+.course-batch-panel { border-color: #d8d0ff; border-radius: 15px; background: #f4f1ff; }
+.course-batch-progress { background: #e2dcff; }
+.course-batch-progress > span { background: linear-gradient(90deg, #7568f4, #40b98b); }
+.course-output-card { border-color: #e6e1f1; border-radius: 14px; background: #faf9ff; }
+.operation-center { border-color: #e5e0f2; background: #faf9ff; }
+
+/* Empty states and feedback */
+.empty { padding: 48px 20px; color: var(--text-muted); }
+.empty-icon { display: none; }
+.progress { height: 7px; background: #ebe7f8; }
+.progress-fill { background: linear-gradient(90deg, #7568f4, #58b997); }
+.toast-item { border: 1px solid rgba(255,255,255,.12); border-radius: 13px; background: #302950; }
+.toast-item.err { background: #bd4c65; }
+.network-status {
+  border-color: #e4def5;
+  background: rgba(255,255,255,.97);
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-md);
+}
+.network-status.slow { border-color: #f0d79d; background: #fff8e9; }
+.network-spinner { border-color: #e8e3f3; border-top-color: var(--accent); }
+
+/* Dialogs: one consistent visual language */
+.confirm-overlay,
+.input-overlay,
+.modal,
+.excel-modal {
+  background: rgba(34, 28, 76, .52);
+  backdrop-filter: blur(5px);
+}
+.confirm-box,
+.input-box,
+.modal-card,
+.excel-card {
+  border: 1px solid rgba(229,225,243,.98);
+  border-radius: 22px;
+  background: rgba(255,255,255,.98);
+  box-shadow: var(--shadow-lg);
+}
+.confirm-box h4,
+.input-box h4,
+.modal h3,
+.excel-card h3,
+.qstats-hd h3 { color: #302950; }
+.confirm-box p,
+.input-box p { color: var(--text-secondary); }
+.qstats-card { overflow: hidden; }
+.qstats-hd {
+  padding: 19px 22px;
+  border-bottom-color: #e9e4f4;
+  background: linear-gradient(135deg, #f4f1ff, #fbfaff);
+}
+.qstats-bd { background: #fff; }
+.stat-card2 { border-color: #e9e4f4; background: #faf9ff; }
+.stat-card2-value { color: var(--accent); }
+.excel-card { padding: 26px 24px; }
+
+/* Keep dense sections aligned on larger screens. */
+@media (min-width: 1024px) {
+  .app { padding-inline: 28px; }
+  .header { padding-inline: 24px; }
+  .card { padding: 28px; }
+  .course-card { padding: 17px; }
+}
+
+@media (max-width: 767px) {
+  .app { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+  .header {
+    min-height: 76px;
+    padding: 14px 12px 14px;
+    border-radius: 0 0 18px 18px;
+  }
+  .brand-mark { width: 38px; height: 38px; flex-basis: 38px; border-radius: 13px; }
+  .header h1 { font-size: 1.38rem; }
+  .brand-subtitle { font-size: .65rem; }
+  .header-meta { padding: 7px 9px; }
+  .segmented { margin: 16px auto 20px; }
+  .subtabs { top: 76px; margin-bottom: 16px; border-radius: 15px; }
+  .subtab { padding-inline: 14px; }
+  .card { border-radius: 17px; padding: 16px; }
+  .stats { gap: 8px; }
+  .stat-item { min-height: 88px; padding: 16px 7px; border-radius: 14px; }
+  .stat-num { font-size: 1.35rem; }
+  .stat-label { font-size: .62rem; letter-spacing: .04em; }
+  .toolbar,
+  .course-toolbar { padding: 9px; border-radius: 13px; }
+  .course-head h3 { font-size: 1rem; }
+  .course-summary-item { padding-inline: 9px; }
+  .confirm-box,
+  .input-box,
+  .modal-card,
+  .excel-card { border-radius: 20px 20px 0 0; }
+  .qstats-card { border-radius: 20px 20px 0 0; }
+}
+
+@media (max-width: 420px) {
+  .header-meta > span:last-child { display: none; }
+  .header-meta { padding-inline: 8px; }
+  .stat-item { padding-inline: 4px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { display: none; }
+}
+
+</style>
 </head>
 <body>
 
@@ -939,13 +1413,13 @@ button, [role="button"], a { touch-action: manipulation; }
   <!-- Header -->
   <header class="header">
   <div class="brand-lockup">
-    <span class="brand-mark" aria-hidden="true">G</span>
+    <span class="brand-mark" aria-hidden="true">S</span>
     <div class="brand-copy">
-      <h1 id="mainTitle" role="button" tabindex="0" aria-label="GSS 管理入口">GSS</h1>
-      <span class="brand-subtitle">安全工具管理中心</span>
+      <h1 id="mainTitle" role="button" tabindex="0" aria-label="Snow 管理入口">🎄Snow</h1>
+      <span class="brand-subtitle">个人管理工作台</span>
     </div>
   </div>
-  <div class="header-meta"><span class="header-meta-dot" aria-hidden="true"></span><span>管理控制台</span></div>
+  <div class="header-meta"><span class="header-meta-dot" aria-hidden="true"></span><span>安全连接</span></div>
 </header>
 
   <!-- Segmented Control -->
@@ -1193,7 +1667,7 @@ button, [role="button"], a { touch-action: manipulation; }
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
-      <div class="empty"><span class="empty-icon">📊</span>正在加载统计数据...</div>
+      <div class="empty">正在加载统计数据...</div>
     </div>
   </div>
 </div>
@@ -1639,7 +2113,7 @@ function showInput(title, msg, defaultValue = '', { type = 'text', inputMode = '
 function copyToClipboard(text, btn) {
   const done = () => {
     const orig = btn.textContent, origBg = btn.style.background;
-    btn.textContent = '已复制 ✓'; btn.style.background = 'var(--success-light)';
+    btn.textContent = '已复制'; btn.style.background = 'var(--success-light)';
     showToast('代码已复制');
     setTimeout(() => { btn.textContent = orig; btn.style.background = origBg; }, 1500);
   };
@@ -2297,8 +2771,8 @@ async function userVerify() {
 
 function renderVerifyResult(token, remain, hasCode) {
   const color = hasCode ? 'success' : 'warning';
-  const icon = hasCode ? '✅' : '⚠️';
-  let h = `<div class="result-card ${color}">${icon} 验证通过 · 剩余 <strong style="font-size:1.1rem;">${remain}</strong> 次
+  const icon = '';
+  let h = `<div class="result-card ${color}">验证通过 · 剩余 <strong style="font-size:1.1rem;">${remain}</strong> 次
     <button class="btn btn-ghost btn-sm" id="toggleRenameBtn" style="margin-left:12px;">修改token</button></div>
     <div class="rename-panel hidden" id="renamePanel">
       <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">输入新的token名称：</div>
@@ -2314,9 +2788,9 @@ function renderVerifyResult(token, remain, hasCode) {
     const c1 = `=javascript:$.getScript('${API_URL}?token=${encodedToken}')`;
     const c2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodedToken}';document.body.appendChild(s);})();`;
     h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
-      <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">📋 复制代码</button></div>
+      <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">复制代码</button></div>
       <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（备用）</div>
-      <div class="code-block">${escapeHtml(c2)}</div><button class="copy-btn" data-code="${escapeHtml(c2)}">📋 复制代码</button></div>`;
+      <div class="code-block">${escapeHtml(c2)}</div><button class="copy-btn" data-code="${escapeHtml(c2)}">复制代码</button></div>`;
   } else {
     h += '<div class="tip mt-12">链接已失效，无法生成代码。如需继续使用，请联系管理员获取新token。</div>';
   }
@@ -2457,7 +2931,7 @@ function applyTokenFilter() {
 function renderTokenView() {
   const container = $('tokenTableContainer');
   if (!state.filteredTokens.length) {
-    container.innerHTML = '<div class="empty"><span class="empty-icon">📭</span>暂无 Token 数据<br><span style="font-size:.78rem;">点击上方 [+ 添加] 创建第一个 Token</span></div>';
+    container.innerHTML = '<div class="empty">暂无 Token 数据<br><span style="font-size:.78rem;">点击上方 [+ 添加] 创建第一个 Token</span></div>';
     $('paginationContainer').innerHTML = '';
     return;
   }
@@ -2666,11 +3140,11 @@ async function addSingleToken() {
   btn.textContent = '添加中...'; btn.disabled = true;
   try {
     await adminFetch('add', { token: name, initCount: init });
-    $('addTokenMsg').innerHTML = `<span style="color:var(--success);">✅ 已添加: ${escapeHtml(name)} (${init} 次)</span>`;
+    $('addTokenMsg').innerHTML = `<span style="color:var(--success);">已添加: ${escapeHtml(name)} (${init} 次)</span>`;
     $('newTokenName').value = ''; $('newTokenInitCount').value = '3';
     await loadAllTokens();
     setTimeout(() => { $('addTokenMsg').innerHTML = ''; }, 3000);
-  } catch(e) { $('addTokenMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(e.message)}</span>`; }
+  } catch(e) { $('addTokenMsg').innerHTML = `<span style="color:var(--danger);">${escapeHtml(e.message)}</span>`; }
   finally { btn.textContent = orig; btn.disabled = false; }
 }
 
@@ -2922,7 +3396,7 @@ function renderQuestionList() {
   const totalPages = Math.max(1, Math.ceil((state.questionTotal || 0) / QUESTION_PAGE_SIZE));
 
   if (!state.questions.length) {
-    container.innerHTML = '<div class="empty"><span class="empty-icon">📝</span>未找到题目<br><span style="font-size:.78rem;">可切换题库、调整关键词或新建题库</span></div>';
+    container.innerHTML = '<div class="empty">未找到题目<br><span style="font-size:.78rem;">可切换题库、调整关键词或新建题库</span></div>';
     pagDiv.innerHTML = state.questionTotal ? `<div class="text-center text-muted" style="font-weight:500;">共 ${state.questionTotal} 条 · 第 ${state.questionPage} 页</div>` : '';
     return;
   }
@@ -3125,7 +3599,7 @@ async function showQuestionStats() {
   const modal = $('questionStatsModal');
   modal.classList.add('show');
   const body = $('questionStatsBody');
-  body.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>正在读取独立题库...</div>';
+  body.innerHTML = '<div class="empty">正在读取独立题库...</div>';
   try {
     const data = await loadQuestionBatches();
     const batches = state.questionBatches;
@@ -3316,7 +3790,7 @@ function renderQuestionImportPreview(preview) {
     : '';
   const timingHtml = `<div class="question-import-timing">校验耗时：浏览器总等待 ${escapeHtml(formatCourseDuration(preview.clientElapsedMs || timing.totalMs || 0))} · 题库核心 ${escapeHtml(formatCourseDuration(timing.totalMs || 0))} · 元数据 ${escapeHtml(formatCourseDuration(timing.metadataMs || 0))} · 本地校验 ${escapeHtml(formatCourseDuration(timing.validationMs || 0))} · Redis 冲突查询 ${escapeHtml(formatCourseDuration(timing.conflictLookupMs || 0))} · 暂存 ${escapeHtml(formatCourseDuration(timing.previewStoreMs || 0))}${escapeHtml(compressionText)}</div>`;
   box.className = `question-import-result ${preview.ready ? 'ok' : 'error'}`;
-  box.innerHTML = `<strong>${preview.ready ? '✅ 校验通过，可以提交' : '❌ 校验未通过，尚未写入题库'}</strong><br>
+  box.innerHTML = `<strong>${preview.ready ? '校验通过，可以提交' : '校验未通过，尚未写入题库'}</strong><br>
     输入 ${Number(preview.inputCount || 0)} 行 · 有效 ${Number(preview.validCount || 0)} 行 · 错误 ${Number(preview.errorCount || 0)} · 冲突 ${Number(preview.conflictCount || 0)} · 提醒 ${Number(preview.warningCount || 0)}
     ${issueHtml ? `<ul class="question-import-issues">${issueHtml}</ul>` : ''}
     ${warningHtml ? `<div style="margin-top:8px;color:var(--warning);font-weight:500;">重复提醒（不阻止导入）</div><ul class="question-import-warnings">${warningHtml}</ul>` : ''}
@@ -3424,7 +3898,7 @@ async function confirmImportFromExcel() {
     $('excelConfigModal').classList.add('show');
     const box = $('questionImportValidation');
     box.className = 'question-import-result error';
-    box.innerHTML = `<strong>❌ 操作失败，题库未改变</strong><br>${escapeHtml(e.message)}`;
+    box.innerHTML = `<strong>操作失败，题库未改变</strong><br>${escapeHtml(e.message)}`;
     showToast(`导入失败: ${e.message}`, true);
     $('importProgress').classList.add('hidden');
   } finally {
@@ -3824,7 +4298,7 @@ function renderCourseList() {
   const container = $('courseListContainer');
   if (!container) return;
   if (!state.courseCourses.length) {
-    container.innerHTML = '<div class="empty"><span class="empty-icon">📚</span>没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">可勾选“显示过期课程”或点击刷新</span></div>';
+    container.innerHTML = '<div class="empty">没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">可勾选“显示过期课程”或点击刷新</span></div>';
     return;
   }
   const html = state.courseGroups.map(group => {
@@ -4523,7 +4997,7 @@ $('verifyResult').addEventListener('click', async e => {
       const panel = document.getElementById('renamePanel');
       if (panel) panel.classList.add('hidden');
       document.getElementById('newTokenNameInput').value = '';
-      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">✅ 改名成功 · 新 Token：<strong>' + escapeHtml(newName) + '</strong></span>';
+      if (msgEl) msgEl.innerHTML = '<span style="color:var(--success);">改名成功 · 新 Token：<strong>' + escapeHtml(newName) + '</strong></span>';
       const nc1 = `=javascript:$.getScript('${API_URL}?token=${encodeURIComponent(newName)}')`;
       const nc2 = `=javascript:(function(){var s=document.createElement('script');s.src='${API_URL}?token=${encodeURIComponent(newName)}';document.body.appendChild(s);})();`;
       const blocks = $('verifyResult').querySelectorAll('.code-block');
@@ -4728,7 +5202,7 @@ document.getElementById('addDeviceBtn')?.addEventListener('click', async () => {
   try {
     const data = await adminFetch('createActivation', { label, expires_days: expiresDays, max_uses: maxUses });
     if (data.ok) {
-      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--success);">✅ 已生成: ${escapeHtml(data.code)} (${expiresDays}天/${maxUses}次)</span>`;
+      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--success);">已生成: ${escapeHtml(data.code)} (${expiresDays}天/${maxUses}次)</span>`;
       document.getElementById('newDeviceLabel').value = '';
       document.getElementById('newDeviceDays').value = '30';
       document.getElementById('newDeviceUses').value = '300';
@@ -4736,9 +5210,9 @@ document.getElementById('addDeviceBtn')?.addEventListener('click', async () => {
       await loadActivations();
       setTimeout(() => { document.getElementById('addDeviceMsg').innerHTML = ''; }, 3000);
     } else {
-      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(data.message||'失败')}</span>`;
+      document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">${escapeHtml(data.message||'失败')}</span>`;
     }
-  } catch(e) { document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">❌ ${escapeHtml(e.message)}</span>`; }
+  } catch(e) { document.getElementById('addDeviceMsg').innerHTML = `<span style="color:var(--danger);">${escapeHtml(e.message)}</span>`; }
   finally { btn.textContent = orig; btn.disabled = false; }
 });
 
@@ -4814,7 +5288,7 @@ function renderDeviceView() {
 
   if (!items.length) {
     const msg = state.deviceKeyword ? '无匹配结果' : '暂无激活码<br><span style="font-size:.78rem;">点击上方 [+ 生成激活码] 创建</span>';
-    container.innerHTML = `<div class="empty"><span class="empty-icon">🔐</span>${msg}</div>`;
+    container.innerHTML = `<div class="empty">${msg}</div>`;
     renderDevicePagination();
     return;
   }
