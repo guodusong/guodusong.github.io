@@ -2633,7 +2633,10 @@ function acceptCourseApiMetadata(data) {
   } else if (!state.courseApiCompatible) {
     state.courseApiMessage = `当前云函数版本不支持一键完成（需要协议 v${COURSE_API_PROTOCOL_VERSION}）；单课程功能仍可使用。`;
   } else {
-    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持视频/评价一键完成。`;
+    const examHint = capabilities.examExecution === true
+      ? '考试支持单门显式确认提交'
+      : capabilities.examReadOnlyPreview === true ? '考试仅支持只读题面预览' : '考试仍需人工处理';
+    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持视频/评价一键完成；${examHint}。`;
     const delay = Number(capabilities.recommendedBatchStepDelayMs);
     if (Number.isFinite(delay) && delay >= 300) state.courseBatchDelayMs = Math.min(Math.round(delay), 5000);
   }
@@ -3983,6 +3986,10 @@ function courseHasPendingExam(course) {
     && course.examPassed !== true);
 }
 
+function courseExamExecutionEnabled() {
+  return state.courseApi?.capabilities?.examExecution === true;
+}
+
 function courseHasPending(course) {
   return Boolean(courseNextWorkflow(course) || courseHasPendingExam(course));
 }
@@ -4274,8 +4281,9 @@ function renderCourseCard(course) {
     actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}">预览下一步</button>
       <button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="${workflowAttr}">执行下一步</button>`;
   } else if (pendingExam) {
-    nextHtml = '<div class="course-next-step blocked">课程考试待完成 · 自动执行未启用，请进入网课平台人工处理；本站仅核对考试状态。</div>';
-    actionHtml = '<span class="text-muted text-sm">考试需人工处理</span>';
+    nextHtml = `<div class="course-next-step blocked">课程考试待完成 · ${courseExamExecutionEnabled() ? '仅支持单门课程显式确认提交。' : '当前仅读取考试题面并匹配题库，不会自动提交考试。'}</div>`;
+    actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="exam">查看考试题面</button>
+      ${courseExamExecutionEnabled() ? `<button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="exam">提交考试</button>` : '<span class="text-muted text-sm">考试提交需人工确认</span>'}`;
   } else {
     nextHtml = '<div class="course-next-step">当前已没有可识别的待执行步骤，以下状态仅供平台复核。</div>';
   }
@@ -4806,9 +4814,25 @@ async function cancelCourseBatch() {
 async function previewCourse(courseId, workflow) {
   try {
     const data = await courseFetch('preview', { courseId, workflow });
-    const steps = Array.isArray(data.steps) ? data.steps : [];
-    const detail = `${data.readyForConfirmation ? '可以确认执行' : '当前不可执行'}\n步骤：${courseWorkflowLabel(data.workflow || workflow)}\n${data.reason || '平台预览完成'}\n待提交动作：${Array.isArray(data.actions) ? data.actions.length : 0} 个`;
-    showCourseOutput(`预览：${courseWorkflowLabel(data.workflow || workflow)}`, detail, data.readyForConfirmation ? 'success' : 'warning', data);
+    const selectedWorkflow = data.workflow || workflow;
+    let detail;
+    if (selectedWorkflow === 'exam') {
+      const surface = data.legacySurface && typeof data.legacySurface === 'object' ? data.legacySurface : {};
+      const total = Number(surface.activeQuestionCount ?? data.questionCount ?? 0);
+      const matched = Number(surface.matchedAnswerCount ?? 0);
+      const missing = Array.isArray(data.missing) ? data.missing.length : 0;
+      const answerStatus = surface.answerSource === 'question-bank'
+        ? `题库匹配：${matched}/${total} 题${missing ? `，未安全匹配 ${missing} 题` : ''}`
+        : `答案来源：${surface.answerSource || '平台题面'}${total ? `，读取 ${total} 题` : ''}`;
+      const examCanExecute = state.courseApi?.capabilities?.examExecution === true;
+      detail = `考试预览\n${answerStatus}\n${data.examPreviewReady === true
+        ? examCanExecute ? '题面和答案映射已准备好，确认后可提交单门考试' : '题面和答案映射已准备好，但考试提交能力默认关闭'
+        : '题面或答案映射尚未满足安全条件，保持只读'}\n${data.reason || '平台考试题面读取完成'}\n平台写入：未执行`;
+    } else {
+      detail = `${data.readyForConfirmation ? '可以确认执行' : '当前不可执行'}\n步骤：${courseWorkflowLabel(selectedWorkflow)}\n${data.reason || '平台预览完成'}\n待提交动作：${Array.isArray(data.actions) ? data.actions.length : 0} 个`;
+    }
+    const outputTone = selectedWorkflow === 'exam' ? 'warning' : data.readyForConfirmation ? 'success' : 'warning';
+    showCourseOutput(`预览：${courseWorkflowLabel(selectedWorkflow)}`, detail, outputTone, data);
   } catch (e) { showCourseOutput('预览失败', e.message, 'error'); showToast(`预览失败：${e.message}`, true); }
 }
 
@@ -4836,11 +4860,12 @@ async function executeCourse(courseId, workflow) {
   const course = state.courseById.get(String(courseId));
   if (!course || course.eligibility?.allowed !== true) { showToast('当前课程不可执行', true); return; }
   const currentWorkflow = courseNextWorkflow(course);
-  if (!currentWorkflow || (workflow && workflow !== 'auto' && workflow !== currentWorkflow)) {
+  const examExecution = workflow === 'exam' && courseExamExecutionEnabled() && courseHasPendingExam(course);
+  if (!examExecution && (!currentWorkflow || (workflow && workflow !== 'auto' && workflow !== currentWorkflow))) {
     showToast('课程状态可能已经变化，请先刷新课程后重试', true);
     return;
   }
-  const selectedWorkflow = currentWorkflow;
+  const selectedWorkflow = examExecution ? 'exam' : currentWorkflow;
   const executionSlot = `${state.courseSessionId}:${courseId}:${selectedWorkflow}`;
   const idempotencyKey = state.courseExecutionKeys.get(executionSlot) || createCourseRequestId();
   state.courseExecutionKeys.set(executionSlot, idempotencyKey);
@@ -4848,7 +4873,12 @@ async function executeCourse(courseId, workflow) {
   state.courseBusy = true;
   try {
     // 先确认、后联网：确认后由服务端做唯一一次权威预览，复核不通过时不会写入。
-    const ok = await showConfirm('确认执行网课步骤', `课程：${course.courseName || courseId}\n本次只执行：${courseWorkflowLabel(selectedWorkflow)}\n确认后会先进行平台最终复核，复核通过才会写入，并在完成后再次验证。`);
+    const ok = await showConfirm(
+      selectedWorkflow === 'exam' ? '确认提交考试' : '确认执行网课步骤',
+      selectedWorkflow === 'exam'
+        ? `课程：${course.courseName || courseId}\n本次将提交内置考试答案，可能消耗平台考试次数。\n确认后会先进行平台最终复核，复核通过才会提交，并在提交后再次验证。`
+        : `课程：${course.courseName || courseId}\n本次只执行：${courseWorkflowLabel(selectedWorkflow)}\n确认后会先进行平台最终复核，复核通过才会写入，并在完成后再次验证。`,
+    );
     if (!ok) return;
     showCourseOutput('正在复核并执行', '已确认，正在读取平台最新状态；如果平台状态已变化，将停止写入。', 'warning');
     const result = await courseFetch('execute', { courseId, workflow: selectedWorkflow, confirm: true, idempotencyKey });
