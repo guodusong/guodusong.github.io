@@ -451,7 +451,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-   GSS Responsive UI · v11.10 frontend-only refinement
+GSS Responsive UI · v11.11 course-test read-only discovery
    CSS-first: existing IDs, event hooks and business logic unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1511,7 +1511,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
       </div>
 
       <!-- Sub-pane: Questions -->
-<div class="subpane hidden" id="subQuestions" data-question-bank-version="11.10">
+<div class="subpane hidden" id="subQuestions" data-question-bank-version="11.11">
         <div class="flex mb-12">
           <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
             <option value="">全部题库</option>
@@ -1663,7 +1663,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-          <div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v11.10</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
+<div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v11.11</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -1748,10 +1748,10 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '11.10.0';
+const COURSE_FRONTEND_VERSION = '11.11.0';
 const COURSE_API_PROTOCOL_VERSION = 2;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '11.10';
+const API_CLIENT_VERSION = '11.11';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -5515,7 +5515,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken) void restoreAdminSession();
 
-console.log('Link · Token 管理 v11.10 — 已就绪');
+console.log('Link · Token 管理 v11.11 — 已就绪');
 </script>
 </body>
 </html>
