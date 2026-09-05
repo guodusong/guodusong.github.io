@@ -451,7 +451,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v11.11 course-test read-only discovery
+GSS Responsive UI · v11.11.1 course-test read-only discovery and batch diagnostics
    CSS-first: existing IDs, event hooks and business logic unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1748,10 +1748,10 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '11.11.0';
+const COURSE_FRONTEND_VERSION = '11.11.1';
 const COURSE_API_PROTOCOL_VERSION = 2;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '11.11';
+const API_CLIENT_VERSION = '11.11.1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -4014,6 +4014,13 @@ const COURSE_BATCH_STATUS_LABELS = Object.freeze({
   cancelled: '已取消',
 });
 
+const COURSE_BATCH_FAILURE_STAGE_LABELS = Object.freeze({
+  'before-platform-write': '平台写入前',
+  'platform-write-uncertain': '平台写入结果不明确',
+  'post-write-verification': '平台写入后复核',
+  reconciliation: '中断步骤只读对账',
+});
+
 const COURSE_BATCH_ITEM_LABELS = Object.freeze({
   pending: '等待',
   running: '执行中',
@@ -4096,6 +4103,12 @@ function renderCourseBatchPanel() {
   }).join(' · ');
   const currentStep = state.courseLastStep || state.courseDiagnostics?.currentStep || performance.last?.currentStep || '请求准备';
   const lastRequestMs = state.courseLastRequestMs || performance.last?.elapsedMs || 0;
+  const lastFailure = batch.status === 'stopped'
+    ? (batch.lastFailure || items.find(item => item.lastFailure)?.lastFailure || null)
+    : null;
+  const failureDiagnosticHtml = lastFailure
+    ? `<div class="course-batch-meta"><strong>诊断：</strong>${escapeHtml(COURSE_BATCH_FAILURE_STAGE_LABELS[lastFailure.stage] || lastFailure.stage || '未知阶段')} · 平台写入${lastFailure.platformWriteAttempted === true ? '已发起或已有待对账步骤' : '未发起'} · 本次写入请求 ${lastFailure.platformWriteRequestCount === null || lastFailure.platformWriteRequestCount === undefined ? '未记录' : Number(lastFailure.platformWriteRequestCount)}</div>`
+    : '';
 
   let actions = '';
   const resumeDisabled = !state.courseAuthenticated ? ' disabled title="请先连接网课会话"' : '';
@@ -4131,6 +4144,7 @@ function renderCourseBatchPanel() {
     <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
      <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
      <div class="course-batch-meta"><strong>当前步骤：</strong>${escapeHtml(currentStep)} · 本次浏览器请求 ${escapeHtml(formatCourseDuration(state.courseLastClientRequestMs))} / 服务端 ${escapeHtml(formatCourseDuration(lastRequestMs))} · 累计服务端 ${escapeHtml(formatCourseDuration(performance.serverElapsedMs || 0))}<br>${escapeHtml(timingHtml)} · 浏览器步骤间等待 ${escapeHtml(formatCourseDuration(state.courseClientWaitMs))}</div>
+    ${failureDiagnosticHtml}
     <div class="course-batch-actions">${actions}</div>
     ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
 }
@@ -5515,7 +5529,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken) void restoreAdminSession();
 
-console.log('Link · Token 管理 v11.11 — 已就绪');
+console.log('Link · Token 管理 v11.11.1 — 已就绪');
 </script>
 </body>
 </html>
