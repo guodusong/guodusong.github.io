@@ -451,7 +451,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v11.11.1 course-test read-only discovery and batch diagnostics
+GSS Responsive UI · v11.12.1 course workflow convergence
    CSS-first: existing IDs, event hooks and business logic unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -819,7 +819,7 @@ img, svg, video { max-width: 100%; }
   #courseLoginBtn { grid-column: 1 / -1; }
   .course-toolbar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
   .course-toolbar .btn { width: 100%; min-height: 44px; }
-  #courseBatchAllBtn, #courseBatchSelectedBtn { grid-column: 1 / -1; }
+  #courseBatchAllBtn { grid-column: 1 / -1; }
   .course-toolbar .checkbox { grid-column: 1 / -1; min-height: 34px; }
   .course-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .course-summary-item { min-width: 0; }
@@ -1370,6 +1370,50 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
   body::before { display: none; }
 }
 
+/* Course convergence: keep the three supported actions visible and move
+   internal timings/IDs behind a deliberate details disclosure. */
+.course-connection {
+  margin-top: 14px;
+  border: 1px solid #e5e0f2;
+  border-radius: 14px;
+  background: #faf9ff;
+}
+.course-connection > summary,
+.course-advanced > summary {
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: .74rem;
+  font-weight: 600;
+  list-style-position: inside;
+}
+.course-connection > summary { padding: 11px 13px; }
+.course-connection[open] > summary { border-bottom: 1px solid #e9e4f4; }
+.course-connection > .course-login-grid,
+.course-connection > .course-actions { padding-inline: 13px; }
+.course-connection > .course-login-grid { padding-top: 12px; }
+.course-connection > .course-actions { padding-bottom: 13px; }
+.course-part-action { display: flex; flex: 1 1 100%; flex-wrap: wrap; gap: 6px; align-items: center; }
+.course-part-action .input { flex: 1 1 170px; min-width: 140px; }
+.course-part-action .btn { flex: 0 1 auto; }
+.course-card-actions > [data-course-action="complete"] { flex: 0 0 auto; }
+.course-batch-counts { display: flex; flex-wrap: wrap; gap: 6px; }
+.course-batch-counts span { padding: 3px 7px; border: 1px solid #e5e0f2; border-radius: 999px; background: rgba(255,255,255,.68); }
+.course-batch-diagnostics { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(216,208,255,.75); }
+.course-batch-diagnostics > summary { color: var(--accent); }
+
+@media (min-width: 768px) {
+  .course-status-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .course-connection > .course-login-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+  .course-part-action { align-items: stretch; }
+  .course-part-action .input,
+  .course-part-action .btn { width: 100%; min-height: 42px; }
+  .course-batch-counts { gap: 5px; }
+  .course-batch-counts span { font-size: .66rem; }
+}
+
 </style>
 </head>
 <body>
@@ -1582,8 +1626,8 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
         <div class="card" style="margin-bottom:12px;">
           <div class="course-head">
             <div>
-              <h3>网课直连管理</h3>
-              <p>通过新云函数直接读取 21TB 数据，不打开 Edge；课程状态以平台复核结果为准。</p>
+              <h3>网课</h3>
+              <p>完成全部课程、一门课程，或只处理视频、评估、考试中的一项。结果以平台确认为准。</p>
             </div>
             <div class="course-badges">
               <span class="course-badge offline" id="courseAuthBadge">未连接</span>
@@ -1591,6 +1635,8 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
               <span class="course-badge offline" id="courseApiBadge">接口待检测</span>
             </div>
           </div>
+          <details class="course-connection" id="courseConnection" open>
+          <summary>账号与连接</summary>
           <div class="course-login-grid">
             <label>网课账号
               <input type="text" id="courseUsername" class="input" autocomplete="username" placeholder="请输入网课账号">
@@ -1601,9 +1647,10 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
           </div>
           <div class="course-actions">
             <button id="courseLoginBtn" class="btn btn-primary btn-sm">登录网课</button>
-            <button id="courseStatusBtn" class="btn btn-ghost btn-sm">读取会话状态</button>
+            <button id="courseStatusBtn" class="btn btn-ghost btn-sm">检查连接</button>
             <button id="courseLogoutBtn" class="btn btn-ghost btn-sm">退出网课</button>
           </div>
+          </details>
           <div id="courseSessionMessage" class="course-session-message">请先输入网课账号和密码登录。</div>
           <div id="courseChallengePanel" class="course-challenge hidden">
             <h4 id="courseChallengeTitle">需要完成登录验证</h4>
@@ -1620,15 +1667,16 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
 
         <div id="courseListPanel" class="card course-list-panel hidden">
           <div class="course-toolbar">
-            <button id="courseRefreshBtn" class="btn btn-primary btn-sm">刷新课程</button>
+            <button id="courseBatchAllBtn" class="btn btn-primary">完成全部课程</button>
+            <button id="courseRefreshBtn" class="btn btn-ghost btn-sm">刷新课程</button>
             <button id="courseTasksBtn" class="btn btn-ghost btn-sm">执行记录</button>
-            <button id="courseBatchAllBtn" class="btn btn-primary btn-sm">一键完成视频/评价</button>
-            <button id="courseBatchSelectedBtn" class="btn btn-ghost btn-sm" disabled>完成选中（0）</button>
             <span class="toolbar-sep"></span>
-            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
             <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
-            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
           </div>
+          <details class="course-advanced"><summary>更多筛选</summary><div class="course-toolbar">
+            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
+            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
+          </div></details>
           <div id="courseBatchPanel" class="course-batch-panel hidden"></div>
           <div id="courseSummary" class="course-summary"></div>
           <div id="courseListContainer"></div>
@@ -1748,10 +1796,10 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '11.11.1';
-const COURSE_API_PROTOCOL_VERSION = 2;
+const COURSE_FRONTEND_VERSION = '11.12.1';
+const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '11.11.1';
+const API_CLIENT_VERSION = '11.12.1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -1922,7 +1970,7 @@ const state = {
   courseGroupsInitialized: false,
   courseLoading: false,
   courseBusy: false,
-  courseSelected: new Set(),
+  coursePartChoices: new Map(),
   courseExecutionKeys: loadPendingCourseExecutions(),
   courseBatch: null,
   courseBatchPumping: false,
@@ -2626,17 +2674,18 @@ function acceptCourseApiMetadata(data) {
   const workflows = Array.isArray(capabilities.batchWorkflows) ? capabilities.batchWorkflows : [];
   state.courseApiCompatible = Number(state.courseApi?.protocolVersion || 0) >= COURSE_API_PROTOCOL_VERSION
     && capabilities.batchExecution === true
+    && capabilities.taskScopeExecution === true
     && workflows.includes('video')
     && workflows.includes('evaluation');
   if (!state.courseApi) {
     state.courseApiMessage = `云函数没有返回版本能力信息，请部署支持一键完成的 v${COURSE_FRONTEND_VERSION} 后端。`;
   } else if (!state.courseApiCompatible) {
-    state.courseApiMessage = `当前云函数版本不支持一键完成（需要协议 v${COURSE_API_PROTOCOL_VERSION}）；单课程功能仍可使用。`;
+    state.courseApiMessage = `当前云函数尚未支持统一课程任务（需要协议 v${COURSE_API_PROTOCOL_VERSION}）。为避免执行范围不一致，先暂停新任务，请部署匹配后端。`;
   } else {
     const examHint = capabilities.examExecution === true
-      ? '考试支持单门显式确认提交'
+      ? '考试仅在确认的任务范围内执行'
       : capabilities.examReadOnlyPreview === true ? '考试仅支持只读题面预览' : '考试仍需人工处理';
-    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持视频/评价一键完成；${examHint}。`;
+    state.courseApiMessage = `云函数 ${state.courseApi.backendVersion || '未知版本'}，已支持全部、单课和单项任务；${examHint}。`;
     const delay = Number(capabilities.recommendedBatchStepDelayMs);
     if (Number.isFinite(delay) && delay >= 300) state.courseBatchDelayMs = Math.min(Math.round(delay), 5000);
   }
@@ -2660,7 +2709,7 @@ function formatCourseDuration(value) {
   return `${(ms / 1000).toFixed(ms >= 10000 ? 0 : 1)}s`;
 }
 
-// 网课接口使用独立命名空间，但复用当前管理员密码鉴权。
+// 网课接口使用独立命名空间，复用管理员会话；网课平台会话独立失效。
 // 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
 async function courseFetch(courseAction, params = {}, requestOptions = {}) {
   if (!state.isAdmin || (!state.adminPwd && !state.adminSessionToken)) throw new Error('请先登录管理后台');
@@ -2688,20 +2737,39 @@ async function courseFetch(courseAction, params = {}, requestOptions = {}) {
     updateCourseBatchUi();
   }
   const { response, data, requestId } = transport;
+  const failed = !response.ok || data.ok === false;
+  const message = data.error || data.message || `网课请求失败（HTTP ${response.status}）`;
+  if (failed && (['ADMIN_SESSION_EXPIRED', 'ADMIN_AUTH_REQUIRED', 'ADMIN_AUTH_FAILED'].includes(data.code) || message === '密码错误' || /管理员会话/.test(message))) {
+    // Admin expiry is not evidence that the separate platform account expired.
+    // Keep the task checkpoint, stop sending steps, and use the normal login UI.
+    state.courseBatchPauseRequested = true;
+    state.courseAuthenticated = false;
+    state.courseSessionStatus = 'unknown';
+    state.courseSessionMessage = '管理后台登录已过期；重新登录管理后台后，将重新读取网课连接状态。';
+    renderCourseSessionState();
+    clearAdminSession('管理后台登录已过期，请重新登录');
+    const error = new Error(message);
+    error.code = data.code || 'ADMIN_AUTH_REQUIRED';
+    error.authScope = 'admin';
+    error.requestId = requestId;
+    throw error;
+  }
   acceptCourseApiMetadata(data);
   acceptCourseDiagnostics(data);
-  if (!response.ok || data.ok === false) {
-    const message = data.error || data.message || `网课请求失败（HTTP ${response.status}）`;
-    if (data.code === 'ADMIN_SESSION_EXPIRED' || data.code === 'ADMIN_AUTH_REQUIRED' || data.code === 'ADMIN_AUTH_FAILED' || message === '密码错误' || /管理员会话/.test(message)) {
-      clearAdminSession('管理后台登录已过期，请重新登录');
-      throw new Error(message);
-    }
+  if (failed) {
     const error = new Error(message);
     error.code = data.code || '';
     error.sessionStatus = data.sessionStatus || '';
     error.requestId = requestId;
+    error.resourceDiagnostics = data.resourceDiagnostics || null;
+    applyCourseSessionError(error.code, message);
     throw error;
   }
+  // batchStep intentionally returns HTTP 200 with a persisted checkpoint when
+  // a single course fails. Inspect the nested business error as well, otherwise
+  // the task can stop correctly while the connection badge still says online.
+  const nestedError = data?.error && typeof data.error === 'object' ? data.error : null;
+  applyCourseSessionError(nestedError?.code || data?.code, nestedError?.message || (typeof data?.error === 'string' ? data.error : ''));
   return acceptAdminSession(data);
 }
 
@@ -4037,26 +4105,33 @@ function courseBatchActive() {
   return Boolean(state.courseBatch && !courseBatchTerminal(state.courseBatch));
 }
 
+function courseBatchScopeTitle(batch) {
+  const scope = batch?.taskScope || 'legacy';
+  if (scope === 'full') return batch?.mode === 'selected' ? '完成该课程' : '完成全部课程';
+  if (scope === 'legacy') return '历史任务（视频与评估）';
+  return `仅完成${courseWorkflowLabel(scope)}`;
+}
+
+function courseBatchScopeDescription(batch) {
+  const scope = batch?.taskScope || 'legacy';
+  if (scope === 'full') return '只处理预览中平台确认的必要环节，整课完成必须由平台确认。';
+  if (scope === 'legacy') return '这是旧版任务，只包含视频和课程评估，不会在升级后自动增加考试。';
+  return `只处理${courseWorkflowLabel(scope)}，不会顺带执行其他环节。`;
+}
+
 function renderCourseBatchControls() {
   const allBtn = $('courseBatchAllBtn');
-  const selectedBtn = $('courseBatchSelectedBtn');
-  if (!allBtn || !selectedBtn) return;
-  const selectableIds = new Set(state.courseCourses.filter(courseBatchable).map(course => String(course.courseId)));
-  for (const courseId of [...state.courseSelected]) {
-    if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
-  }
+  if (!allBtn) return;
+  const selectableIds = new Set(state.courseCourses.filter(course => course?.eligibility?.allowed === true && !course.mapOnly && !coursePlatformComplete(course)).map(course => String(course.courseId)));
   const active = courseBatchActive();
   const unavailable = !state.courseAuthenticated || !state.courseApiCompatible || state.courseBusy || state.courseBatchPumping || active;
   allBtn.disabled = unavailable || selectableIds.size === 0;
-  selectedBtn.disabled = unavailable || state.courseSelected.size === 0;
-  selectedBtn.textContent = `完成选中（${state.courseSelected.size}）`;
   const title = !state.courseApiCompatible
     ? state.courseApiMessage
     : active
       ? '已有未结束的一键完成任务，请先继续或取消'
-      : '处理期限内待完成的视频和课程评价';
+      : '处理当前账号全部期限内待完成课程的必要环节；开始前确认范围';
   allBtn.title = title;
-  selectedBtn.title = !state.courseApiCompatible ? state.courseApiMessage : active ? '已有未结束的一键完成任务，请先继续或取消' : '只处理勾选课程的视频和课程评价';
 }
 
 function renderCourseBatchPanel() {
@@ -4076,8 +4151,12 @@ function renderCourseBatchPanel() {
   const cancelled = Number(batch.cancelledCourses ?? items.filter(item => item.status === 'cancelled').length);
   const settled = completed + failed + cancelled;
   const percent = total > 0 ? Math.min(100, Math.round(settled * 100 / total)) : 100;
-  const examSkipped = items.filter(item => item.examSkipped === true).length
-    + (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.examSkipped === true).length : 0);
+  const taskScope = batch.taskScope || 'legacy';
+  const blockedItems = taskScope === 'legacy' ? [] : (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.complete !== true) : []);
+  const examSkipped = taskScope === 'legacy'
+    ? items.filter(item => item.examSkipped === true).length
+      + (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.examSkipped === true).length : 0)
+    : 0;
   const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
   const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
   const waitingHint = state.courseBatchPauseRequested
@@ -4103,11 +4182,9 @@ function renderCourseBatchPanel() {
   }).join(' · ');
   const currentStep = state.courseLastStep || state.courseDiagnostics?.currentStep || performance.last?.currentStep || '请求准备';
   const lastRequestMs = state.courseLastRequestMs || performance.last?.elapsedMs || 0;
-  const lastFailure = batch.status === 'stopped'
-    ? (batch.lastFailure || items.find(item => item.lastFailure)?.lastFailure || null)
-    : null;
+  const lastFailure = batch.lastFailure || items.find(item => item.lastFailure)?.lastFailure || null;
   const failureDiagnosticHtml = lastFailure
-    ? `<div class="course-batch-meta"><strong>诊断：</strong>${escapeHtml(COURSE_BATCH_FAILURE_STAGE_LABELS[lastFailure.stage] || lastFailure.stage || '未知阶段')} · 平台写入${lastFailure.platformWriteAttempted === true ? '已发起或已有待对账步骤' : '未发起'} · 本次写入请求 ${lastFailure.platformWriteRequestCount === null || lastFailure.platformWriteRequestCount === undefined ? '未记录' : Number(lastFailure.platformWriteRequestCount)}</div>`
+    ? `<div class="course-batch-meta"><strong>最近问题：</strong>${escapeHtml(COURSE_BATCH_FAILURE_STAGE_LABELS[lastFailure.stage] || lastFailure.stage || '未知阶段')} · 平台写入${lastFailure.platformWriteAttempted === true ? '已发起或已有待对账步骤' : '未发起'} · ${escapeHtml(lastFailure.errorCode || '')}</div>`
     : '';
 
   let actions = '';
@@ -4131,21 +4208,30 @@ function renderCourseBatchPanel() {
     return `<div class="course-batch-item">
       <span class="course-batch-item-state ${stateClass}">${escapeHtml(COURSE_BATCH_ITEM_LABELS[itemStatus] || itemStatus)}</span>
       <div class="course-batch-item-main"><strong>${escapeHtml(item.courseName || item.courseId || '未命名课程')}</strong><br>
-        <span>${planned ? `计划：${escapeHtml(planned)} · ` : ''}已验证 ${verifiedSteps} 步${item.examSkipped === true ? ' · 考试已跳过' : ''}${item.reason ? ` · ${escapeHtml(item.reason)}` : ''}</span>
+        <span>${planned ? `计划：${escapeHtml(planned)} · ` : ''}已验证 ${verifiedSteps} 步${item.examSkipped === true ? ' · 历史任务未包含考试' : ''}${item.reason ? ` · ${escapeHtml(item.reason)}` : ''}</span>
       </div>
     </div>`;
   }).join('');
 
+  const currentItem = items.find(item => String(item.courseId || '') === String(batch.currentCourseId || ''));
+  const currentText = currentItem?.courseName || (batch.currentCourseId ? String(batch.currentCourseId) : '等待下一门课程');
+  const scopeTitle = courseBatchScopeTitle(batch);
+  const diagnosticHtml = `<details class="course-advanced course-batch-diagnostics"><summary>性能与诊断</summary>
+      <div class="course-batch-meta"><strong>当前课程：</strong>${escapeHtml(currentText)} · <strong>当前步骤：</strong>${escapeHtml(currentStep)}</div>
+      <div class="course-batch-meta">本次浏览器请求 ${escapeHtml(formatCourseDuration(state.courseLastClientRequestMs))} · 服务端 ${escapeHtml(formatCourseDuration(lastRequestMs))} · 累计服务端 ${escapeHtml(formatCourseDuration(performance.serverElapsedMs || 0))}<br>${escapeHtml(timingHtml)} · 浏览器步骤间等待 ${escapeHtml(formatCourseDuration(state.courseClientWaitMs))} · 当前步骤间隔约 ${stepDelay}ms</div>
+      ${failureDiagnosticHtml || '<div class="course-batch-meta">当前没有记录到失败步骤。</div>'}
+    </details>`;
+
   panel.classList.remove('hidden');
   panel.innerHTML = `<div class="course-batch-head">
-      <div><div class="course-batch-title">一键完成（视频与评价）</div><div class="course-batch-meta">完成 ${completed}/${total} · 失败 ${failed} · 取消 ${cancelled} · 平台已验证步骤 ${Number(batch.completedSteps || 0)} · 预览跳过 ${Number(batch.skippedCourses || 0)} · 步骤间隔约 ${stepDelay}ms</div></div>
+      <div><div class="course-batch-title">${escapeHtml(scopeTitle)}</div><div class="course-batch-meta">${escapeHtml(courseBatchScopeDescription(batch))}</div></div>
       <div class="course-batch-status">${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</div>
     </div>
     <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
-     <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${examSkipped > 0 ? `<br>已识别 ${examSkipped} 门包含或仅剩考试；本功能不会执行考试。` : ''}</div>
-     <div class="course-batch-meta"><strong>当前步骤：</strong>${escapeHtml(currentStep)} · 本次浏览器请求 ${escapeHtml(formatCourseDuration(state.courseLastClientRequestMs))} / 服务端 ${escapeHtml(formatCourseDuration(lastRequestMs))} · 累计服务端 ${escapeHtml(formatCourseDuration(performance.serverElapsedMs || 0))}<br>${escapeHtml(timingHtml)} · 浏览器步骤间等待 ${escapeHtml(formatCourseDuration(state.courseClientWaitMs))}</div>
-    ${failureDiagnosticHtml}
+     <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${blockedItems.length ? `<br>有 ${blockedItems.length} 门未执行：${escapeHtml(blockedItems.slice(0, 3).map(item => item.reason || '当前不可执行').join('；'))}${blockedItems.length > 3 ? '；其余见下方详情' : ''}` : ''}${examSkipped > 0 ? `<br>历史任务中有 ${examSkipped} 门涉及考试，但考试未纳入本任务。` : ''}</div>
+     <div class="course-batch-meta course-batch-counts"><span>课程 ${completed}/${total}</span><span>失败 ${failed}</span><span>取消 ${cancelled}</span><span>已验证步骤 ${Number(batch.completedSteps || 0)}</span><span>未执行 ${blockedItems.length}</span></div>
     <div class="course-batch-actions">${actions}</div>
+    ${diagnosticHtml}
     ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
 }
 
@@ -4207,12 +4293,12 @@ function courseGroupKey(group) {
 }
 
 function coursePlatformComplete(course) {
-  if (course?.courseFinished === true || course?.platformCompleted === true || course?.examPassed === true) return true;
-  const rate = Number(course?.studyRate ?? 0);
-  const workflows = course?.workflowCandidates || course?.workflows || [];
-  const remaining = workflows.some(workflow => workflow === 'evaluation' && course?.hasFinishEvaluate !== true
-    || workflow === 'exam' && course?.examPassed !== true);
-  return rate >= 100 && !remaining;
+  // 通过考试只能证明考试这一环节完成，不能代替平台的整课完成标记；
+  // 否则会把“视频/评估尚未完成但考试已通过”的课程误显示为已完成，
+  // 进而禁用“完成该课程”和“完成全部课程”。
+  // 完整课程的完成判定必须与后端 planCourseTask 一致，只接受平台的
+  // 聚合完成标记；不能根据若干单项状态在浏览器端自行推断。
+  return course?.courseFinished === true || course?.platformCompleted === true;
 }
 
 function makeStandaloneCourseGroup(course) {
@@ -4258,9 +4344,8 @@ function applyCourseFilters({ render = true } = {}) {
   state.courseCourses = courses;
   state.courseGroups = groups;
   state.courseById = new Map(courses.map(course => [String(course.courseId), course]));
-  const selectableIds = new Set(courses.filter(courseBatchable).map(course => String(course.courseId)));
-  for (const courseId of [...state.courseSelected]) {
-    if (!selectableIds.has(String(courseId))) state.courseSelected.delete(String(courseId));
+  for (const courseId of state.coursePartChoices.keys()) {
+    if (!state.courseById.has(String(courseId))) state.coursePartChoices.delete(String(courseId));
   }
   if (render) {
     renderCourseSummary();
@@ -4275,51 +4360,52 @@ function renderCourseCard(course) {
   const pendingExam = courseHasPendingExam(course);
   const allowed = course?.eligibility?.allowed === true && course?.mapOnly !== true;
   const courseId = courseAttr(course?.courseId || '');
-  const batchable = courseBatchable(course);
-  const selected = state.courseSelected.has(String(course?.courseId || ''));
-  const batchLocked = courseBatchActive() || state.courseBatchPumping;
-  const selectionHtml = batchable
-    ? `<label class="course-select"><input type="checkbox" data-course-select="${courseId}"${selected ? ' checked' : ''}${batchLocked ? ' disabled' : ''}>加入一键完成</label>`
-    : '';
+  const completed = coursePlatformComplete(course);
+  const batchLocked = courseBatchActive() || state.courseBatchPumping || state.courseBusy;
+  const disabled = !allowed || completed || batchLocked || !state.courseAuthenticated || !state.courseApiCompatible ? ' disabled' : '';
+  const selectedPart = state.coursePartChoices.get(String(course?.courseId || '')) || next || (pendingExam ? 'exam' : 'video');
   const workflowAttr = courseAttr(next || (pendingExam ? 'exam' : 'auto'));
   const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
   const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
   let nextHtml = '';
-  let actionHtml = `<span class="text-muted text-sm">当前无需执行</span>`;
+  let actionHtml = `<button class="btn btn-primary" data-course-action="complete" data-course-id="${courseId}"${disabled}>完成该课程</button>
+    <div class="course-part-action"><select class="input" data-course-part="${courseId}" aria-label="选择要完成的环节"${disabled}>
+      ${['video', 'evaluation', 'exam'].map(part => `<option value="${part}"${selectedPart === part ? ' selected' : ''}>${escapeHtml(courseWorkflowLabel(part))}</option>`).join('')}
+    </select><button class="btn btn-ghost" data-course-action="part" data-course-id="${courseId}"${disabled}>只完成所选项</button></div>`;
 
   if (!allowed) {
     nextHtml = `<div class="course-next-step blocked">${course?.mapOnly === true ? '学习地图额外条目：只读展示' : escapeHtml(course?.eligibility?.reason || '当前课程不可执行')}</div>`;
     actionHtml = '<span class="text-muted text-sm">仅查看，不执行写入</span>';
+  } else if (completed) {
+    nextHtml = '<div class="course-next-step">平台已确认整课完成，无需重复执行。</div>';
   } else if (next) {
-    nextHtml = `<div class="course-next-step">下一步：<strong>${escapeHtml(courseWorkflowLabel(next))}</strong> · 每次只执行这一项，执行后可再次平台复核</div>`;
-    actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}">预览下一步</button>
-      <button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="${workflowAttr}">执行下一步</button>`;
+    nextHtml = `<div class="course-next-step">当前待完成：<strong>${escapeHtml(courseWorkflowLabel(next))}</strong>。整课任务会继续处理其后必要环节。</div>`;
   } else if (pendingExam) {
-    nextHtml = `<div class="course-next-step blocked">课程考试待完成 · ${courseExamExecutionEnabled() ? '仅支持单门课程显式确认提交。' : '当前仅读取考试题面并匹配题库，不会自动提交考试。'}</div>`;
-    actionHtml = `<button class="btn btn-xs" data-course-action="preview" data-course-id="${courseId}" data-workflow="exam">查看考试题面</button>
-      ${courseExamExecutionEnabled() ? `<button class="btn btn-xs btn-primary" data-course-action="execute" data-course-id="${courseId}" data-workflow="exam">提交考试</button>` : '<span class="text-muted text-sm">考试提交需人工确认</span>'}`;
+    nextHtml = `<div class="course-next-step blocked">只剩课程考试。${courseExamExecutionEnabled() ? '确认任务后才会提交，不自动补考。' : '考试执行能力尚未开启，当前可以只读查看题面。'}</div>`;
   } else {
     nextHtml = '<div class="course-next-step">当前已没有可识别的待执行步骤，以下状态仅供平台复核。</div>';
   }
 
   return `<article class="course-card" data-course-id="${courseId}">
     <div class="course-card-top">
-      <div style="min-width:0;flex:1;">${selectionHtml}<div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div><div class="course-card-id">${escapeHtml(course?.courseId || '')}</div></div>
-      <div class="course-card-score">得分：${escapeHtml(status.score[0])}</div>
+      <div class="course-card-name">${escapeHtml(course?.courseName || '未命名课程')}</div>
+      <span class="course-badge ${completed ? 'online' : 'offline'}">${completed ? '已完成' : '待完成'}</span>
     </div>
     <div class="course-status-grid">
       ${courseStatusValue('视频学习', status.video[0], status.video[1])}
       ${courseStatusValue('课程评估', status.evaluation[0], status.evaluation[1])}
-      ${courseStatusValue('课程期限', status.deadline[0], status.deadline[1])}
       ${courseStatusValue('课程考试', status.exam[0], status.exam[1])}
     </div>
-    <div class="course-card-meta"><span>${escapeHtml(platformState)}</span><span>·</span><span>${escapeHtml(source)}</span>${course?.planEndTime ? `<span>· 截止 ${escapeHtml(course.planEndTime)}</span>` : ''}</div>
     ${nextHtml}
     <div class="course-card-actions">
       ${actionHtml}
-      <button class="btn btn-xs" data-course-action="inspect" data-course-id="${courseId}">平台复核</button>
-      <button class="btn btn-xs" data-course-action="verify" data-course-id="${courseId}" data-workflow="${workflowAttr}">验证状态</button>
     </div>
+    <details class="course-advanced"><summary>详情与诊断</summary>
+      <div class="course-card-meta">${escapeHtml(platformState)} · ${escapeHtml(source)} · 得分 ${escapeHtml(status.score[0])}${course?.planEndTime ? ` · 截止 ${escapeHtml(course.planEndTime)}` : ''}</div>
+      <div class="course-card-id">课程标识：${escapeHtml(course?.courseId || '')}</div>
+      <div class="course-card-actions"><button class="btn btn-ghost btn-sm" data-course-action="inspect" data-course-id="${courseId}"${batchLocked ? ' disabled' : ''}>刷新本课状态</button>
+      <button class="btn btn-ghost btn-sm" data-course-action="preview" data-course-id="${courseId}" data-workflow="${workflowAttr}"${batchLocked ? ' disabled' : ''}>${pendingExam && !next ? '查看考试题面' : '只读诊断'}</button></div>
+    </details>
   </article>`;
 }
 
@@ -4407,6 +4493,8 @@ function setCourseSessionResult(data) {
   state.courseSessionStatus = data?.status || (state.courseAuthenticated ? 'authenticated' : 'failed');
   state.courseChallenge = data?.challenge || null;
   state.courseSessionMessage = data?.message || (state.courseAuthenticated ? '网课会话已连接，可以读取课程。' : '尚未连接网课会话。');
+  const connection = $('courseConnection');
+  if (connection) connection.open = !state.courseAuthenticated;
   renderCourseSessionState();
   if (!state.courseAuthenticated) $('courseListPanel').classList.add('hidden');
 }
@@ -4489,7 +4577,7 @@ async function logoutCourse() {
     }
     savePendingCourseExecutions();
     state.courseAllCourses = []; state.courseAllGroups = []; state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseListCache = null; state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
-    state.courseSelected.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false; state.courseDiagnostics = null; state.courseClientWaitMs = 0; state.courseLastStep = '请求准备'; state.courseLastRequestMs = 0; state.courseLastClientRequestMs = 0;
+    state.coursePartChoices.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false; state.courseDiagnostics = null; state.courseClientWaitMs = 0; state.courseLastStep = '请求准备'; state.courseLastRequestMs = 0; state.courseLastClientRequestMs = 0;
     setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
     updateCourseBatchUi();
     showToast('网课会话已清除');
@@ -4564,23 +4652,66 @@ function mergeCourseState(course) {
 function courseResultJson(value) {
   try {
     return JSON.stringify(value, (key, item) => {
-      if (/^(password|coursePassword|pending|cookies|cookie|hyperEspCode|image)$/i.test(key)) return '[已隐藏]';
-      return item;
+      if (/(?:password|token|secret|authorization|cookie|sessionId|sessionKey|elnSession|credential)/i.test(key) || /^(pending|hyperEspCode|image|answerSession)$/i.test(key)) return '[已隐藏]';
+      return typeof item === 'string' ? redactCourseDiagnosticText(item) : item;
     }, 2);
   } catch (_) { return ''; }
+}
+
+function redactCourseDiagnosticText(value) {
+  return String(value || '')
+    .replace(/(https?:\/\/[^\s<>"'?]+)\?[^\s<>"']*/gi, '$1?[已隐藏查询参数]')
+    .replace(/\b(authorization|cookie)\s*[=:][^\r\n<>]+/gi, '$1=[已隐藏]')
+    .replace(/((?:password|token|eln_session_id|elsSign|sessionKey)\s*[=:]\s*)(?:"[^"]*"|'[^']*'|[^\s,;<>]+)/gi, '$1[已隐藏]');
+}
+
+function courseFailureSummary(error, context = {}) {
+  return {
+    kind: 'course-failure',
+    capturedAt: new Date().toISOString(),
+    frontendVersion: COURSE_FRONTEND_VERSION,
+    backendVersion: state.courseApi?.backendVersion || null,
+    courseId: context.courseId || null,
+    workflow: context.workflow || null,
+    code: error?.code || 'UNKNOWN',
+    message: redactCourseDiagnosticText(error?.message || '请求失败').slice(0, 1000),
+    requestId: error?.requestId || null,
+    authScope: error?.authScope || (['SESSION_EXPIRED', 'AUTH_REQUIRED'].includes(error?.code) ? 'course' : null),
+    resourceDiagnostics: error?.resourceDiagnostics || null,
+  };
+}
+
+function applyCourseSessionError(code, message) {
+  const normalizedCode = String(code || '').trim();
+  const normalizedMessage = String(message || '').trim();
+  if (!['SESSION_EXPIRED', 'AUTH_REQUIRED'].includes(normalizedCode)
+    && !/网课会话已失效|请先登录网课账号|直连网课会话未登录|请重新登录/i.test(normalizedMessage)) return false;
+  const expired = normalizedCode === 'SESSION_EXPIRED' || /会话已失效|登录状态已失效/i.test(normalizedMessage);
+  state.courseBatchPauseRequested = true;
+  state.courseAuthenticated = false;
+  state.courseSessionStatus = expired ? 'expired' : 'logged_out';
+  state.courseChallenge = null;
+  state.courseSessionMessage = expired
+    ? '网课登录已失效，可能已在官网或其他位置登录。请在这里重新登录后继续，已有任务不会被清空。'
+    : '请先登录网课账号；已有任务保留，登录后可继续。';
+  const connection = $('courseConnection');
+  if (connection) connection.open = true;
+  renderCourseSessionState();
+  renderCourseBatchControls();
+  return true;
 }
 
 function showCourseOutput(title, detail, tone = 'success', raw = null) {
   const output = $('courseOutput');
   if (!output) return;
   const json = raw ? courseResultJson(raw) : '';
-  output.innerHTML = `<div class="course-output-card ${tone}"><div class="course-output-title">${escapeHtml(title)}</div><div class="course-output-detail">${escapeHtml(detail)}</div>${json ? `<details><summary>查看返回摘要</summary><pre>${escapeHtml(json)}</pre></details>` : ''}</div>`;
+  output.innerHTML = `<div class="course-output-card ${tone}"><div class="course-output-title">${escapeHtml(title)}</div><div class="course-output-detail">${escapeHtml(detail)}</div>${json ? `<button type="button" class="btn btn-sm btn-ghost" data-course-copy-diagnostics>复制诊断</button><details><summary>查看返回摘要</summary><pre data-course-diagnostics>${escapeHtml(json)}</pre></details>` : ''}</div>`;
   output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 async function loadCourseBatchStatus({ silent = false } = {}) {
   if (!state.isAdmin) {
-    state.courseBatch = null;
+    // Login expiry must not erase the currently displayed checkpoint.
     updateCourseBatchUi();
     return null;
   }
@@ -4601,10 +4732,22 @@ function courseBatchPreviewMessage(preview) {
   const names = items.slice(0, 8).map((item, index) => `${index + 1}. ${item.courseName || item.courseId}`).join('\n');
   const extra = items.length > 8 ? `\n……另有 ${items.length - 8} 门` : '';
   const examSkipped = [...items, ...skipped].filter(item => item.examSkipped === true).length;
+  if (preview.taskScope) {
+    const scope = preview.taskScope === 'full' ? '整门课程所需的视频、评估、考试' : `仅${courseWorkflowLabel(preview.taskScope)}`;
+    const blocked = skipped.filter(item => item.complete !== true);
+    const scopeNames = items.map((item, index) => `${index + 1}. ${item.courseName || item.courseId}：${(item.plannedWorkflows || []).map(courseWorkflowLabel).join(' → ')}`).join('\n');
+    const includesEvaluation = items.some(item => (item.plannedWorkflows || []).includes('evaluation'));
+    const includesExam = items.some(item => (item.plannedWorkflows || []).includes('exam'));
+    const policy = includesEvaluation
+      ? '课程评估按当前已实现规则执行：星级选择 5 星，数字评分取可用最高值，必填文字填写“好”，非必填文字留空；遇到未识别字段会停止，不猜测。'
+      : '';
+    const examPolicy = includesExam ? '考试仅使用题库中已安全匹配的答案，题面或答案不完整时停止，不自动补考。' : '';
+    return `执行范围：${scope}\n可执行 ${items.length} 门 · 已完成 ${skipped.length - blocked.length} 门 · 暂不可执行 ${blocked.length} 门\n\n${preview.taskScope === 'full' ? '每步后重新读取后续要求，整课完成必须由平台确认。' : '不会代做其他环节；前置条件不足时不扩大范围。'}\n${[policy, examPolicy].filter(Boolean).join('\n')}\n单门资源问题会记录并继续其他课程；登录失效或提交结果不明会暂停。关闭页面会停止后续请求，任务进度保留。\n\n${scopeNames}${blocked.length ? '\n\n暂未执行：\n' + blocked.map(item => `${item.courseName || item.courseId}：${item.reason}`).join('\n') : ''}`;
+  }
   return `平台最新预览：可执行 ${items.length} 门，跳过 ${skipped.length} 门。\n\n只会依次完成视频学习和课程评价；不会进入或提交考试。${examSkipped ? `\n其中 ${examSkipped} 门涉及考试，考试部分将跳过。` : ''}\n任一步骤完成后都会复核平台状态；出现异常会自动停止。\n\n${names}${extra}`;
 }
 
-async function startCourseBatch(mode = 'all') {
+async function startCourseBatch(mode = 'all', { taskScope = 'full', courseIds = [] } = {}) {
   if (state.courseBusy || state.courseBatchPumping) return;
   if (!state.courseApiCompatible) {
     showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
@@ -4614,9 +4757,9 @@ async function startCourseBatch(mode = 'all') {
     showToast('已有未结束的一键完成任务，请先继续或取消', true);
     return;
   }
-  const selectedCourseIds = mode === 'selected' ? [...state.courseSelected] : [];
+  const selectedCourseIds = mode === 'selected' ? [...new Set(courseIds.map(String))] : [];
   if (mode === 'selected' && selectedCourseIds.length === 0) {
-    showToast('请先勾选至少一门课程', true);
+    showToast('请先明确选择要完成的课程', true);
     return;
   }
 
@@ -4629,16 +4772,24 @@ async function startCourseBatch(mode = 'all') {
   renderCourseBatchControls();
   try {
     showCourseOutput('正在生成一键完成预览', '服务器正在重新读取平台课程状态，本步骤不会产生写入。', 'warning');
-    const previewResult = await courseFetch('batchPreview', { batchMode: mode, courseIds: selectedCourseIds });
+    const previewResult = await courseFetch('batchPreview', { batchMode: mode, courseIds: selectedCourseIds, taskScope });
     const preview = previewResult.preview || {};
+    if (preview.taskScope !== taskScope) {
+      showCourseOutput('尚未开始', '后端没有确认本次执行范围，请部署匹配版本后再试；没有创建或执行任务。', 'error', previewResult);
+      return;
+    }
     if (Number(preview.executableCount || 0) === 0) {
       const skipped = Array.isArray(preview.skipped) ? preview.skipped : [];
       const reasons = skipped.slice(0, 10).map(item => `${item.courseName || item.courseId}：${item.reason || '不可执行'}`).join('\n');
-      showCourseOutput('当前没有可一键完成的课程', reasons || '平台未返回待完成的视频或课程评价。', 'warning', previewResult);
+      showCourseOutput('所选范围当前无需执行或尚不可执行', reasons || '平台未返回所选范围的待完成环节。', 'warning', previewResult);
+      return;
+    }
+    if (preview.examExecutionEnabled !== true && (preview.items || []).some(item => (item.plannedWorkflows || []).includes('exam'))) {
+      showCourseOutput('尚未开始：考试能力未开启', '本次范围包含考试，但后端尚未启用考试提交。可以先选择仅视频或仅评估；完整任务需要先启用并验证考试能力。没有创建或执行任务。', 'warning', previewResult);
       return;
     }
     showCourseOutput('一键完成预览已生成', courseBatchPreviewMessage(preview), 'warning', previewResult);
-    const confirmed = await showConfirm('确认一键完成', courseBatchPreviewMessage(preview));
+    const confirmed = await showConfirm(taskScope === 'full' ? '确认完成课程' : `确认只完成${courseWorkflowLabel(taskScope)}`, courseBatchPreviewMessage(preview));
     if (!confirmed) {
       showToast('已取消，本次预览没有产生写入');
       return;
@@ -4646,7 +4797,6 @@ async function startCourseBatch(mode = 'all') {
 
     const created = await courseFetch('batchCreate', { previewId: preview.previewId, confirm: true });
     state.courseBatch = created.batch || null;
-    state.courseSelected.clear();
     state.courseBatchPauseRequested = false;
     state.courseBatchCancelRequested = false;
     renderCourseList();
@@ -4654,7 +4804,7 @@ async function startCourseBatch(mode = 'all') {
     showCourseOutput('一键完成任务已创建', '开始逐门执行。每次只提交一个已确认的步骤，并在提交后复核平台状态。', 'warning', created);
     await pumpCourseBatch();
   } catch (e) {
-    showCourseOutput('一键完成启动失败', e.message, 'error');
+    showCourseOutput('一键完成启动失败', e.message, 'error', courseFailureSummary(e, { courseId: selectedCourseIds.length === 1 ? selectedCourseIds[0] : null, workflow: taskScope }));
     showToast(`一键完成启动失败：${e.message}`, true);
     await loadCourseBatchStatus({ silent: true });
   } finally {
@@ -4724,21 +4874,26 @@ async function pumpCourseBatch() {
 
     const batch = state.courseBatch;
     if (batch?.status === 'completed') {
-      showCourseOutput('一键完成已结束', `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门；所有写入步骤均已通过平台复核。考试没有执行。`, 'success', { batch });
+      const completionText = batch.taskScope === 'full'
+        ? `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门；所有必要步骤均已通过平台复核，整课完成以平台确认状态为准。`
+        : batch.taskScope
+          ? `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门的${courseWorkflowLabel(batch.taskScope)}；其他环节未被执行。`
+          : `已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门历史任务范围（视频与评估）；考试未纳入本任务。`;
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已结束`, completionText, 'success', { batch });
       showToast('一键完成任务已结束');
     } else if (batch?.status === 'completed_with_errors') {
-      showCourseOutput('一键完成已结束，但存在失败课程', batch.reason || '请查看任务详情并人工复核。', 'warning', { batch });
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已结束，但有未完成项目`, `${batch.reason || '请查看任务详情并人工复核。'}\n已完成 ${batch.completedCourses || 0}/${batch.totalCourses || 0} 门；未执行或失败的项目不会被算作完成。`, 'warning', { batch });
       showToast('任务结束，但有失败课程', true);
     } else if (batch?.status === 'stopped') {
-      showCourseOutput('一键完成已停止', `${batch.reason || '平台复核未通过'}\n未开始的课程没有执行，可修复后点击“继续剩余课程”。`, 'error', { batch });
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已停止`, `${batch.reason || '平台复核未通过'}\n未开始的课程没有执行，可修复后点击“继续剩余课程”。`, 'error', { batch });
       showToast('任务遇到问题，已停止', true);
     } else if (batch?.status === 'paused') {
-      showCourseOutput('一键完成已暂停', '当前步骤已处理完毕，后续课程尚未执行。', 'warning', { batch });
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已暂停`, '当前步骤已处理完毕，后续课程尚未执行；恢复后只会继续本任务范围。', 'warning', { batch });
     } else if (batch?.status === 'cancelled') {
-      showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', { batch });
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已取消`, '未开始的课程不会执行，本任务范围外的环节也不会被执行。', 'warning', { batch });
     }
   } catch (e) {
-    showCourseOutput('一键完成请求失败', `${e.message}\n浏览器已停止继续发送步骤，请读取任务状态后再决定是否继续。`, 'error');
+    showCourseOutput('一键完成请求失败', `${e.message}\n浏览器已停止继续发送步骤，请读取任务状态后再决定是否继续。`, 'error', courseFailureSummary(e));
     showToast(`一键完成请求失败：${e.message}`, true);
     await loadCourseBatchStatus({ silent: true });
   } finally {
@@ -4847,7 +5002,7 @@ async function previewCourse(courseId, workflow) {
     }
     const outputTone = selectedWorkflow === 'exam' ? 'warning' : data.readyForConfirmation ? 'success' : 'warning';
     showCourseOutput(`预览：${courseWorkflowLabel(selectedWorkflow)}`, detail, outputTone, data);
-  } catch (e) { showCourseOutput('预览失败', e.message, 'error'); showToast(`预览失败：${e.message}`, true); }
+  } catch (e) { showCourseOutput('预览失败', e.message, 'error', courseFailureSummary(e, { courseId, workflow })); showToast(`预览失败：${e.message}`, true); }
 }
 
 async function inspectCourse(courseId) {
@@ -4856,16 +5011,19 @@ async function inspectCourse(courseId) {
     const course = data.course || {};
     const status = courseStatusData(course);
     showCourseOutput('平台复核完成', `课程：${course.courseName || courseId}\n视频学习：${status.video[0]}\n课程评估：${status.evaluation[0]}\n课程考试：${status.exam[0]}\n得分：${status.score[0]}`, 'success', data);
-    await loadCourseList({ forceRefresh: true });
-  } catch (e) { showCourseOutput('平台复核失败', e.message, 'error'); showToast(`平台复核失败：${e.message}`, true); }
+    // 单课复核已经返回权威状态，直接合并卡片，避免再次读取整套课程与学习地图。
+    if (data.course) mergeCourseState(data.course);
+    else await loadCourseList({ forceRefresh: true });
+  } catch (e) { applyCourseSessionError(e.code, e.message); showCourseOutput('平台复核失败', e.message, 'error', courseFailureSummary(e, { courseId })); showToast(`平台复核失败：${e.message}`, true); }
 }
 
 async function verifyCourse(courseId, workflow) {
   try {
     const data = await courseFetch('verify', { courseId, workflow: workflow || 'auto' });
     showCourseOutput('验证结果', data.verified === true ? '平台复读验证通过。' : `平台复读验证未通过：${data.reason || '状态仍未满足完成条件'}`, data.verified === true ? 'success' : 'warning', data);
-    await loadCourseList({ forceRefresh: true });
-  } catch (e) { showCourseOutput('验证失败', e.message, 'error'); showToast(`验证失败：${e.message}`, true); }
+    if (data.course) mergeCourseState(data.course);
+    else await loadCourseList({ forceRefresh: true });
+  } catch (e) { applyCourseSessionError(e.code, e.message); showCourseOutput('验证失败', e.message, 'error', courseFailureSummary(e, { courseId, workflow })); showToast(`验证失败：${e.message}`, true); }
 }
 
 async function executeCourse(courseId, workflow) {
@@ -4956,15 +5114,9 @@ async function loadCourseTasks() {
 
 // 网课卡片和分组事件代理
 $('courseListContainer').addEventListener('change', e => {
-  const checkbox = e.target.closest('input[data-course-select]');
-  if (!checkbox || courseBatchActive() || state.courseBatchPumping) return;
-  const courseId = String(checkbox.dataset.courseSelect || '');
-  if (!courseId || !courseBatchable(state.courseById.get(courseId))) {
-    checkbox.checked = false;
-    return;
-  }
-  if (checkbox.checked) state.courseSelected.add(courseId); else state.courseSelected.delete(courseId);
-  renderCourseBatchControls();
+  const select = e.target.closest('select[data-course-part]');
+  if (!select || !['video', 'evaluation', 'exam'].includes(select.value)) return;
+  state.coursePartChoices.set(String(select.dataset.coursePart), select.value);
 });
 
 $('courseListContainer').addEventListener('click', async e => {
@@ -4980,10 +5132,22 @@ $('courseListContainer').addEventListener('click', async e => {
   const action = button.dataset.courseAction;
   const courseId = button.dataset.courseId;
   const workflow = button.dataset.workflow || courseNextWorkflow(state.courseById.get(String(courseId))) || 'auto';
+  if (action === 'complete') await startCourseBatch('selected', { taskScope: 'full', courseIds: [courseId] });
+  if (action === 'part') {
+    const part = button.closest('.course-card')?.querySelector('select[data-course-part]')?.value;
+    if (['video', 'evaluation', 'exam'].includes(part)) await startCourseBatch('selected', { taskScope: part, courseIds: [courseId] });
+  }
   if (action === 'preview') await previewCourse(courseId, workflow);
   if (action === 'inspect') await inspectCourse(courseId);
   if (action === 'verify') await verifyCourse(courseId, workflow);
   if (action === 'execute') await executeCourse(courseId, workflow);
+});
+
+$('courseOutput').addEventListener('click', e => {
+  const button = e.target.closest('[data-course-copy-diagnostics]');
+  if (!button) return;
+  const text = $('courseOutput').querySelector('[data-course-diagnostics]')?.textContent;
+  if (text) copyToClipboard(text, button);
 });
 
 $('courseBatchPanel').addEventListener('click', async e => {
@@ -5100,7 +5264,6 @@ $('courseChallengeCode').addEventListener('keypress', e => { if (e.key === 'Ente
 $('courseRefreshBtn').addEventListener('click', () => loadCourseList({ forceRefresh: true }));
 $('courseTasksBtn').addEventListener('click', loadCourseTasks);
 $('courseBatchAllBtn').addEventListener('click', () => startCourseBatch('all'));
-$('courseBatchSelectedBtn').addEventListener('click', () => startCourseBatch('selected'));
 ['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
   $(id).addEventListener('change', () => applyCourseFilters());
 });
@@ -5529,7 +5692,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken) void restoreAdminSession();
 
-console.log('Link · Token 管理 v11.11.1 — 已就绪');
+console.log('Link · Token 管理 v11.12.1 — 已就绪');
 </script>
 </body>
 </html>
