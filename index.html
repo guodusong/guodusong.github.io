@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc1"><title>Snow · 雪松工作台</title><style>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc2"><title>Snow · 雪松工作台</title><style>
 
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -924,6 +924,26 @@ body::before,body::after{display:none}button,input,select,textarea{font-family:i
 .stat-item::before,.subtabs::before,.subtabs::after{display:none}.header h1{text-transform:none}.segmented{max-width:none;width:auto}.inline-form:not(.open){visibility:hidden;pointer-events:none}.inline-form.open{max-height:none;visibility:visible}.course-group{border-color:var(--border);background:transparent}.course-group-head{background:#f0f3e9;border-color:var(--border)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
+</style><style id="snowStudioDesign">
+/* Cedar Studio RC2: presentation only; original structural rules stay in workspace.css. */
+:root{--bg:#f7f7f2;--text:#253b33;--text-secondary:#617269;--text-muted:#6f7e73;--accent:#244e3d;--accent-hover:#183d2e;--accent-light:#e7eee1;--border:#e1e6dc;--border-light:#edf0e8;--snow-sidebar:218px;--radius-lg:16px;--studio-forest:#183f34;--studio-sage:#e6eddf}
+body{letter-spacing:.1px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline-color:#658e70}.snow-public-intro h2 span{color:#5d8055}
+body[data-snow-mode=workspace] .snow-sidebar{background:var(--studio-forest);border:0;color:#f1f5e8;padding:29px 16px}.snow-sidebar .snow-cedar{color:#cedfc1}.snow-sidebar-brand{gap:10px}.snow-sidebar-brand strong{font-size:32px;font-weight:600}.snow-workspace{border-color:#ffffff1b;margin:35px 0 27px;background:#ffffff04}.snow-workspace-avatar{background:#ffffff12;color:#d4e2c8}.snow-workspace small,.snow-nav-caption,.snow-sidebar-foot p,.snow-sidebar-foot .snow-eyebrow{color:#b3c4b8}.snow-sidebar .subtab{color:#bed0c1;font-size:13px;border-radius:8px;min-height:46px}.snow-sidebar .subtab.active{background:#ffffff12;color:#f6f8ef;box-shadow:inset 2px 0 #c8dca6}.snow-sidebar .subtab:hover:not(.active){background:#ffffff09;color:white}.snow-sidebar-foot .btn{color:#c9d9cd;border-color:#ffffff24}.snow-sidebar-foot .btn:hover{background:#ffffff0b}
+body[data-snow-mode=workspace] .app{padding-left:42px;padding-right:42px}.snow-topline{letter-spacing:1.2px}.snow-page-heading{padding:34px 0 27px}.snow-page-heading h2{font-size:30px;font-weight:500;letter-spacing:-.8px}.snow-page-heading p{margin-top:9px;line-height:1.8}.snow-page-heading .snow-eyebrow{font-size:9px}.snow-footer{border-top-color:var(--border);margin-top:34px}.btn{border-radius:8px;font-size:13px}.btn-primary{background:var(--accent);border-color:var(--accent)}.seg-btn.active{background:var(--studio-forest)}
+body[data-studio-page=overview] .stats{display:none!important}.studio-hero{background:var(--studio-sage);border-radius:16px;position:relative;padding:32px 38px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;min-height:290px}.studio-hero-copy{z-index:1;position:relative}.studio-hero .snow-eyebrow{font-size:9px;color:#637d58}.studio-hero h2{font-size:34px;line-height:1.45;letter-spacing:-1px;font-weight:500;margin:16px 0 10px}.studio-hero p{font-size:12px;color:#637b58;margin-bottom:25px}.studio-hero .btn{font-size:12px;padding:11px 18px}.studio-hero .btn span{margin-left:20px}.studio-orbit{--progress:0%;background:conic-gradient(#688a56 var(--progress),#cad7bc 0);border-radius:50%;width:168px;height:168px;padding:5px;z-index:1;margin-right:55px;flex-shrink:0}.studio-orbit>div{height:100%;border:7px solid var(--studio-sage);border-radius:50%;background:var(--studio-sage);display:flex;align-content:center;justify-content:center;align-items:baseline;flex-wrap:wrap;padding:24px 0}.studio-orbit strong{font-size:52px;line-height:1.2;letter-spacing:-2px;font-weight:400;color:#486440}.studio-orbit span{font-size:22px;color:#6a835d;white-space:pre}.studio-orbit small{display:block;flex-basis:100%;text-align:center;font-size:10px;color:#657e59;margin-top:9px}.studio-hero-tree{position:absolute;right:-35px;bottom:-82px;opacity:.12;transform:rotate(18deg)}.studio-hero-tree .snow-cedar{width:220px;height:275px}
+.studio-home-columns{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(240px,1fr);gap:34px;margin-top:31px}.studio-section-heading{display:flex;gap:14px;justify-content:space-between;align-items:center;min-height:42px;margin-bottom:12px}.studio-section-heading h3{font-size:16px;font-weight:500}.studio-section-heading>span{font-size:10px;color:var(--text-muted)}.studio-text-button{color:#628452;font-size:12px;background:none;border:0;cursor:pointer;min-height:44px;padding:5px 0}.studio-continue{width:100%;text-align:left;padding:24px;background:#fff;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:18px;color:var(--text);cursor:pointer}.studio-continue:hover{border-color:#aabd9b}.studio-course-art{position:relative;display:block;overflow:hidden;width:49px;height:68px;flex-shrink:0;background:#e9eddf;border-radius:5px}.studio-course-art::before,.studio-course-art::after{content:'';position:absolute;bottom:-2px;border-left:25px solid transparent;border-right:25px solid transparent;border-bottom:60px solid #b3c8a0;left:-15px;transform:rotate(-15deg)}.studio-course-art::after{left:10px;border-bottom-color:#789568;border-bottom-width:46px;transform:rotate(9deg)}.studio-continue-copy{display:grid;gap:8px;min-width:0}.studio-continue-copy small{font-size:10px;color:#6f7e64}.studio-continue-copy strong{font-size:15px;font-weight:500;line-height:1.75;overflow-wrap:anywhere}.studio-continue-copy>span{font-size:11px;color:var(--text-muted)}.studio-entry-arrow{margin-left:auto;color:#638554}.studio-data-note{font-size:11px;color:var(--text-muted);margin:15px 0;line-height:1.9}.studio-attention{border-left:1px solid var(--border);padding-left:30px}.studio-connection{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:11px 0}.studio-connection #snowCourseState{font-size:11px;background:#e9efe3;padding:4px 11px;border-radius:5px}.studio-attention>p{font-size:12px;line-height:1.9;color:var(--text-muted);margin:10px 0}.studio-quick{margin-top:28px;border-top:1px solid var(--border);padding-top:19px}.snow-shortcuts{gap:22px}.snow-shortcut{border:0;background:transparent;border-radius:0;padding:16px 0;gap:10px}.snow-shortcut:hover{background:none;color:#638452}.snow-shortcut .snow-icon{width:22px;height:22px}.snow-shortcut strong{font-size:13px}.snow-shortcut span{font-size:11px}
+#userPanel.active{grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:95px;padding:30px 40px 45px}.snow-public-intro{padding:22px 0 0}.snow-public-intro h2{font-size:37px;line-height:1.5;letter-spacing:-1px;margin:19px 0 14px}.snow-public-intro>p{font-size:13px;max-width:330px;line-height:2}.snow-public-art{display:block;width:300px;height:202px;position:relative;margin-top:23px;background:none;transform:none;border-radius:0}.studio-sun{position:absolute;width:86px;height:86px;border-radius:50%;background:#e3e9d4;left:165px;top:5px}.studio-tree{position:absolute;bottom:14px;z-index:1}.studio-tree .snow-cedar{width:87px;height:140px;color:#799669}.studio-tree.tree-one{left:38px;bottom:16px;transform:rotate(-7deg)}.studio-tree.tree-two{left:111px;bottom:10px}.studio-tree.tree-two .snow-cedar{width:110px;height:177px;color:#496f48}.studio-tree.tree-three{left:205px;bottom:15px;transform:rotate(6deg)}.studio-tree.tree-three .snow-cedar{width:59px;height:100px;color:#a3b78b}.studio-ground{position:absolute;bottom:13px;left:21px;width:260px;height:1px;background:#d1dcc4}#userPanel>.card{border:0;padding:34px 32px;box-shadow:0 9px 35px #38522a05;border-radius:17px}.snow-form-heading h2{font-size:25px;font-weight:500;margin:18px 0 10px}.snow-form-heading label{margin-top:26px}.snow-form-heading p{line-height:1.9}.input{background:#fcfdf9}.tip{background:#f5f6ef;border-color:#edf0e4}#verifyBtn{min-height:49px}
+.course-group{border:0;border-radius:0;background:transparent;margin:0 0 18px}.course-group-header{background:transparent;border:0;border-bottom:1px solid var(--border);padding:16px 1px;box-shadow:none;gap:10px;color:var(--text)}.course-group-title{font-size:13px;font-weight:500}.course-group-meta{font-size:10px;color:var(--text-muted)}.course-group-body{padding:0}.course-card[data-studio-enhanced]{display:grid;grid-template-columns:49px minmax(0,1fr) 124px auto;align-items:center;gap:20px;padding:23px 5px;border:0;border-bottom:1px solid var(--border);border-radius:0;background:transparent;margin:0;box-shadow:none}.course-card[data-studio-enhanced]:hover{background:#f0f3e980}.course-card[data-studio-enhanced]>.course-card-top{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}.course-card[data-studio-enhanced] .course-card-name{font-size:14px;line-height:1.8;font-weight:500;overflow-wrap:anywhere}.course-card[data-studio-enhanced]>.course-card-top>.course-badge{font-size:10px;border:0;padding:3px 8px}.studio-row-progress{font-size:10px;color:var(--text-muted);display:grid;gap:9px}.studio-track{display:block;height:4px;background:#e1e7d8;border-radius:6px;overflow:hidden}.studio-track>i{height:100%;display:block;background:#8ca779;border-radius:6px}.studio-open{font-size:11px;background:transparent;white-space:nowrap}.studio-course-dialog{border:0;border-radius:16px 0 0 16px;background:var(--bg);color:var(--text);width:500px;max-width:calc(100vw - 24px);max-height:100dvh;height:100dvh;margin:0 0 0 auto;padding:27px;overflow:auto;overscroll-behavior:contain;box-shadow:-15px 0 70px #15342118}.studio-course-dialog::backdrop{background:#172c2755;backdrop-filter:blur(4px)}body:has(.studio-course-dialog[open]){overflow:hidden}.studio-sheet-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:26px}.studio-sheet-title{font-size:23px;font-weight:500;line-height:1.6;margin-bottom:26px;overflow-wrap:anywhere}.studio-course-dialog .course-card-actions{display:flex;flex-wrap:wrap;margin-top:20px}.studio-course-dialog .course-part-action{display:flex;flex-wrap:wrap;gap:8px;width:100%}.studio-course-dialog .course-part-action .input{min-width:0;flex:1}.studio-course-dialog .course-status-grid{margin:20px 0}.studio-course-dialog .course-next-step{line-height:1.9;font-size:13px}.studio-course-dialog .course-card-id{overflow-wrap:anywhere}.studio-course-dialog .course-advanced{margin-top:24px}.studio-course-dialog .course-advanced summary{min-height:44px}.studio-course-dialog .course-card-meta{line-height:2}
+.course-summary{display:flex;flex-wrap:wrap;gap:7px 18px;padding:13px 0;margin:0 0 8px;border-bottom:1px solid var(--border)}.course-summary-item{background:transparent;border:0;border-radius:0;padding:3px 0;font-size:11px;box-shadow:none}.course-summary-item strong{font-weight:500;font-size:13px}.course-summary-item.danger{color:#94664a}.course-toolbar{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0;padding:12px 0}.course-connection{background:#f2f5ec}.course-head h3{font-size:18px;font-weight:500}.course-head p{font-size:12px}.course-badges .course-badge{font-size:10px}.course-session-message.success{background:#edf3e8;border-color:#dfe8d7}.course-batch-item.done{background:#eef4e8}
+@media(max-width:1180px){body[data-snow-mode=workspace] .app{padding-left:27px;padding-right:27px}.studio-orbit{margin-right:8px}.studio-hero{padding:28px}.studio-home-columns{gap:24px}.studio-attention{padding-left:22px}#userPanel.active{gap:40px;padding-left:0;padding-right:0}.snow-public-intro h2{font-size:32px}.course-card[data-studio-enhanced]{gap:14px;grid-template-columns:43px minmax(0,1fr) 94px auto}}
+@media(max-width:960px){.studio-home-columns{grid-template-columns:1fr}.studio-attention{border-left:0;padding-left:0;border-top:1px solid var(--border);padding-top:17px}.studio-hero h2{font-size:29px}.studio-orbit{width:135px;height:135px;margin-right:0}.studio-orbit>div{padding:17px 0}.studio-orbit strong{font-size:39px}.studio-orbit span{font-size:18px}.course-card[data-studio-enhanced]{grid-template-columns:43px minmax(0,1fr) auto}.studio-row-progress{grid-column:2/4;grid-row:2}.studio-open{grid-column:3;grid-row:1}}
+@media(max-width:760px){body[data-snow-mode=workspace] .app{padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}.snow-page-heading{padding:25px 0 23px}.snow-page-heading h2{font-size:26px}.snow-page-heading p{font-size:12px}.snow-page-heading .snow-eyebrow{display:none}.snow-mobile-nav button.selected{color:#456d3d;background:transparent;position:relative}.snow-mobile-nav button.selected::before{content:'';position:absolute;top:0;width:23px;height:2px;border-radius:2px;background:#69885b}.studio-hero{padding:24px 22px;min-height:270px;align-items:flex-start}.studio-hero h2{font-size:28px}.studio-hero p{font-size:11px;max-width:174px;line-height:1.9;margin-bottom:23px}.studio-hero .snow-eyebrow{font-size:8px;letter-spacing:1.1px}.studio-hero .btn{font-size:11px;min-height:43px;padding:10px 12px}.studio-hero .btn span{margin-left:8px}.studio-orbit{position:absolute;width:108px;height:108px;right:14px;top:62px;padding:4px}.studio-orbit>div{padding:12px 0;border-width:4px}.studio-orbit strong{font-size:33px}.studio-orbit span{font-size:15px}.studio-orbit small{font-size:8px;margin-top:6px}.studio-home-columns{margin-top:22px;gap:19px}.studio-section-heading{gap:8px;margin-bottom:9px}.studio-section-heading h3{font-size:15px}.studio-section-heading>span{font-size:9px}.studio-text-button{font-size:11px}.studio-continue{padding:19px 15px;gap:12px}.studio-continue-copy strong{font-size:14px}.studio-continue-copy>span{font-size:11px}.studio-course-art{width:43px;height:61px}.studio-data-note{font-size:11px}.studio-quick{margin-top:22px}.snow-shortcuts{grid-template-columns:1fr;gap:0}.snow-shortcut{display:grid;grid-template-columns:26px 1fr;gap:6px 14px;border-bottom:1px solid var(--border);padding:17px 0}.snow-shortcut .snow-icon{grid-row:1/3}.snow-shortcut span{grid-column:2}.snow-shortcut:last-child{border:0}.snow-footer{font-size:8px;letter-spacing:1px}
+#userPanel.active{gap:25px;padding:9px 0 30px}.snow-public-intro{padding:0 2px}.snow-public-intro h2{font-size:28px;margin:12px 0 10px}.snow-public-intro>p{font-size:12px;max-width:330px}.snow-public-intro .snow-eyebrow{font-size:8px}.snow-public-art{display:none}#userPanel>.card{padding:27px 23px}.snow-form-heading h2{font-size:23px}.snow-form-heading label{margin-top:23px}.header{padding-top:12px}.snow-form-heading .snow-eyebrow{font-size:9px}
+.course-card[data-studio-enhanced]{background:#fff;border:0;border-radius:12px;grid-template-columns:43px minmax(0,1fr);padding:20px 17px;gap:13px;margin-bottom:12px}.course-card[data-studio-enhanced]:hover{background:white}.course-card[data-studio-enhanced]>.course-card-top{grid-column:2;grid-row:1}.course-card[data-studio-enhanced]>.studio-course-art{grid-row:1}.course-card[data-studio-enhanced] .course-card-name{font-size:14px}.studio-open{grid-row:2;grid-column:1/3;justify-self:end;min-height:44px;font-size:12px}.studio-row-progress{grid-column:1/3;grid-row:3;font-size:11px}.course-group-header{flex-wrap:wrap;gap:6px;text-align:left}.course-group-meta{flex-basis:100%;padding-left:18px;font-size:10px}.course-group-body{padding:14px 0 0}.studio-course-dialog{width:100%;max-width:100%;height:auto;max-height:calc(100dvh - 28px);margin:auto 0 0;padding:22px 23px calc(27px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0}.studio-sheet-title{font-size:21px}.studio-sheet-heading{margin-bottom:21px}.studio-course-dialog .btn{min-height:44px}.studio-course-dialog .course-card-actions>.btn{flex:1 1 auto}.studio-course-dialog .course-part-action{flex-direction:column}.studio-course-dialog .course-status-grid{grid-template-columns:1fr}.studio-course-dialog .course-part-action .input{width:100%;flex:auto}.studio-course-dialog .course-card-actions{max-width:100%}
+}
+@media(max-width:400px){.studio-orbit{top:auto;bottom:25px}.studio-hero p{max-width:155px}}
+@media(max-width:360px){.studio-hero{padding:21px 18px}.studio-hero h2{font-size:25px}.studio-orbit{width:87px;height:87px;right:10px}.studio-orbit strong{font-size:27px}.studio-orbit span{font-size:12px}.studio-orbit small{font-size:7px;margin-top:4px}.studio-orbit>div{padding:8px 0}.studio-hero p{max-width:155px}.snow-public-intro h2{font-size:25px}.studio-section-heading>span{display:none}}
+
 </style></head><body>
 
 
@@ -1316,7 +1336,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const icon = key => '<svg class="snow-icon" viewBox="0 0 24 24" aria-hidden="true">'+paths[key]+'</svg>';
   const modules = {
-    overview:['总览','一切进展，一目了然。','从这里进入你的日常工作，状态以实际读取结果为准。'],
+    overview:['总览','让今天，更从容一点。','学习进度与日常事务，在一个清晰的空间里。'],
     tokens:['访问凭证','每一份访问，都有归属。','管理 Token、剩余次数与批量操作。'],
     course:['学习管理','学习，清晰有序。','连接账号、查看课程、处理任务，完成状态以平台确认为准。'],
     questions:['资料题库','资料有序，查找有据。','查询、导入和维护题库；保留原有校验与备份流程。'],
@@ -1407,6 +1427,119 @@ document.addEventListener('DOMContentLoaded', () => {
   // Observe subtab active classes for programmatic navigation after login/session restore.
   new MutationObserver(update).observe(nav,{attributes:true,subtree:true,attributeFilter:['class']});
   update();
+});
+
+</script>
+<script id="snowStudioUI">
+/* RC2 presentation layer. No requests, persistence, or replacement business handlers. */
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+  const el = id => document.getElementById(id);
+  const make = (tag, cls, text) => { const node=document.createElement(tag); node.className=cls; if(text!==undefined)node.textContent=text; return node; };
+  const tree = document.querySelector('.brand-mark').innerHTML;
+  const art=document.querySelector('.snow-public-art');
+  art.innerHTML='<span class="studio-sun"></span><span class="studio-tree tree-one">'+tree+'</span><span class="studio-tree tree-two">'+tree+'</span><span class="studio-tree tree-three">'+tree+'</span><span class="studio-ground"></span>';
+  document.querySelector('.snow-public-intro h2').innerHTML='把繁琐留在身后。<br>把时间，<span>留给自己。</span>';
+  document.querySelector('.snow-public-intro p').textContent='一个安静、有序的工具入口。从验证凭证开始，让每一步都简单一点。';
+  document.querySelector('.snow-public-intro .snow-eyebrow').textContent='LESS FRICTION. MORE FOCUS.';
+  document.querySelector('.snow-form-heading .snow-eyebrow').textContent='01 / PERSONAL ACCESS';
+  document.querySelector('.snow-sidebar-foot .snow-eyebrow').textContent='CEDAR / UI 12.0.0 RC2';
+  document.querySelector('.snow-footer').textContent='SNOW WORKSPACE / CEDAR STUDIO 12.0.0 RC2';
+  const home=el('subOverview');
+  // Keep the connection label observed by the base adapter; reuse the original shortcuts.
+  const status=el('snowCourseState'),shortcuts=home.querySelector('.snow-shortcuts');
+  home.replaceChildren();
+  const hero=make('section','studio-hero');
+  hero.innerHTML='<div class="studio-hero-copy"><div class="snow-eyebrow">MAKE ROOM FOR PROGRESS</div><h2>每一点进步，<br>都值得被看见。</h2><p>从一门课程开始，让学习更有条理。</p><button class="btn btn-primary" data-snow-go="course">进入学习管理 <span aria-hidden="true">→</span></button></div><div class="studio-orbit" role="img"><div><strong id="studioCompleted">—</strong><span id="studioTotal"></span><small>平台确认完成</small></div></div><span class="studio-hero-tree" aria-hidden="true">'+tree+'</span>';
+  const columns=make('div','studio-home-columns');
+  columns.innerHTML='<section><div class="studio-section-heading"><h3>接下来，继续学习</h3><button class="studio-text-button" data-snow-go="course">查看课程 →</button></div><div id="studioContinue"></div><p class="studio-data-note" id="studioDataNote"></p></section><section class="studio-attention"><div class="studio-section-heading"><h3>需要留意</h3><span>先确认，再继续</span></div><div class="studio-connection"><span>学习平台连接</span></div><p id="studioAttention"></p><button class="studio-text-button" data-snow-go="course">查看状态与诊断 →</button></section>';
+  columns.querySelector('.studio-connection').append(status);
+  const quick=make('section','studio-quick');quick.innerHTML='<div class="studio-section-heading"><h3>工作空间里的其他事</h3><span>各归其位，随时可用</span></div>';quick.append(shortcuts);
+  home.append(hero,columns,quick);
+  let lastHome='', wasLogged=false, activeDialog=null, returnFocus=null;
+  const list=el('courseListContainer');
+  function closeDetails(restore=true){
+    if(activeDialog?.open)activeDialog.close();
+    activeDialog=null;
+    if(restore&&returnFocus?.isConnected)returnFocus.focus();
+    returnFocus=null;
+  }
+  function renderHome(){
+    const loaded=state.isAdmin&&state.courseAuthenticated&&state.courseGroupsInitialized;
+    const courses=loaded?(state.courseAllCourses||[]):[];
+    const done=courses.filter(coursePlatformComplete).length;
+    const pending=courses.filter(c=>!coursePlatformComplete(c));
+    const next=pending.find(c=>c.eligibility?.allowed===true&&c.mapOnly!==true)||pending[0];
+    const unavailable=pending.filter(c=>c.mapOnly===true||c.eligibility?.allowed!==true).length;
+    const signature=JSON.stringify([loaded,done,courses.length,next?.courseName,unavailable,state.courseLoading,state.courseApiCompatible]);
+    if(signature===lastHome)return;lastHome=signature;
+    el('studioCompleted').textContent=loaded?String(done):'—';
+    el('studioTotal').textContent=loaded?' / '+courses.length:'';
+    const percent=loaded&&courses.length?Math.round(done/courses.length*100):0;
+    const orbit=home.querySelector('.studio-orbit');orbit.style.setProperty('--progress',percent+'%');
+    orbit.setAttribute('aria-label',loaded?'最近读取的课程中，平台确认完成 '+done+' / '+courses.length+' 门':'课程尚未读取');
+    const entry=make('button','studio-continue');entry.type='button';entry.dataset.snowGo='course';
+    const symbol=make('span','studio-course-art');symbol.setAttribute('aria-hidden','true');
+    const copy=make('span','studio-continue-copy');
+    copy.append(make('small','',loaded?'最近读取的课程':'LEARNING STARTS HERE'),make('strong','',!loaded?'先连接，了解你的学习进度':next?next.courseName||'未命名课程':courses.length?'当前读取的课程均已完成':'当前未读取到课程'),make('span','',!loaded?'进入学习管理后读取平台状态':next?'进入学习管理查看详情与可执行环节':'可刷新课程，查看是否有新的安排'));
+    entry.append(symbol,copy,make('span','studio-entry-arrow','→'));el('studioContinue').replaceChildren(entry);
+    el('studioDataNote').textContent=state.courseLoading?'正在读取，暂保留上次结果。':loaded?'统计基于最近一次读取的全部课程，不随列表筛选变化；不是实时监控。':'尚未读取课程。连接账号并读取课程后，即可查看学习进度。';
+    el('studioAttention').textContent=!loaded?'连接学习平台后，这里会汇总课程状态。':!state.courseApiCompatible?'当前接口尚未确认兼容，请先查看学习管理中的具体提示。':unavailable?unavailable+' 门未完成课程当前仅可查看或不满足执行条件，请在课程详情中确认原因。':'操作结果以平台复核为准。遇到失败或待确认，请先查看执行诊断，不要重复提交。';
+  }
+  function enhanceCards(){
+    // Dialog remains under its original article AND delegated event root.
+    // Existing selects/buttons are moved, not cloned, preserving handlers and payloads.
+    if(activeDialog&&!activeDialog.isConnected)closeDetails(false);
+    for(const card of list.querySelectorAll('.course-card:not([data-studio-enhanced])')){
+      card.dataset.studioEnhanced='true';
+      const course=state.courseById.get(card.dataset.courseId);
+      const top=card.querySelector('.course-card-top');if(!top)continue;
+      const name=card.querySelector('.course-card-name').textContent;
+      const dialog=make('dialog','studio-course-dialog');dialog.setAttribute('aria-label',name+' · 课程详情');
+      const heading=make('div','studio-sheet-heading');heading.append(make('span','snow-eyebrow','COURSE DETAILS'));
+      const close=make('button','btn btn-ghost','关闭');close.type='button';close.dataset.studioClose='';heading.append(close);
+      dialog.append(heading,make('h2','studio-sheet-title',name));
+      [...card.children].filter(n=>n!==top).forEach(n=>dialog.append(n));
+      const art=make('span','studio-course-art');art.setAttribute('aria-hidden','true');
+      const progress=make('div','studio-row-progress');
+      const raw=course?.studyRate;
+      const known=raw!==null&&raw!==undefined&&raw!==''&&Number.isFinite(Number(raw));
+      const rate=known?Math.min(100,Math.max(0,Number(raw))):null;
+      if(!known){
+        const value=dialog.querySelector('.course-status-item .course-status-value');
+        if(value){value.textContent='进度待确认（平台未返回）';value.className='course-status-value neutral';}
+      }
+      const caption=make('span','',rate===null?'视频进度待确认':'视频学习 '+rate+'%');
+      const track=make('span','studio-track');const fill=make('i','');fill.style.width=(rate??0)+'%';track.append(fill);progress.append(caption,track);
+      const open=make('button','btn btn-ghost studio-open','查看详情 →');open.type='button';open.dataset.studioOpen='';open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-label','查看详情：'+name);
+      card.prepend(art);card.append(progress,open,dialog);
+      dialog.addEventListener('cancel',()=>{activeDialog=null;returnFocus=null;});
+    }
+  }
+  list.addEventListener('click',e=>{
+    if(e.target.closest('[data-studio-close]')){closeDetails();return;}
+    const open=e.target.closest('[data-studio-open]');
+    if(open){closeDetails(false);returnFocus=open;activeDialog=open.closest('.course-card').querySelector('.studio-course-dialog');activeDialog.showModal();return;}
+    // Close before original actions show their non-native confirmation/diagnostic panels.
+    if(e.target.closest('[data-course-action]'))closeDetails(false);
+  },true);
+  function sync(){
+    const logged=state.isAdmin&&!el('adminMain').classList.contains('hidden');
+    if(logged&&!wasLogged){wasLogged=true;switchSubtab('overview');}
+    else if(!logged)wasLogged=false;
+    document.body.dataset.studioPage=state.adminSubtab||'tokens';
+    if(!logged||!el('adminPanel').classList.contains('active')||state.adminSubtab!=='course')closeDetails(false);
+    if(state.adminSubtab==='overview'){
+      el('snowPageTitle').textContent='让今天，更从容一点。';
+      el('snowPageDescription').textContent='学习进度与日常事务，在一个清晰的空间里。';
+    }
+    renderHome();enhanceCards();
+  }
+  new MutationObserver(()=>{enhanceCards();renderHome();}).observe(list,{childList:true,subtree:true});
+  const observer=new MutationObserver(sync);
+  [el('adminMain'),el('adminPanel'),el('adminSubtabs')].forEach(n=>observer.observe(n,{attributes:true,attributeFilter:['class'],subtree:n===el('adminSubtabs')}));
+  [el('courseAuthBadge'),el('courseSummary'),el('courseSessionMessage')].forEach(n=>observer.observe(n,{childList:true,subtree:true}));
+  sync();
 });
 
 </script>
