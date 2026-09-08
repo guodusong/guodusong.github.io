@@ -451,8 +451,8 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v11.12.7 course workflow convergence
-   CSS-first: existing IDs, event hooks and business logic unchanged.
+GSS Responsive UI · v11.12.8 scoped HTTP token-check compatibility
+   HTTP only changes transport guards; course and answer workflows remain unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
   --bg: #f4f7fb;
@@ -1005,6 +1005,15 @@ body::before {
   background: #36b78a;
   box-shadow: 0 0 0 4px rgba(54, 183, 138, .12);
 }
+.header-meta.http-compat {
+  border-color: #fde68a;
+  background: rgba(255, 251, 235, .94);
+  color: #92400e;
+}
+.header-meta.http-compat .header-meta-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, .14);
+}
 
 .segmented {
   max-width: 440px;
@@ -1463,7 +1472,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
       <span class="brand-subtitle">个人管理工作台</span>
     </div>
   </div>
-  <div class="header-meta"><span class="header-meta-dot" aria-hidden="true"></span><span>安全连接</span></div>
+  <div class="header-meta" id="transportStatus"><span class="header-meta-dot" aria-hidden="true"></span><span id="transportStatusText">安全连接</span></div>
 </header>
 
   <!-- Segmented Control -->
@@ -1475,6 +1484,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
   <!-- ═══ User Panel ═══ -->
   <div class="panel active" id="userPanel">
     <div class="card">
+      <div class="result-card warning hidden" id="httpCompatibilityNotice">当前通过 HTTP 兼容模式访问，仅开放普通 Token 验证与代码生成；管理后台和网课功能保持停用。</div>
       <input type="text" id="tokenInput" class="input" placeholder="请输入token" autocomplete="off">
       <button id="verifyBtn" class="btn btn-primary btn-full mt-12">验证并生成代码</button>
       <div id="verifyResult" class="hidden mt-16"></div>
@@ -1484,6 +1494,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
 
   <!-- ═══ Admin Panel ═══ -->
   <div class="panel" id="adminPanel">
+    <div class="result-card warning hidden" id="httpAdminDisabledNotice">当前是 HTTP 兼容模式。为保护管理员与网课信息，本页面不允许登录管理后台；请改用可用的 HTTPS 正式入口。</div>
     <!-- Login -->
     <div class="card" id="adminLoginCard">
       <div class="flex">
@@ -1555,7 +1566,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
       </div>
 
       <!-- Sub-pane: Questions -->
-      <div class="subpane hidden" id="subQuestions" data-question-bank-version="11.12.7">
+      <div class="subpane hidden" id="subQuestions" data-question-bank-version="11.12.8">
         <div class="flex mb-12">
           <select id="questionBatchFilter" class="input" style="flex:2;min-width:150px;">
             <option value="">全部题库</option>
@@ -1711,7 +1722,7 @@ tr:hover td { color: var(--text); background: #f8f6ff; }
 <div class="modal" id="questionStatsModal">
   <div class="modal-card qstats-card">
     <div class="qstats-hd">
-<div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v11.12.7</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
+<div><h3>独立题库管理 <span style="font-size:.68rem;color:var(--text-muted);font-weight:500;">v11.12.8</span></h3><p>查看、筛选、整库替换、删除或回滚；支持整库导出和原子恢复</p></div>
       <button class="btn btn-ghost btn-sm" id="closeQuestionStatsBtn">关闭</button>
     </div>
     <div class="qstats-bd" id="questionStatsBody">
@@ -1796,10 +1807,10 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '11.12.7';
+const COURSE_FRONTEND_VERSION = '11.12.8';
 const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '11.12.7';
+const API_CLIENT_VERSION = '11.12.8';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -1810,6 +1821,41 @@ const SHEETJS_VERSION = '0.20.2';
 const SHEETJS_BUNDLE_SHA256 = '0DCBC967984DE297BD4233CBB77FEBAD8A396C72D8AC0CFAB09094D6D7F6E805';
 const SHEETJS_BUNDLE_ELEMENT_ID = 'gssSheetJsBundle';
 let sheetJsPromise = null;
+
+function isLegacyHttpCompatibilityMode() {
+  return window.location.protocol === 'http:' && window.location.hostname === 'gss.qzz.io';
+}
+
+function insecureTransportAdminError() {
+  const error = new Error('HTTP 兼容模式仅开放普通 Token 验证与代码生成；管理后台和网课功能保持停用');
+  error.code = 'INSECURE_TRANSPORT_ADMIN_DISABLED';
+  return error;
+}
+
+function applyTransportSecurityPolicy() {
+  if (!isLegacyHttpCompatibilityMode()) return;
+  document.getElementById('httpCompatibilityNotice')?.classList.remove('hidden');
+  document.getElementById('httpAdminDisabledNotice')?.classList.remove('hidden');
+  const status = document.getElementById('transportStatus');
+  status?.classList.add('http-compat');
+  const statusText = document.getElementById('transportStatusText');
+  if (statusText) statusText.textContent = 'HTTP 兼容模式';
+  const password = document.getElementById('adminPassword');
+  const login = document.getElementById('loginAdminBtn');
+  if (password) {
+    password.value = '';
+    password.disabled = true;
+    password.placeholder = 'HTTP 模式不开放管理登录';
+  }
+  if (login) login.disabled = true;
+}
+
+function publicVerifyErrorMessage(error) {
+  if (isLegacyHttpCompatibilityMode() && error?.code === 'NETWORK_ERROR') {
+    return 'HTTP 兼容接口未生效或被浏览器拦截，请确认 v11.12.8 后端已经部署';
+  }
+  return error?.message || '验证失败';
+}
 
 function createCourseSessionId() {
   try {
@@ -2538,6 +2584,7 @@ function acceptAdminSession(data) {
 }
 
 async function adminFetch(action, params = {}, requestOptions = {}) {
+  if (isLegacyHttpCompatibilityMode()) throw insecureTransportAdminError();
   const isMutation = ADMIN_MUTATING_ACTIONS.has(action) && !ADMIN_READ_ONLY_ACTIONS.has(action);
   if (isMutation && state.backendCompatibility === 'incompatible') {
     const error = new Error('前后端管理协议不兼容，已停止写入；请先部署匹配版本并执行快速检测');
@@ -2712,6 +2759,7 @@ function formatCourseDuration(value) {
 // 网课接口使用独立命名空间，复用管理员会话；网课平台会话独立失效。
 // 网课密码只能放在 coursePassword 字段，避免与管理员 password 混淆。
 async function courseFetch(courseAction, params = {}, requestOptions = {}) {
+  if (isLegacyHttpCompatibilityMode()) throw insecureTransportAdminError();
   if (!state.isAdmin || (!state.adminPwd && !state.adminSessionToken)) throw new Error('请先登录管理后台');
   const payload = {
     module: 'course',
@@ -2832,9 +2880,10 @@ async function userVerify() {
       showToast('无效的 Token', true);
     }
   } catch(e) {
+    const message = publicVerifyErrorMessage(e);
     $('verifyResult').classList.remove('hidden');
-    $('verifyResult').innerHTML = `<div class="result-card error">${escapeHtml(e.message)}<br><span style="font-size:.76rem;font-weight:400;">请重试或检查网络</span></div>`;
-    showToast(e.message || '验证失败', true);
+    $('verifyResult').innerHTML = `<div class="result-card error">${escapeHtml(message)}${e.requestId ? `<br><span style="font-size:.76rem;font-weight:400;">请求编号：${escapeHtml(e.requestId)}</span>` : ''}</div>`;
+    showToast(message, true);
   } finally {
     btn.textContent = orig; btn.disabled = false;
   }
@@ -2844,16 +2893,18 @@ function renderVerifyResult(token, remain, hasCode) {
   const color = hasCode ? 'success' : 'warning';
   const icon = '';
   let h = `<div class="result-card ${color}">验证通过 · 剩余 <strong style="font-size:1.1rem;">${remain}</strong> 次
-    <button class="btn btn-ghost btn-sm" id="toggleRenameBtn" style="margin-left:12px;">修改token</button></div>
-    <div class="rename-panel hidden" id="renamePanel">
-      <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">输入新的token名称：</div>
-      <div class="flex">
-        <input type="text" id="newTokenNameInput" class="input" placeholder="新token名称" style="flex:2;">
-        <button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button>
-        <button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button>
-      </div>
-      <div id="renameMsg" class="text-sm mt-8"></div>
-    </div>`;
+    ${isLegacyHttpCompatibilityMode() ? '' : '<button class="btn btn-ghost btn-sm" id="toggleRenameBtn" style="margin-left:12px;">修改token</button>'}</div>`;
+  if (!isLegacyHttpCompatibilityMode()) {
+    h += `<div class="rename-panel hidden" id="renamePanel">
+        <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">输入新的token名称：</div>
+        <div class="flex">
+          <input type="text" id="newTokenNameInput" class="input" placeholder="新token名称" style="flex:2;">
+          <button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button>
+          <button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button>
+        </div>
+        <div id="renameMsg" class="text-sm mt-8"></div>
+      </div>`;
+  }
   if (hasCode) {
     const { primary: c1, fallback: c2 } = buildAnswerBootstrapCodes(token);
     h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
@@ -2881,6 +2932,7 @@ function buildAnswerBootstrapCodes(token) {
 let adminSessionRestoreGeneration = 0;
 
 async function restoreAdminSession() {
+  if (isLegacyHttpCompatibilityMode()) return false;
   if (!state.adminSessionToken || state.isAdmin) return false;
   const generation = ++adminSessionRestoreGeneration;
   const btn = $('loginAdminBtn');
@@ -2908,6 +2960,10 @@ async function restoreAdminSession() {
 }
 
 async function adminLogin() {
+  if (isLegacyHttpCompatibilityMode()) {
+    showToast(insecureTransportAdminError().message, true);
+    return;
+  }
   adminSessionRestoreGeneration += 1;
   clearStoredAdminSessionToken();
   state.adminSessionToken = '';
@@ -5688,11 +5744,12 @@ document.getElementById('clearAllDevicesBtn')?.addEventListener('click', async (
 
 document.getElementById('refreshActivationsBtn')?.addEventListener('click', loadActivations);
 
+applyTransportSecurityPolicy();
 renderDeploymentStatus();
 renderAdminOperationHistory();
-if (state.adminSessionToken) void restoreAdminSession();
+if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdminSession();
 
-console.log('Link · Token 管理 v11.12.7 — 已就绪');
+console.log('Link · Token 管理 v11.12.8 — 已就绪');
 </script>
 </body>
 </html>
