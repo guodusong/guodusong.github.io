@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc2"><title>Snow · 雪松工作台</title><style>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc3"><title>Snow · 雪松工作台</title><style>
 
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -944,6 +944,29 @@ body[data-studio-page=overview] .stats{display:none!important}.studio-hero{backg
 @media(max-width:400px){.studio-orbit{top:auto;bottom:25px}.studio-hero p{max-width:155px}}
 @media(max-width:360px){.studio-hero{padding:21px 18px}.studio-hero h2{font-size:25px}.studio-orbit{width:87px;height:87px;right:10px}.studio-orbit strong{font-size:27px}.studio-orbit span{font-size:12px}.studio-orbit small{font-size:7px;margin-top:4px}.studio-orbit>div{padding:8px 0}.studio-hero p{max-width:155px}.snow-public-intro h2{font-size:25px}.studio-section-heading>span{display:none}}
 
+</style><style id="snowProductDesign">
+/* Product layouts RC3. New task-oriented components; no business state is inferred from color. */
+:root{--field-border:#dce2d8;--field-active:#7b927e;--body-copy:#44594d;--product-muted:#718075}
+.app{position:relative}body[data-snow-mode=workspace] .app{max-width:1400px;width:calc(100% - var(--snow-sidebar));padding-left:36px;padding-right:36px;margin-right:auto}.snow-page-heading{padding:30px 0 23px}.snow-page-heading h2{font-size:27px}.snow-page-heading .snow-eyebrow{display:none}.snow-page-heading p{font-size:13px}.btn{min-height:40px;padding:9px 15px;font-size:13px;font-weight:500}.btn-ghost{background:transparent}.btn-danger{background:transparent;color:#a4483d;border-color:#ead8d1}.btn:disabled{opacity:.5;cursor:not-allowed}.input{background:#fcfdfb;border:1px solid var(--field-border);border-radius:8px;min-height:46px;font-size:14px;box-shadow:none;transition:border-color .15s}.input:focus,.input:focus-visible{border-color:var(--field-active);outline:none;box-shadow:none}button:focus-visible,a:focus-visible,summary:focus-visible,[role=button]:focus-visible{outline:2px solid #819582;outline-offset:2px}.text-action{background:none;border:0;color:#3e694e;font-size:13px;padding:8px 0;min-height:40px;cursor:pointer}.section-label{font-size:11px;color:var(--product-muted);letter-spacing:.6px}.field-note{font-size:12px;line-height:1.85;color:var(--product-muted);margin:10px 0 16px}.product-field{display:grid;gap:9px;font-size:13px;color:var(--body-copy)}.product-field .input{width:100%}.form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}.sheet-intro{font-size:13px;color:var(--product-muted);line-height:1.9;margin-bottom:24px}
+/* Credentials: list browsing, contextual multi-select, then explicit record management. */
+body[data-studio-page=tokens] .stats{border:0;border-bottom:1px solid var(--border);background:transparent;border-radius:0;padding:3px 0 24px;margin-bottom:27px;max-width:690px}.stats .stat-num{font-size:29px;font-weight:500}.stats .stat-label{font-size:11px}.stats .stat-item{padding:0 25px}.stats .stat-item:first-child{padding-left:0}.stats .stat-item.danger .stat-num{color:var(--text)}.credentials-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:21px}.credentials-heading h3{font-size:17px;font-weight:500;margin:0}.credentials-heading p{font-size:12px;color:var(--product-muted);margin-top:6px}.credentials-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:19px}.credentials-filter-group,.credentials-tools{display:flex;align-items:center;gap:9px}.filter-summary{font-size:12px;color:var(--product-muted)}.credentials-toolbar .btn{min-height:38px;font-size:12px}.credentials-filter-group #clearFilterBtn{border:0;padding:7px;color:#687d68}.action-menu{position:relative}.action-menu>summary{list-style:none;border:1px solid var(--border);border-radius:8px;min-height:38px;padding:8px 13px;font-size:12px;cursor:pointer}.action-menu>summary::-webkit-details-marker{display:none}.action-menu>summary::after{content:'⌄';margin-left:10px}.action-menu-items{position:absolute;right:0;top:calc(100% + 7px);min-width:170px;background:white;border:1px solid var(--border);box-shadow:0 9px 25px #263b3010;border-radius:10px;padding:6px;z-index:20}.action-menu-items>.btn{display:block;text-align:left;width:100%;border:0;border-radius:6px}.action-menu-items>.btn:last-child{margin-top:5px;border-top:1px solid var(--border);border-radius:0}.credentials-bulk{display:flex;align-items:center;gap:18px;padding:10px 16px;background:#eaf0e3;border-radius:8px;margin-bottom:15px;font-size:13px}.credentials-bulk #deleteSelectedBtn{margin-left:auto}.credentials-select-all{display:none;align-items:center;gap:10px;font-size:12px;padding:13px 18px;border-bottom:1px solid var(--border)}#subTokens[data-selecting=true] .credentials-select-all{display:flex}.credential-select{display:none}#subTokens[data-selecting=true] .credential-select{display:block;position:absolute;left:16px;top:calc(50% - 10px)}.credential-select input,.credentials-select-all input{width:18px;height:18px;accent-color:var(--accent)}.credentials-list{border-top:1px solid var(--border)}.credentials-columns{display:grid;grid-template-columns:minmax(170px,1fr) 130px 155px 78px;gap:30px;font-size:11px;color:var(--product-muted);padding:14px 19px}.credential-row{position:relative;display:grid;grid-template-columns:minmax(170px,1fr) 130px 155px 78px;align-items:center;gap:30px;background:white;padding:22px 19px;border-bottom:1px solid var(--border-light)}.credential-row:hover{background:#fcfdf9}.credential-row.selected{background:#eff4e8}#subTokens[data-selecting=true] .credential-row,#subTokens[data-selecting=true] .credentials-columns{padding-left:50px}.credential-identity{min-width:0}.credential-name{display:block;background:transparent;border:0;font-size:15px;font-weight:550;color:var(--text);text-align:left;padding:0;min-height:28px;overflow-wrap:anywhere;cursor:pointer}.credential-identity small{display:block;color:var(--product-muted);font-size:11px;margin-top:5px;overflow-wrap:anywhere}.credential-balance{display:flex;align-items:baseline;gap:8px}.credential-balance strong{font-size:23px;font-weight:500;font-variant-numeric:tabular-nums}.credential-balance span{font-size:11px;color:var(--product-muted)}.credential-balance.exhausted strong{color:#9b6c47}.credential-usage{display:grid;gap:5px;font-size:11px;color:var(--product-muted)}.credential-usage b{font-weight:400;color:var(--body-copy);margin-left:10px;font-variant-numeric:tabular-nums}.credential-manage{min-height:38px;font-size:12px;padding:8px 12px;white-space:nowrap}.credential-manage span{margin-left:5px}
+/* One consistent side panel. Original submit/confirmation handlers are retained. */
+.product-sheet{width:480px;max-width:calc(100vw - 20px);height:100dvh;max-height:100dvh;margin:0 0 0 auto;border:0;border-radius:16px 0 0 16px;background:#fafbf7;color:var(--text);padding:0;overflow:auto;box-shadow:-18px 0 60px #172e2418}.product-sheet::backdrop{background:#1a2d254f;backdrop-filter:blur(3px)}body:has(.product-sheet[open]){overflow:hidden}.product-sheet-header{position:sticky;top:0;z-index:2;background:#fafbf7;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:25px 27px;border-bottom:1px solid var(--border)}.product-sheet-header h2{font-size:21px;font-weight:500;margin-top:7px}.product-sheet-body{padding:26px 27px 36px}.sheet-close{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 11px;min-height:40px;color:var(--product-muted);font-size:12px;cursor:pointer}.product-sheet .inline-form.open{background:none;border:0;padding:0;margin:0;box-shadow:none;max-height:none;overflow:visible}.product-sheet .inline-form>.flex{display:grid;grid-template-columns:1fr;gap:22px}.product-sheet .inline-form #addTokenBtn{margin-top:5px;width:100%}.product-sheet textarea{min-height:180px}.credential-detail-name{font-size:25px;line-height:1.6;overflow-wrap:anywhere}.credential-detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:25px 0 27px;margin:15px 0 10px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.credential-detail-stats strong{display:block;font-size:27px;font-weight:500;font-variant-numeric:tabular-nums}.credential-detail-stats span{font-size:11px;color:var(--product-muted)}.credential-detail-actions{display:grid}.detail-action{position:relative;display:grid;gap:6px;text-align:left;padding:22px 22px 22px 0;border:0;border-bottom:1px solid var(--border);background:none;cursor:pointer}.detail-action::after{content:'→';position:absolute;right:0;top:30px;color:#80937b}.detail-action strong{font-size:14px;font-weight:500;color:var(--text)}.detail-action span{font-size:12px;color:var(--product-muted)}.detail-action:hover strong{color:#54794a}.credential-danger{margin-top:26px}.credential-danger summary{font-size:13px;color:#90634d;cursor:pointer;min-height:44px}.credential-danger p{font-size:12px;color:var(--product-muted);line-height:1.9;margin:9px 0 15px}.credential-danger .btn{width:100%;display:block;margin-top:10px}
+/* Platform connection: restrained form width, connected summary, secondary technical detail. */
+.learning-connection{padding:26px 0 23px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:27px!important;background:none;border-radius:0}.learning-connection .course-head{align-items:flex-start;gap:25px}.learning-connection .course-head h3{font-size:17px}.learning-connection .course-head p{font-size:12px;margin-top:7px}.learning-connection .course-badges{margin-left:auto}.learning-connection #courseAuthBadge{font-size:11px;padding:5px 11px}.learning-connection .course-connection{background:none;border:0;padding:0;margin:24px 0 0;max-width:580px;border-radius:0}.learning-connection .course-connection>summary{font-size:14px;list-style:none;font-weight:500;padding:0;min-height:0;cursor:default}.learning-connection .course-connection>summary::-webkit-details-marker{display:none}.learning-connection .course-login-grid{grid-template-columns:1fr 1fr;gap:18px;margin-top:17px}.learning-connection .course-login-grid label{font-size:12px}.learning-connection .course-actions{margin-top:19px}.learning-connection .course-session-message{max-width:760px;border:0;border-left:2px solid #b8c7b0;border-radius:0;background:transparent;padding:4px 0 4px 13px;margin:18px 0 0;font-size:12px}.learning-connection[data-connected=true] .course-session-message{font-size:11px;color:var(--product-muted);border:0;padding:0;margin-top:8px}.connection-ready{font-size:13px;margin:17px 0 0;color:var(--body-copy)}.connection-details{margin-top:16px}.connection-details summary{color:var(--product-muted);font-size:12px;cursor:pointer;min-height:36px;padding:6px 0}.connection-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:13px 0}.connection-meta .btn{font-size:12px;min-height:36px}.learning-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 15px}.learning-toolbar>div:first-child{margin-right:auto}.learning-toolbar h3{font-size:17px;font-weight:500}.learning-toolbar p{font-size:12px;color:var(--product-muted);margin:6px 0}.learning-toolbar .toolbar-sep{display:none}.learning-filters{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:12px 0 17px;font-size:12px}.learning-filters>.course-advanced{margin:0;border:0;padding:0}.learning-filters>.course-advanced>summary{font-size:12px;min-height:36px;padding:6px 0}.learning-filters .course-toolbar{border:0;padding:8px 0}.learning-connection .course-challenge{max-width:580px}.learning-connection[data-busy=true] #courseLoginBtn{cursor:progress}
+/* Task processing is not platform completion. Progress includes settled failures/cancellations. */
+.course-batch-panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:26px;margin:20px 0 25px}.task-header{display:flex;align-items:center;justify-content:space-between;gap:20px}.task-header h3{font-size:21px;font-weight:500;margin-top:8px}.task-status-dot{height:9px;width:9px;border-radius:50%;background:#819274;flex-shrink:0}.course-batch-panel[data-task-status=stopped] .task-status-dot,.course-batch-panel[data-task-status=paused] .task-status-dot,.course-batch-panel[data-task-status=completed_with_errors] .task-status-dot{background:#b1854e}.task-description{font-size:13px;line-height:1.9;color:var(--body-copy);margin:15px 0;max-width:850px;overflow-wrap:anywhere}.task-current{font-size:12px;color:var(--product-muted);margin:12px 0}.task-current strong{font-weight:500;color:var(--text);margin-left:10px;overflow-wrap:anywhere}.task-metrics{display:flex;gap:44px;padding:17px 0 22px}.task-metrics>div{display:grid;gap:5px}.task-metrics strong{font-size:27px;font-weight:500;line-height:1.4}.task-metrics small{font-size:15px;color:var(--product-muted)}.task-metrics span{font-size:11px;color:var(--product-muted)}.task-progress-caption{display:flex;justify-content:space-between;gap:15px;font-size:11px;color:var(--product-muted);margin-bottom:7px}.course-batch-panel .course-batch-progress{height:4px;background:#ecefe7;margin:0 0 20px}.course-batch-panel .course-batch-progress>span{background:#9cad91;background-image:none}.course-batch-panel[data-task-status=stopped] .course-batch-progress>span,.course-batch-panel[data-task-status=paused] .course-batch-progress>span{background:#b6a07c}.course-batch-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}.task-results{margin-top:25px;border-top:1px solid var(--border);padding-top:20px}.task-results>h3{font-size:14px;font-weight:500;margin-bottom:6px}.task-result-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:13px;padding:18px 0;border-bottom:1px solid var(--border-light)}.task-result-state{font-size:11px;padding-top:3px;color:var(--product-muted)}.task-result-state.failed{color:#a65344}.task-result-state.done{color:#507944}.task-result-state.paused{color:#9c764b}.task-result-row h4{font-size:13px;font-weight:500;line-height:1.8;margin:0}.task-result-row p{font-size:11px;line-height:1.85;margin-top:4px;color:var(--product-muted);overflow-wrap:anywhere}.task-result-row .task-result-reason{color:#6d7568}.task-scope-details,.course-batch-diagnostics{border:0!important;background:none!important;margin-top:14px;padding:0!important}.task-scope-details summary,.course-batch-diagnostics summary{font-size:12px;cursor:pointer;min-height:38px;padding:8px 0}.task-scope-details p,.course-batch-diagnostics .course-batch-meta{font-size:12px;line-height:1.85;color:var(--product-muted);overflow-wrap:anywhere}.course-batch-diagnostics .course-batch-meta{margin:10px 0}.course-output:empty{display:none}
+/* Public extraction becomes a two-stage flow, with fallback/settings progressively disclosed. */
+.access-entry{margin-top:23px}.access-entry>label{display:block;font-size:13px;margin-bottom:9px}.access-entry>.btn{margin-top:15px}.access-success-line{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#57734d;gap:14px}.access-balance{display:flex;align-items:baseline;gap:12px;margin-top:10px}.access-balance strong{font-size:43px;font-weight:500;line-height:1.5;letter-spacing:-1px}.access-balance span{font-size:12px;color:var(--product-muted)}.access-current{font-size:12px;color:var(--product-muted);margin:8px 0 20px;overflow-wrap:anywhere}.access-current b{font-weight:500;color:var(--text);margin-left:6px}.access-code-primary{padding-top:21px;border-top:1px solid var(--border)}.access-code-primary .code-block{margin:11px 0 10px;background:#f5f6f0;border:0;font-size:12px;line-height:1.9}.access-code-primary .copy-btn{background:var(--accent);color:white;border:0;width:100%;min-height:46px}.access-alternative,.access-maintenance{padding:6px 0;border-bottom:1px solid var(--border-light)}.access-alternative summary,.access-maintenance summary{font-size:12px;color:var(--product-muted);cursor:pointer;min-height:42px;padding:10px 0}.access-alternative>p,.access-maintenance>p{font-size:12px;color:var(--product-muted);line-height:1.9;margin-bottom:13px}.access-maintenance .rename-panel{padding:16px 0;border:0;background:none}.access-maintenance .rename-panel label{font-size:12px;display:block;margin-bottom:9px}.access-instructions{margin-top:25px;border-top:1px solid var(--border);padding-top:20px}.access-instructions h3{font-size:12px;font-weight:500;margin-bottom:12px}.access-instructions ol{padding-left:18px;font-size:12px;line-height:2;color:var(--product-muted)}.access-empty{font-size:13px;line-height:1.9;padding:16px 0;color:var(--product-muted)}#userPanel>.card[data-access-stage=ready] .snow-form-heading h2{font-size:22px}#userPanel>.card[data-access-stage=ready] .snow-form-heading p{display:none}
+/* Shared login canvas rather than a small card expanding into a full-width application. */
+body[data-snow-mode=login] .header{display:none}body[data-snow-mode=login] .segmented{position:absolute;right:40px;top:56px;z-index:1}body[data-snow-mode=login] .snow-topline{padding:22px 0}.login-stage{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);background:white;max-width:1000px;margin:75px auto 60px;min-height:490px;border-radius:16px;overflow:hidden;border:1px solid var(--border)}.login-story{padding:45px 38px;background:#1c4235;color:#eef4e8}.login-brand{display:flex;gap:12px;align-items:center;margin-bottom:62px}.login-brand strong{font-size:31px;letter-spacing:-1px}.login-brand .snow-cedar{color:#d3e2c0}.login-story .snow-eyebrow{font-size:9px;color:#adc2ae}.login-story h2{font-size:29px;font-weight:400;line-height:1.65;margin:16px 0}.login-story>p{font-size:13px;color:#b7cbbb;line-height:2}.login-stage #adminLoginCard{margin:auto;width:100%;padding:44px;max-width:480px;border:0;border-radius:0;background:none}.login-stage .snow-form-heading h2{font-size:24px}.login-stage .snow-form-heading>label{margin-top:28px}.login-stage .snow-form-heading{margin-bottom:10px}.login-stage .snow-form-heading .snow-eyebrow{font-size:9px}.login-stage #loginAdminBtn{margin-top:4px;min-height:46px}
+@media(max-width:1000px){.credentials-columns,.credential-row{grid-template-columns:minmax(135px,1fr) 100px 90px 75px;gap:14px}.credential-balance{flex-direction:column;gap:1px}.learning-toolbar>div:first-child{flex-basis:100%;margin-bottom:10px}.login-stage{margin-top:80px}.login-story{padding:36px 28px}.login-stage #adminLoginCard{padding:32px}}
+@media(max-width:760px){body[data-snow-mode=workspace] .app{width:100%;padding-left:max(20px,env(safe-area-inset-left));padding-right:max(20px,env(safe-area-inset-right))}.snow-page-heading{padding:25px 0 23px}.snow-page-heading h2{font-size:25px}.snow-page-heading p{font-size:12px}.input,input.input,select.input,textarea.input{font-size:16px;min-height:48px}.btn{min-height:44px;font-size:13px;padding:10px 14px}.text-action{min-height:44px}.credentials-heading{align-items:center;gap:12px;margin-bottom:20px}.credentials-heading h3{font-size:16px}.credentials-heading p{font-size:11px;max-width:180px}.credentials-heading .btn{min-width:106px}.credentials-toolbar{gap:9px;flex-wrap:wrap}.credentials-tools{margin-left:auto;gap:7px}.credentials-filter-group{flex-wrap:wrap;gap:4px}.filter-summary{flex-basis:100%;font-size:11px}.credentials-toolbar .btn,.action-menu>summary{min-height:44px;font-size:12px;padding:10px 11px}.credentials-toolbar .btn{flex:none}.credentials-list{border:0}.credentials-columns{display:none}.credential-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:21px 18px;border:1px solid var(--border-light);border-radius:12px;margin-bottom:12px}.credential-identity{grid-column:1;grid-row:1}.credential-name{font-size:16px}.credential-balance{grid-column:2;grid-row:1;align-items:flex-end;gap:3px}.credential-balance strong{font-size:25px}.credential-usage{grid-column:1;grid-row:2;display:flex;flex-wrap:wrap;gap:8px 14px;font-size:11px}.credential-usage b{margin-left:4px}.credential-manage{grid-column:2;grid-row:2;min-height:42px;font-size:12px;padding:8px 13px}#subTokens[data-selecting=true] .credential-row{padding-left:45px}#subTokens[data-selecting=true] .credential-select{left:14px;top:25px}.credentials-bulk{flex-wrap:wrap;gap:7px 14px;padding:10px 13px}.credentials-bulk #deleteSelectedBtn{font-size:12px;min-height:40px}.credentials-bulk strong{font-size:12px}.credentials-select-all{padding:9px 4px 17px}.action-menu-items{min-width:170px}.action-menu-items>.btn{min-height:46px}.product-sheet{width:100%;max-width:100%;height:auto;max-height:calc(100dvh - 24px);margin:auto 0 0;border-radius:18px 18px 0 0}.product-sheet-header{padding:21px 22px 17px}.product-sheet-header h2{font-size:20px}.product-sheet-body{padding:23px 22px calc(27px + env(safe-area-inset-bottom))}.sheet-close{min-height:44px;min-width:54px}.product-sheet .inline-form .input{flex:initial!important;min-width:0!important}.credential-detail-stats{gap:10px}.credential-detail-stats strong{font-size:25px}.credential-detail-name{font-size:22px}.detail-action{padding-top:20px;padding-bottom:20px}.detail-action span{font-size:12px}.learning-connection{padding:20px 0;margin-bottom:25px!important}.learning-connection .course-head{flex-direction:row;flex-wrap:nowrap;gap:12px}.learning-connection .course-head>div:first-child{min-width:0}.learning-connection .course-head p{font-size:11px;line-height:1.9}.learning-connection .course-badges{flex-shrink:0}.learning-connection .course-login-grid{grid-template-columns:1fr;gap:18px}.learning-connection .course-actions .btn{width:100%}.connection-meta{gap:8px}.connection-meta .btn{min-height:44px}.learning-toolbar{gap:8px;display:grid;grid-template-columns:1fr auto auto}.learning-toolbar>div:first-child{grid-column:1/-1}.learning-toolbar #courseBatchAllBtn{grid-column:1/-1;width:100%}.learning-toolbar #courseRefreshBtn{grid-column:2}.learning-toolbar #courseTasksBtn{grid-column:3}.learning-filters{gap:9px 20px;align-items:flex-start}.learning-filters .checkbox{font-size:12px;min-height:44px}.learning-filters>.course-advanced>summary{min-height:44px;padding:10px 0}.course-summary{font-size:11px}.course-batch-panel{padding:21px 18px}.task-header h3{font-size:19px;line-height:1.6}.task-description{font-size:12px;margin:13px 0}.task-current{display:grid;gap:4px;font-size:11px}.task-current strong{margin-left:0;font-size:13px}.task-metrics{gap:0;display:grid;grid-template-columns:repeat(3,1fr);padding:17px 0 23px}.task-metrics strong{font-size:24px}.task-metrics small{font-size:13px}.task-metrics span{font-size:10px}.task-progress-caption{font-size:10px}.course-batch-actions>.btn{flex:1 1 auto}.task-result-row{grid-template-columns:44px minmax(0,1fr);gap:9px;padding:16px 0}.task-result-row h4{font-size:13px}.task-result-row p{font-size:11px}.access-instructions{margin-top:23px}.access-balance strong{font-size:40px}.access-maintenance .form-actions>.btn{flex:1}.access-current{font-size:12px;line-height:1.8}body[data-snow-mode=login] .segmented{right:20px;top:53px;left:20px}.login-stage{display:block;margin:77px 0 30px;min-height:0;background:none;border:0;border-radius:0}.login-story{background:none;padding:0 2px 20px;color:var(--text)}.login-brand{margin:0 0 21px}.login-brand .snow-cedar{color:#587a4d}.login-story .snow-eyebrow,.login-story h2,.login-story>p{display:none}.login-stage #adminLoginCard{max-width:none;padding:27px 23px;background:white;border-radius:14px}.login-stage .snow-form-heading h2{font-size:23px}.login-stage .snow-form-heading p{font-size:12px}.login-stage .snow-form-heading .snow-eyebrow{display:none}}
+@media(max-width:360px){.credentials-toolbar{align-items:flex-start}.credentials-toolbar .btn,.action-menu>summary{padding-left:9px;padding-right:9px;font-size:11px}.credentials-tools{gap:5px}.credential-usage{display:grid;gap:4px}.task-metrics strong{font-size:21px}.task-header h3{font-size:18px}.credentials-bulk #deleteSelectedBtn{margin-left:0}.credential-balance span{font-size:10px}}
+
+.login-stage #adminLoginCard>.flex{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:761px) and (max-width:1000px){.credentials-columns,.credential-row{grid-template-columns:minmax(0,1fr) 80px 70px 72px;gap:12px}}
+
 </style></head><body>
 
 
@@ -1337,13 +1360,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const icon = key => '<svg class="snow-icon" viewBox="0 0 24 24" aria-hidden="true">'+paths[key]+'</svg>';
   const modules = {
     overview:['总览','让今天，更从容一点。','学习进度与日常事务，在一个清晰的空间里。'],
-    tokens:['访问凭证','每一份访问，都有归属。','管理 Token、剩余次数与批量操作。'],
-    course:['学习管理','学习，清晰有序。','连接账号、查看课程、处理任务，完成状态以平台确认为准。'],
-    questions:['资料题库','资料有序，查找有据。','查询、导入和维护题库；保留原有校验与备份流程。'],
-    devices:['设备绑定','让每一次连接，都有记录。','管理激活码、设备绑定与使用期限。'],
-    logs:['操作日志','每一次操作，都有迹可循。','查看已有管理操作日志。'],
-    emergency:['应急代码','需要的时候，随时可用。','保留现有代码获取和复制流程。'],
-    health:['系统状态','把系统状态，看得更清楚。','版本、连通性与未完成操作复核，集中在这里。']
+    tokens:['访问凭证','访问凭证','查看可用次数，管理分发给他人的访问权限。'],
+    course:['学习管理','学习管理','连接学习平台，查看课程与任务。'],
+    questions:['资料题库','资料题库','查找题目，管理导入与备份。'],
+    devices:['设备绑定','设备绑定','管理激活码、设备绑定与使用期限。'],
+    logs:['操作日志','操作日志','查看管理操作及其记录。'],
+    emergency:['应急代码','应急代码','按需获取与复制。'],
+    health:['系统状态','系统状态','检查版本、连通性与未完成操作。']
   };
   const app = document.querySelector('.app');
   const header = document.querySelector('.header');
@@ -1443,8 +1466,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.snow-public-intro p').textContent='一个安静、有序的工具入口。从验证凭证开始，让每一步都简单一点。';
   document.querySelector('.snow-public-intro .snow-eyebrow').textContent='LESS FRICTION. MORE FOCUS.';
   document.querySelector('.snow-form-heading .snow-eyebrow').textContent='01 / PERSONAL ACCESS';
-  document.querySelector('.snow-sidebar-foot .snow-eyebrow').textContent='CEDAR / UI 12.0.0 RC2';
-  document.querySelector('.snow-footer').textContent='SNOW WORKSPACE / CEDAR STUDIO 12.0.0 RC2';
+  document.querySelector('.snow-sidebar-foot .snow-eyebrow').textContent='CEDAR / UI 12.0.0 RC3';
+  document.querySelector('.snow-footer').textContent='SNOW WORKSPACE / PRODUCT UI 12.0.0 RC3';
   const home=el('subOverview');
   // Keep the connection label observed by the base adapter; reuse the original shortcuts.
   const status=el('snowCourseState'),shortcuts=home.querySelector('.snow-shortcuts');
@@ -1540,6 +1563,137 @@ document.addEventListener('DOMContentLoaded', () => {
   [el('adminMain'),el('adminPanel'),el('adminSubtabs')].forEach(n=>observer.observe(n,{attributes:true,attributeFilter:['class'],subtree:n===el('adminSubtabs')}));
   [el('courseAuthBadge'),el('courseSummary'),el('courseSessionMessage')].forEach(n=>observer.observe(n,{childList:true,subtree:true}));
   sync();
+});
+
+</script>
+<script id="snowProduct0">
+document.addEventListener('DOMContentLoaded',()=>{
+  'use strict';
+  const $=id=>document.getElementById(id), create=(tag,cls,html='')=>{const n=document.createElement(tag);n.className=cls;n.innerHTML=html;return n;};
+  const pane=$('subTokens'),list=$('tokenTableContainer'),toolbar=pane.querySelector('.toolbar'),deleteSelected=$('deleteSelectedBtn');
+  toolbar.className='credentials-toolbar';
+  const title=create('div','credentials-heading','<div><h3>凭证列表</h3><p>分发访问权限，管理可用次数。</p></div>');title.append($('toggleAddFormBtn'));pane.prepend(title);
+  $('toggleAddFormBtn').textContent='新增凭证';
+  const filter=create('div','credentials-filter-group');$('clearFilterBtn').textContent='清除';filter.append($('filterRemainBtn'),$('clearFilterBtn'));
+  const filterLabel=create('span','filter-summary');filter.append(filterLabel);
+  const tools=create('div','credentials-tools');
+  const selection=create('button','btn btn-ghost','批量选择');selection.type='button';selection.setAttribute('aria-pressed','false');
+  const menu=create('details','action-menu','<summary>更多操作</summary><div class="action-menu-items"></div>');
+  menu.querySelector('div').append($('toggleImportBtn'),$('refreshDataBtn'),$('clearAllTokensBtn'));
+  tools.append(selection,menu);toolbar.replaceChildren(filter,tools);
+  const batch=create('div','credentials-bulk');batch.hidden=true;batch.setAttribute('role','region');batch.setAttribute('aria-label','凭证批量操作');
+  const count=create('strong',''),clear=create('button','text-action','取消选择');clear.type='button';batch.append(count,clear,deleteSelected);toolbar.after(batch);
+  let selecting=false,detailToken=null,returnFocus=null;
+  const sheet=create('dialog','product-sheet');sheet.id='credentialSheet';sheet.setAttribute('aria-labelledby','credentialSheetTitle');
+  sheet.innerHTML='<header class="product-sheet-header"><div><span class="section-label">CREDENTIALS</span><h2 id="credentialSheetTitle"></h2></div><button class="sheet-close" type="button" aria-label="关闭凭证面板">关闭</button></header><div class="product-sheet-body"></div>';
+  document.body.append(sheet);const content=sheet.querySelector('.product-sheet-body');
+  // Move forms rather than clone controls or add a second submit handler.
+  const forms=[$('addTokenForm'),$('importForm')];
+  const placeholders=forms.map(form=>{const mark=document.createComment('form-home');form.before(mark);return mark;});
+  function close(){
+    if(sheet.open)sheet.close();detailToken=null;
+    forms.forEach((form,i)=>{form.classList.remove('open');placeholders[i].after(form);});
+    if($('toastStack').parentElement===sheet)document.body.prepend($('toastStack'));
+    if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
+  }
+  function open(title,trigger){
+    close();returnFocus=trigger||document.activeElement;$('credentialSheetTitle').textContent=title;content.replaceChildren();sheet.append($('toastStack'));sheet.showModal();
+  }
+  sheet.querySelector('.sheet-close').addEventListener('click',close);sheet.addEventListener('cancel',e=>{e.preventDefault();close();});
+  function showForm(index,trigger){
+    if(!state.isAdmin)return;menu.open=false;open(index===0?'新增凭证':'批量导入',trigger);
+    const form=forms[index];form.classList.add('open');
+    const intro=create('p','sheet-intro',index===0?'设置一个容易识别的凭证名称和初始次数。':'每行填写一个凭证名称。沿用现有规则，默认每份凭证 3 次。');
+    if(index===0&&!form.dataset.labels){
+      for(const [id,name] of [['newTokenName','凭证名称'],['newTokenInitCount','初始次数']]){const field=create('label','product-field');field.htmlFor=id;field.textContent=name;$(id).before(field);field.append($(id));}
+      form.dataset.labels='true';
+    }
+    content.append(intro,form);(index===0?$('newTokenName'):$('importTokensText')).focus();
+  }
+  $('toggleAddFormBtn').addEventListener('click',e=>showForm(0,e.currentTarget));$('toggleImportBtn').addEventListener('click',e=>showForm(1,e.currentTarget));
+  // Existing import logic closes its form on success; close the containing sheet too.
+  new MutationObserver(()=>{if(sheet.open&&content.contains(forms[1])&&!forms[1].classList.contains('open'))close();}).observe(forms[1],{attributes:true,attributeFilter:['class']});
+  function showToken(token,trigger){
+    if(!state.isAdmin)return;const t=state.filteredTokens.find(t=>String(t.token)===token);if(!t)return;
+    open('凭证详情',trigger);detailToken=token;
+    const e=escapeHtml;
+    content.innerHTML=`<div class="credential-detail-name">${e(t.token)}</div><p class="field-note">${t.originalToken&&t.originalToken!==t.token?'原名 '+e(t.originalToken):'访问凭证'}</p><div class="credential-detail-stats"><div><strong>${e(t.remain)}</strong><span>剩余次数</span></div><div><strong>${e(t.initCount)}</strong><span>初始次数</span></div><div><strong>${e(t.used)}</strong><span>已用次数</span></div></div><div class="credential-detail-actions"><button type="button" class="detail-action" data-credential-action="copyToken"><strong>复制凭证</strong><span>复制当前名称，用于分发或提取</span></button><button type="button" class="detail-action" data-credential-action="editToken"><strong>调整剩余次数</strong><span>修改当前可用次数，不改变初始值</span></button><button type="button" class="detail-action" data-credential-action="renameToken"><strong>修改凭证名称</strong><span>更新使用名称，保留原有业务记录</span></button></div><details class="credential-danger"><summary>重置与删除</summary><p>这些操作会改变凭证状态，执行前将再次确认。</p><button type="button" class="btn btn-ghost" data-credential-action="resetToken">重置为初始次数</button><button type="button" class="btn btn-danger" data-credential-action="deleteToken">删除这份凭证</button></details>`;
+  }
+  list.addEventListener('click',e=>{const b=e.target.closest('[data-credential-open]');if(b)showToken(b.dataset.credentialOpen,b);});
+  content.addEventListener('click',e=>{const b=e.target.closest('[data-credential-action]');if(!b||!state.isAdmin||!detailToken)return;const token=detailToken,action=b.dataset.credentialAction;close();handleTokenAction(action,token);});
+  selection.addEventListener('click',()=>{selecting=!selecting;if(!selecting){state.selectedTokens.clear();renderTokenView();}sync();});
+  clear.addEventListener('click',()=>{state.selectedTokens.clear();selecting=false;renderTokenView();sync();});
+  menu.addEventListener('click',e=>{if(e.target.closest('button'))menu.open=false;});
+  function sync(){
+    const logged=state.isAdmin&&!$('adminMain').classList.contains('hidden');
+    if(!logged||!$('adminPanel').classList.contains('active')||state.adminSubtab!=='tokens'){if(sheet.open)close();menu.open=false;}
+    if(!logged){selecting=false;detailToken=null;}
+    pane.dataset.selecting=String(selecting||state.selectedTokens.size>0);
+    selection.textContent=selecting?'退出选择':'批量选择';selection.setAttribute('aria-pressed',String(selecting));
+    batch.hidden=state.selectedTokens.size===0;count.textContent='已选 '+state.selectedTokens.size+' 项';
+    $('clearFilterBtn').hidden=state.tokenFilter===null;filterLabel.textContent=state.tokenFilter===null?'':'剩余次数 = '+state.tokenFilter;
+    const empty=list.querySelector('.empty');
+    if(empty){const message=state.tokenFilter===null?'还没有凭证。点击“新增凭证”开始创建。':'没有符合筛选条件的凭证。清除筛选可查看全部。';if(empty.textContent!==message)empty.textContent=message;}
+    const check=$('selectAllCheck');if(check){const c=[...list.querySelectorAll('[data-action="toggleSelect"]')],n=c.filter(n=>n.checked).length;check.checked=c.length>0&&n===c.length;check.indeterminate=n>0&&n<c.length;}
+    if(detailToken&&sheet.open){const t=state.filteredTokens.find(t=>String(t.token)===detailToken);if(!t)close();}
+  }
+  list.addEventListener('change',sync);new MutationObserver(sync).observe(list,{childList:true,subtree:true});
+  new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['data-snow-mode','data-studio-page']});
+  sync();
+});
+
+</script>
+<script id="snowProduct1">
+document.addEventListener('DOMContentLoaded',()=>{
+  'use strict';const $=id=>document.getElementById(id);
+  const pane=$('subCourse'),card=pane.querySelector('.card'),connection=$('courseConnection');card.className='learning-connection';
+  const heading=card.querySelector('.course-head');heading.querySelector('h3').textContent='学习平台';heading.querySelector('p').textContent='连接后读取课程；完成结果始终以平台复核为准。';
+  const tech=document.createElement('details');tech.className='connection-details';tech.innerHTML='<summary>连接详情</summary><div class="connection-meta"></div>';
+  tech.querySelector('div').append($('courseSessionBadge'),$('courseApiBadge'),$('courseStatusBtn'),$('courseLogoutBtn'));card.append(tech);
+  connection.querySelector('summary').textContent='连接账号';
+  $('courseLoginBtn').textContent='连接学习平台';
+  const note=document.createElement('p');note.className='field-note';note.textContent='使用学习平台账号登录。若平台要求验证，将在这里继续完成。';connection.querySelector('.course-login-grid').before(note);
+  const connected=document.createElement('p');connected.className='connection-ready';connected.textContent='连接已就绪。你可以查看课程，或在连接详情中检查会话。';heading.after(connected);
+  const list=$('courseListPanel');const primary=list.querySelector('.course-toolbar');primary.className='learning-toolbar';
+  const title=document.createElement('div');title.innerHTML='<h3>我的课程</h3><p>先查看范围与状态，再开始任务。</p>';primary.prepend(title);
+  const filters=document.createElement('div');filters.className='learning-filters';filters.append(primary.querySelector('label'),list.querySelector('details.course-advanced'));primary.after(filters);
+  // Do not alter connection flags, submit logic, or enabled/disabled checks.
+  function sync(){
+    const connectedNow=state.courseAuthenticated===true;
+    card.dataset.connected=String(connectedNow);connected.hidden=!connectedNow;connection.hidden=connectedNow;
+    $('courseLogoutBtn').hidden=!connectedNow;
+    const checking=$('courseStatusBtn').disabled,logging=$('courseLoginBtn').disabled;
+    card.dataset.busy=String(checking||logging);
+    if(!connectedNow&&!connection.open)connection.open=true;
+    if(!connectedNow&&state.courseSessionStatus==='expired')connection.querySelector('summary').textContent='重新连接账号';
+  }
+  new MutationObserver(sync).observe($('courseAuthBadge'),{childList:true,subtree:true});
+  [$('courseLoginBtn'),$('courseStatusBtn')].forEach(n=>new MutationObserver(sync).observe(n,{attributes:true,attributeFilter:['disabled']}));sync();
+});
+
+</script>
+<script id="snowProduct2">
+// Restored sessions may resolve before the dynamically created overview exists.
+function showSnowWorkspaceLanding() {
+  const show = () => { if (state.isAdmin) switchSubtab('overview'); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show, { once: true });
+  else show();
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  'use strict';const $=id=>document.getElementById(id),card=$('userPanel').querySelector('.card'),result=$('verifyResult');
+  const inputGroup=document.createElement('section');inputGroup.className='access-entry';
+  const label=card.querySelector('label[for="tokenInput"]');inputGroup.append(label,$('tokenInput'),$('verifyBtn'));result.before(inputGroup);
+  const steps=card.querySelector(':scope>.tip');steps.className='access-instructions';steps.innerHTML='<h3>如何使用</h3><ol><li>复制代码，打开答题页面。</li><li>粘贴到地址栏，删除最前面的等号。</li><li>按回车执行。</li></ol>';
+  function sync(){const ready=!!result.querySelector('[data-verified-result]')&&!result.classList.contains('hidden');card.dataset.accessStage=ready?'ready':'entry';inputGroup.hidden=ready;const current=result.querySelector('.access-current b'),name=$('tokenInput').value.trim();if(current&&current.textContent!==name)current.textContent=name;}
+  result.addEventListener('click',e=>{if(e.target.closest('[data-access-switch]')){result.replaceChildren();result.classList.add('hidden');currentVerifiedToken='';sync();$('tokenInput').focus();$('tokenInput').select();}});
+  new MutationObserver(sync).observe(result,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});sync();
+  const login=$('adminLoginCard'),story=document.createElement('section');story.className='login-story';story.innerHTML='<div class="snow-eyebrow">YOUR WORKSPACE, IN ORDER</div><h2>回到一个<br>井然有序的空间。</h2><p>凭证、学习与日常事务，<br>在这里集中管理。</p>';
+  const stage=document.createElement('div');stage.className='login-stage';login.before(stage);stage.append(story,login);
+  const brand=document.createElement('div');brand.className='login-brand';brand.innerHTML=document.querySelector('.snow-sidebar-brand').innerHTML;story.prepend(brand);
+  let previous=document.body.dataset.snowMode;
+  new MutationObserver(()=>{const mode=document.body.dataset.snowMode;stage.hidden=mode!=='login';if(mode==='workspace'&&previous==='login'&&!matchMedia('(prefers-reduced-motion: reduce)').matches){$('adminMain').animate([{opacity:.25,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing:'ease-out'});}previous=mode;}).observe(document.body,{attributes:true,attributeFilter:['data-snow-mode']});
+  stage.hidden=document.body.dataset.snowMode!=='login';
 });
 
 </script>
@@ -2637,32 +2791,17 @@ async function userVerify() {
 }
 
 function renderVerifyResult(token, remain, hasCode) {
-  const color = hasCode ? 'success' : 'warning';
-  const icon = '';
-  let h = `<div class="result-card ${color}">验证通过 · 剩余 <strong style="font-size:1.1rem;">${remain}</strong> 次
-    ${isLegacyHttpCompatibilityMode() ? '' : '<button class="btn btn-ghost btn-sm" id="toggleRenameBtn" style="margin-left:12px;">修改token</button>'}</div>`;
-  if (!isLegacyHttpCompatibilityMode()) {
-    h += `<div class="rename-panel hidden" id="renamePanel">
-        <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:8px;">输入新的token名称：</div>
-        <div class="flex">
-          <input type="text" id="newTokenNameInput" class="input" placeholder="新token名称" style="flex:2;">
-          <button class="btn btn-primary btn-sm" id="confirmRenameBtn">确认</button>
-          <button class="btn btn-ghost btn-sm" id="cancelRenameBtn">取消</button>
-        </div>
-        <div id="renameMsg" class="text-sm mt-8"></div>
-      </div>`;
-  }
-  if (hasCode) {
-    const { primary: c1, fallback: c2 } = buildAnswerBootstrapCodes(token);
-    h += `<div style="margin-top:16px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式一（首选）</div>
-      <div class="code-block">${escapeHtml(c1)}</div><button class="copy-btn" data-code="${escapeHtml(c1)}">复制代码</button></div>
-      <div style="margin-top:12px;"><div style="font-size:.72rem;font-weight:500;margin-bottom:6px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">方式二（备用）</div>
-      <div class="code-block">${escapeHtml(c2)}</div><button class="copy-btn" data-code="${escapeHtml(c2)}">复制代码</button></div>`;
-  } else {
-    h += '<div class="tip mt-12">链接已失效，无法生成代码。如需继续使用，请联系管理员获取新token。</div>';
-  }
-  return h;
+  const e=escapeHtml;
+  const rename=isLegacyHttpCompatibilityMode()?'':`<details class="access-maintenance"><summary>凭证设置</summary><p>重命名会修改这份凭证本身，并非切换到其他凭证。</p><button type="button" class="text-action" id="toggleRenameBtn">重命名当前凭证</button>
+    <div class="rename-panel hidden" id="renamePanel"><label for="newTokenNameInput">新凭证名称</label><input type="text" id="newTokenNameInput" class="input" placeholder="输入新名称"><div class="form-actions"><button class="btn btn-primary" id="confirmRenameBtn">确认重命名</button><button class="btn btn-ghost" id="cancelRenameBtn">取消</button></div><div id="renameMsg" role="status"></div></div></details>`;
+  let html=`<section class="access-ready" data-verified-result><div class="access-success-line"><span>${hasCode?'验证通过':'次数已用完'}</span><button type="button" class="text-action" data-access-switch>更换凭证</button></div><div class="access-balance"><strong>${e(remain)}</strong><span>次可用</span></div><p class="access-current">当前凭证 <b>${e(token)}</b></p></section>`;
+  if(hasCode){
+    const {primary,fallback}=buildAnswerBootstrapCodes(token);
+    html+=`<div class="access-code-primary"><div class="section-label">你的专属代码</div><div class="code-block">${e(primary)}</div><button class="copy-btn btn btn-primary" data-code="${e(primary)}">复制代码</button><p class="field-note">复制后，按下方步骤在答题页面使用。</p></div><details class="access-alternative"><summary>首选方式不可用？</summary><p>可尝试以下备用方式。</p><div class="code-block">${e(fallback)}</div><button class="copy-btn btn btn-ghost" data-code="${e(fallback)}">复制备用代码</button></details>`;
+  }else html+='<p class="access-empty">当前凭证已无可用次数。请联系管理员或更换凭证。</p>';
+  return html+rename;
 }
+
 
 function buildAnswerBootstrapCodes(token) {
   const encodedToken = encodeURIComponent(String(token));
@@ -2694,7 +2833,7 @@ async function restoreAdminSession() {
     $('adminMain').classList.remove('hidden');
     acceptTokenListData(res);
     renderTokenView();
-    switchSubtab('tokens');
+    showSnowWorkspaceLanding();
     adminFetch('getEmergencyCode').then(d => { $('emergencyCodeBlock').textContent = d?.code || '应急代码获取失败'; }).catch(() => { $('emergencyCodeBlock').textContent = '应急代码加载失败'; });
     showToast('管理会话已恢复');
     return true;
@@ -2727,7 +2866,7 @@ async function adminLogin() {
     $('adminMain').classList.remove('hidden');
     acceptTokenListData(res);
     renderTokenView();
-    switchSubtab('tokens');
+    showSnowWorkspaceLanding();
     adminFetch('getEmergencyCode').then(d => { $('emergencyCodeBlock').textContent = d?.code || '应急代码获取失败'; }).catch(() => { $('emergencyCodeBlock').textContent = '应急代码加载失败'; });
     showToast('管理后台已解锁');
   } catch(e) {
@@ -2852,52 +2991,26 @@ function renderTokenView() {
 }
 
 function renderTokenCards(items) {
-  let h = '<div class="token-list">';
-  items.forEach(t => {
-    const hasRenamed = t.originalToken && t.originalToken !== t.token;
-    h += `<div class="token-card${state.selectedTokens.has(t.token)?' selected':''}" data-token="${escapeHtml(t.token)}">
-      <div class="token-card-top">
-        <div class="token-card-info">
-          <div class="token-card-name" data-action="copyToken" data-token="${escapeHtml(t.token)}">${escapeHtml(t.token)}</div>
-          ${hasRenamed?`<div class="token-card-orig">原名: ${escapeHtml(t.originalToken)}</div>`:''}
-        </div>
-        <input type="checkbox" data-action="toggleSelect" data-token="${escapeHtml(t.token)}" ${state.selectedTokens.has(t.token)?'checked':''} style="width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;">
-      </div>
-      <div class="token-card-meta">
-        <span>初始 <strong style="color:var(--text);">${t.initCount}</strong></span>
-        <span class="token-card-remain">剩余 <strong>${t.remain}</strong></span>
-        <span class="token-card-used">已用 <strong>${t.used}</strong></span>
-      </div>
-      <div class="token-card-acts">
-        <button class="btn btn-xs" data-action="editToken" data-token="${escapeHtml(t.token)}">修改</button>
-        <button class="btn btn-xs" data-action="renameToken" data-token="${escapeHtml(t.token)}">改名</button>
-        <button class="btn btn-xs" data-action="resetToken" data-token="${escapeHtml(t.token)}">重置</button>
-        <button class="btn btn-xs btn-danger" data-action="deleteToken" data-token="${escapeHtml(t.token)}">删除</button>
-      </div></div>`;
-  });
-  h += '</div>';
-  return h;
+  return renderTokenTable(items);
 }
 
 function renderTokenTable(items) {
-  let h = '<div class="table-wrap"><table><thead><tr><th style="width:36px;"><input type="checkbox" id="selectAllCheck"></th><th>原Token</th><th>现Token</th><th>初始</th><th>剩余</th><th>已用</th><th>操作</th></tr></thead><tbody>';
-  items.forEach(t => {
-    const hasRenamed = t.originalToken && t.originalToken !== t.token;
-    h += `<tr data-token="${escapeHtml(t.token)}">
-      <td><input type="checkbox" data-action="toggleSelect" data-token="${escapeHtml(t.token)}" ${state.selectedTokens.has(t.token)?'checked':''}></td>
-      <td class="orig-token">${escapeHtml(hasRenamed?t.originalToken:t.token)}</td>
-      <td class="token-name" data-action="copyToken" data-token="${escapeHtml(t.token)}">${escapeHtml(t.token)}</td>
-      <td>${t.initCount}</td><td class="remain-val">${t.remain}</td><td class="used-val">${t.used}</td>
-      <td class="act-group">
-        <button class="btn btn-xs" data-action="editToken" data-token="${escapeHtml(t.token)}">修改</button>
-        <button class="btn btn-xs" data-action="renameToken" data-token="${escapeHtml(t.token)}">改名</button>
-        <button class="btn btn-xs" data-action="resetToken" data-token="${escapeHtml(t.token)}">重置</button>
-        <button class="btn btn-xs btn-danger" data-action="deleteToken" data-token="${escapeHtml(t.token)}">删除</button>
-      </td></tr>`;
-  });
-  h += '</tbody></table></div>';
-  return h;
+  const selectedOnPage = items.filter(t => state.selectedTokens.has(t.token)).length;
+  return `<div class="credentials-list" role="list" aria-label="访问凭证列表">
+    <div class="credentials-columns" aria-hidden="true"><span>凭证</span><span>剩余次数</span><span>初始 / 已用</span><span>操作</span></div>
+    <label class="credentials-select-all"><input type="checkbox" id="selectAllCheck" ${items.length && selectedOnPage === items.length ? 'checked' : ''}>选择本页凭证</label>
+    ${items.map(t => {
+      const token=escapeHtml(t.token), renamed=t.originalToken && t.originalToken!==t.token;
+      return `<article class="credential-row${state.selectedTokens.has(t.token)?' selected':''}" role="listitem" data-token="${token}">
+        <label class="credential-select"><input type="checkbox" data-action="toggleSelect" data-token="${token}" ${state.selectedTokens.has(t.token)?'checked':''} aria-label="选择凭证 ${token}"></label>
+        <div class="credential-identity"><button type="button" class="credential-name" data-credential-open="${token}" aria-label="管理凭证 ${token}">${token}</button><small>${renamed?'原名 '+escapeHtml(t.originalToken):'访问凭证'}</small></div>
+        <div class="credential-balance${Number(t.remain)<=0?' exhausted':''}"><strong>${escapeHtml(t.remain)}</strong><span>${Number(t.remain)<=0?'次数已用完':'次可用'}</span></div>
+        <div class="credential-usage"><span>初始 <b>${escapeHtml(t.initCount)}</b></span><span>已用 <b>${escapeHtml(t.used)}</b></span></div>
+        <button type="button" class="btn btn-ghost credential-manage" data-credential-open="${token}" aria-label="查看凭证 ${token} 详情">管理 <span aria-hidden="true">→</span></button>
+      </article>`;
+    }).join('')}</div>`;
 }
+
 
 // Token actions (event delegation)
 async function handleTokenAction(action, token) {
@@ -4008,12 +4121,9 @@ function renderCourseBatchPanel() {
     const stateClass = itemStatus === 'completed' ? 'done' : itemStatus === 'failed' ? 'failed' : itemStatus === 'running' ? 'running' : '';
     const planned = (Array.isArray(item.plannedWorkflows) ? item.plannedWorkflows : []).map(courseWorkflowLabel).join(' → ');
     const verifiedSteps = Array.isArray(item.steps) ? item.steps.filter(step => step.verified === true).length : 0;
-    return `<div class="course-batch-item">
-      <span class="course-batch-item-state ${stateClass}">${escapeHtml(COURSE_BATCH_ITEM_LABELS[itemStatus] || itemStatus)}</span>
-      <div class="course-batch-item-main"><strong>${escapeHtml(item.courseName || item.courseId || '未命名课程')}</strong><br>
-        <span>${planned ? `计划：${escapeHtml(planned)} · ` : ''}已验证 ${verifiedSteps} 步${item.examSkipped === true ? ' · 历史任务未包含考试' : ''}${item.reason ? ` · ${escapeHtml(item.reason)}` : ''}</span>
-      </div>
-    </div>`;
+    const suspended=itemStatus==='running'&&['paused','stopped'].includes(batch.status);
+    const label=suspended?'已暂停':COURSE_BATCH_ITEM_LABELS[itemStatus]||itemStatus;
+    return `<div class="task-result-row"><span class="task-result-state ${suspended?'paused':stateClass}">${escapeHtml(label)}</span><div><h4>${escapeHtml(item.courseName||item.courseId||'未命名课程')}</h4><p>${planned?escapeHtml(planned)+' · ':''}已验证 ${verifiedSteps} 步${item.examSkipped?' · 历史任务未包含考试':''}</p>${item.reason?`<p class="task-result-reason">${escapeHtml(item.reason)}</p>`:''}</div></div>`;
   }).join('');
 
   const currentItem = items.find(item => String(item.courseId || '') === String(batch.currentCourseId || ''));
@@ -4026,17 +4136,19 @@ function renderCourseBatchPanel() {
     </details>`;
 
   panel.classList.remove('hidden');
-  panel.innerHTML = `<div class="course-batch-head">
-      <div><div class="course-batch-title">${escapeHtml(scopeTitle)}</div><div class="course-batch-meta">${escapeHtml(courseBatchScopeDescription(batch))}</div></div>
-      <div class="course-batch-status">${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</div>
-    </div>
-    <div class="course-batch-progress"><span style="width:${percent}%"></span></div>
-     <div class="course-batch-meta">${escapeHtml(batch.reason || '等待执行')}${blockedItems.length ? `<br>有 ${blockedItems.length} 门未执行：${escapeHtml(blockedItems.slice(0, 3).map(item => item.reason || '当前不可执行').join('；'))}${blockedItems.length > 3 ? '；其余见下方详情' : ''}` : ''}${examSkipped > 0 ? `<br>历史任务中有 ${examSkipped} 门涉及考试，但考试未纳入本任务。` : ''}</div>
-     <div class="course-batch-meta course-batch-counts"><span>课程 ${completed}/${total}</span><span>失败 ${failed}</span><span>取消 ${cancelled}</span><span>已验证步骤 ${Number(batch.completedSteps || 0)}</span><span>未执行 ${blockedItems.length}</span></div>
+  panel.dataset.taskStatus=batch.status||'unknown';
+  panel.innerHTML=`<header class="task-header"><div><span class="section-label">${escapeHtml(scopeTitle)}</span><h3>${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</h3></div><span class="task-status-dot" aria-hidden="true"></span></header>
+    <p class="task-description">${escapeHtml(batch.reason||courseBatchScopeDescription(batch))}</p>
+    ${['running','paused','stopped'].includes(batch.status)?`<p class="task-current">当前课程 <strong>${escapeHtml(currentText)}</strong></p>`:''}
+    <div class="task-metrics"><div><strong>${completed}<small> / ${total}</small></strong><span>平台确认完成</span></div><div><strong>${failed}</strong><span>失败课程</span></div><div><strong>${Number(batch.completedSteps||0)}</strong><span>已验证步骤</span></div></div>
+    <div class="task-progress-caption"><span>任务处理进度（含失败、取消）</span><span>${settled} / ${total}</span></div><div class="course-batch-progress"><span style="width:${percent}%"></span></div>
     <div class="course-batch-actions">${actions}</div>
-    ${diagnosticHtml}
-    ${itemHtml ? `<div class="course-batch-items">${itemHtml}</div>` : ''}`;
+    ${blockedItems.length||cancelled||examSkipped?`<p class="field-note">未执行 ${blockedItems.length} 门 · 已取消 ${cancelled} 门${examSkipped?' · 历史任务未包含考试 '+examSkipped+' 门':''}</p>`:''}
+    ${itemHtml?`<section class="task-results"><h3>课程结果</h3>${itemHtml}</section>`:''}
+    <details class="task-scope-details"><summary>执行范围与未执行原因</summary><p>${escapeHtml(courseBatchScopeDescription(batch))}</p>${blockedItems.map(item=>`<p>${escapeHtml(item.courseName||item.courseId||'课程')}：${escapeHtml(item.reason||'当前不可执行')}</p>`).join('')}</details>
+    ${diagnosticHtml}`;
 }
+
 
 function updateCourseBatchUi() {
   renderCourseBatchControls();
