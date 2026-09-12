@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc4"><title>Snow · 雪松工作台</title><style>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc5"><title>Snow · 雪松工作台</title><style>
 
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -1047,6 +1047,58 @@ html{scrollbar-gutter:stable}
 .qstats-bd{flex:1;min-height:0;overflow:auto;max-height:none;overscroll-behavior:contain}
 .qstats-bd .question-batch-actions{align-items:flex-start}
 
+/* RC5 shared dialog/field/feedback rules. No global theme replacement. */
+:root{--interaction-radius:18px;--interaction-pad:28px;--interaction-control-height:44px;--interaction-error:#9b423c}
+.snow-modal-open{overflow:hidden}
+.interaction-label{display:block;font-size:13px;line-height:1.6;color:var(--text-secondary);font-weight:500}
+.interaction-label>.input{display:block;width:100%;margin-top:9px;min-width:0}
+.interaction-header{flex:none;padding:var(--interaction-pad);border-bottom:1px solid var(--border-light)}
+.interaction-header h3{font-size:22px!important;font-weight:500;margin:10px 0 8px!important;line-height:1.4}
+.interaction-header p{font-size:12px;color:var(--text-muted);margin:0;line-height:1.8}
+#editQuestionModal,#excelConfigModal,#inputOverlay,#confirmOverlay{align-items:center;padding:24px;top:var(--snow-visible-top,0px);bottom:auto;height:var(--snow-visible-height,100dvh);box-sizing:border-box}
+#editQuestionModal .interaction-card,#excelConfigModal .interaction-card{display:flex;flex-direction:column;width:100%;padding:0;max-height:calc(var(--snow-visible-height,100dvh) - 48px);overflow:hidden;border-radius:var(--interaction-radius);animation:none;box-shadow:0 22px 80px #173a2e24}
+#editQuestionModal .interaction-card{max-width:680px}#excelConfigModal .interaction-card{max-width:860px}
+.interaction-body{padding:24px var(--interaction-pad);overflow:auto;overscroll-behavior:contain;min-height:0;flex:1;scroll-padding:20px}
+.interaction-body .form-group{margin-bottom:22px}.interaction-body .form-group:last-of-type{margin-bottom:0}
+.interaction-body .input{font-size:14px;line-height:1.7;min-height:var(--interaction-control-height);border-radius:9px}
+.interaction-body textarea{resize:vertical;max-height:340px}
+.field-required{font-size:11px;color:var(--text-muted);font-weight:400;margin-left:8px}
+.interaction-footer{flex:none;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px var(--interaction-pad);border-top:1px solid var(--border-light);background:#fafbf8}
+.interaction-footer .field-note{font-size:11px;margin:0;max-width:240px}.interaction-actions{display:flex;gap:10px;flex-shrink:0}
+.interaction-footer .btn,.input-prompt-actions .btn,.confirm-actions .btn{min-height:var(--interaction-control-height);white-space:normal}
+.interaction-footer>.flex{flex-shrink:0}.import-footer>#addCategoryBtn{max-width:50%;text-align:left;overflow-wrap:anywhere}
+.mapping-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:24px 0 12px}
+#previewTable{max-width:100%;overflow:auto}#previewTable .table-wrap{border-radius:10px}#previewTable td{overflow-wrap:anywhere;min-width:90px}
+#questionImportValidation{overflow-wrap:anywhere}.interaction-notice,.list-feedback[data-state=error]{color:var(--interaction-error);background:#fbf1ee;border:1px solid #efd8d1;border-radius:9px;padding:13px 15px;font-size:13px;line-height:1.8;margin-top:18px;overflow-wrap:anywhere}
+.interaction-error{color:var(--interaction-error);font-size:12px;line-height:1.6;margin:7px 0 0}
+.input[aria-invalid=true]{border-color:var(--interaction-error)!important;box-shadow:none!important}
+.interaction-card [hidden],.interaction-error[hidden],.list-feedback[hidden]{display:none!important}
+#confirmOverlay .confirm-box,#inputOverlay .input-box{width:100%;max-width:440px;padding:28px;max-height:calc(var(--snow-visible-height,100dvh) - 48px);overflow:auto;border-radius:var(--interaction-radius);animation:none;margin:0;box-shadow:0 22px 80px #173a2e24}
+.confirm-box h4,.input-box h4{font-size:19px;line-height:1.5;font-weight:500;margin-bottom:14px}.confirm-box p,.input-box p{font-size:13px;line-height:1.85;overflow-wrap:anywhere}
+.input-box .interaction-label{margin-bottom:8px}.input-box .input{font-size:16px}.input-prompt-error{font-size:12px;line-height:1.6}
+.confirm-actions,.input-prompt-actions{padding-top:18px;margin-top:18px;border-top:1px solid var(--border-light)}
+.list-feedback{min-height:44px;margin:12px 0 16px;padding:11px 0;font-size:12px;line-height:1.8;color:var(--text-muted)}
+.list-feedback[data-state=loading]::before{content:'';display:inline-block;width:9px;height:9px;border-radius:50%;background:#819b87;margin-right:10px}
+.interaction-toast{display:flex!important;gap:18px;align-items:flex-start;text-align:left!important;background:#fff!important;color:var(--text-primary)!important;border:1px solid var(--border)!important;border-left:3px solid #51745c!important;border-radius:10px!important;padding:15px 16px!important;box-shadow:0 8px 28px #19392e16!important;font-size:13px!important;line-height:1.7!important;pointer-events:auto}
+.interaction-toast>span{flex:1;min-width:0;overflow-wrap:anywhere}.interaction-toast.err{border-left-color:#aa5148!important;color:#8c3934!important}
+.toast-dismiss{border:0;background:none;color:var(--text-muted);font:inherit;font-size:11px;padding:3px 0 3px 8px;flex:none;cursor:pointer;min-height:32px}
+.toast-stack{max-height:45dvh;overflow:auto;z-index:12000}
+.task-attention{border-left:3px solid #ae956c;padding:14px 18px;background:#f8f5ed;margin:20px 0;border-radius:0 9px 9px 0}.task-attention h4{margin:0 0 7px;font-size:14px}.task-attention p{font-size:12px;line-height:1.8;margin:0}
+@media(max-width:600px){
+  :root{--interaction-pad:20px}
+  #editQuestionModal,#excelConfigModal{padding:12px 0 0;align-items:flex-end}
+  #editQuestionModal .interaction-card,#excelConfigModal .interaction-card{max-height:calc(var(--snow-visible-height,100dvh) - 12px);border-radius:20px 20px 0 0;border-bottom:0}
+  .interaction-header{padding:19px 20px 16px}.interaction-header h3{font-size:20px!important}.interaction-header .section-label{font-size:9px}
+  .interaction-body{padding:20px}.interaction-body .input{font-size:16px}.mapping-grid{gap:15px;grid-template-columns:1fr}
+  .interaction-footer{display:flex;flex-wrap:wrap;gap:12px;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}
+  .interaction-footer>.field-note{max-width:none;width:100%;font-size:11px}.interaction-actions,.interaction-footer>.flex{width:100%;display:grid;grid-template-columns:1fr 1.4fr;gap:10px}.interaction-actions .btn{width:100%}
+  .import-footer>#addCategoryBtn{max-width:100%;width:100%;text-align:left;padding-left:0;border:0;background:none}
+  #confirmOverlay,#inputOverlay{padding:14px;align-items:center}#confirmOverlay .confirm-box,#inputOverlay .input-box{padding:23px;max-height:calc(var(--snow-visible-height,100dvh) - 28px)}
+  .toast-stack{bottom:calc(76px + env(safe-area-inset-bottom));width:calc(100% - 28px)}.toast-dismiss{min-height:44px}
+}
+@media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
+@media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
+
 </style></head><body>
 
 
@@ -1076,7 +1128,8 @@ html{scrollbar-gutter:stable}
   <div class="input-box" role="dialog" aria-modal="true" aria-labelledby="inputPromptTitle" aria-describedby="inputPromptMsg">
     <h4 id="inputPromptTitle"></h4>
     <p id="inputPromptMsg"></p>
-    <input type="text" id="inputPromptValue" class="input" autocomplete="off">
+    <label class="interaction-label" for="inputPromptValue">填写新值</label>
+    <input type="text" id="inputPromptValue" class="input" autocomplete="off" aria-describedby="inputPromptMsg inputPromptError">
     <div id="inputPromptError" class="input-prompt-error" role="alert"></div>
     <div class="input-prompt-actions">
       <button type="button" class="btn btn-ghost btn-sm" id="inputPromptCancel">取消</button>
@@ -1356,37 +1409,48 @@ html{scrollbar-gutter:stable}
 
 <!-- Excel Config Modal -->
 <div class="excel-modal" id="excelConfigModal">
-  <div class="excel-card">
-    <h3 id="excelConfigTitle" style="margin-bottom:12px;">新建题库</h3>
+  <div class="excel-card interaction-card" role="dialog" aria-modal="true" aria-labelledby="excelConfigTitle">
+    <header class="interaction-header"><span class="section-label">LIBRARY IMPORT</span><h3 id="excelConfigTitle">新建题库</h3><p>确认字段对应关系，校验通过后再提交。</p></header>
+    <div class="interaction-body">
     <div id="questionImportContext" class="question-import-context"></div>
     <div id="excelPreviewArea" class="mb-12"></div>
-    <div class="flex mb-12"><select id="questionColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 题目</span></div>
-    <div class="flex mb-12"><select id="answerColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 答案</span></div>
-    <div class="flex mb-12"><select id="optionStartColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项起始</span></div>
-    <div class="flex mb-12"><select id="optionEndColSelect" class="input" style="flex:1;"></select><span style="padding:0 8px;color:var(--text-muted);white-space:nowrap;">→ 选项结束</span></div>
+    <section class="mapping-grid" aria-label="文件字段对应关系">
+      <label class="interaction-label" for="questionColSelect">题目所在列<select id="questionColSelect" class="input"></select></label>
+      <label class="interaction-label" for="answerColSelect">答案所在列<select id="answerColSelect" class="input"></select></label>
+      <label class="interaction-label" for="optionStartColSelect">选项起始列<select id="optionStartColSelect" class="input"></select></label>
+      <label class="interaction-label" for="optionEndColSelect">选项结束列<select id="optionEndColSelect" class="input"></select></label>
+    </section>
+    <p class="field-note">选项按起始列至结束列连续读取，请对照下方预览检查。</p>
     <div id="previewTable" style="overflow-x:auto;margin-bottom:16px;"></div>
     <div id="questionImportValidation" class="hidden"></div>
-    <div class="flex-between">
+    </div>
+    <footer class="interaction-footer import-footer">
       <button id="addCategoryBtn" class="btn btn-ghost btn-sm">题库名称</button>
       <div class="flex gap-8">
         <button id="cancelImportBtn" class="btn btn-ghost btn-sm">取消</button>
         <button id="confirmImportConfigBtn" class="btn btn-primary">校验并预览</button>
       </div>
-    </div>
+    </footer>
   </div>
 </div>
 
 <!-- Edit Question Modal -->
 <div class="modal" id="editQuestionModal">
-  <div class="modal-card">
-    <h3>修改题目</h3>
-    <div class="form-group"><label>题干</label><textarea id="editQuestionText" class="input" rows="3" placeholder="请输入题目内容"></textarea></div>
-    <div class="form-group"><label>选项列表（每行一个）</label><textarea id="editQuestionOptions" class="input" rows="5" placeholder="例如：&#10;正确&#10;错误"></textarea></div>
-    <div class="form-group"><label>答案</label><input type="text" id="editQuestionAnswer" class="input" placeholder="请输入正确答案"></div>
-    <div class="btn-row">
-      <button id="cancelEditBtn" class="btn btn-ghost">取消</button>
-      <button id="saveEditBtn" class="btn btn-primary">保存</button>
+  <div class="modal-card interaction-card" role="dialog" aria-modal="true" aria-labelledby="editQuestionTitle">
+    <header class="interaction-header"><span class="section-label">QUESTION EDITOR</span><h3 id="editQuestionTitle">编辑题目</h3><p>修改这道题的内容，不影响其他题目。</p></header>
+    <div class="interaction-body">
+    <div class="form-group"><label for="editQuestionText">题目内容 <span class="field-required">必填</span></label><textarea id="editQuestionText" class="input" rows="3" placeholder="请输入题目内容" aria-describedby="editQuestionTextError"></textarea><p class="interaction-error" id="editQuestionTextError" hidden></p></div>
+    <div class="form-group"><label for="editQuestionOptions">选项列表 <span class="field-required">每行一个</span></label><textarea id="editQuestionOptions" class="input" rows="5" placeholder="例如：&#10;正确&#10;错误" aria-describedby="editQuestionOptionsError"></textarea><p class="interaction-error" id="editQuestionOptionsError" hidden></p></div>
+    <div class="form-group"><label for="editQuestionAnswer">答案 <span class="field-required">必填</span></label><input type="text" id="editQuestionAnswer" class="input" placeholder="请输入正确答案" aria-describedby="editQuestionAnswerError"><p class="interaction-error" id="editQuestionAnswerError" hidden></p></div>
+    <div id="editQuestionFeedback" class="interaction-notice" role="alert" hidden></div>
     </div>
+    <footer class="interaction-footer">
+      <span class="field-note" id="editQuestionSaveHint">保存前可继续检查和修改。</span>
+      <div class="interaction-actions">
+      <button id="cancelEditBtn" class="btn btn-ghost">取消</button>
+      <button id="saveEditBtn" class="btn btn-primary">保存修改</button>
+      </div>
+    </footer>
   </div>
 </div>
 
@@ -1546,8 +1610,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.snow-public-intro p').textContent='一个安静、有序的工具入口。从验证凭证开始，让每一步都简单一点。';
   document.querySelector('.snow-public-intro .snow-eyebrow').textContent='LESS FRICTION. MORE FOCUS.';
   document.querySelector('.snow-form-heading .snow-eyebrow').textContent='01 / PERSONAL ACCESS';
-  document.querySelector('.snow-sidebar-foot .snow-eyebrow').textContent='CEDAR / UI 12.0.0 RC4';
-  document.querySelector('.snow-footer').textContent='SNOW WORKSPACE / PRODUCT UI 12.0.0 RC4';
+  document.querySelector('.snow-sidebar-foot .snow-eyebrow').textContent='CEDAR / UI 12.0.0 RC5';
+  document.querySelector('.snow-footer').textContent='SNOW WORKSPACE / PRODUCT UI 12.0.0 RC5';
   const home=el('subOverview');
   // Keep the connection label observed by the base adapter; reuse the original shortcuts.
   const status=el('snowCourseState'),shortcuts=home.querySelector('.snow-shortcuts');
@@ -1899,6 +1963,165 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 </script>
+<script id="snowProduct4">
+/* RC5 shared presentation primitives. Requests and authorization stay in business handlers. */
+const SnowInteraction = (() => {
+  const $ = id => document.getElementById(id);
+  const versions = new Map(), timers = new WeakMap();
+  const lists = { questions: ['questionSearchResult','questionSearchBtn'], logs: ['logsContainer',null] };
+  function toast(message, error) {
+    const stack = $('toastStack');
+    if (!stack) return;
+    let item = [...stack.children].find(n => n.dataset.message === message && n.classList.contains('err') === error);
+    if (item) { clearTimeout(timers.get(item)); }
+    else {
+      item = document.createElement('div'); item.className = 'toast-item interaction-toast' + (error ? ' err' : '');
+      item.dataset.message = message;
+      const content = document.createElement('span'); content.textContent = message;
+      const close = document.createElement('button'); close.type = 'button'; close.className = 'toast-dismiss';
+      close.textContent = '关闭'; close.setAttribute('aria-label','关闭此提示');
+      close.addEventListener('click',()=>{clearTimeout(timers.get(item));item.remove();});
+      item.append(content,close); stack.append(item);
+      while (stack.children.length > 3) { const oldest=stack.firstElementChild;clearTimeout(timers.get(oldest));oldest.remove(); }
+    }
+    const dismiss = () => {
+      if (item.matches(':hover') || item.contains(document.activeElement)) { timers.set(item,setTimeout(dismiss,1500)); return; }
+      item.remove();
+    };
+    timers.set(item,setTimeout(dismiss,error ? 9000 : 3500));
+  }
+  function listNotice(name) {
+    const [id] = lists[name], list = $(id);
+    let notice = $('snowListNotice-'+name);
+    if (!notice) {
+      notice=document.createElement('div');notice.id='snowListNotice-'+name;notice.className='list-feedback';notice.hidden=true;
+      notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');
+      list.before(notice);
+    }
+    return {list,notice};
+  }
+  function beginList(name) {
+    const ticket=(versions.get(name)||0)+1;versions.set(name,ticket);
+    const {list,notice}=listNotice(name);
+    list.setAttribute('aria-busy','true');notice.hidden=false;notice.dataset.state='loading';
+    notice.textContent=list.querySelector('.question-record,.activity-entry')?'正在更新，已有内容暂时保留。':'正在读取，请稍候…';
+    document.dispatchEvent(new Event('snow-list-state'));
+    return ticket;
+  }
+  function endList(name,ticket,error='') {
+    if (!isLatest(name,ticket)) return;
+    const {list,notice}=listNotice(name);list.setAttribute('aria-busy','false');
+    notice.hidden=!error;notice.dataset.state=error?'error':'ready';notice.textContent=error;
+    if(error){const hint=document.createElement('span');hint.textContent=name==='questions'?' 可调整条件后重新搜索；下方内容尚未更新。':' 可点击“刷新记录”重新读取。';notice.append(hint);}
+    document.dispatchEvent(new Event('snow-list-state'));
+  }
+  function isLatest(name,ticket){return versions.get(name)===ticket;}
+  function clearEditorErrors(){
+    for(const id of ['editQuestionText','editQuestionOptions','editQuestionAnswer']){
+      $(id).removeAttribute('aria-invalid');$(id+'Error').hidden=true;$(id+'Error').textContent='';
+    }
+    $('editQuestionFeedback').hidden=true;$('editQuestionFeedback').textContent='';
+  }
+  function editorErrors(issues){
+    for(const [id,message] of issues){$(id).setAttribute('aria-invalid','true');$(id+'Error').textContent=message;$(id+'Error').hidden=false;}
+    $('editQuestionFeedback').textContent=`还有 ${issues.length} 项需要填写，请检查标注字段。`;$('editQuestionFeedback').hidden=false;
+    $(issues[0][0]).focus();$(issues[0][0]).scrollIntoView({block:'nearest'});
+  }
+  function editorBusy(busy){
+    for(const id of ['saveEditBtn','cancelEditBtn'])$(id).disabled=busy;
+    for(const id of ['editQuestionText','editQuestionOptions','editQuestionAnswer'])$(id).readOnly=busy;
+    $('editQuestionModal').setAttribute('aria-busy',String(busy));
+    $('saveEditBtn').textContent=busy?'正在保存…':'保存修改';
+    $('editQuestionSaveHint').textContent=busy?'正在等待接口返回，请勿重复提交。':'保存前可继续检查和修改。';
+  }
+  return {toast,beginList,endList,isLatest,clearEditorErrors,editorErrors,editorBusy};
+})();
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const $=id=>document.getElementById(id);
+  const modalSpecs=[['questionStatsModal','closeQuestionStatsBtn'],['excelConfigModal','cancelImportBtn'],['editQuestionModal','cancelEditBtn'],['confirmOverlay','confirmCancel'],['inputOverlay','inputPromptCancel']];
+  const openOrder=[], focusOrigins=new Map(), inertOwned=new Set();
+  const visible=node=>!!node?.getClientRects().length;
+  const isOpen=node=>node.classList.contains('show');
+  const releaseInert=()=>{for(const n of inertOwned)n.inert=false;inertOwned.clear();};
+  function isolate(top){
+    releaseInert();
+    if(!top)return;
+    // Make only branches outside the active dialog inert; do not move or clone business controls.
+    for(let branch=top;branch&&branch!==document.body;branch=branch.parentElement){
+      for(const sibling of branch.parentElement.children){
+        if(sibling===branch||['SCRIPT','STYLE'].includes(sibling.tagName)||['toastStack','networkStatus'].includes(sibling.id)||sibling.inert)continue;
+        sibling.inert=true;inertOwned.add(sibling);
+      }
+    }
+  }
+  function syncModal(node){
+    const open=isOpen(node),known=openOrder.includes(node);
+    node.setAttribute('aria-hidden',String(!open));
+    if(open&&!known){
+      focusOrigins.set(node,document.activeElement);openOrder.push(node);
+      if(node.id==='editQuestionModal')SnowInteraction.clearEditorErrors();
+      const native=[...document.querySelectorAll('dialog[open]')].pop();
+      if(native&&!native.contains(node)&&['confirmOverlay','inputOverlay'].includes(node.id))native.append(node);
+      requestAnimationFrame(()=>{
+        if(!isOpen(node))return;
+        const target=node.id==='confirmOverlay'?$('confirmCancel'):node.querySelector('textarea,input,select,button');
+        target?.focus();
+      });
+    }else if(!open&&known){
+      openOrder.splice(openOrder.indexOf(node),1);
+      if(node.parentElement?.tagName==='DIALOG')document.body.append(node);
+    }
+    isolate(openOrder.at(-1));
+    document.body.classList.toggle('snow-modal-open',openOrder.length>0);
+    if(!open&&known){const target=focusOrigins.get(node);if(visible(target)&&!target.closest('[inert]'))target.focus();focusOrigins.delete(node);}
+  }
+  for(const [id] of modalSpecs){const node=$(id);new MutationObserver(()=>syncModal(node)).observe(node,{attributes:true,attributeFilter:['class']});node.setAttribute('aria-hidden','true');}
+  $('questionStatsModal').querySelector('.qstats-card').setAttribute('role','dialog');
+  $('questionStatsModal').querySelector('.qstats-card').setAttribute('aria-label','独立题库管理');
+  $('questionStatsModal').querySelector('.qstats-card').setAttribute('aria-modal','true');
+  document.addEventListener('keydown',e=>{
+    const top=openOrder.at(-1);if(!top||['confirmOverlay','inputOverlay'].includes(top.id))return;
+    if(e.key==='Escape'){
+      e.preventDefault();e.stopImmediatePropagation();
+      if(top.getAttribute('aria-busy')==='true'||(top.id==='excelConfigModal'&&$('confirmImportConfigBtn').disabled))return;
+      $(modalSpecs.find(([id])=>id===top.id)[1]).click();
+    }else if(e.key==='Tab'){
+      const nodes=[...top.querySelectorAll('button,input,select,textarea,a[href],summary,[tabindex="0"]')].filter(n=>visible(n)&&!n.disabled&&!n.closest('[inert]'));
+      if(!nodes.length)return;
+      const index=nodes.indexOf(document.activeElement);
+      const next=e.shiftKey?(index<=0?nodes.length-1:index-1):(index<0||index===nodes.length-1?0:index+1);
+      e.preventDefault();nodes[next].focus();
+    }
+  },true);
+  // Backdrop clicks never discard an edit or import; the explicit cancel action remains available.
+  for(const id of ['editQuestionModal','excelConfigModal'])$(id).addEventListener('click',e=>{if(e.target===$(id)){e.preventDefault();e.stopImmediatePropagation();}},true);
+  for(const id of ['editQuestionText','editQuestionOptions','editQuestionAnswer'])$(id).addEventListener('input',()=>{
+    $(id).removeAttribute('aria-invalid');$(id+'Error').hidden=true;$('editQuestionFeedback').hidden=true;
+  });
+  const syncInputError=()=>{$('inputPromptValue').setAttribute('aria-invalid',String(!!$('inputPromptError').textContent));};
+  new MutationObserver(syncInputError).observe($('inputPromptError'),{childList:true,subtree:true,characterData:true});
+  document.addEventListener('snow-list-state',()=>{
+    const busy=state.logLoading;
+    const refresh=$('subLogs').querySelector('.module-heading-actions>.btn'),more=$('subLogs').querySelector('.activity-more');
+    if(refresh)refresh.disabled=busy;if(more){more.disabled=busy;more.hidden=!state.logHasMore;}
+  });
+  let frame=0;
+  function updateViewport(){
+    cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{
+      const vv=window.visualViewport;
+      document.documentElement.style.setProperty('--snow-visible-height',`${vv?.height||window.innerHeight}px`);
+      document.documentElement.style.setProperty('--snow-visible-top',`${vv?.offsetTop||0}px`);
+      const active=document.activeElement;
+      if(vv&&vv.height<window.innerHeight*.8&&active?.matches('input,textarea,select')&&active.closest('.interaction-card,.input-box,dialog'))active.scrollIntoView({block:'nearest'});
+    });
+  }
+  window.visualViewport?.addEventListener('resize',updateViewport);
+  window.visualViewport?.addEventListener('scroll',updateViewport);
+  window.addEventListener('resize',updateViewport);updateViewport();
+});
+
+</script>
 <script>
 // ═══════════════════════════════════════════
 //  State
@@ -2181,14 +2404,9 @@ function tokenNameError(value) {
   if (!/^[\p{L}\p{N}._:-]+$/u.test(token)) return 'Token 仅允许中文、字母、数字、点、下划线、冒号和短横线';
   return '';
 }
-const showToast = (msg, err) => {
-  const stack = $('toastStack');
-  const el = document.createElement('div');
-  el.className = 'toast-item' + (err ? ' err' : '');
-  el.textContent = msg;
-  stack.appendChild(el);
-  setTimeout(() => { el.style.animation = 'toastIn .2s reverse'; setTimeout(() => el.remove(), 250); }, 2800);
-};
+const showToast = (msg, err) => SnowInteraction.toast(String(msg ?? ''), !!err);
+
+
 
 let dialogQueue = Promise.resolve();
 function showConfirm(title, msg) {
@@ -3403,27 +3621,31 @@ function renderLogEntry(log) {
 
 async function loadLogs(reset = true) {
   const c = $('logsContainer');
-  if (!c || state.logLoading) return;
-  if (reset) { state.logPage = 1; state.logHasMore = true; c.innerHTML = '<div class="text-center text-muted" style="padding:16px;">加载日志中...</div>'; c._scrollSetup = false; }
-  if (!state.logHasMore) return;
+  if (!c || state.logLoading || (!reset && !state.logHasMore)) return;
+  const previousPage = state.logPage, previousMore = state.logHasMore;
+  if (reset) { state.logPage = 1; state.logHasMore = true; }
   state.logLoading = true;
+  const ticket = SnowInteraction.beginList('logs');
   try {
     const data = await adminFetch('logs', { page: state.logPage, pageSize: LOG_PAGE_SIZE });
     const raw = data.logs || [];
     state.logHasMore = data.hasMore !== false && raw.length >= LOG_PAGE_SIZE;
     if (reset) c.innerHTML = '';
-    if (!raw.length && reset) { c.innerHTML = ''; return; }
     for (const s of raw) { try { const log = JSON.parse(s); if (log?.timestamp) c.appendChild(renderLogEntry(log)); } catch(e) {} }
+    if (!c.children.length) c.innerHTML = '<div class="empty">暂无操作记录</div>';
     state.logPage++;
     if (!c._scrollSetup) {
       c._scrollSetup = true;
       c.addEventListener('scroll', () => { if (c.scrollHeight - c.scrollTop - c.clientHeight < 60) loadLogs(false); });
     }
+    SnowInteraction.endList('logs', ticket);
   } catch(e) {
-    if (reset) c.innerHTML = '<div class="empty" style="color:var(--danger);">日志加载异常</div>';
-    showToast('日志加载失败', true);
-  } finally { state.logLoading = false; }
+    state.logPage = previousPage; state.logHasMore = previousMore;
+    SnowInteraction.endList('logs', ticket, '日志读取失败，已有记录未清空。');
+  } finally { state.logLoading = false; document.dispatchEvent(new Event('snow-list-state')); }
 }
+
+
 
 async function clearLogs() {
   const ok = await showConfirm('清空日志', '确定要清除所有操作日志吗？');
@@ -3572,6 +3794,7 @@ async function initializeQuestionManagement() {
 }
 
 async function loadQuestions() {
+  const ticket = SnowInteraction.beginList('questions');
   try {
     const kw = $('questionSearchKeyword')?.value.trim() || '';
     const batchId = $('questionBatchFilter')?.value || '';
@@ -3579,14 +3802,18 @@ async function loadQuestions() {
     const params = { keyword: kw, page: state.questionPage, pageSize: QUESTION_PAGE_SIZE };
     if (batchId) params.batchId = batchId;
     const data = await adminFetch('searchSimpleQuestions', params, { cancelGroup: 'question-search' });
+    if (!SnowInteraction.isLatest('questions', ticket)) return;
     state.questions = Array.isArray(data.data) ? data.data : [];
     state.questionTotal = Number(data.total || 0);
     renderQuestionList();
+    SnowInteraction.endList('questions', ticket);
   } catch(e) {
     if (e.code === 'REQUEST_SUPERSEDED') return;
-    showToast(`加载题目失败: ${e.message}`, true);
+    SnowInteraction.endList('questions', ticket, `读取失败：${e.message}`);
   }
 }
+
+
 
 function renderQuestionList() {
   const container = $('questionSearchResult');
@@ -3639,19 +3866,32 @@ $('questionSearchResult').addEventListener('click', async e => {
 });
 
 async function saveEditQuestion() {
+  const button = $('saveEditBtn');
+  if (button.disabled) return;
+  SnowInteraction.clearEditorErrors();
   const text = $('editQuestionText').value.trim();
   const ans = $('editQuestionAnswer').value.trim();
   const optsRaw = $('editQuestionOptions').value;
-  if (!text) { showToast('题目不能为空', true); return; }
-  if (!ans) { showToast('答案不能为空', true); return; }
   const optsArr = optsRaw.split('\n').map(s => s.trim()).filter(s => s);
-  if (!optsArr.length) { showToast('至少需要一个选项', true); return; }
+  const issues = [];
+  if (!text) issues.push(['editQuestionText', '请输入题目内容。']);
+  if (!optsArr.length) issues.push(['editQuestionOptions', '至少填写一个选项，每行一个。']);
+  if (!ans) issues.push(['editQuestionAnswer', '请输入答案。']);
+  if (issues.length) { SnowInteraction.editorErrors(issues); return; }
+  const id = state.editId;
+  SnowInteraction.editorBusy(true);
   try {
-    await adminFetch('updateSimpleQuestion', { id: state.editId, text, options: JSON.stringify(optsArr), answer: ans });
+    await adminFetch('updateSimpleQuestion', { id, text, options: JSON.stringify(optsArr), answer: ans });
     showToast('修改成功'); $('editQuestionModal').classList.remove('show'); state.editId = null;
     await loadQuestions();
-  } catch(e) { showToast(`修改失败: ${e.message}`, true); }
+  } catch(e) {
+    // Preserve original error evidence and entered values; never retry a write automatically.
+    $('editQuestionFeedback').textContent = `修改未完成：${e.message}`;
+    $('editQuestionFeedback').hidden = false;
+  } finally { SnowInteraction.editorBusy(false); }
 }
+
+
 
 async function clearAllQuestions() {
   const ok = await showConfirm('清空全部题库', '此操作会删除所有独立题库及全部题目，不可恢复。确定继续吗？');
@@ -4254,6 +4494,10 @@ function renderCourseBatchPanel() {
       + (Array.isArray(batch.skipped) ? batch.skipped.filter(item => item.examSkipped === true).length : 0)
     : 0;
   const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
+  const needsReview = ['paused', 'stopped'].includes(batch.status);
+  const attentionHtml = failed > 0 || needsReview
+    ? `<aside class="task-attention"><h4>${needsReview ? '任务已暂停，请先查看原因' : '部分课程需要处理'}</h4><p>${failed > 0 ? `${failed} 门课程失败。` : ''}${needsReview ? '请先查看当前课程和平台返回的说明；写入结果待确认时先复核，不要重复提交。' : '请查看下方各门课程的具体原因；技术信息收在“性能与诊断”中。'}</p></aside>`
+    : '';
   const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
   const waitingHint = state.courseBatchPauseRequested
     ? ' · 正在等待当前步骤结束后暂停'
@@ -4323,6 +4567,7 @@ function renderCourseBatchPanel() {
     <div class="task-metrics"><div><strong>${completed}<small> / ${total}</small></strong><span>平台确认完成</span></div><div><strong>${failed}</strong><span>失败课程</span></div><div><strong>${Number(batch.completedSteps||0)}</strong><span>已验证步骤</span></div></div>
     <div class="task-progress-caption"><span>任务处理进度（含失败、取消）</span><span>${settled} / ${total}</span></div><div class="course-batch-progress"><span style="width:${percent}%"></span></div>
     <div class="course-batch-actions">${actions}</div>
+    ${attentionHtml}
     ${blockedItems.length||cancelled||examSkipped?`<p class="field-note">未执行 ${blockedItems.length} 门 · 已取消 ${cancelled} 门${examSkipped?' · 历史任务未包含考试 '+examSkipped+' 门':''}</p>`:''}
     ${itemHtml?`<section class="task-results"><h3>课程结果</h3>${itemHtml}</section>`:''}
     <details class="task-scope-details"><summary>执行范围与未执行原因</summary><p>${escapeHtml(courseBatchScopeDescription(batch))}</p>${blockedItems.map(item=>`<p>${escapeHtml(item.courseName||item.courseId||'课程')}：${escapeHtml(item.reason||'当前不可执行')}</p>`).join('')}</details>
