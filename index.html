@@ -1099,23 +1099,489 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="1.1.0-rc5"><style id="snowMemberDesign">
-.member-entry{margin-left:12px;border:0;background:transparent;color:#245344;font:inherit;cursor:pointer;padding:10px 12px;border-radius:8px}.member-entry:hover{background:#e8eee8}
-.member-dialog{width:min(1180px,calc(100vw - 48px));height:min(820px,calc(100dvh - 48px));max-width:none;max-height:none;border:1px solid #dce4db;border-radius:22px;padding:0;background:#f6f7f3;color:#20382f;box-shadow:0 24px 90px #152d2633;font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif}.member-dialog::backdrop{background:#18382e66;backdrop-filter:blur(4px)}
-.member-dialog [hidden]{display:none!important}.member-dialog *{box-sizing:border-box}.member-dialog button,.member-dialog input,.member-dialog select,.member-dialog textarea{font:inherit}.member-dialog button{cursor:pointer}.member-dialog button:disabled{opacity:.5;cursor:default}.member-head{height:74px;display:flex;justify-content:space-between;align-items:center;padding:0 28px;background:#fff;border-bottom:1px solid #e1e7dd}.member-logo{display:flex;align-items:center;gap:13px;font-size:22px;font-weight:650;letter-spacing:-.8px}.member-logo svg{height:35px;width:27px;color:#285543}.member-label{font-size:12px;color:#7c8c80;letter-spacing:1.5px;font-weight:500}.member-close{border:1px solid #dde5dc;background:#fff;border-radius:8px;padding:9px 14px;color:#506456}.member-layout{display:grid;grid-template-columns:200px 1fr;height:calc(100% - 74px)}.member-nav{padding:25px 16px;background:#edf1e9;overflow:auto}.member-nav strong{display:block;margin:0 12px 18px;font-size:14px}.member-nav button{display:block;width:100%;text-align:left;border:0;background:none;border-radius:10px;padding:12px 14px;margin:4px 0;color:#5d7063}.member-nav button[aria-current=page]{background:#244f40;color:#fff}.member-main{min-width:0;overflow:auto;padding:32px 36px;scrollbar-gutter:stable}.member-main h2{font-size:28px;font-weight:550;letter-spacing:-1px;line-height:1.3;margin:0 0 10px}.member-main h3{font-size:16px;margin:0 0 14px;font-weight:600}.member-muted{color:#718276;font-size:13px;line-height:1.8}.member-page-title{margin-bottom:26px}.member-card{background:white;border:1px solid #e0e6dc;border-radius:14px;padding:22px;margin-bottom:18px}.member-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.member-grid>.member-card{margin:0}.member-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:24px 0}.member-stat{background:white;border:1px solid #e0e6dc;border-radius:14px;padding:22px}.member-stat b{display:block;font-size:36px;letter-spacing:-1px;font-weight:600;line-height:1.3}.member-stat span{color:#778879;font-size:12px}.member-hero{padding:28px;background:#e7eee2;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:20px}.member-hero p{margin:8px 0 0}.member-primary,.member-secondary,.member-danger{padding:11px 16px;border-radius:9px;border:1px solid transparent;min-height:43px}.member-primary{background:#24513f;color:white}.member-secondary{background:white;color:#395746;border-color:#dce5d7}.member-danger{background:#fff5f1;color:#9b4735;border-color:#ecd5ce}.member-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}.member-form{display:grid;gap:15px}.member-form label{display:grid;gap:7px;font-size:13px;color:#47604e}.member-dialog input,.member-dialog select,.member-dialog textarea{width:100%;min-width:0;border:1px solid #dce4d6;background:#fcfdfb;border-radius:8px;padding:11px 12px;color:#20382f}.member-dialog input:focus-visible,.member-dialog select:focus-visible,.member-dialog textarea:focus-visible,.member-dialog button:focus-visible{outline:2px solid #7f9a84;outline-offset:2px}.member-dialog input[type=checkbox]{width:18px;height:18px;padding:0;flex-shrink:0}.member-form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}.member-auth{max-width:420px;margin:35px auto}.member-auth h2{margin-bottom:14px}.member-auth-switch{border:0;background:transparent;padding:8px;color:#24513f}.member-notice{padding:12px 16px;border-radius:9px;background:#e8eee3;color:#3e5b45;line-height:1.7;font-size:13px;margin-bottom:16px;overflow-wrap:anywhere}.member-notice[data-error=true]{background:#fff1ec;color:#8c4a38}.member-row{border-bottom:1px solid #edf0e8;padding:15px 0;display:flex;justify-content:space-between;align-items:center;gap:14px}.member-row:last-child{border-bottom:0}.member-row strong{display:block;font-size:14px;overflow-wrap:anywhere}.member-row small{color:#798779;font-size:12px;line-height:1.8}.member-code{font-family:ui-monospace,monospace;overflow-wrap:anywhere;background:#f3f5ee;border-radius:8px;padding:12px;font-size:12px;line-height:1.7;margin:10px 0;white-space:pre-wrap}.member-course-check{display:flex;align-items:center;gap:12px;min-width:0}.member-course-check>span{min-width:0}.member-status{font-size:12px;color:#657c68}.member-product-price{font-size:28px;margin:14px 0;color:#244f40}.member-product-price small{font-size:12px;color:#7a8a7a}.member-edit-products{display:grid;gap:16px}.member-edit-product{padding:18px;border:1px solid #e3e8dd;border-radius:10px}.member-edit-product .member-form-two{grid-template-columns:repeat(3,1fr)}.member-empty{padding:30px;text-align:center;color:#7a897b;font-size:14px}.member-busy{font-size:12px;color:#5c7964;margin-left:10px}.member-dialog .member-profile-note{padding:20px 0;font-size:12px;line-height:1.8;color:#819080}
-@media(max-width:760px){.member-dialog{width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0}.member-head{height:64px;padding:0 18px}.member-label{display:none}.member-layout{display:flex;flex-direction:column;height:calc(100% - 64px)}.member-nav{display:flex;gap:4px;overflow-x:auto;padding:10px 12px;flex-shrink:0}.member-nav strong{display:none}.member-nav button{width:auto;white-space:nowrap;padding:10px 13px;margin:0}.member-main{padding:24px 18px;flex:1;min-height:0}.member-main h2{font-size:25px}.member-stats{gap:8px}.member-stat{padding:14px 10px}.member-stat b{font-size:28px}.member-grid,.member-form-two{grid-template-columns:1fr}.member-hero{align-items:flex-start;padding:22px;flex-direction:column}.member-card{padding:18px}.member-edit-product .member-form-two{grid-template-columns:1fr 1fr}.member-auth{margin:15px auto}.member-row{align-items:flex-start}.member-row>.member-actions{margin:0}.member-dialog .member-actions>button{flex-grow:1}}
-@media(prefers-reduced-motion:reduce){.member-dialog *{scroll-behavior:auto!important}}
-.member-layout.member-auth-layout{grid-template-columns:1fr}
-.member-confirm{width:min(430px,calc(100vw - 32px));border:1px solid #dce4db;border-radius:16px;background:#fff;color:#20382f;padding:26px;font:14px/1.8 system-ui,-apple-system,"Microsoft YaHei",sans-serif;box-shadow:0 20px 80px #152d2633}.member-confirm::backdrop{background:#18382e66}.member-confirm h3{margin:0 0 12px;font-size:18px}.member-confirm label{display:grid;gap:8px}.member-confirm input{width:100%;box-sizing:border-box;border:1px solid #dce4db;border-radius:8px;padding:12px;font:inherit}.member-confirm-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}.member-confirm button{border:1px solid #dce4db;border-radius:8px;padding:10px 18px;background:#fff;color:#395746;font:inherit;cursor:pointer}.member-confirm button[type=submit]{background:#24513f;color:#fff}.member-confirm :focus-visible{outline:2px solid #7f9a84;outline-offset:2px}
-
-/* Keep native dialogs centered despite inherited RC5 dialog positioning. */
-.member-dialog,.member-confirm{position:fixed;inset:0;margin:auto;box-sizing:border-box}
+</style><meta name="snow-member-version" content="1.16.0-rc1"><style id="snowMemberDesign">
+/* Receipt query state v18: no global component overrides. */
+.member-receipt-query{min-width:0}
+.member-receipt-query .member-receipt-label{display:block;font-size:11px;line-height:1.8;color:#687970;margin-top:14px}
+.member-receipt-query[data-query-phase=loading]{background:#f5f7f5;border-color:#dfe6e1;color:#314d40}
+.member-receipt-query[data-query-phase=loading] p{color:#61746a}
+.member-receipt-query[data-query-phase=failed]{background:#faf5ec;border-color:#e9dcc6;color:#78613e}
+.member-receipt-query[data-query-phase=failed] p{color:#806c4b}
+.member-receipt-query code{word-break:break-word}
+/* Snow member workspace — a single, scoped visual system. */
+/* Device entitlements: read-only field presentation; no status or business override. */
+.member-device-asset .member-asset-header{gap:12px;flex-wrap:wrap}
+.member-device-asset .member-asset-badge[data-device-tone=attention]{background:#f7f0e8;border-color:#eaddc9;color:#87653f}
+.member-device-asset .member-asset-badge[data-device-tone=unknown]{background:#f2f3ef;border-color:#e1e4db;color:#727c6d}
+.member-device-asset .member-device-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+.member-device-asset .member-device-metrics b{font-size:24px;min-height:32px;line-height:1.3;overflow-wrap:anywhere}
+.member-device-info{display:grid;gap:11px;margin:22px 0 16px;font-size:12px;line-height:1.7}
+.member-device-info>div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px}
+.member-device-info dt{color:#81907f}
+.member-device-info dd{margin:0;color:#425a48;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.member-device-time-note,.member-device-data-note{padding:12px 14px;border:1px solid #e8ddc6;border-radius:9px;background:#f8f5ee;color:#7c694a;font-size:11px;line-height:1.8;margin:14px 0}
+.member-device-data-note strong{font-size:12px}.member-device-data-note p{margin:6px 0 0}
+.member-device-asset .member-device-guide{line-height:1.9;margin-bottom:18px}
+@media(max-width:760px){.member-device-info>div{grid-template-columns:72px minmax(0,1fr);gap:8px}.member-device-info{font-size:11px}.member-device-asset .member-device-metrics b{font-size:22px}}
+/* Review workspace: scoped controls and explicit loading/error/empty states. */
+.member-review-toolbar .member-review-switch,.member-review-tools,.member-review-filter{display:flex;align-items:center;gap:8px;min-width:0}
+.member-review-toolbar .member-review-switch{padding:4px;border:1px solid #dfe5dd;border-radius:10px;background:#eff3ed;gap:4px}
+.member-review-toolbar .member-review-switch button{border:0;background:transparent;min-height:44px;padding:10px 18px;color:#718172}
+.member-review-toolbar .member-review-switch button[aria-pressed=true]{background:#fff;color:#244e40;box-shadow:0 1px 3px #1d3d2910}
+.member-review-toolbar .member-review-filter button{border-color:transparent;background:transparent;min-height:44px;color:#718172;padding:10px 12px}
+.member-review-toolbar .member-review-filter button[aria-pressed=true]{background:#edf2e9;color:#244e40;border-color:#dce5d7}
+.member-review-toolbar button:focus{box-shadow:none}
+.member-review-search>summary{display:flex;align-items:center;gap:12px;min-height:44px;list-style:none;cursor:pointer;font-size:12px}
+.member-review-search>summary::-webkit-details-marker{display:none}
+.member-review-search>summary::before{content:'';width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);flex:none}
+.member-review-search[open]>summary::before{transform:rotate(45deg)}
+.member-review-search>summary>span{margin-left:auto;color:#7a8878;font-size:11px}
+.member-review-search-body{padding-top:16px;border-top:1px solid #edf0e8;margin-top:12px}
+.member-review-search #memberReviewSearch{display:flex;align-items:flex-end;gap:12px;max-width:680px}
+.member-review-search #memberReviewSearch>label{flex:1;min-width:0}
+.member-review-search #memberReviewSearch>div{flex-shrink:0}
+.member-review-search .member-help{margin-bottom:0}
+.member-review-records>.member-section-head{padding-bottom:16px;border-bottom:1px solid #edf0e8;margin-bottom:0}
+.member-review-records>.member-section-head .member-help{margin:7px 0 0}
+.member-review-records .member-review-item{padding:22px 0}
+.member-review-records .member-review-item:last-of-type{border-bottom:0}
+.member-review-records .member-review-identity{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.member-review-records .member-review-identity strong{min-width:0;overflow-wrap:anywhere;line-height:1.7}
+.member-review-records .member-review-state{margin-left:0;flex:none}
+.member-review-records .member-operation-id{margin-top:10px;overflow-wrap:anywhere}
+.member-review-records .member-review-item>button{min-height:44px}
+.member-review-empty>strong{display:block;color:#536553}
+.member-review-empty>p{line-height:1.8;margin:10px auto 0;max-width:440px}
+@media(max-width:760px){
+ .member-review-toolbar{align-items:stretch!important}
+ .member-review-toolbar .member-review-switch{width:100%;box-sizing:border-box}
+ .member-review-toolbar .member-review-switch button{flex:1;min-width:0}
+ .member-review-tools{width:100%;justify-content:space-between;flex-wrap:wrap}
+ .member-review-filter{gap:2px}
+ .member-review-toolbar .member-review-filter button{padding:10px 9px}
+ .member-review-search #memberReviewSearch{display:grid;grid-template-columns:1fr}
+ .member-review-search #memberReviewSearch button{width:100%;min-height:44px}
+ .member-review-records .member-review-item{gap:14px;padding:18px 0}
+ .member-review-records .member-review-item>button{width:100%}
+}
+/* Unsaved configuration state: no persisted drafts or new business actions. */
+.member-edit-state{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 15px;border:1px solid #e5dcc6;border-radius:9px;background:#f7f4ec;color:#78663f;font-size:12px;margin-bottom:8px}
+.member-edit-state>button{flex-shrink:0;min-height:44px;border:0;background:transparent;color:#78663f;padding:8px 10px;text-decoration:underline;text-underline-offset:4px;font:inherit}
+.member-leave-dialog{position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(440px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;border:1px solid #dce3dc;border-radius:16px;padding:28px;background:#fff;color:#253d32;box-shadow:0 24px 80px #152d262b;font:14px/1.7 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+.member-leave-dialog *{box-sizing:border-box}.member-leave-dialog::backdrop{background:#18382e66;backdrop-filter:blur(4px)}
+.member-leave-eyebrow{font-size:10px;letter-spacing:2px;color:#7b887e}.member-leave-dialog h3{font-size:22px;line-height:1.45;margin:10px 0 12px}
+.member-leave-dialog p{color:#69796f;margin:0;overflow-wrap:anywhere}
+.member-leave-actions{display:flex;gap:10px;margin-top:24px}.member-leave-actions button{flex:1;min-height:44px;min-width:0;border:1px solid #dce3dc;border-radius:8px;padding:10px 14px;font:inherit;cursor:pointer;background:#254f3d;color:#fff}
+.member-leave-actions button:last-child{background:#faf4f1;border-color:#ead9d1;color:#996957}.member-leave-actions button:hover{filter:brightness(.97)}
+.member-leave-actions button:focus{box-shadow:none}.member-leave-actions button:focus-visible{outline:2px solid #698476;outline-offset:3px}
+@media(max-width:520px){.member-edit-state{align-items:flex-start;gap:8px;padding:10px 12px}.member-edit-state>button{padding:8px 5px}.member-leave-dialog{padding:23px 20px;border-radius:14px}.member-leave-dialog h3{font-size:20px}.member-leave-actions button{padding:10px 8px}}
+/* Copy fallback is a separate native top-layer dialog, not an account form. */
+.member-copy-dialog{position:fixed;inset:0;margin:auto;box-sizing:border-box;width:min(560px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);overflow:auto;border:1px solid #dce3dc;border-radius:18px;padding:28px;background:#fff;color:#253d32;box-shadow:0 24px 80px #152d262b;font:14px/1.65 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+.member-copy-dialog *{box-sizing:border-box}
+.member-copy-dialog::backdrop{background:#18382e66;backdrop-filter:blur(4px)}
+.member-copy-eyebrow{font-size:10px;letter-spacing:2px;color:#7b887e}
+.member-copy-dialog h3{font-size:23px;line-height:1.4;margin:10px 0}
+.member-copy-dialog header p{color:#69796f;margin:0 0 22px}
+.member-copy-dialog label{display:block;font-size:12px;font-weight:600;margin:0 0 8px}
+.member-copy-dialog textarea{display:block;width:100%;height:180px;min-height:120px;resize:vertical;border:1px solid #dce3dc;border-radius:9px;padding:14px;background:#f6f7f4;color:#253d32;font:13px/1.75 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}
+.member-copy-dialog textarea:focus,.member-copy-dialog button:focus-visible{box-shadow:none;outline:2px solid #698476;outline-offset:3px}
+.member-copy-help{color:#5e7365;font-size:12px;margin:12px 0 20px}
+.member-copy-actions{display:flex;gap:10px}
+.member-copy-actions button{min-height:44px;border:1px solid #dce3dc;border-radius:8px;padding:10px 18px;font:inherit;cursor:pointer;background:#fff;color:#375643}
+.member-copy-actions button:first-child{background:#254f3d;color:#fff;border-color:#254f3d}
+.member-copy-actions button:hover{filter:brightness(.96)}
+.member-copy-privacy{margin:18px 0 0;color:#859087;font-size:11px}
+@media(max-width:520px){.member-copy-dialog{padding:22px 18px;border-radius:14px}.member-copy-dialog h3{font-size:21px}.member-copy-dialog textarea{font-size:16px;height:170px}.member-copy-actions button{flex:1;min-width:0;padding:10px 8px}}
+.member-entry{margin-left:8px;border:0;background:transparent;color:#245344;font:inherit;cursor:pointer;padding:10px 12px;border-radius:8px}
+.member-entry:hover{background:#e8eee8}
+.member-dialog{width:min(1200px,calc(100vw - 48px));height:min(880px,calc(100dvh - 48px));max-width:none;max-height:none;border:1px solid #dce3dc;border-radius:20px;padding:0;background:#f6f7f4;color:#253d32;box-shadow:0 24px 90px #152d262b;font:14px/1.6 system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+.member-dialog::backdrop{background:#18382e55;backdrop-filter:blur(5px)}
+.member-dialog [hidden]{display:none!important}.member-dialog *{box-sizing:border-box}
+.member-dialog button,.member-dialog input,.member-dialog select,.member-dialog textarea{font:inherit}
+.member-dialog button{cursor:pointer;transition:background-color .15s,border-color .15s}
+.member-dialog button:disabled{opacity:.48;cursor:default}
+.member-head{height:72px;display:flex;justify-content:space-between;align-items:center;padding:0 26px;background:#fff;border-bottom:1px solid #e5e9e2}
+.member-logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:650;letter-spacing:-.7px}
+.member-logo svg{height:34px;width:26px;color:#285543}
+.member-label{font-size:10px;color:#839085;letter-spacing:2px;font-weight:500;margin-left:8px}
+.member-close{border:1px solid #e1e7de;background:#fff;border-radius:8px;padding:8px 12px;color:#5d7164;font-size:12px!important}
+.member-close:hover{background:#f5f7f2}
+.member-layout{display:grid;grid-template-columns:184px 1fr;height:calc(100% - 72px)}
+.member-nav{padding:28px 14px;background:#1d4032;color:#e2ece4;overflow:auto}
+.member-nav strong{display:block;margin:0 13px 25px;font-size:12px;color:#bdd0c0;overflow-wrap:anywhere;font-weight:500}
+.member-nav button{display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:8px;padding:12px 14px;margin:5px 0;color:#c0d1c4;font-size:13px}
+.member-nav button:hover{background:#ffffff0a;color:#fff}
+.member-nav button[aria-current=page]{background:#f1f5ed;color:#254c39;font-weight:650}
+.member-main{min-width:0;overflow:auto;padding:30px 32px;scrollbar-gutter:stable;overscroll-behavior:contain}
+.member-main h2{font-size:27px;font-weight:650;letter-spacing:-.7px;line-height:1.4;margin:0 0 8px}
+.member-main h3{font-size:15px;margin:0 0 14px;font-weight:650}
+.member-muted{color:#7b887e;font-size:12px;line-height:1.85}
+.member-page-title{margin-bottom:26px}
+.member-card{background:#fff;border:1px solid #e3e8df;border-radius:12px;padding:24px;margin-bottom:20px}
+.member-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+.member-grid>.member-card{margin:0}
+.member-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+.member-stat{background:#fff;border:1px solid #e3e8df;border-radius:12px;padding:22px}
+.member-stat b{display:block;font-size:32px;letter-spacing:-1px;font-weight:600;line-height:1.3;font-variant-numeric:tabular-nums}
+.member-stat span{display:block;margin-top:7px;color:#849084;font-size:12px}
+.member-hero{padding:26px;background:#eaf0e6;border:1px solid #dfe7d9;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.member-hero h3{font-size:18px;margin:0}.member-hero p{margin:8px 0 0}
+.member-primary,.member-secondary,.member-danger{padding:10px 16px;border-radius:8px;border:1px solid transparent;min-height:42px;font-size:13px!important;line-height:1.5}
+.member-primary{background:#285740;color:#fff}.member-primary:hover{background:#204b35}
+.member-secondary{background:#fff;color:#526b59;border-color:#dfe5da}.member-secondary:hover{background:#f4f7f0;border-color:#bccdb8}
+.member-danger{background:#fff7f3;color:#9b5440;border-color:#efddd3}
+.member-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.member-form{display:grid;gap:18px}
+.member-form label,.member-quantity-label{display:grid;gap:8px;font-size:12px;color:#526b59;font-weight:500}
+.member-dialog input,.member-dialog select,.member-dialog textarea{width:100%;min-width:0;min-height:44px;border:1px solid #dfe5da;background:#fafbf8;border-radius:8px;padding:11px 12px;color:#253d32;box-shadow:none}
+.member-dialog input:hover,.member-dialog select:hover{border-color:#bdcabb}
+.member-dialog input:focus-visible,.member-dialog select:focus-visible,.member-dialog textarea:focus-visible{outline:1px solid #799881;outline-offset:1px;background:#fff}
+.member-dialog button:focus-visible,.member-maintenance summary:focus-visible,.member-claim-section summary:focus-visible{outline:2px solid #8ba48a;outline-offset:3px}
+.member-nav button:focus-visible{outline-color:#c6dbc4}
+.member-dialog input[type=checkbox]{width:18px;height:18px;min-height:18px;padding:0;flex-shrink:0}
+.member-form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.member-auth{max-width:440px;margin:22px auto;padding:28px;background:#fff;border:1px solid #e3e8df;border-radius:14px}
+.member-auth h2{font-size:24px;margin-bottom:12px}.member-auth .member-page-title{margin-bottom:24px}
+.member-auth-switch{border:0;background:transparent;padding:5px 0;color:#285740;font-size:12px!important}
+.member-dialog .member-profile-note{padding:16px 0 0;margin-bottom:0;font-size:11px;line-height:1.9;color:#89938a}
+.member-notice{padding:12px 15px;border-radius:8px;background:#edf3e8;border:1px solid #e2eadb;color:#45634c;line-height:1.7;font-size:12px;margin-bottom:20px;overflow-wrap:anywhere}
+.member-notice[data-error=true]{background:#fff5ef;border-color:#f1e0d5;color:#91553f}
+.member-row{border-bottom:1px solid #edf0e8;padding:16px 0;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.member-row:last-child{border-bottom:0}.member-row strong{display:block;font-size:13px;overflow-wrap:anywhere}
+.member-row small{color:#849084;font-size:12px;line-height:1.8}
 .member-row>div:first-child{min-width:0;flex:1}.member-row>button{flex-shrink:0;white-space:nowrap}
+.member-code{font-family:ui-monospace,monospace;overflow-wrap:anywhere;background:#f3f5ef;border:1px solid #e5e9df;border-radius:8px;padding:14px;font-size:12px;line-height:1.8;margin:14px 0;white-space:pre-wrap}
+.member-course-check{display:flex;align-items:center;gap:12px;min-width:0}.member-course-check>span{min-width:0}
+.member-status{font-size:12px;color:#657c68}
+.member-product{display:flex;flex-direction:column;padding:26px}.member-product h3{margin-bottom:8px}
+.member-product-price{font-size:34px;margin:20px 0;color:#244f40;letter-spacing:-.8px;font-variant-numeric:tabular-nums}
+.member-product-price small{font-size:12px;color:#849084;letter-spacing:0}
+.member-product .member-form{margin-top:4px}.member-product>.member-actions{margin-top:auto;padding-top:24px}
+.member-product>.member-actions>button{width:100%}
+.member-edit-products{display:grid;gap:16px}.member-edit-product{padding:20px;border:1px solid #e3e8dd;border-radius:10px;background:#fafbf7}
+.member-edit-product .member-form-two{grid-template-columns:repeat(3,1fr)}
+.member-empty{padding:32px 20px;text-align:center;color:#859184;font-size:12px}
+.member-busy{font-size:12px;color:#5c7964;margin-left:10px}
+.member-help{font-size:11px;color:#839080;line-height:1.85;margin:12px 0 0;overflow-wrap:anywhere}
+/* Assets have one card, not a card wrapped in another card. */
+.member-assets-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.member-asset-section{min-width:0}.member-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.member-section-head h3{margin:0;font-size:13px}.member-section-head>span{color:#8b9589;font-size:11px}
+.member-asset{padding:22px;background:#fff;border:1px solid #e0e7dc;border-radius:12px;margin-bottom:16px;min-width:0}
+.member-asset-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.member-asset-kind{font-size:9px;letter-spacing:1.5px;color:#8b9988}
+.member-asset-badge{font-size:10px;line-height:1.5;border:1px solid #dce7d6;background:#f1f6ec;color:#59784c;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.member-asset-name{display:block;font-size:15px;line-height:1.6;margin:14px 0 18px;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:550;letter-spacing:-.2px}
+.member-asset-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 0 20px;border-bottom:1px solid #edf0e8}
+.member-asset-metrics b{display:block;font-size:26px;font-weight:550;font-variant-numeric:tabular-nums;line-height:1.3}
+.member-asset-metrics span{display:block;font-size:10px;color:#8b9688;margin-top:5px}
+.member-asset .member-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:18px}
+.member-asset .member-actions>button{padding:10px 8px;min-width:0;font-size:12px!important}
+.member-maintenance{margin-top:18px;border-top:1px solid #e9ede4}
+.member-maintenance+ .member-maintenance{margin-top:0}
+.member-maintenance summary{list-style:none;cursor:pointer;padding:15px 0;color:#45654d;font-size:12px;display:flex;align-items:center;justify-content:space-between;font-weight:550}
+.member-maintenance summary::-webkit-details-marker{display:none}
+.member-maintenance summary::after{content:'';width:6px;height:6px;border-right:1.5px solid #7b9375;border-bottom:1.5px solid #7b9375;transform:rotate(45deg);margin-right:4px}
+.member-maintenance[open]>summary::after{transform:rotate(225deg)}
+.member-maintenance-body{padding:2px 0 0}
+.member-maintenance-option{background:#f6f8f2;border:1px solid #e5eadf;border-radius:10px;padding:16px;margin-bottom:10px;min-width:0}
+.member-maintenance-option:last-child{margin-bottom:0}
+.member-append-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px}
+.member-append-header strong{font-size:12px;font-weight:550}.member-append-header>span{font-size:10px;color:#7d8d77}
+.member-append-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(90px,.85fr);gap:16px;align-items:stretch}
+.member-quantity-label{font-size:11px;gap:7px}
+.member-quantity-label input{background:#fff!important;min-height:46px;font-size:18px!important;padding:9px 12px;font-variant-numeric:tabular-nums}
+.member-presets{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.member-presets button{min-height:28px;padding:4px 8px;font-size:10px!important;background:#fff;border-color:#e2e8db}
+.member-presets button[aria-pressed=true]{border-color:#95b38a;background:#eaf2e3;color:#426a34}
+.member-price-summary{border-left:1px solid #e2e8da;padding-left:16px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.member-price-summary>span{font-size:11px;color:#81907b}.member-price-summary>div{display:flex;align-items:baseline;gap:5px;margin:5px 0}
+.member-price-summary b{font-size:28px;font-weight:600;line-height:1.3;letter-spacing:-.6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.member-price-summary div>span{font-size:11px;color:#6d8264}.member-price-summary small{font-size:10px;color:#85947e;overflow-wrap:anywhere}
+.member-append-footer{border-top:1px solid #e3e9dc;margin-top:16px;padding-top:13px;display:flex;flex-direction:column;gap:12px}
+.member-append-footer p{font-size:10px;line-height:1.7;color:#8a9584;margin:0}
+.member-append-footer>button{width:100%;min-height:42px}
+.member-renewal{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.member-renewal strong{display:block;font-size:12px}.member-renewal small{display:block;font-size:11px;color:#84927e;margin-top:5px}
+.member-renewal>button{flex-shrink:0;font-size:12px!important;padding:9px 12px}
+.member-claim-section{margin-top:12px;border-top:1px solid #e1e7db}
+.member-claim-section>summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:12px;padding:18px 0;font-size:12px;list-style:none;color:#62775d}
+.member-claim-section>summary::-webkit-details-marker{display:none}
+.member-claim-section>summary small{font-size:11px;color:#92a08b;font-weight:400}
+.member-claim-section>summary::after{content:'+';font-size:18px;font-weight:300;color:#7c9275}
+.member-claim-section[open]>summary::after{content:'−'}
+.member-layout.member-auth-layout{grid-template-columns:1fr;background:#f6f7f4}
+.member-confirm{width:min(430px,calc(100vw - 32px));border:1px solid #dce4db;border-radius:14px;background:#fff;color:#253d32;padding:28px;font:13px/1.85 system-ui,-apple-system,"Microsoft YaHei",sans-serif;box-shadow:0 20px 80px #152d2633}
+.member-confirm::backdrop{background:#18382e55;backdrop-filter:blur(3px)}
+.member-confirm h3{margin:0 0 14px;font-size:18px}.member-confirm p{color:#6b7e6d;overflow-wrap:anywhere}
+.member-confirm label{display:grid;gap:8px}.member-confirm input{width:100%;box-sizing:border-box;border:1px solid #dce4db;border-radius:8px;padding:12px;font:inherit}
+.member-confirm-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:26px}
+.member-confirm button{border:1px solid #dce4db;border-radius:8px;padding:10px 20px;background:#fff;color:#52705b;font:inherit;cursor:pointer}
+.member-confirm button[type=submit]{background:#285740;color:#fff}.member-confirm :focus-visible{outline:2px solid #8ba48a;outline-offset:2px}
+.member-dialog,.member-confirm{position:fixed;inset:0;margin:auto;box-sizing:border-box}
+@media(max-width:960px){.member-assets-columns{grid-template-columns:1fr}.member-asset-metrics{max-width:360px}.member-asset .member-actions{max-width:360px}.member-append-grid{grid-template-columns:minmax(0,1fr) minmax(120px,.65fr)}.member-main{padding:28px}.member-maintenance-option{max-width:none}}
+@media(max-width:760px){
+ .member-dialog{width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+ .member-head{height:60px;padding:0 18px}.member-logo{font-size:21px}.member-logo svg{height:30px;width:23px}.member-label{display:none}.member-close{padding:7px 10px;font-size:11px!important}
+ .member-layout{display:flex;flex-direction:column;height:calc(100% - 60px)}
+ .member-nav{display:flex;gap:4px;overflow-x:auto;padding:9px 12px;flex-shrink:0;background:#fff;border-bottom:1px solid #e5eade;scrollbar-width:none}.member-nav::-webkit-scrollbar{display:none}
+ .member-nav strong{display:none}.member-nav button{width:auto;white-space:nowrap;padding:9px 13px;margin:0;color:#839080;font-size:12px}.member-nav button[aria-current=page]{background:#eaf0e3;color:#39603e}
+ .member-main{padding:23px 18px;flex:1;min-height:0}.member-main h2{font-size:24px}.member-page-title{margin-bottom:23px}
+ .member-stats{gap:8px}.member-stat{padding:16px 11px}.member-stat b{font-size:26px}.member-stat span{font-size:10px}
+ .member-grid,.member-form-two{grid-template-columns:1fr}.member-hero{align-items:flex-start;padding:22px;flex-direction:column}.member-hero>button{width:100%}
+ .member-card{padding:20px}.member-edit-product .member-form-two{grid-template-columns:1fr 1fr}.member-auth{margin:0 auto;padding:24px;max-width:440px}
+ .member-row{flex-direction:column;align-items:stretch}.member-row>div:first-child{width:100%;flex:auto}.member-row>.member-actions{margin:0;width:100%;justify-content:flex-start;flex-wrap:wrap}.member-row .member-actions{gap:6px}.member-row .member-actions>button{padding:8px 10px;font-size:11px!important}
+ .member-asset{padding:20px}.member-asset-name{font-size:14px}.member-asset .member-actions{max-width:none}
+ .member-append-grid{grid-template-columns:minmax(0,1.1fr) minmax(90px,.9fr);gap:14px}.member-maintenance-option{padding:14px}
+ .member-append-header{margin-bottom:16px}.member-price-summary{padding-left:14px}.member-price-summary b{font-size:28px}
+ .member-presets{gap:4px}.member-presets button{padding:4px 7px}.member-claim-section>summary{align-items:flex-start;flex-wrap:wrap}.member-claim-section>summary small{width:100%;order:2;font-size:10px}
+ .member-product{padding:24px}.member-product-price{margin:16px 0}.member-confirm{padding:24px}.member-confirm-actions>button{flex:1}
+}
+@media(max-width:360px){.member-main{padding:20px 12px}.member-asset{padding:16px}.member-maintenance-option{padding:12px}.member-presets button{padding:4px 6px}.member-append-grid{gap:10px}.member-price-summary{padding-left:10px}.member-price-summary b{font-size:18px;letter-spacing:-.3px}.member-price-summary>div{display:block}.member-price-summary div>span{margin-left:4px}}
+@media(prefers-reduced-motion:reduce){.member-dialog *{scroll-behavior:auto!important;transition:none!important}}
 
-.member-product{display:flex;flex-direction:column}.member-product>.member-actions{margin-top:auto;padding-top:16px}.member-help{font-size:12px;color:#718276;line-height:1.8;margin:9px 0 0;overflow-wrap:anywhere}.member-asset{padding:20px 0;border-bottom:1px solid #e6ebe1}.member-asset:first-of-type{padding-top:0}.member-asset:last-child{border-bottom:0;padding-bottom:0}.member-asset-header strong{display:block;font-size:15px;overflow-wrap:anywhere}.member-asset-header small{display:block;font-size:12px;color:#718276;line-height:1.8;margin-top:7px}.member-maintenance{margin-top:16px;border-top:1px solid #edf0e8}.member-maintenance summary{cursor:pointer;padding:13px 0;color:#395746;font-size:13px;font-weight:550}.member-maintenance-body{padding:0 0 6px}.member-maintenance-option{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px;background:#f5f7f1;border-radius:8px;margin:8px 0}.member-maintenance-option>div{min-width:0;flex:1}.member-maintenance-option strong{display:block;font-size:13px;overflow-wrap:anywhere}.member-maintenance-option small{display:block;font-size:12px;color:#718276;margin-top:5px}.member-maintenance-option>button{flex-shrink:0}.member-maintenance summary:focus-visible{outline:2px solid #7f9a84;outline-offset:2px}
-@media(max-width:760px){.member-maintenance-option{align-items:flex-start;gap:10px}.member-maintenance-option>button{padding:10px 12px}.member-asset .member-actions{display:grid;grid-template-columns:1fr 1fr}.member-asset .member-actions>button{min-width:0}.member-product>.member-actions{margin-top:16px}}
+/* Reliability workspace: readable financial records and bounded recovery notes. */
+.member-dialog .member-course-check{display:flex;align-items:center;gap:9px}
+.member-dialog input[type=checkbox]{accent-color:#285740}
+.member-recovery .member-form{max-width:640px;margin-top:18px}
+.member-recovery-result{padding:16px;margin:18px 0 0;background:#eef3e9;border:1px solid #dce6d5;border-radius:8px;font-size:12px;overflow-wrap:anywhere}
+.member-recovery-result p{color:#647a5b;margin:8px 0}.member-recovery-result code,.member-operation-id{font:11px/1.8 ui-monospace,Consolas,monospace;overflow-wrap:anywhere;display:block;color:#7b8975}
+.member-operation-id{margin-top:8px}.member-ledger-entry{border-bottom:1px solid #edf0e8;padding:20px 0}.member-ledger-entry:first-child{padding-top:0}
+.member-ledger-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.member-ledger-top>div:first-child{min-width:0;flex:1}
+.member-ledger-top strong{font-size:13px;overflow-wrap:anywhere}.member-ledger-top small{display:block;font-size:11px;color:#8b9585;margin-top:6px}
+.member-ledger-amount{text-align:right;flex-shrink:0}.member-ledger-amount b{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;color:#49634b}
+.member-ledger-amount[data-direction=in] b{color:#2d774b}.member-ledger-amount[data-direction=neutral] b{font-size:12px;font-weight:500;color:#85917e}
+.member-ledger-entry details{margin-top:14px}.member-ledger-entry summary{font-size:11px;color:#83947b;cursor:pointer}.member-ledger-pagination{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}
+.member-ledger-pagination>span{font-size:11px;color:#8b9585}.member-ledger-pagination .member-actions{margin:0}
+@media(max-width:760px){.member-ledger-top{gap:12px}.member-ledger-amount b{font-size:15px}.member-ledger-pagination{flex-wrap:wrap}.member-recovery .member-row{flex-wrap:wrap}.member-recovery .member-row>.member-actions{width:100%}.member-presets button{min-height:32px}}
+.member-recovery-result[data-status=unconfirmed]{background:#f7f4ec;border-color:#e5dcc6;color:#78663f}.member-recovery-result[data-status=unconfirmed] p{color:#786b51}
 
-.member-quantity-label{display:grid;gap:6px;font-size:12px;margin:12px 0 7px}.member-quantity-label input{width:100%;max-width:190px;padding:10px 12px;border:1px solid #d8e1d6;background:#fff;border-radius:8px;color:inherit;min-width:0}.member-quantity-label input:focus-visible{outline:2px solid #7f9a84;outline-offset:2px}.member-maintenance-option:has(.member-quantity-label){align-items:flex-end}
+.member-review-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 22px;background:#f4eee1;border:1px solid #e7dcc2;border-radius:12px;margin-bottom:24px}.member-review-banner p{font-size:12px;color:#827454;margin:7px 0 0}
+.member-review-toolbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.member-review-toolbar .member-actions{margin:0}
+.member-review-item{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:20px 0;border-bottom:1px solid #edf0e8}.member-review-item:first-child{padding-top:0}.member-review-item>div{min-width:0;flex:1}.member-review-item>button{flex-shrink:0}.member-review-item small{display:block;font-size:11px;color:#86927e;overflow-wrap:anywhere;margin-top:8px}
+.member-review-state{display:inline-block;font-size:11px;padding:4px 8px;border-radius:6px;margin-left:12px;background:#f4eee1;color:#806637}.member-review-state[data-status=confirmed]{background:#eaf1e7;color:#457347}.member-review-state[data-status=rejected]{background:#f3ebe8;color:#876454}
+.member-review-event{border-left:2px solid #dde5d8;padding:0 0 22px 18px;margin-left:4px}.member-review-event small{display:block;color:#8b9585;font-size:11px;margin-top:8px}.member-review-event p{white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0;font-size:13px}.member-review-event span{display:block;margin-top:10px;font-size:11px;color:#7d8c74}.member-review-detail{margin-top:18px}
+.member-dialog .member-form textarea{box-sizing:border-box;width:100%;border:1px solid #dce4db;background:#fcfcf9;border-radius:8px;padding:12px;color:#274637;font:inherit;resize:vertical;min-height:104px}
+@media(max-width:760px){.member-review-banner{align-items:flex-start;flex-direction:column}.member-review-toolbar{gap:10px}.member-review-toolbar button{padding:9px 12px}.member-review-item{gap:12px;flex-wrap:wrap}.member-review-item>div{flex-basis:100%}.member-review-state{margin-left:8px}.member-review-item>button{min-height:40px}}
+
+.member-support{margin-bottom:18px;padding:16px 20px;border:1px solid #dedfd6;border-radius:12px;background:#fff}.member-support summary{cursor:pointer;font-weight:600}.member-support dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 14px}.member-support dt{color:#64786e}.member-support dd{margin:0;overflow-wrap:anywhere}.member-support button{margin-top:12px}@media(max-width:600px){.member-support dl{grid-template-columns:1fr;gap:4px}.member-support dd{margin-bottom:10px}}
+
+/* Workspace UI v8: presentation-only; all rules remain scoped to member UI. */
+.member-dialog{--member-ink:#233e33;--member-muted:#64756a;--member-line:#e2e8e0;width:min(1280px,calc(100vw - 40px));border-radius:18px;background:#f5f7f3}
+.member-layout{grid-template-columns:212px minmax(0,1fr)}
+.member-head{height:72px;padding:0 28px}.member-main{padding:32px;scroll-padding:24px}
+.member-main h2{font-size:28px;letter-spacing:-.5px}.member-muted{color:var(--member-muted);font-size:13px}.member-help,.member-row small{color:#687a6b}
+.member-eyebrow{display:block;font-size:10px;letter-spacing:1.5px;color:#778d79;font-weight:550;margin-bottom:10px}
+.member-page-title{margin-bottom:28px}.member-page-title .member-muted{max-width:680px;line-height:1.85}
+.member-nav{display:flex;flex-direction:column;padding:24px 12px;background:#1c3e30}
+.member-nav-profile{padding:0 12px 22px;margin-bottom:14px;border-bottom:1px solid #ffffff18}
+.member-nav-avatar{display:grid;place-items:center;width:38px;height:38px;background:#ffffff10;border:1px solid #ffffff24;border-radius:12px;font-size:16px;color:#e0eddf;margin-bottom:14px}
+.member-nav-profile strong{margin:0 0 5px;font-size:13px;line-height:1.6;color:#f0f4ee;font-weight:600}
+.member-nav-profile small{font-size:8px;letter-spacing:1.6px;color:#9fb8a5}
+.member-nav-links{display:grid;gap:4px}.member-nav-links button{display:flex;align-items:center;gap:11px;min-height:44px;margin:0;padding:12px;border-radius:9px}
+.member-nav-icon{width:19px;height:19px;flex:none}.member-nav-links button[aria-current=page]{background:#edf3e7;box-shadow:none}
+.member-nav-foot{margin-top:auto;padding:28px 12px 0;color:#9cb49f;font-size:10px;letter-spacing:.3px}
+.member-card{border-color:var(--member-line);border-radius:14px;margin-bottom:22px;padding:24px}
+.member-card .member-form{max-width:680px}.member-main[data-page=account] .member-form{max-width:480px}
+.member-dialog input,.member-dialog select,.member-dialog textarea{background:#fbfcf9;border-color:#d8e1d4;border-radius:9px;min-height:46px}
+.member-dialog input:focus-visible,.member-dialog select:focus-visible,.member-dialog textarea:focus-visible{outline:1px solid #718b73;outline-offset:2px}
+.member-primary,.member-secondary,.member-danger{min-height:44px;border-radius:9px;font-weight:500}
+.member-primary{background:#26583e}.member-secondary{border-color:#dce4d7;color:#46634f}.member-close{min-height:38px}
+.member-balance-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;background:#fff;border:1px solid var(--member-line);border-radius:14px;margin:0 0 24px;overflow:hidden}
+.member-balance-strip .member-stat{border:0;border-radius:0;background:none;padding:23px 26px;position:relative}
+.member-balance-strip .member-stat+.member-stat:before{content:'';position:absolute;left:0;top:23px;bottom:23px;width:1px;background:#e4eade}
+.member-balance-strip .member-stat span{font-size:12px;color:#5d7462;margin:0 0 13px}
+.member-balance-strip .member-stat b{font-size:38px;font-weight:600;margin-bottom:9px;color:#224f39}
+.member-balance-strip .member-stat small{font-size:11px;color:#748270}
+.member-balance-strip .member-stat button{border:0;background:none;min-height:28px;padding:0;font-size:11px!important;color:#4b7254;text-align:left}
+.member-home-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(240px,1fr);gap:22px;align-items:start}
+.member-home-primary{min-width:0}.member-hero{background:#eaf0e3;border-color:#dbe5d3;min-height:154px;padding:24px;gap:16px;margin-bottom:22px}
+.member-hero .member-eyebrow{color:#6b8363;font-size:9px}.member-hero h3{font-size:18px}.member-hero p{font-size:12px;margin:7px 0 0}
+.member-hero>button{flex-shrink:0}.member-quick-section{padding:24px;margin-bottom:0}.member-quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.member-quick-link{display:flex;align-items:center;gap:12px;padding:17px 0;min-height:82px;border:0;border-bottom:1px solid #edf1e7;background:none;text-align:left;color:#385c43;min-width:0}
+.member-quick-link:nth-last-child(-n+2){border-bottom:0}.member-quick-link>span:not(.member-link-arrow){min-width:0;flex:1}
+.member-quick-link strong{display:block;font-size:12px;font-weight:600}.member-quick-link small{display:block;font-size:10px;color:#768672;margin-top:6px;line-height:1.6}
+.member-quick-link>.member-nav-icon{width:20px;height:20px;padding:0;color:#5b7b59}.member-link-arrow{font-size:16px;color:#8aa081;flex:none}
+.member-quick-link:hover{color:#1d5030}.member-quick-link:hover .member-link-arrow{color:#315e36}
+.member-cdk-panel{padding:26px;margin:0;background:#fff}.member-cdk-panel h3{font-size:19px;margin:4px 0 12px}.member-cdk-panel>.member-muted{font-size:12px;line-height:1.9;margin-bottom:24px}.member-cdk-panel .member-form{gap:14px}.member-cdk-panel .member-help{border-top:1px solid #edf0e6;padding-top:18px;margin-top:22px}
+.member-user-list .member-search-bar{display:grid;grid-template-columns:minmax(0,340px) auto;gap:12px;align-items:end;margin-bottom:26px;max-width:440px}
+.member-search-bar button{height:46px}.member-users-labels{display:grid;grid-template-columns:minmax(0,1fr) 154px 264px;gap:18px;font-size:10px;color:#83917f;padding:12px 0;border-top:1px solid #e9ede3;border-bottom:1px solid #e9ede3}
+.member-user-list .member-user-row{display:grid;grid-template-columns:minmax(0,1fr) 154px 264px;gap:18px;padding:20px 0;align-items:center;position:relative}
+.member-user-row .member-user-identity{display:flex;align-items:center;gap:12px;min-width:0}.member-user-identity>div{min-width:0}
+.member-user-avatar{display:grid;place-items:center;width:36px;height:36px;border:1px solid #dce6d4;border-radius:11px;background:#f0f5e9;flex-shrink:0;color:#63825b;font-size:13px}
+.member-user-identity strong{font-size:13px;line-height:1.6}.member-user-identity .member-status-chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:#63815a;line-height:1.5;margin-top:5px}
+.member-status-chip:before{content:'';width:5px;height:5px;background:#769965;border-radius:50%}.member-status-chip[data-status=disabled]{color:#8b6f61}.member-status-chip[data-status=disabled]:before{background:#ae8d7b}
+.member-user-balances{display:grid;grid-template-columns:1fr 1fr;gap:18px}.member-user-balances span{display:block;min-width:0}.member-user-balances b{display:block;font-size:17px;font-weight:550;font-variant-numeric:tabular-nums;line-height:1.5;overflow-wrap:anywhere}.member-user-balances small{display:block;font-size:10px}
+.member-user-row .member-user-actions{margin:0;gap:6px;flex-wrap:nowrap;justify-content:flex-end}
+.member-user-actions>button{background:none;border-color:transparent;padding:8px;font-size:11px!important;white-space:nowrap}
+.member-user-actions>button:hover{background:#f0f4e9;border-color:#e2eadb}
+.member-row-menu{position:relative;flex-shrink:0}.member-row-menu>summary{list-style:none;cursor:pointer;color:#72826b;font-size:11px;min-height:44px;display:flex;align-items:center;padding:8px;border-radius:8px}
+.member-row-menu>summary::-webkit-details-marker{display:none}.member-row-menu>summary:hover{background:#f1f4ec}.member-row-menu[open]>summary{background:#f0f4e9;color:#365e3d}
+.member-row-menu>div{position:absolute;top:100%;right:0;z-index:3;display:grid;gap:4px;padding:8px;width:140px;border:1px solid #e0e7d8;border-radius:10px;background:#fff;box-shadow:0 8px 28px #18362212}
+.member-row-menu>div>button{border:0;background:#fff;text-align:left;font-size:11px!important;min-height:40px;padding:9px 12px;white-space:nowrap}.member-row-menu>div>button:hover{background:#f3f6ee}.member-row-menu [data-status=disabled]{color:#995d4b}
+.member-row-menu summary:focus-visible,.member-quick-link:focus-visible{outline:2px solid #849c79;outline-offset:2px}
+.member-main[data-page=cdks] .member-form-two{grid-template-columns:repeat(2,minmax(0,1fr))}.member-main[data-page=cdks] .member-card:has(#memberCreateCdksForm){max-width:720px}
+.member-main[data-page=config] .member-edit-products{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.member-main[data-page=config] .member-card .member-form{max-width:none}.member-edit-product{background:#fafcf6;padding:20px}.member-edit-product h3{margin-bottom:18px}.member-edit-product .member-form-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.member-auth{padding:34px;border-radius:16px;margin:24px auto;box-shadow:0 10px 30px #233a2905;max-width:460px}.member-auth .member-page-title{margin-bottom:28px}.member-auth .member-muted{font-size:12px}.member-auth .member-primary{margin-top:3px}
+.member-asset{border-radius:14px;border-color:#dfe7d8}.member-asset-name{font-size:16px}.member-asset-metrics{grid-template-columns:repeat(auto-fit,minmax(60px,1fr))}
+.member-ledger-pagination{padding-top:20px;border-top:1px solid #e9eee3}.member-support{background:#fcfdf9;border-color:#e1e7d9}.member-support summary{font-size:12px}.member-support dl{font-size:12px}
+@media(max-width:1100px){.member-users-labels{display:none}.member-user-list .member-user-row{grid-template-columns:minmax(0,1fr) 154px}.member-user-row .member-user-actions{grid-column:1/-1;justify-content:flex-start;margin-left:48px}.member-home-grid{grid-template-columns:1fr}.member-cdk-panel .member-form{grid-template-columns:minmax(0,1fr) auto;align-items:end}.member-cdk-panel .member-form>button{height:46px}.member-cdk-panel>.member-muted{margin-bottom:18px}.member-hero{min-height:140px}}
+@media(max-width:960px){.member-layout{grid-template-columns:184px minmax(0,1fr)}.member-main{padding:26px}.member-main[data-page=config] .member-edit-products{grid-template-columns:1fr}.member-quick-grid{gap:0 20px}}
+@media(max-width:760px){
+ .member-dialog{width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0}.member-head{height:60px;padding:0 16px}.member-layout{display:flex;height:calc(100% - 60px)}
+ .member-nav{padding:8px 12px;background:#fff;overflow:visible;flex:none;border-bottom:1px solid #e2e9dc}.member-nav-profile,.member-nav-foot{display:none}.member-nav-links{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.member-dialog[data-role=admin] .member-nav-links{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .member-nav-links button{min-width:0;min-height:46px;padding:8px 4px;gap:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;white-space:normal;line-height:1.4;border-radius:8px}.member-nav-icon{width:16px;height:16px}.member-nav-links button[aria-current=page]{background:#edf3e7;color:#305937}
+ .member-main{padding:24px 16px;flex:1;min-height:0}.member-main h2{font-size:24px}.member-eyebrow{font-size:9px;margin-bottom:8px}.member-page-title{margin-bottom:22px}.member-page-title .member-muted{font-size:12px}
+ .member-card{padding:20px;border-radius:12px}.member-balance-strip{margin-bottom:18px;border-radius:12px}.member-balance-strip .member-stat{padding:18px 12px}.member-balance-strip .member-stat span{font-size:10px;line-height:1.6;margin-bottom:10px}.member-balance-strip .member-stat b{font-size:29px;margin-bottom:7px}.member-balance-strip .member-stat small{font-size:9px;line-height:1.7;display:block}.member-balance-strip .member-stat+.member-stat:before{top:18px;bottom:18px}.member-balance-strip .member-stat button{font-size:10px!important;min-height:32px;line-height:1.7;white-space:normal}
+ .member-home-grid{gap:18px}.member-hero{flex-direction:row;align-items:center;padding:20px;margin-bottom:18px;min-height:138px}.member-hero>button{width:auto;max-width:100px;padding:9px 12px;white-space:normal;font-size:11px!important}.member-hero h3{font-size:16px;line-height:1.6}.member-hero .member-eyebrow{font-size:8px}.member-hero p{font-size:11px}
+ .member-quick-section{padding:20px}.member-quick-grid{gap:0 14px}.member-quick-link{gap:9px;min-height:88px;align-items:flex-start}.member-quick-link>.member-nav-icon{width:18px;height:18px;margin-top:2px}.member-quick-link strong{font-size:11px}.member-quick-link small{font-size:10px}.member-link-arrow{display:none}
+ .member-cdk-panel .member-form{grid-template-columns:1fr;gap:12px}.member-cdk-panel h3{font-size:18px}.member-cdk-panel .member-help{padding-top:16px;margin-top:18px}
+ .member-user-list .member-search-bar{grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-bottom:18px}.member-user-list .member-search-bar>button{padding:10px 14px}
+ .member-user-list .member-user-row{grid-template-columns:minmax(0,1fr);gap:14px;padding:20px 0}.member-user-row .member-user-identity{width:auto;flex:initial}.member-user-balances{padding-left:48px;gap:20px;max-width:260px}.member-user-row .member-user-actions{grid-column:auto;width:auto;margin-left:40px;justify-content:flex-start;gap:4px;flex-wrap:wrap}.member-user-row .member-user-actions>button{padding:8px;min-height:44px;font-size:11px!important}
+ .member-row-menu>summary{min-height:44px}.member-row-menu>div{right:0}.member-main[data-page=cdks] .member-form-two{grid-template-columns:1fr 1fr}.member-main[data-page=config] .member-edit-products{grid-template-columns:1fr}.member-auth{margin:4px auto;padding:26px;max-width:460px}.member-auth-layout .member-main{padding:24px 16px}
+ .member-ledger-pagination{padding-top:16px}.member-review-toolbar button{min-height:44px}.member-help{font-size:11px}
+}
+@media(max-width:360px){.member-main{padding:22px 12px}.member-nav{padding:8px}.member-nav-links button{font-size:10px}.member-balance-strip .member-stat{padding:16px 10px}.member-balance-strip .member-stat b{font-size:26px}.member-hero{gap:10px;padding:18px}.member-hero h3{font-size:15px}.member-hero>button{max-width:88px;padding:8px 10px}.member-quick-grid{gap:0 10px}.member-quick-link{gap:7px}.member-quick-link>.member-nav-icon{width:15px;height:15px}.member-user-row .member-user-actions{margin-left:0}.member-user-balances{padding-left:48px}.member-auth{padding:24px}.member-card{padding:18px}}
+
+/* v9 polish: stable forms, honest read states and touch/keyboard affordances. */
+.member-main{scrollbar-gutter:stable}
+.member-auth{box-sizing:border-box;width:100%;max-width:460px}
+.member-auth-feedback{min-height:48px;margin-top:16px;overflow-wrap:anywhere}
+.member-auth-feedback .member-notice{margin:0;padding:10px 12px;font-size:12px}
+.member-auth-switch{min-height:44px}
+.member-dialog input[readonly]{color:#63786c;background:#f2f5ee;cursor:wait}
+.member-dialog button:disabled{cursor:default}
+.member-dialog #memberSignInPoints,.member-dialog #memberCdkDays{max-width:220px}
+.member-read-state{min-height:228px;padding:20px 0;box-sizing:border-box}
+.member-read-state>p{margin:0 0 22px;color:#677b6c;font-size:12px;line-height:1.8}
+.member-read-state>strong{display:block;margin:24px 0 10px;color:#49624f;font-size:14px}
+.member-read-state.member-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.member-read-state.member-empty>p{max-width:400px;margin:0}
+.member-skeleton{display:grid;gap:22px}
+.member-skeleton-row{display:flex;align-items:center;gap:14px;height:42px}
+.member-skeleton-row>i{width:36px;height:36px;flex:none;border-radius:11px;background:#edf2e8}
+.member-skeleton-row>span{display:grid;gap:9px;width:min(240px,70%)}
+.member-skeleton-row span i{display:block;height:10px;border-radius:3px;background:#edf2e8}
+.member-skeleton-row span i:last-child{width:62%;background:#f3f5ef}
+.member-row-menu>div{z-index:8;max-width:calc(100vw - 40px)}
+.member-user-actions button:focus-visible,.member-row-menu button:focus-visible,.member-auth-switch:focus-visible{outline:2px solid #849c79;outline-offset:2px}
+@media(max-width:760px){
+ .member-head{padding-top:env(safe-area-inset-top);height:calc(60px + env(safe-area-inset-top))}
+ .member-layout{height:calc(100% - 60px - env(safe-area-inset-top))}
+ .member-main{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+ .member-dialog #memberSignInPoints,.member-dialog #memberCdkDays{max-width:200px}
+ .member-auth{max-width:460px}.member-read-state{min-height:248px}
+ .member-nav-links button{font-size:11px}.member-quick-link strong{font-size:12px}
+ .member-balance-strip .member-stat small{font-size:10px}
+}
+@media(max-width:480px){
+ .member-main[data-page=courses] .member-card>.member-actions,.member-main[data-page=account] .member-card>.member-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .member-main[data-page=courses] .member-card>.member-actions>button,.member-main[data-page=account] .member-card>.member-actions>button{width:100%;padding:10px 8px;white-space:normal;min-height:44px}
+ .member-main[data-page=courses] .member-card>.member-actions>button:first-child:nth-last-child(3){grid-column:1/-1}
+ .member-auth-layout .member-main{padding:20px 12px}.member-auth{padding:24px}
+}
+
+/* Access workspace v10: view hierarchy only; no new business actions. */
+.member-wallet-context{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 22px;margin-bottom:22px;border:1px solid #e1e8da;border-radius:12px;background:#edf3e7}
+.member-wallet-context>div{display:flex;align-items:baseline;gap:14px;flex:none}.member-wallet-context span{font-size:12px;color:#5d7562}
+.member-wallet-context strong{font-size:26px;font-weight:600;line-height:1.3;font-variant-numeric:tabular-nums;color:#2c583a}.member-wallet-context small{font-size:11px;font-weight:400;margin-left:7px}
+.member-wallet-context p{margin:0;color:#697d68;font-size:11px;line-height:1.8;text-align:right}
+.member-shop-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:stretch}
+.member-shop-grid>.member-card{margin:0;padding:24px}
+.member-shop-grid>[data-product-kind=token]{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:30px;align-items:start}
+.member-shop-grid>[data-product-kind=token]>.member-product-heading{grid-column:1;grid-row:1}
+.member-shop-grid>[data-product-kind=token]>h3{grid-column:1;grid-row:2}
+.member-shop-grid>[data-product-kind=token]>.member-product-description{grid-column:1;grid-row:3}
+.member-shop-grid>[data-product-kind=token]>.member-product-offer{grid-column:1;grid-row:4;border-bottom:0;margin-bottom:0;padding-bottom:0;align-self:center}
+.member-shop-grid>[data-product-kind=token]>.member-form{grid-column:2;grid-row:1/span 3;gap:14px;margin:0}
+.member-shop-grid>[data-product-kind=token]>.member-actions{grid-column:2;grid-row:4;margin:0;align-self:end}
+.member-product-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.member-product-heading>.member-nav-icon{width:22px;height:22px;color:#4e7554}
+.member-product-state{font-size:10px;color:#6d8068;border:1px solid #e1e8d9;border-radius:6px;padding:4px 7px;background:#f7faf3}
+.member-shop-grid .member-product h3{font-size:17px;margin-bottom:10px}.member-product-description{font-size:12px;line-height:1.9;color:#6a7c6c;margin:0 0 18px}
+.member-product-offer{display:flex;align-items:baseline;justify-content:space-between;gap:14px;padding-bottom:18px;border-bottom:1px solid #edf1e6;margin-bottom:18px}
+.member-product-offer>span{font-size:12px;color:#4d6954}.member-product-offer .member-product-price{margin:0;font-size:30px;flex:none}
+.member-shop-grid .member-product>.member-actions{padding-top:18px}.member-shop-grid .member-product .member-help{margin:0}
+.member-shop-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 2px;border-bottom:1px solid #e1e8da;margin-bottom:22px}
+.member-shop-footer strong{font-size:12px}.member-shop-footer p{font-size:11px;color:#6e806b;margin:6px 0 0}.member-shop-footer button{flex:none}
+.member-access-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:258px;text-align:center;box-sizing:border-box}
+.member-access-empty>.member-nav-icon{width:26px;height:26px;color:#7c9671;margin-bottom:20px}.member-access-empty h3{font-size:14px;margin:0 0 10px}.member-access-empty p{font-size:12px;line-height:1.9;color:#71816d;max-width:280px;margin:0 0 22px}
+.member-asset .member-actions>button:only-child{grid-column:1/-1}
+.member-asset>.member-help{font-size:11px;padding-left:12px;border-left:2px solid #e1e8db;line-height:1.95;margin-top:16px;color:#61765f}
+.member-ledger-layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:22px;align-items:start}
+.member-ledger-list{margin:0}.member-ledger-list>.member-section-head{padding-bottom:18px;margin-bottom:22px;border-bottom:1px solid #e8ede2;gap:12px}
+.member-ledger-empty-link{display:flex;justify-content:center;margin:0 0 20px}
+.member-ledger-tools{border:1px solid #e2e8de;background:#fff;border-radius:12px;overflow:hidden}
+.member-ledger-tools>summary{display:flex;align-items:center;justify-content:space-between;list-style:none;padding:20px;cursor:pointer;font-size:13px;color:#3e5f46;min-height:44px;box-sizing:border-box}
+.member-ledger-tools>summary::-webkit-details-marker{display:none}.member-ledger-tools>summary small{display:block;font-size:11px;color:#72846b;font-weight:400;margin-top:6px;line-height:1.8}
+.member-ledger-tools>summary:after{content:'+';font-size:18px;color:#799370;margin-left:12px}.member-ledger-tools[open]>summary:after{content:'−'}
+.member-ledger-tools>summary:focus-visible,.member-text-link:focus-visible{outline:2px solid #849c79;outline-offset:-3px}
+.member-ledger-tools>.member-recovery{border:0;border-radius:0;border-top:1px solid #edf0e6;margin:0;padding:20px}
+.member-ledger-tools .member-recovery .member-section-head{display:none}.member-ledger-tools .member-recovery>.member-muted{margin:0}.member-ledger-tools .member-recovery .member-form{gap:12px}
+.member-ledger-tools .member-recovery .member-row{flex-direction:column;align-items:stretch}.member-ledger-tools .member-recovery .member-row>.member-actions{margin-top:0}
+.member-ledger-guide{padding:22px 4px}.member-ledger-guide h3{font-size:12px;color:#587054;margin:0 0 16px}.member-ledger-guide p{font-size:11px;line-height:1.9;color:#768570;margin:0 0 12px}.member-ledger-guide b{display:block;color:#526e52;font-weight:500;margin-bottom:3px}
+.member-text-link{padding:10px 0;border:0;background:none;text-align:left;color:#3d6946;font-size:11px!important;min-height:44px}
+.member-ledger-alert{padding:14px 18px;margin:0 0 14px;background:#f5efe1;color:#7c6b44;border:1px solid #e8dfc9;border-radius:10px;font-size:12px;line-height:1.9}
+@media(max-width:1100px){.member-shop-grid{grid-template-columns:1fr}.member-shop-grid>[data-product-kind=token]{display:flex;grid-column:auto}.member-shop-grid>[data-product-kind=token]>.member-product-offer{border-bottom:1px solid #edf1e6;margin-bottom:18px;padding-bottom:18px;align-self:stretch}.member-shop-grid>[data-product-kind=token]>.member-actions{align-self:stretch}.member-ledger-layout{grid-template-columns:1fr}.member-ledger-aside{max-width:none}}
+
+/* Completion pass: private fields, bounded local filtering and menu positioning. */
+.member-password-field{display:flex;align-items:stretch;position:relative;min-width:0}
+.member-password-label{display:grid;gap:8px;min-width:0}
+.member-password-field>input{width:100%;padding-right:64px}
+.member-password-field>[data-password-toggle]{position:absolute;right:4px;top:3px;bottom:3px;min-width:52px;min-height:40px;border:0;background:none;color:#4f7058;font-size:12px!important;cursor:pointer;border-radius:6px}
+.member-password-field>[data-password-toggle]:focus-visible{outline:1px solid #78956e;outline-offset:-2px}
+
+/* Admin read surfaces: never substitute a missing response with an empty list. */
+.member-admin-split{display:grid;grid-template-columns:minmax(270px,.85fr) minmax(0,1.65fr);gap:22px;align-items:start}
+.member-admin-split>.member-card{margin-bottom:0;min-width:0}
+.member-admin-create>.member-muted{margin-bottom:24px}
+.member-admin-create>.member-form{margin-top:18px}
+.member-admin-records>.member-section-head{align-items:start;gap:16px;padding-bottom:20px;border-bottom:1px solid #edf0e8;margin-bottom:4px}
+.member-admin-records>.member-section-head h3{margin:0 0 6px}
+.member-admin-records>.member-section-head .member-help{margin:0}
+.member-admin-records>.member-section-head>button{flex-shrink:0;min-height:40px}
+.member-admin-records .member-read-state{padding:24px 0}
+.member-admin-empty{padding:34px 12px;text-align:center}
+.member-admin-empty strong{font-size:13px;color:#51664e}.member-admin-empty p{font-size:12px;color:#71806b;margin-bottom:0}
+.member-cdk-row{padding:18px 0;gap:16px}.member-cdk-row small{display:block;margin-top:4px}.member-cdk-digest{font-family:ui-monospace,Consolas,monospace}
+.member-claim-row{align-items:start;padding:24px 0;gap:24px}.member-claim-row .member-eyebrow{display:block;margin-bottom:8px}
+.member-claim-note{margin:12px 0 0;font-size:12px;line-height:1.85;color:#64745e;white-space:pre-wrap;overflow-wrap:anywhere}
+.member-claim-row>.member-actions{flex-shrink:0}
+.member-dialog button:focus-visible,.member-dialog summary:focus-visible,.member-confirm button:focus-visible{outline:2px solid #617c58;outline-offset:3px}
+.member-nav button:focus-visible{outline-color:#d8e7c8;outline-offset:-3px}
+#memberHeading:focus{outline:0}
+@media(max-width:960px){.member-admin-split{grid-template-columns:1fr;gap:20px}.member-admin-create .member-form{max-width:520px}}
+@media(max-width:760px){
+ .member-admin-records>.member-section-head{gap:10px;flex-wrap:wrap}.member-admin-records>.member-section-head>button{min-height:44px}
+ .member-cdk-row{flex-direction:row;align-items:center}.member-cdk-row>button{min-height:44px;flex-shrink:0}
+ .member-claim-row{gap:18px}.member-claim-row>.member-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;margin:0}
+ .member-claim-row>.member-actions>button{width:100%;min-height:44px}
+ .member-admin-create .member-form-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* Field feedback uses native validity; it never changes business validation rules. */
+.member-field-feedback-wrap{min-width:0;width:100%}.member-field-feedback-wrap>label{width:100%}
+.member-validation-summary{margin:0 0 2px;padding:11px 13px;border-left:2px solid #bc816d;background:#fbf4ee;color:#815040;font-size:12px;line-height:1.75;border-radius:0 6px 6px 0}
+.member-field-feedback{display:block;margin-top:7px;font-size:11px;line-height:1.65;color:#8f4f3f;overflow-wrap:anywhere}
+.member-dialog [data-validation-field][aria-invalid=true]{border-color:#b8806b;background:#fdf9f5}
+.member-dialog [data-validation-field][aria-invalid=true]:focus{border-color:#9f6a55;outline:1px solid #9f6a55;outline-offset:1px;box-shadow:none}
+.member-account-retry{max-width:540px;padding:24px}.member-account-retry>.member-help{margin:0 0 18px;line-height:1.9}
+@media(max-width:760px){.member-account-retry{padding:20px}.member-account-retry>button{width:100%;min-height:44px}.member-field-feedback{font-size:12px}}
+.member-asset-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:end;margin-bottom:10px}
+.member-asset-toolbar label{display:grid;gap:8px;font-size:12px;color:#526b59}.member-asset-toolbar input{box-sizing:border-box;width:100%}
+.member-asset-toolbar+.member-help{margin-bottom:22px}.member-filter-empty{padding:18px;border:1px dashed #dbe4d5;border-radius:10px;color:#6a7f66;font-size:12px;line-height:1.8}
+.member-asset[hidden],.member-filter-empty[hidden]{display:none}
+.member-row-menu[data-direction=up]>div{top:auto;bottom:100%}
+@media(max-width:1100px){.member-shop-grid>[data-product-kind=token]{align-items:stretch}}
+@media(max-width:760px){.member-asset-toolbar{grid-template-columns:1fr 1fr}.member-asset-toolbar>label{grid-column:1/-1}.member-asset-toolbar>button{width:100%;padding:10px 8px}}
+@media(max-width:760px){
+ .member-wallet-context{padding:16px 18px;flex-wrap:wrap;gap:8px;margin-bottom:18px}.member-wallet-context p{text-align:left;width:100%}.member-wallet-context strong{font-size:24px}
+ .member-shop-grid{gap:16px}.member-shop-grid>.member-card{padding:20px}.member-product-heading{margin-bottom:16px}.member-shop-grid .member-product h3{font-size:16px}
+ .member-product-offer{gap:10px;margin-bottom:16px}.member-product-offer .member-product-price{font-size:28px}.member-shop-footer{align-items:flex-start;flex-direction:column;padding:20px 0;gap:14px}
+ .member-shop-footer button{width:100%}.member-access-empty{min-height:238px;padding:24px 18px}
+ .member-ledger-layout{gap:18px}.member-ledger-list>.member-section-head{flex-wrap:wrap;gap:8px}.member-ledger-list>.member-section-head>span{font-size:11px}
+ .member-ledger-tools>summary,.member-ledger-tools>.member-recovery{padding:18px}.member-ledger-guide{padding:20px 2px}
+}
 
 </style></head><body>
 
@@ -5989,14 +6455,41 @@ if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdm
 
 console.log('Link · Token 管理 v11.12.9 — 已就绪');
 </script>
-<script id="snowMemberUI">
+<script id="snowMemberJournal">
+(function(root){
+  'use strict';
+  const KEY='snow.member.operation-notes.v1';
+  const ACTIONS=['purchase','redeemCdk','checkin','claim'];
+  function clean(v){
+    if(!v||typeof v!=='object'||! /^[a-zA-Z0-9._:-]{12,100}$/.test(v.operationId)||! /^[a-zA-Z0-9-]{12,100}$/.test(v.userId)||!ACTIONS.includes(v.action)||!['unknown','confirmed','rejected'].includes(v.status)||!Number.isSafeInteger(v.createdAt)||v.createdAt<0)return null;
+    // Never spread input. Persistence is limited to these five non-secret fields.
+    return {operationId:v.operationId,userId:v.userId,action:v.action,status:v.status,createdAt:v.createdAt};
+  }
+  function create(options={}){
+    let storage=options.storage,persistent=true,records=[];
+    try{if(!storage)storage=root.sessionStorage;const raw=storage.getItem(KEY);if(raw){const values=JSON.parse(raw);if(Array.isArray(values))records=values.slice(0,100).map(clean).filter(Boolean);}}catch{persistent=false;}
+    function write(){try{if(!storage)throw Error();storage.setItem(KEY,JSON.stringify(records));}catch{persistent=false;}}
+    return Object.freeze({
+      get persistent(){return persistent;},
+      supports:action=>ACTIONS.includes(action),
+      list:userId=>records.filter(r=>r.userId===userId).map(r=>({...r})),
+      add(value){const item=clean({...value,status:'unknown',createdAt:Date.now()});if(!item)throw Error('操作记录格式不正确');const prior=records.find(r=>r.userId===item.userId&&r.operationId===item.operationId);if(prior)return;
+        const unresolved=records.filter(r=>r.status==='unknown');if(unresolved.length>=100)throw Error('待核对操作较多，请先处理交易核对。');records=[item,...unresolved,...records.filter(r=>r.status!=='unknown').slice(0,29)].slice(0,100);write();},
+      settle(userId,id,status){if(!['confirmed','rejected'].includes(status))return;records=records.map(r=>r.userId===userId&&r.operationId===id?{...r,status}:r);write();}
+    });
+  }
+  if(typeof module==='object'&&module.exports)module.exports={create,KEY};else root.SnowTransactionJournal=Object.freeze({create});
+})(typeof window==='undefined'?null:window);
+
+</script><script id="snowMemberUI">
 /* Member UI is an additive module. No replacement of the frozen RC5 handlers. */
 document.addEventListener('DOMContentLoaded',()=>{
   'use strict';
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const api=typeof API_URL==='string'?API_URL:'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
-  const member={token:'',user:null,data:null,page:'home',admin:false,authMode:'login',busy:false,notice:'',error:false,pending:new Map(),tokenDrafts:new Map(),quantityDrafts:new Map(),courses:[],selected:new Set(),preview:null,batch:null,run:false,challenge:null};
+  const journal=SnowTransactionJournal.create();
+  const member={browseFrames:{},adminCapabilities:null,diagnostic:null,reviewData:null,reviewDetail:null,reviewFilter:"pending",reviewUser:"",reviewHold:false,reviewPage:1,epoch:0,recoveryRead:null,recoveryReadId:0,recovery:null,adminLedger:null,token:'',user:null,data:null,page:'home',admin:false,authMode:'login',busy:false,notice:'',error:false,pending:new Map(),tokenDrafts:new Map(),quantityDrafts:new Map(),courses:[],selected:new Set(),preview:null,batch:null,run:false,challenge:null};
   const dialog=document.createElement('dialog');dialog.id='memberDialog';dialog.className='member-dialog';dialog.setAttribute('aria-labelledby','memberHeading');
   const tree='<svg viewBox="0 0 64 80" fill="none" aria-hidden="true"><path d="M32 5 17 27h10L11 44h12L5 63h54L41 44h12L37 27h10L32 5Z" fill="currentColor"/><path d="M32 19v54M32 37l-8-6m8 18 13-10M32 57l-15-9" stroke="#f6f5f1" stroke-width="2" stroke-linecap="round"/></svg>';
   dialog.innerHTML='<header class="member-head"><div class="member-logo">'+tree+'snow.<span class="member-label">PERSONAL SPACE</span></div><button class="member-close" data-member-close>返回工作台</button></header><div class="member-layout"><nav class="member-nav" aria-label="用户中心导航"></nav><main class="member-main" id="memberMain"></main></div>';
@@ -6004,50 +6497,238 @@ document.addEventListener('DOMContentLoaded',()=>{
   const entry=document.createElement('button');entry.type='button';entry.className='member-entry';entry.textContent='用户中心';entry.addEventListener('click',()=>open(false));
   document.querySelector('.segmented')?.append(entry);
   const management=document.createElement('button');management.type='button';management.className='member-entry';management.textContent='用户与点数';management.addEventListener('click',()=>open(true));$('adminMain')?.prepend(management);
-  function open(admin){member.admin=admin;member.page=admin?'users':'home';member.notice='';member.error=false;dialog.showModal();render();if(admin)loadAdmin();else if(member.token)refresh().catch(e=>say(e.message,true));}
-  function close(){member.run=false;dialog.close();}
-  dialog.addEventListener('cancel',()=>{member.run=false;});
+  function open(admin){member.epoch++;member.browseFrames={};member.adminCapabilities=null;member.diagnostic=null;member.adminLedger=null;member.reviewDetail=null;member.reviewData=null;member.reviewUser='';member.admin=admin;member.page=admin?'users':'home';member.notice='';member.error=false;dialog.showModal();render();if(admin)loadAdmin();else if(member.token)refresh().catch(e=>say(e.message,true));}
+  function close(){member.epoch++;member.run=false;dialog.close();}
+  dialog.addEventListener('cancel',()=>{member.epoch++;member.run=false;});
   async function ask(message,passwordMode=false){
-    const box=document.createElement('dialog');box.className='member-confirm';box.setAttribute('aria-labelledby','memberConfirmHeading');
-    box.innerHTML='<form method="dialog"><h3 id="memberConfirmHeading">'+esc(passwordMode?'重置用户密码':'请确认操作')+'</h3><p>'+esc(message)+'</p>'+(passwordMode?'<label>临时新密码<input type="password" autocomplete="new-password" minlength="10" maxlength="128" required></label>':'')+'<div class="member-confirm-actions"><button type="button" data-cancel>取消</button><button type="submit">确认</button></div></form>';
+    const box=document.createElement('dialog');box.className='member-confirm';box.setAttribute('aria-labelledby','memberConfirmHeading');box.setAttribute('aria-describedby','memberConfirmDescription');
+    box.innerHTML='<form method="dialog"><h3 id="memberConfirmHeading">'+esc(passwordMode?'重置用户密码':'请确认操作')+'</h3><p id="memberConfirmDescription">'+esc(message)+'</p>'+(passwordMode?'<label>临时新密码<input type="password" autocomplete="new-password" minlength="10" maxlength="128" required></label>':'')+'<div class="member-confirm-actions"><button type="button" data-cancel>取消</button><button type="submit">确认</button></div></form>';
     document.body.append(box);
-    return new Promise(resolve=>{let done=false;const finish=result=>{if(done)return;done=true;box.close();box.remove();resolve(result);};box.querySelector('[data-cancel]').addEventListener('click',()=>finish(null));box.addEventListener('cancel',e=>{e.preventDefault();finish(null);});box.querySelector('form').addEventListener('submit',e=>{e.preventDefault();finish(passwordMode?box.querySelector('input').value:true);});box.showModal();});
+    return new Promise(resolve=>{let done=false;const finish=result=>{if(done)return;done=true;box.querySelectorAll('input').forEach(el=>{el.value='';});box.close();box.remove();resolve(result);};box.querySelector('[data-cancel]').addEventListener('click',()=>finish(null));box.addEventListener('cancel',e=>{e.preventDefault();finish(null);});box.querySelector('form').addEventListener('submit',e=>{e.preventDefault();finish(passwordMode?box.querySelector('input').value:true);});box.showModal();box.querySelector(passwordMode?'input':'[data-cancel]').focus({preventScroll:true});});
   }
-  const title=(heading,description)=>'<div class="member-page-title"><h2 id="memberHeading">'+esc(heading)+'</h2><div class="member-muted">'+esc(description)+'</div></div>';
-  const input=(label,id,type='text',value='',extra='')=>'<label>'+esc(label)+'<input id="'+id+'" type="'+type+'" value="'+esc(value)+'" '+extra+'></label>';
+  const title=(heading,description)=>'<div class="member-page-title"><span class="member-eyebrow">'+esc(member.admin?'账户与点数管理':member.token?'我的工作空间':'SNOW / PERSONAL ACCESS')+'</span><h2 id="memberHeading" tabindex="-1">'+esc(heading)+'</h2><div class="member-muted">'+esc(description)+'</div></div>';
+  const input=(label,id,type='text',value='',extra='')=>type==='password'?'<div class="member-password-label"><label for="'+esc(id)+'">'+esc(label)+'</label><span class="member-password-field"><input id="'+esc(id)+'" type="password" value="'+esc(value)+'" '+extra+' data-private-field="password"><button type="button" data-password-toggle="'+esc(id)+'" data-password-label="'+esc(label)+'" aria-controls="'+esc(id)+'" aria-label="显示'+esc(label)+'" aria-pressed="false" '+(member.busy?'disabled':'')+'>显示</button></span></div>':'<label>'+esc(label)+'<input id="'+id+'" type="'+type+'" value="'+esc(value)+'" '+extra+'></label>';
   const btn=(text,action,primary=false,extra='')=>'<button type="button" class="member-'+(primary?'primary':'secondary')+'" data-member="'+action+'" '+extra+(member.busy&&!(action==='coursePause'&&member.run)?' disabled':'')+'>'+esc(text)+'</button>';
   const fmt=v=>new Date(Number(v)).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false});
   const status=v=>({pending:'待审核',approved:'已通过',rejected:'未通过',held:'待完成或核对',consumed:'已消耗',released:'已释放',unused:'未领取',redeemed:'已领取',revoked:'已作废',active:'正常',disabled:'已停用',completed:'已完成',failed:'失败',cancelled:'已取消',running:'执行中',stopped:'待处理',paused:'已暂停',completed_with_errors:'结束，有失败项',bound:'已绑定',exhausted:'已耗尽'}[v]||v);
   const value=id=>$(id)?.value||'';
   function say(message,error=false){member.notice=message;member.error=error;render();}
   function render(){
+    clearDismissedFeedback();
+    const main=$('memberMain'),samePage=main.dataset.page===member.page;
+    const isAuth=!member.admin&&!member.token;
+    const retainedAuth=isAuth&&samePage&&main.dataset.authMode===member.authMode?main.querySelector('#memberAuthForm'):null;
+    const focused=main.contains(document.activeElement)?document.activeElement:null;
+    const navFocused=dialog.querySelector('.member-nav').contains(document.activeElement);
+    const owner=member.admin?'admin':member.user?.userId||'auth';
+    const sameOwner=samePage&&main.dataset.owner===owner;
+    const retain=sameOwner&&!member.committedId&&(member.busy||member.error||main.dataset.working==='true'||hasConfigEdits(main));
+    const forms=retain?Array.from(main.querySelectorAll('form')).filter(f=>f.id!=='memberAuthForm'&&(member.busy||member.error||!['memberCourseLoginForm','memberChallengeForm'].includes(f.id))):[];
+    const filter=sameOwner&&member.page==='assets'?main.querySelector('.member-asset-toolbar'):null;
+    const expanded=samePage?Array.from(main.querySelectorAll('details[open]')).map(el=>el.dataset.ledgerId||el.dataset.maintenanceKey||el.className):[];
     const nav=dialog.querySelector('.member-nav');
-    const pages=member.admin?[['users','用户管理'],['cdks','CDK 发放'],['claims','绑定审核'],['config','兑换设置']]:[['home','我的空间'],['shop','权益兑换'],['assets','我的凭证'],['courses','学习任务'],['ledger','点数明细'],['account','账户设置']];
-    nav.innerHTML=(member.admin?'<strong>账户与点数管理</strong>':member.user?'<strong>'+esc(member.user.username)+'</strong>':'<strong>雪松用户中心</strong>')+pages.map(([key,label])=>'<button type="button" data-member-page="'+key+'" aria-current="'+(member.page===key?'page':'false')+'">'+label+'</button>').join('');
+    const pages=member.admin?[['users','用户管理'],['reviews','核对工作台'],['cdks','CDK 发放'],['claims','绑定审核'],['config','兑换设置']]:[['home','我的空间'],['shop','权益兑换'],['assets','我的凭证'],['courses','学习任务'],['ledger','点数明细'],['reviews','待核对中心'],['account','账户设置']];
+    nav.innerHTML='<div class="member-nav-profile"><span class="member-nav-avatar" aria-hidden="true">'+(member.admin?'S':esc((member.user?.username||'S').slice(0,1).toUpperCase()))+'</span>'+(member.admin?'<strong>账户与点数管理</strong>':member.user?'<strong>'+esc(member.user.username)+'</strong>':'<strong>雪松用户中心</strong>')+'<small>'+(member.admin?'ADMIN WORKSPACE':'PERSONAL WORKSPACE')+'</small></div><div class="member-nav-links">'+pages.map(([key,label])=>'<button type="button" data-member-page="'+key+'" aria-current="'+(member.page===key?'page':'false')+'">'+navIcon(key)+'<span>'+label+'</span></button>').join('')+'</div><div class="member-nav-foot">清晰管理，每一份权益。</div>';
+    dialog.dataset.role=member.admin?'admin':'user';
+    nav.querySelectorAll('button').forEach(el=>{el.disabled=member.busy||(!member.admin&&!!member.token&&!member.data);});
     nav.hidden=!member.admin&&!member.token;
     dialog.querySelector('.member-layout').classList.toggle('member-auth-layout',nav.hidden);
     let html='';
     if(!member.admin&&!member.token){
-      html='<section class="member-auth">'+title(member.authMode==='login'?'欢迎回到自己的空间。':'从今天，积累一点。','开放注册。每日签到获得点数，兑换你需要的工具权益。')+'<form id="memberAuthForm" class="member-form">'+input('用户名','memberUsername','text','','autocomplete="username" required minlength="3" maxlength="32"')+input('密码','memberPassword','password','','autocomplete="'+(member.authMode==='login'?'current-password':'new-password')+'" required minlength="10" maxlength="128"')+(member.authMode==='register'?input('确认密码','memberConfirmPassword','password','','autocomplete="new-password" required minlength="10" maxlength="128"'):'')+'<button class="member-primary" '+(member.busy?'disabled':'')+'>'+ (member.busy?'正在处理…':member.authMode==='login'?'登录用户中心':'创建账户')+'</button></form><div class="member-actions"><button class="member-auth-switch" data-member="authSwitch">'+(member.authMode==='login'?'还没有账户？注册':'已有账户？登录')+'</button></div><p class="member-profile-note">密码至少 10 位。忘记密码可联系管理员重置。<br>当前登录仅保存在本页面内存中，刷新页面后需重新登录。不会保存你的密码。</p></section>';
+      html='<section class="member-auth">'+title(member.authMode==='login'?'欢迎回到自己的空间。':'从今天，积累一点。','开放注册。每日签到获得点数，兑换你需要的工具权益。')+'<form id="memberAuthForm" class="member-form">'+input('用户名','memberUsername','text','','autocomplete="username" required minlength="3" maxlength="32"')+input('密码','memberPassword','password','','autocomplete="'+(member.authMode==='login'?'current-password':'new-password')+'" required minlength="10" maxlength="128"')+(member.authMode==='register'?input('确认密码','memberConfirmPassword','password','','autocomplete="new-password" required minlength="10" maxlength="128"'):'')+'<button class="member-primary" '+(member.busy?'disabled':'')+'>'+ (member.busy?'正在处理…':member.authMode==='login'?'登录用户中心':'创建账户')+'</button></form><div class="member-actions"><button class="member-auth-switch" data-member="authSwitch" '+(member.busy?'disabled':'')+'>'+ (member.authMode==='login'?'还没有账户？注册':'已有账户？登录')+'</button></div><p class="member-profile-note">密码至少 10 位。忘记密码可联系管理员重置。<br>当前登录仅保存在本页面内存中，刷新页面后需重新登录。不会保存你的密码。</p></section>';
     }else if(member.admin){html=adminView();}
-    else if(!member.data){html=title('正在读取你的空间。','请稍候。');}
+    else if(!member.data){html=title('我的空间。',member.error?'账户资料尚未读取成功，当前页面的登录凭据仍保留。':'正在准备账户与权益信息。')+(member.error?accountRetryView():listPlaceholder(false,'账户信息'));}
     else html=userView();
-    $('memberMain').innerHTML=(member.notice?'<div class="member-notice" role="status" data-error="'+member.error+'">'+esc(member.notice)+'</div>':'')+html;
+    const notice=member.notice?'<div class="member-notice" role="'+(member.error?'alert':'status')+'" aria-atomic="true" data-error="'+member.error+'">'+esc(member.notice)+'</div>':'';
+    if(isAuth)html=html.replace('</section>','<div class="member-auth-feedback">'+notice+'</div></section>');
+    main.innerHTML=supportView()+(isAuth?'':notice)+html;
+    if(retainedAuth)restoreAuthForm(main,retainedAuth,member.busy,member.authMode);
+    restorePendingForms(main,forms);
+    if(filter&&main.querySelector('.member-asset-toolbar'))main.querySelector('.member-asset-toolbar').replaceWith(filter);
+    main.querySelectorAll('.member-asset-toolbar button').forEach(el=>{el.disabled=member.busy||member.assetsLoading;});
+    resetPrivateFields(main);
+    prepareFormFeedback(main);
+    prepareConfigEditState(main);
+    if(member.page==='assets')filterAssets(main);
+    main.dataset.authMode=isAuth?member.authMode:'';
+    if(focused?.isConnected&&!focused.disabled)focused.focus({preventScroll:true});
+    main.dataset.page=member.page;main.setAttribute('aria-busy',String(member.busy));
+    main.dataset.owner=owner;main.dataset.working=String(member.busy);
+    restoreWorkspaceFocus(main,focused,navFocused,samePage);
+    main.querySelectorAll('details').forEach(el=>{if(expanded.includes(el.dataset.ledgerId||el.dataset.maintenanceKey||el.className))el.open=true;});
   }
+
+  function clearDismissedFeedback(){
+    if(member.notice)return;
+    member.error=false;member.diagnostic=null;
+  }
+  function restoreWorkspaceFocus(main,focused,navFocused,samePage){
+    if(!dialog.open||member.busy||focused?.isConnected&&!focused.disabled)return;
+    let target;
+    if(!samePage||navFocused)target=main.querySelector('#memberHeading');
+    else if(focused?.id)target=$(focused.id);
+    else if(focused?.dataset.member){
+      const matches=Array.from(main.querySelectorAll('[data-member]')).filter(el=>el.dataset.member===focused.dataset.member);
+      if(matches.length===1)target=matches[0];
+    }
+    else if(!focused&&document.activeElement===document.body)target=main.querySelector('#memberHeading');
+    if(target&&main.contains(target)&&!target.disabled)target.focus({preventScroll:true});
+  }
+
+  function supportView(){
+    const d=member.diagnostic;if(!d||!member.error)return '';
+    const stages={network:'连接服务',timeout:'等待响应',parse:'解析响应',server:'服务端响应'};
+    return '<details class="member-support"><summary>查看故障诊断</summary><p class="member-help">仅包含请求编号、版本、时间和错误分类，不包含密码、Token、CDK 或表单内容。不会自动重试。</p><dl><dt>诊断编号</dt><dd>'+esc(d.clientId)+'</dd><dt>服务端请求编号</dt><dd>'+esc(d.requestId||'未取得')+'</dd><dt>阶段</dt><dd>'+esc(stages[d.stage]||'请求处理')+'</dd><dt>操作 / 错误分类</dt><dd>'+esc(d.action)+' / '+esc(d.code)+'</dd><dt>结果</dt><dd>'+esc({unknown:'待核对',rejected:'明确拒绝',confirmed:'已确认成功',read:'读取未成功'}[d.outcome])+'</dd></dl>'+btn('复制诊断','supportCopy')+'</details>';
+  }
+  function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
+    const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
+    return {clientId,time:new Date().toISOString(),frontendVersion:'12.15.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+  }
+  function listPager(data,previous,next){
+    if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
+    return '<div class="member-actions">'+btn('上一页',previous,false,(data?.page||1)<=1?'disabled':'')+btn('下一页',next,false,(data?.page||1)*20>=(data?.total||0)?'disabled':'')+'</div>';
+  }
+  function browseFrame(key,page=1,query=''){
+    if(page===1||!member.browseFrames[key])member.browseFrames[key]={query,cursors:['']};
+    return member.browseFrames[key];
+  }
+
+
+  function navIcon(key){
+    const shapes={home:'M3 10 12 3l9 7v10H3V10Zm6 10v-7h6v7',shop:'M4 7h16l-1 14H5L4 7Zm4 0V5a4 4 0 0 1 8 0v2',assets:'M3 7h18v13H3V7Zm0 4h18M7 15h4',courses:'M3 4h7l2 2 2-2h7v16h-7l-2 2-2-2H3V4Zm9 2v16',ledger:'M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6',reviews:'M12 3a9 9 0 1 0 9 9M12 7v6h4M17 3l3 3 3-3',account:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9v-2a7 7 0 0 1 14 0v2',users:'M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 10v-2a6 6 0 0 1 12 0v2m3-11a3 3 0 0 0 0-6m1 9a5 5 0 0 1 4 5v3',cdks:'M3 6h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V6Zm12 0v3m0 3v3m0 2v1',claims:'M9 15l6-6M7 13l-2 2a4 4 0 0 0 6 6l2-2m-2-12 2-2a4 4 0 0 1 6 6l-2 2',config:'M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6m-5 0v6'};
+    return '<svg class="member-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+(shapes[key]||shapes.home)+'"/></svg>';
+  }
+  function listPlaceholder(failed,label){
+    if(failed)return '<div class="member-empty member-read-state" role="status"><strong>'+esc(label)+'读取未成功</strong><p>请先查看上方错误说明。这里不代表没有数据，不会自动重试。</p></div>';
+    return '<div class="member-read-state" role="status" aria-live="polite"><p>正在读取'+esc(label)+'，请稍候。</p><div class="member-skeleton" aria-hidden="true">'+[1,2,3].map(()=>'<div class="member-skeleton-row"><i></i><span><i></i><i></i></span></div>').join('')+'</div></div>';
+  }
+  function quickLink(page,label,description){return '<button type="button" class="member-quick-link" data-member-page="'+page+'">'+navIcon(page)+'<span><strong>'+esc(label)+'</strong><small>'+esc(description)+'</small></span><span class="member-link-arrow" aria-hidden="true">→</span></button>';}
+  function homeView(d,a){
+    const pending=d.assetsLoaded===false?'—':a.holds.filter(h=>h.status==='held').length;
+    return (d.reviewPending?'<section class="member-review-banner"><div><strong>'+esc(d.reviewPending)+' 项记录需要核对</strong><p>先查看结果，避免重复兑换。</p></div>'+btn('前往核对','openReviews')+'</section>':'')+title('你好，'+member.user.username+'。','你的点数、权益和学习进度，都在这里。')+
+      '<div class="member-stats member-balance-strip"><div class="member-stat"><span>可用点数</span><b>'+esc(d.points)+'</b><small>用于兑换工具权益</small></div><div class="member-stat"><span>可用整课额度</span><b>'+esc(d.courseQuota)+'</b><small>平台确认完成后结算</small></div><div class="member-stat"><span>待结算课程</span><b>'+pending+'</b>'+btn('查看课程预留','openHoldReviews')+'</div></div>'+
+      '<div class="member-home-grid"><section class="member-home-primary"><div class="member-hero"><div><span class="member-eyebrow">DAILY CHECK-IN</span><h3>每天一点，慢慢积累。</h3><p class="member-muted">每日签到获得 '+esc(d.config.signInPoints)+' 点，不开放充值。</p></div>'+btn(d.checkedIn?'今日已签到':'签到领取 '+d.config.signInPoints+' 点','checkin',true,d.checkedIn?'disabled':'')+'</div><section class="member-card member-quick-section"><div class="member-section-head"><h3>接下来，你可以</h3><span>常用入口</span></div><div class="member-quick-grid">'+quickLink('shop','兑换新权益','用点数兑换所需工具')+quickLink('assets','使用我的凭证','复制代码、追加或续期')+quickLink('courses','查看学习任务','读取课程与执行进度')+quickLink('ledger','查看点数明细','每一笔收支都有记录')+'</div></section></section><aside class="member-card member-cdk-panel"><span class="member-eyebrow">REDEEM POINTS</span><h3>有一份 CDK？</h3><p class="member-muted">输入管理员发放的兑换码，点数会进入当前账户。</p><form id="memberCdkForm" class="member-form">'+input('兑换码','memberCdk','text','','autocomplete="off" placeholder="输入 SN- 开头的 CDK" required')+'<button class="member-primary" '+(member.busy?'disabled':'')+'>兑换点数</button></form><p class="member-help">兑换成功后，可在点数明细中查看记录。</p></aside></div>';
+  }
+  function usersView(){
+    const data=member.adminData,users=data?.users||[];
+    return title('用户管理。','按账户查看点数与课程额度，管理状态及待核对事项。')+'<section class="member-card member-user-list"><form id="memberUserSearch" class="member-form member-search-bar"><label>查找用户<input id="memberUserQuery" maxlength="32" placeholder="输入用户名查找" value="'+esc(member.browseFrames.users?.query||'')+'"></label><button class="member-secondary">查找</button></form><div class="member-users-labels" aria-hidden="true"><span>账户</span><span>可用点数 / 整课额度</span><span>操作</span></div>'+(!data?listPlaceholder(member.error,'用户列表'):'')+users.map(u=>'<article class="member-row member-user-row"><div class="member-user-identity"><span class="member-user-avatar" aria-hidden="true">'+esc(u.username.slice(0,1).toUpperCase())+'</span><div><strong>'+esc(u.username)+'</strong><small class="member-status-chip" data-status="'+esc(u.status)+'">'+esc(status(u.status))+'</small></div></div><div class="member-user-balances"><span><b>'+esc(u.points)+'</b><small>点数</small></span><span><b>'+esc(u.courseQuota)+'</b><small>整课额度</small></span></div><div class="member-actions member-user-actions">'+btn('查看账目','userLedger',false,'data-user="'+esc(u.userId)+'"')+btn('待核对事项','userReviews',false,'data-user="'+esc(u.userId)+'"')+'<details class="member-row-menu" data-maintenance-key="user-menu-'+esc(u.userId)+'"><summary aria-label="'+esc(u.username)+' 的更多操作">更多</summary><div>'+btn(u.status==='active'?'停用账户':'恢复账户','userStatus',false,'data-user="'+esc(u.userId)+'" data-status="'+(u.status==='active'?'disabled':'active')+'"')+btn('重置密码','userReset',false,'data-user="'+esc(u.userId)+'"')+'</div></details></div></article>').join('')+(data&&!users.length?'<div class="member-empty">'+(data.pagination?.hasMore?'本批暂无匹配用户，可继续读取下一批。':'没有找到匹配的用户。')+'</div>':'')+(data?listPager(data,'usersPrev','usersNext'):'')+'</section>';
+  }
+
   function userView(){
+    if(member.page==='reviews')return reviewView();
     const d=member.data, a=d.assets||{tokens:[],activations:[],claims:[],holds:[]};
-    if(member.page==='home')return title('你好，'+member.user.username+'。','把每一点积累，变成更轻松的日常。')+'<div class="member-hero"><div><h3>今天，也为自己积累一点。</h3><p class="member-muted">每日签到获得 '+esc(d.config.signInPoints)+' 点，不开放充值。</p></div>'+btn(d.checkedIn?'今日已签到':'签到领取 '+d.config.signInPoints+' 点','checkin',true,d.checkedIn?'disabled':'')+'</div><div class="member-stats"><div class="member-stat"><b>'+esc(d.points)+'</b><span>可用点数</span></div><div class="member-stat"><b>'+esc(d.courseQuota)+'</b><span>可用整课额度</span></div><div class="member-stat"><b>'+a.holds.filter(h=>h.status==='held').length+'</b><span>待结算课程</span></div></div><section class="member-card"><h3>兑换管理员发放的 CDK</h3><form id="memberCdkForm" class="member-form">'+input('CDK','memberCdk','text','','autocomplete="off" placeholder="SN-…" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>兑换点数</button></div></form></section><p class="member-muted">点数和权益均归属于你的账户。兑换成功后，可在“我的凭证”和“学习任务”中使用。</p>';
+    if(member.page==='home')return homeView(d,a);
     if(member.page==='shop')return shopView(d);
-    if(member.page==='assets')return assetsView(d,a);
-    if(member.page==='ledger')return title('每一笔，都清楚。','签到、CDK、兑换与课程结算记录。')+'<section class="member-card">'+(member.ledger?.rows?.length?member.ledger.rows.map(e=>'<div class="member-row"><div><strong>'+esc(e.message||e.action)+'</strong><small>'+esc(fmt(e.createdAt))+'</small></div><div><strong>'+esc(e.change>0?'+'+e.change:e.change)+' 点</strong><small>余额 '+esc(e.balance)+'</small></div></div>').join(''):'<div class="member-empty">暂无记录。</div>')+'<div class="member-actions">'+btn('上一页','ledgerPrev',false,(member.ledger?.page||1)<=1?'disabled':'')+btn('下一页','ledgerNext',false,(member.ledger?.page||1)*20 >= (member.ledger?.total||0)?'disabled':'')+'</div></section>';
-    if(member.page==='account')return title('账户设置。','修改密码后，已有登录会话会失效。')+'<section class="member-card"><form id="memberPasswordForm" class="member-form">'+input('当前密码','memberCurrentPassword','password','','autocomplete="current-password" required')+input('新密码','memberNewPassword','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>修改密码</button></div></form><div class="member-actions">'+btn('退出登录','logout')+'</div></section>';
+    if(member.page==='assets')return d.assetsLoaded===false?title('我的凭证。','需要时读取权益，避免每次登录都扫描全部数据。')+'<section class="member-card">'+(member.assetsLoading?listPlaceholder(false,'凭证'):member.error?listPlaceholder(true,'凭证'):'<p class="member-muted">凭证尚未读取。读取后可以复制代码、追加次数或续期。</p>')+btn('读取我的凭证','assetsLoad',true,member.assetsLoading?'disabled':'')+'</section>':assetsView(d,a);
+    if(member.page==='ledger')return ledgerWorkspaceView(d);
+    if(member.page==='account')return title('账户设置。','修改密码后，已有登录会话会失效。')+'<section class="member-card"><form id="memberPasswordForm" class="member-form">'+input('当前密码','memberCurrentPassword','password','','autocomplete="current-password" required')+input('新密码','memberNewPassword','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+input('确认新密码','memberNewPasswordConfirm','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>修改密码</button></div></form><div class="member-actions">'+btn('退出当前登录','logout')+btn('退出全部登录','logoutAll')+'</div></section>';
     return coursesView();
+  }
+
+  const actionLabel=a=>({purchase:'权益兑换 / 追加',redeemCdk:'CDK 兑换',checkin:'每日签到',claim:'凭证绑定申请'}[a]||'账户操作');
+  function walletContext(d){
+    return '<section class="member-wallet-context" aria-label="当前账户点数"><div><span>可用点数</span><strong>'+esc(d.points??'—')+'<small>点</small></strong></div><p>权益按当前报价确认后兑换，成功后归属本账户。</p></section>';
+  }
+  function emptyAccess(heading,description,page='shop',label='查看权益兑换'){
+    return '<div class="member-card member-access-empty">'+navIcon(page)+'<h3>'+esc(heading)+'</h3><p>'+esc(description)+'</p><button type="button" class="member-secondary" data-member-page="'+esc(page)+'">'+esc(label)+'</button></div>';
+  }
+  function ledgerWorkspaceView(d){
+    const pending=journal.list(member.user.userId).filter(n=>n.status==='unknown').length;
+    const data=member.ledger;
+    return title('每一笔，都清楚。','先看流水，再核对回执。未知结果不要重新兑换或重复提交。')+
+      '<div class="member-ledger-layout"><section class="member-card member-ledger-list"><div class="member-section-head"><h3>点数与权益流水</h3><span>当前可用 '+esc(d.points??'—')+' 点</span></div>'+(!data?listPlaceholder(member.error,'点数明细'):ledgerView(data,false))+(data&&!(data.rows||[]).length?'<div class="member-ledger-empty-link"><button type="button" class="member-secondary" data-member-page="home">返回我的空间</button></div>':'')+'</section><aside class="member-ledger-aside">'+(pending?'<p class="member-ledger-alert" role="status">'+pending+' 笔本标签页交易结果待核对，请先查看原回执。</p>':'')+'<details class="member-ledger-tools" data-maintenance-key="ledger-recovery" '+(pending?'open':'')+'><summary><span>查询交易回执<small>有操作编号时使用，不会再次扣点</small></span></summary>'+recoveryView()+'</details><div class="member-ledger-guide"><h3>如何阅读记录</h3><p><b>点数变化</b>签到、CDK 兑换与权益兑换的收支。</p><p><b>权益记录</b>绑定和课程额度等不直接改变点数的事项。</p><button type="button" class="member-text-link" data-member-page="reviews">查看服务端待核对事项</button></div></aside></div>';
+  }
+  function recoveryView(){
+    const notes=journal.list(member.user.userId).filter(n=>n.status==='unknown');
+    return '<section class="member-card member-recovery"><div class="member-section-head"><h3>交易核对</h3><span>'+notes.length+' 笔待核对</span></div><p class="member-muted">只读取成功回执，不会重新兑换或重复扣点。暂未查到回执不等于失败，请先核对流水和凭证。</p><form id="memberOperationForm" class="member-form"><label>操作编号<input id="memberOperationId" maxlength="100" minlength="12" required autocomplete="off" placeholder="输入或粘贴交易操作编号"></label><div><button class="member-secondary" '+(member.busy?'disabled':'')+'>查询交易结果</button></div></form>'+recoveryResultView()+notes.map(n=>'<div class="member-row"><div><strong>'+esc(actionLabel(n.action))+'</strong><small>'+esc(fmt(n.createdAt))+'</small><code class="member-operation-id">'+esc(n.operationId)+'</code></div><div class="member-actions">'+btn('复制编号','copy',false,'data-code="'+esc(n.operationId)+'"')+btn('核对','operationLookup',true,'data-operation="'+esc(n.operationId)+'"')+'</div></div>').join('')+'<p class="member-help">仅操作编号、类型、时间和核对状态保留在本标签页，不保存登录令牌、密码、Token 或 CDK。'+(!journal.persistent?'当前浏览器无法保留记录，请及时复制操作编号。':'刷新后重新登录同一账户，可继续核对；关闭标签页后不再保留。')+'</p></section>';
+  }
+  // Receipt query presentation is scoped to this account, workspace and latest read.
+  function recoveryResultView(){
+    const q=member.recoveryRead;
+    if(!q||q.userId!==member.user?.userId||q.epoch!==member.epoch||q.readId!==member.recoveryReadId||member.page!=='ledger')return '';
+    let heading,description,status='reading';
+    if(q.phase==='loading'){heading='正在读取本次交易回执';description='仅查询当前操作编号，不会重新兑换或重复扣点。';}
+    else if(q.phase==='failed'){heading='本次回执读取未成功';description='读取失败不代表原交易失败。请先核对流水和凭证，需要时可手动再次查询；系统不会自动重发交易。';status='read-failed';}
+    else if(q.phase==='done'&&member.recovery){const result=member.recovery;status=result.status;heading=result.status==='confirmed'?'成功回执已确认':'尚未查到成功回执';description=result.message;}
+    else return '';
+    return '<div class="member-recovery-result member-receipt-query" data-query-phase="'+esc(q.phase)+'" data-status="'+esc(status)+'" role="status" aria-live="polite" aria-busy="'+(q.phase==='loading')+'"><strong>'+esc(heading)+'</strong><p>'+esc(description)+'</p><span class="member-receipt-label">本次查询编号</span><code>'+esc(q.operationId)+'</code></div>';
+  }
+  function ledgerView(data,admin){
+    const labels={register:'账户注册',checkin:'每日签到',cdk:'CDK 兑换',purchase:'权益兑换',claim:'凭证绑定申请',approveClaim:'绑定审核',profile:'账户安全更新',reserveCourse:'课程额度预留',settleCourse:'课程额度结算'};
+    const rows=(data.rows||[]).map(e=>'<article class="member-ledger-entry"><div class="member-ledger-top"><div><strong>'+esc(e.message||e.display?.label||labels[e.action]||'账户操作')+'</strong><small>'+esc(fmt(e.createdAt))+'</small></div><div class="member-ledger-amount" data-direction="'+(e.change>0?'in':e.change<0?'out':'neutral')+'"><b>'+esc(e.change===0?'权益记录':(e.change>0?'+':'')+e.change+' 点')+'</b><small>点数余额 '+esc(e.balance)+'</small></div></div><details data-ledger-id="'+esc(e.id||e.createdAt)+'"><summary>交易详情</summary><p class="member-muted">'+esc(e.display?.entitlementType||labels[e.action]||'账户操作')+'</p><code class="member-operation-id">'+esc(e.id||'历史记录无操作编号')+'</code>'+(e.id?'<div class="member-actions">'+btn('复制编号','copy',false,'data-code="'+esc(e.id)+'"')+(!admin?btn('核对回执','operationLookup',false,'data-operation="'+esc(e.id)+'"'):'')+'</div>':'')+'</details></article>').join('');
+    const prefix=admin?'adminLedger':'ledger';
+    return (rows||'<div class="member-empty">暂无点数或权益记录。</div>')+'<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 页 · 共 '+esc(data.total||0)+' 条</span><div class="member-actions">'+btn('上一页',prefix+'Prev',false,(data.page||1)<=1?'disabled':'')+btn('下一页',prefix+'Next',false,(data.page||1)*20 >= (data.total||0)?'disabled':'')+'</div></div>';
+  }
+  async function lookupOperation(id){
+    if(member.data?.capabilities.operationStatus!==true)throw Error('当前后端尚未开放交易核对，请先升级后端。');
+    const uid=member.user.userId,epoch=member.epoch;
+    const readId=++member.recoveryReadId;
+    const current=()=>member.user?.userId===uid&&member.epoch===epoch&&member.recoveryReadId===readId&&member.page==='ledger';
+    member.recovery=null;member.recoveryRead={userId:uid,epoch,readId,operationId:id,phase:'loading'};render();
+    let result;
+    try{result=await request('operationStatus',{operationId:id});}
+    catch(error){if(!current())return;member.recoveryRead.phase='failed';throw error;}
+    if(result.status==='confirmed'){journal.settle(uid,id,'confirmed');for(const [key,value] of member.pending)if(value===id)member.pending.delete(key);}
+    if(!current())return;
+    member.recoveryRead.phase='done';
+    member.recovery=result;member.page='ledger';await loadLedger();await refresh();member.notice=result.message;
+  }
+  async function loadUserLedger(userId,page=1){
+    const epoch=member.epoch,result=await request('memberUserLedger',{userId,page});
+    if(!member.admin||epoch!==member.epoch)return;
+    member.adminLedger=result;render();
+  }
+
+  const reviewState=v=>({unconfirmed:'结果待核对',confirmed:'已确认',rejected:'明确拒绝',open:'待跟进',investigating:'核对中',awaiting_user:'等待用户补充',closed:'已归档'}[v]||'待核对');
+  const reviewReason=v=>({RECEIPT_CONFIRMED:'已有原交易回执或原课程结算证据',AWAITING_RECEIPT:'尚未取得原交易成功回执',INSUFFICIENT_POINTS:'原交易因点数不足而明确拒绝',PRODUCT_CHANGED:'原交易因商品或报价变化而明确拒绝',TOKEN_NAME_TAKEN:'原交易因凭证名称已被占用而明确拒绝'}[v]||'原交易明确拒绝，可结合原操作提示核对。');
+  function reviewView(){
+    if(!member.admin&&member.data?.capabilities.reviewCenter!==true)return title('待核对中心。','请先升级后端以使用服务端核对记录。');
+    const detail=member.reviewDetail;
+    if(detail)return reviewDetailView(detail);
+    const data=member.reviewData,failed=!data&&member.error&&!!member.notice&&!member.busy;
+    const label=member.reviewHold?'课程预留':'交易核对记录';
+    const choice=(text,action,selected)=>btn(text,action,false,'aria-pressed="'+String(selected)+'"');
+    const emptyHeading=data?.pagination?.hasMore?'本批暂无可展示记录':member.reviewHold?'本次未读取到课程预留':member.reviewFilter==='pending'?'本次未读取到待核对记录':'本次未读取到交易核对记录';
+    const emptyHint=data?.pagination?.hasMore?'仍有下一批，可继续读取。':member.reviewHold?'这是当前账户筛选下的读取结果，不会在此释放或结算课程。':member.reviewFilter==='pending'?'已登记交易可能已自动核对，可切换到全部记录查看。':'这是当前账户筛选下的读取结果；未找到记录不代表原交易失败。';
+    return title(member.admin?'核对工作台。':'把不确定，核对清楚。','记录保存在服务端。换设备或关闭页面后重新登录，也可以查看已登记事项。')+
+      '<div class="member-review-toolbar"><div class="member-review-switch" role="group" aria-label="核对记录类型">'+choice('交易记录','reviewTransactions',!member.reviewHold)+choice('课程预留','reviewHolds',member.reviewHold)+'</div><div class="member-review-tools">'+(!member.reviewHold?'<div class="member-review-filter" role="group" aria-label="交易记录范围">'+choice('待核对','reviewPending',member.reviewFilter==='pending')+choice('全部记录','reviewAll',member.reviewFilter==='all')+'</div>':'')+btn(failed?'重新读取':'刷新记录','reviewRefresh')+'</div></div>'+
+      (member.admin?'<details class="member-card member-review-search" data-maintenance-key="review-search"><summary><strong>账户筛选</strong><span>'+esc(member.reviewUser?'已限定账户':'全部账户')+'</span></summary><div class="member-review-search-body"><form id="memberReviewSearch" class="member-form"><label>账户编号（可选）<input id="memberReviewUser" value="'+esc(member.reviewUser)+'" placeholder="留空查看全部账户" aria-describedby="memberReviewSearchHelp"></label><div><button class="member-secondary" '+(member.busy?'disabled':'')+'>筛选账户</button></div></form><p id="memberReviewSearchHelp" class="member-help">按明确账户编号查找，也可从用户管理进入该账户的待核对事项。</p></div></details>':'')+
+      '<section class="member-card member-review-records" aria-labelledby="memberReviewListHeading" aria-busy="'+String(!data&&!failed)+'"><div class="member-section-head"><div><h3 id="memberReviewListHeading">'+esc(label)+'</h3><p class="member-help">'+(data?'本页显示 '+esc((data.rows||[]).length)+' 条记录':'读取成功后才展示记录')+'</p></div></div>'+(!data?listPlaceholder(failed,label):(data.rows||[]).length?data.rows.map(v=>'<article class="member-review-item"><div><div class="member-review-identity"><strong>'+esc(v.label||'课程额度预留')+'</strong><span class="member-review-state" data-status="'+esc(v.status)+'">'+esc(v.status==='held'?'额度仍预留':reviewState(v.status))+'</span></div><small>'+esc(fmt(v.createdAt))+(member.admin?' · 账户 '+esc(v.userId):'')+'</small><code class="member-operation-id">'+esc(v.reviewId)+'</code>'+(v.courseId?'<small>课程编号 '+esc(v.courseId)+'</small>':'')+(v.workflow?'<small>跟进状态：'+esc(reviewState(v.workflow))+'</small>':'')+'</div>'+btn(member.reviewHold?'查看跟进':'查看详情','reviewOpen',false,'data-user="'+esc(v.userId)+'" data-review="'+esc(v.reviewId)+'"')+'</article>').join(''):'<div class="member-empty member-review-empty"><strong>'+esc(emptyHeading)+'</strong><p>'+esc(emptyHint)+'</p></div>')+
+      (data?(data.pagination?listPager(data,'reviewPrev','reviewNext'):'<div class="member-ledger-pagination"><span>第 '+esc(data.page)+' 页 · 当前索引 '+esc(data.total)+' 条</span><div class="member-actions">'+btn('上一页','reviewPrev',false,data.page<=1?'disabled':'')+btn('下一页','reviewNext',false,data.page*20>=data.total?'disabled':'')+'</div></div>'):'')+'</section><p class="member-help">核对不会重新兑换或重复扣点。课程预留仅查看与跟进，不会在这里释放或消耗。未找到记录不代表交易失败；请求未到达服务端和旧版事项可能没有登记。</p>';
+  }
+  function reviewDetailView(d){
+    const v=d.review,unknown=v.status==='unconfirmed';
+    const events={registered:'登记核对事项',receipt_confirmed:'证据确认',explicit_rejection:'明确业务拒绝',admin_followup:'管理员跟进'};
+    return title(v.label+'。',unknown?'尚不能确定最终结果，请继续核对证据。':'结果已有服务端证据，跟进不会再次执行业务。')+'<div class="member-actions">'+btn('返回记录','reviewBack')+'</div><section class="member-card member-review-detail"><div class="member-section-head"><h3>'+esc(reviewState(v.status))+'</h3><span>'+esc(reviewState(v.workflow))+'</span></div><code class="member-operation-id">'+esc(v.reviewId)+'</code><p class="member-muted">登记 '+esc(fmt(v.createdAt))+' · 更新 '+esc(fmt(v.updatedAt))+'</p>'+(v.reason?'<p class="member-help">证据状态：'+esc(reviewReason(v.reason))+'</p>':'')+(d.summary?'<p class="member-muted">'+esc(d.summary.entitlementType||'账户操作')+(d.summary.totalPoints!==undefined?' · 本次 '+esc(d.summary.totalPoints)+' 点':'')+'</p>':'')+(d.related?'<p class="member-muted">课程编号 '+esc(d.related.courseId)+'<br>原结算状态：'+esc(status(d.related.settlement))+'</p>':'')+btn('复制编号','copy',false,'data-code="'+esc(v.reviewId)+'"')+'</section>'+
+      (member.admin?'<section class="member-card"><h3>添加跟进记录</h3><form id="memberReviewNote" class="member-form"><label>跟进状态<select id="memberReviewWorkflow">'+(unknown?'<option value="investigating">核对中</option><option value="awaiting_user">等待用户补充</option>':'<option value="closed">已归档（只补充备注）</option>')+'</select></label><label>处理依据与备注<textarea id="memberReviewNoteText" rows="4" maxlength="300" required placeholder="向用户展示，请勿填写密码、Token、CDK 或其他敏感信息"></textarea></label><p class="member-help">未知结果不能手动强制成功、失败或关闭。此操作仅写入跟进记录，不修改余额、凭证及课程额度。管理员为共享身份，记录会话标识，不等同于实名操作人。</p><div><button class="member-primary" '+(member.busy?'disabled':'')+'>保存跟进</button></div></form></section>':'')+
+      '<section class="member-card"><h3>核对时间线</h3>'+((d.audit||[]).length?d.audit.map(e=>'<article class="member-review-event"><strong>'+esc(events[e.event]||'状态记录')+'</strong><small>'+esc(fmt(e.createdAt))+' · '+esc(e.actor==='system'?'系统':e.actor)+'</small>'+(e.note?'<p>'+esc(e.note)+'</p>':'')+'<span>'+esc(reviewState(e.after))+' · '+esc(reviewState(e.workflow))+'</span></article>').join(''):'<p class="member-muted">尚无跟进记录。</p>')+'<p class="member-help">展示最近 50 条，服务端保留全部审计记录。共 '+esc(d.auditTotal||0)+' 条。</p></section>';
+  }
+  async function loadReviews(page=1){
+    const epoch=member.epoch,admin=member.admin,uid=member.user?.userId,readId=member.reviewReadId=(member.reviewReadId||0)+1;
+    const paged=member.reviewHold&&(admin?member.adminCapabilities?.cursorLists:member.data?.capabilities.cursorLists)===true;
+    const frame=paged?browseFrame('holds:'+admin+':'+(admin?member.reviewUser:uid),page):null;
+    const action=member.reviewHold?(admin?(paged?'memberReviewHoldsPage':'memberReviewHolds'):(paged?'reviewHoldsPage':'reviewHolds')):(admin?'memberReviews':'reviews');
+    const params={page,...(paged?{cursor:frame.cursors[page-1]}:{}),filter:member.reviewFilter,...(admin&&member.reviewUser?{userId:member.reviewUser}:{}),...(!admin&&!member.reviewHold?{unresolvedIds:journal.list(uid).filter(n=>n.status==='unknown').slice(0,20).map(n=>n.operationId)}:{})};
+    member.reviewData=null;render();
+    let result;try{result=await request(action,params);}catch(e){if(epoch!==member.epoch||admin!==member.admin||(!admin&&uid!==member.user?.userId)||member.page!=='reviews'||readId!==member.reviewReadId)return;if(member.busy)throw e;member.diagnostic=e.support||null;say(e.message,true);return;}
+    if(epoch!==member.epoch||admin!==member.admin||(!admin&&uid!==member.user?.userId)||member.page!=='reviews'||readId!==member.reviewReadId)return;
+    if(!admin){for(const item of result.reconciled||[]){if(['confirmed','rejected'].includes(item.status)){journal.settle(uid,item.reviewId,item.status);for(const [key,id] of member.pending)if(id===item.reviewId)member.pending.delete(key);}}if(!member.reviewHold&&result.filter==='pending')member.data.reviewPending=result.total;}
+    if(paged){frame.cursors[page]=result.pagination.nextCursor;result.page=page;}member.reviewPage=page;member.reviewData=result;render();
+  }
+  async function loadReviewDetail(userId,reviewId){
+    const epoch=member.epoch,admin=member.admin,uid=member.user?.userId;
+    let result;try{result=await request(admin?'memberReviewDetail':'reviewDetail',{reviewId,...(admin?{userId}:{})});}catch(e){if(epoch!==member.epoch||admin!==member.admin||(!admin&&uid!==member.user?.userId))return;throw e;}
+    if(epoch!==member.epoch||admin!==member.admin||(!admin&&uid!==member.user?.userId))return;
+    member.reviewDetail=result;
+    if(!admin&&['confirmed','rejected'].includes(result.review.status)){journal.settle(uid,reviewId,result.review.status);for(const [key,id] of member.pending)if(id===reviewId)member.pending.delete(key);}
+    render();
   }
 
   function productUnits(p){return p.amount?p.amount+(p.kind==='course'?' 门课程':' 次'):p.days&&p.uses?p.days+' 天 / '+p.uses+' 次':p.days?p.days+' 天':p.uses+' 次';}
   function shopView(d){
     const products=d.config.products.filter(p=>['token','course','activation'].includes(p.kind));
-    return title('让点数，发挥作用。','这里兑换新的权益。已有凭证的追加次数和续期，请前往“我的凭证”。')+'<div class="member-grid">'+products.map(p=>'<section class="member-card member-product"><h3>'+esc(p.title)+'</h3><div class="member-muted">'+esc(productUnits(p))+'</div><div class="member-product-price">'+(p.enabled?esc(p.points)+' <small>点</small>':'<small>尚未上架</small>')+'</div>'+(p.kind==='token'?'<div class="member-form">'+input('自定义 Token（可选）','memberTokenName-'+p.id,'text',member.tokenDrafts.get(p.id)||'','maxlength="100" autocomplete="off" data-token-product="'+esc(p.id)+'" placeholder="留空则随机生成"')+'<p class="member-help">名称区分大小写，不可与已有凭证重名；留空则随机生成。Token 相当于使用钥匙，建议使用不易猜到的名称。</p></div>':'')+'<div class="member-actions">'+btn('兑换','purchase',true,'data-product="'+esc(p.id)+'" '+(!p.enabled?'disabled':'') )+'</div></section>').join('')+'</div>';
+    const descriptions={token:'用于提取答题代码。已有凭证可在“我的凭证”追加次数。',course:'平台确认整门课程完成后，才结算对应额度。',activation:'兑换后获得设备绑定码，在绑定流程中使用。'};
+    return title('让点数，发挥作用。','这里兑换新的权益。已有凭证的追加次数和续期，请前往“我的凭证”。')+walletContext(d)+'<div class="member-shop-grid">'+products.map(p=>'<section class="member-card member-product" data-product-kind="'+esc(p.kind)+'"><div class="member-product-heading">'+navIcon({token:'assets',course:'courses',activation:'claims'}[p.kind])+'<span class="member-product-state">'+(p.enabled?'已开放':'尚未上架')+'</span></div><h3>'+esc(p.title)+'</h3><p class="member-product-description">'+esc(descriptions[p.kind])+'</p><div class="member-product-offer"><span>'+esc(productUnits(p))+'</span><div class="member-product-price">'+(p.enabled?esc(p.points)+' <small>点</small>':'<small>尚未上架</small>')+'</div></div>'+(p.kind==='token'?'<div class="member-form">'+input('自定义 Token（可选）','memberTokenName-'+esc(p.id),'text',member.tokenDrafts.get(p.id)||'','maxlength="100" autocomplete="off" data-token-product="'+esc(p.id)+'" aria-describedby="memberTokenHelp-'+esc(p.id)+'" placeholder="留空则随机生成"')+'<p class="member-help" id="memberTokenHelp-'+esc(p.id)+'">名称区分大小写，不可与已有凭证重名；留空则随机生成。Token 相当于使用钥匙，建议使用不易猜到的名称。</p></div>':'')+'<div class="member-actions">'+btn('兑换','purchase',true,'data-product="'+esc(p.id)+'" '+(!p.enabled?'disabled':'') )+'</div></section>').join('')+(products.length?'':emptyAccess('暂无可展示的新权益','可返回我的空间签到，或查看已有凭证。','home','返回我的空间'))+'</div><div class="member-shop-footer"><div><strong>已经有凭证？</strong><p>追加次数、延长有效期，在具体凭证下操作。</p></div><button type="button" class="member-secondary" data-member-page="assets">管理我的凭证</button></div>';
   }
   function maintenanceOptions(d,kind,target){
     const products=d.config.products.filter(p=>p.kind===kind&&p.enabled);
@@ -6055,7 +6736,10 @@ document.addEventListener('DOMContentLoaded',()=>{
     return products.map(p=>{
       const custom=['token_add','activation_uses'].includes(kind),unit=p.amount||p.uses;
       const raw=member.quantityDrafts.get(quantityKey(p.id,target))??String(unit),price=appendPrice(p,raw);
-      return '<div class="member-maintenance-option"><div><strong>'+esc(p.title)+'</strong><small>'+esc(productUnits(p))+' · '+esc(p.points)+' 点'+(custom?'／份':'')+'</small>'+(custom?'<label class="member-quantity-label">追加次数<input type="number" inputmode="numeric" min="1" max="1000000" step="1" value="'+esc(raw)+'" data-append-product="'+esc(p.id)+'" data-append-target="'+esc(target)+'"></label><small data-append-price>'+esc(price?'本次追加 '+price.requestedAmount+' 次，合计 '+price.totalPoints+' 点':'请输入 1—1000000 的整数次数')+'</small><p class="member-help">按上方每份次数计价，不足一份按一份计费；实际增加输入的次数。</p>':'')+'</div>'+btn(kind==='activation_days'?'确认续期':'确认追加','purchase',false,'data-product="'+esc(p.id)+'" data-target="'+esc(target)+'"')+'</div>';
+      const action=btn(kind==='activation_days'?'确认续期':'确认追加','purchase',true,'data-product="'+esc(p.id)+'" data-target="'+esc(target)+'"');
+      if(!custom)return '<div class="member-maintenance-option member-renewal"><div><strong>'+esc(p.title)+'</strong><small>'+esc(productUnits(p))+' · '+esc(p.points)+' 点</small></div>'+action+'</div>';
+      const presets=[unit,unit*5,unit*10].filter((v,i,a)=>v<=1000000&&a.indexOf(v)===i);
+      return '<section class="member-maintenance-option"><header class="member-append-header"><strong>设置追加次数</strong><span>'+esc(unit)+' 次 / '+esc(p.points)+' 点</span></header><div class="member-append-grid"><div><label class="member-quantity-label">追加次数<input type="number" inputmode="numeric" min="1" max="1000000" step="1" value="'+esc(raw)+'" data-append-product="'+esc(p.id)+'" data-append-target="'+esc(target)+'"></label><div class="member-presets" aria-label="快捷次数">'+presets.map(n=>btn(n+' 次','appendPreset',false,'aria-pressed="'+String(Number(raw)===n)+'" data-quantity="'+n+'"')).join('')+'</div></div><div class="member-price-summary"><span>本次消耗</span><div><b data-append-total>'+esc(price?price.totalPoints:'—')+'</b><span>点</span></div><small data-append-price>'+esc(price?'追加 '+price.requestedAmount+' 次':'请输入有效次数')+'</small></div></div><footer class="member-append-footer"><p>不足一份按一份计费；只增加输入次数。</p>'+action+'</footer></section>';
     }).join('');
   }
   const quantityKey=(product,target)=>JSON.stringify([product,target]);
@@ -6065,11 +6749,45 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!Number.isSafeInteger(requestedAmount)||requestedAmount>1000000||!Number.isSafeInteger(totalPoints)||totalPoints<1||totalPoints>1000000000)return null;
     return {requestedAmount,totalPoints};
   }
-  function assetMaintenance(d,kind,target,label){return '<details class="member-maintenance"><summary>'+esc(label)+'</summary><div class="member-maintenance-body">'+maintenanceOptions(d,kind,target)+'</div></details>';}
+  function assetMaintenance(d,kind,target,label){return '<details class="member-maintenance" data-maintenance-key="'+esc(quantityKey(kind,target))+'"><summary>'+esc(label)+'</summary><div class="member-maintenance-body">'+maintenanceOptions(d,kind,target)+'</div></details>';}
   function assetsView(d,a){
-    const tokens=a.tokens.map(t=>'<article class="member-asset"><div class="member-asset-header"><strong>'+esc(t.token)+'</strong><small>剩余 '+esc(t.remain)+' 次 · 已用 '+esc(t.used)+' 次</small></div><div class="member-actions">'+btn('复制 Token','copy',false,'data-code="'+esc(t.token)+'"')+btn('复制答题代码','copyToken',true,'data-code="'+esc(t.token)+'"')+'</div><p class="member-help">Token 填入 GSS 提取页；答题代码粘贴到 21TB 答题页面地址栏，删除最前面的等号后运行。</p>'+assetMaintenance(d,'token_add',t.token,'追加次数')+'</article>').join('');
-    const devices=a.activations.map(t=>'<article class="member-asset"><div class="member-asset-header"><strong>'+esc(t.code)+'</strong><small>'+esc(status(t.status))+' · '+esc(t.days)+' 天 · 已用 '+esc(t.used)+' / '+esc(t.maximum)+' 次<br>计时基准：'+esc(fmt(t.daysStart))+'</small></div><div class="member-actions">'+btn('复制绑定码','copy',false,'data-code="'+esc(t.code)+'"')+'</div>'+assetMaintenance(d,'activation_days',t.code,'延长有效期')+assetMaintenance(d,'activation_uses',t.code,'追加使用次数')+'</article>').join('');
-    return title('每一份权益，都有归属。','新兑换权益自动绑定。在具体凭证下追加或续期，按管理员设置扣点，不影响已有使用记录。')+'<section class="member-card"><h3>脚本凭证</h3>'+(tokens||'<div class="member-empty">还没有脚本凭证，前往权益兑换。</div>')+'</section><section class="member-card"><h3>设备绑定码</h3>'+(devices||'<div class="member-empty">还没有设备绑定码。</div>')+'</section><section class="member-card"><h3>绑定以前的凭证</h3><form id="memberClaimForm" class="member-form"><label>类型<select id="memberClaimKind"><option value="token">Token</option><option value="activation">设备绑定码</option></select></label>'+input('凭证','memberClaimCode','text','','required autocomplete="off"')+input('归属说明','memberClaimNote','text','','maxlength="200" placeholder="供管理员核对，如发放时间或备注"')+'<div><button class="member-secondary" '+(member.busy?'disabled':'')+'>提交绑定申请</button></div></form>'+a.claims.map(c=>'<div class="member-row"><div><strong>'+esc(c.code)+'</strong><small>'+esc(status(c.status))+'</small></div></div>').join('')+'</section>';
+    const metric=(n,label)=>'<div><b>'+esc(n)+'</b><span>'+esc(label)+'</span></div>';
+    const tokens=a.tokens.map(t=>'<article class="member-asset"><div class="member-asset-header"><span class="member-asset-kind">SCRIPT ACCESS</span><span class="member-asset-badge">'+(t.remain>0?'可使用':'暂无次数')+'</span></div><strong class="member-asset-name">'+esc(t.token)+'</strong><div class="member-asset-metrics">'+metric(t.remain,'剩余次数')+metric(t.used,'已用次数')+'</div><div class="member-actions">'+btn('复制答题代码','copyToken',true,'data-code="'+esc(t.token)+'"')+btn('复制 Token','copy',false,'data-code="'+esc(t.token)+'"')+'</div><p class="member-help">Token 用于 GSS 提取；答题代码粘贴到 21TB 地址栏，删除首个等号后执行。</p>'+assetMaintenance(d,'token_add',t.token,'追加次数')+'</article>').join('');
+    const devices=a.activations.map(t=>deviceAssetView(d,t)).join('');
+    return title('我的凭证。','查看、使用和管理你的权益。追加与续期会在确认后扣除点数。')+walletContext(d)+'<div class="member-asset-toolbar"><label>查找已读取的凭证<input id="memberAssetQuery" type="search" maxlength="100" placeholder="按 Token 或设备码查找" autocomplete="off"></label><button type="button" class="member-secondary" data-asset-clear>清除筛选</button>'+btn('刷新凭证','assetsLoad',false,member.assetsLoading?'disabled':'')+'</div><p class="member-help">仅筛选本次已读取的凭证，不会重新查询题库或自动执行业务。</p><p id="memberAssetNoMatch" class="member-filter-empty" hidden role="status">已读取的凭证中没有匹配结果，请清除筛选或手动刷新。</p><div class="member-assets-columns"><section class="member-asset-section"><div class="member-section-head"><h3>脚本凭证</h3><span>'+a.tokens.length+' 份</span></div>'+(tokens||emptyAccess('还没有脚本凭证','先兑换使用次数，再复制专属答题代码。'))+'</section><section class="member-asset-section"><div class="member-section-head"><h3>设备绑定码</h3><span>'+a.activations.length+' 份</span></div>'+(devices||emptyAccess('还没有设备绑定码','兑换设备套餐后，绑定码会显示在这里。'))+'</section></div><details class="member-claim-section"><summary><span>绑定以前的凭证</span><small>已有 Token 或设备码？申请归属审核</small></summary><div class="member-card"><form id="memberClaimForm" class="member-form"><div class="member-form-two"><label>类型<select id="memberClaimKind"><option value="token">Token</option><option value="activation">设备绑定码</option></select></label>'+input('凭证','memberClaimCode','text','','required autocomplete="off"')+'</div>'+input('归属说明','memberClaimNote','text','','maxlength="200" placeholder="如发放时间、用途或备注，供管理员核对"')+'<div><button class="member-secondary" '+(member.busy?'disabled':'')+'>提交绑定申请</button></div></form>'+a.claims.map(c=>'<div class="member-row"><div><strong>'+esc(c.code)+'</strong><small>'+esc(status(c.status))+'</small></div></div>').join('')+'</div></details>';
+  }
+  // Device presentation only: interpret the existing asset fields, never authorize usage.
+  function deviceEntitlement(t,now=Date.now()){
+    const count=v=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=0?v:null;
+    const days=t.days===-1?-1:count(t.days),maximum=t.maximum===-1?-1:count(t.maximum),used=count(t.used);
+    const start=count(t.daysStart),validStart=start!==null&&start>0&&start<=8640000000000000;
+    const candidate=days!==null&&days>=0&&validStart?start+days*86400000:null;
+    const expires=candidate!==null&&Number.isSafeInteger(candidate)&&candidate<=8640000000000000?candidate:null;
+    const remaining=maximum===-1?'不限次数':maximum!==null&&used!==null?String(Math.max(0,maximum-used)):'—';
+    const warnings=[];
+    if(maximum===null)warnings.push('套餐总次数未提供或无效，剩余次数暂不可核对。');
+    if(used===null)warnings.push('已用次数未提供或无效，请核对原使用记录。');
+    if(maximum!==null&&maximum>=0&&used!==null&&used>maximum)warnings.push('已用次数超过套餐总次数，请核对原使用记录。');
+    if(days===null)warnings.push('套餐天数未提供或无效，到期时间暂不可核对。');
+    else if(days!==-1&&!validStart)warnings.push('未提供有效计时基准，无法展示到期时间。');
+    else if(days!==-1&&expires===null)warnings.push('计时数据超出可展示范围，到期时间暂不可核对。');
+    return {remaining,used:used===null?'—':String(used),days:days===-1?'不限期':days===null?'未提供':days+' 天',total:maximum===-1?'不限次数':maximum===null?'未提供':maximum+' 次',start:validStart?fmt(start):'未提供',expires:days===-1?'不限期':expires===null?'待核对':fmt(expires),elapsed:expires!==null&&typeof now==='number'&&Number.isFinite(now)&&now>=expires,warnings};
+  }
+  function deviceAssetView(d,t){
+    const info=deviceEntitlement(t);
+    const labels={unused:'未绑定设备',bound:'已绑定设备',exhausted:'次数已耗尽',expired:'已过期',revoked:'已停用',paused:'已暂停',suspended:'已暂停'};
+    const known=typeof t.status==='string'&&Object.hasOwn(labels,t.status),state=known?labels[t.status]:'待核对状态';
+    const tone=['revoked','paused','suspended','expired','exhausted'].includes(t.status)?'attention':known?'normal':'unknown';
+    const row=(label,text)=>'<div><dt>'+esc(label)+'</dt><dd>'+esc(text)+'</dd></div>';
+    return '<article class="member-asset member-device-asset"><div class="member-asset-header"><span class="member-asset-kind">DEVICE ACCESS</span><span class="member-asset-badge" data-device-tone="'+tone+'">登记状态 · '+esc(state)+'</span></div><strong class="member-asset-name">'+esc(t.code)+'</strong><div class="member-asset-metrics member-device-metrics"><div><b data-device-remaining>'+esc(info.remaining)+'</b><span>剩余次数</span></div><div><b>'+esc(info.used)+'</b><span>已用次数</span></div></div><div class="member-actions">'+btn('复制绑定码','copy',false,'data-code="'+esc(t.code)+'"')+'</div><dl class="member-device-info">'+row('套餐总次数',info.total)+row('套餐天数',info.days)+row('计时基准',info.start)+row('到期参考',info.expires)+'</dl>'+(info.elapsed?'<p class="member-device-time-note" role="status">根据本机时间，当前读取的有效期已到期。实际可用性请以服务端校验为准。</p>':'')+(info.warnings.length?'<div class="member-device-data-note" role="status"><strong>部分权益信息待核对</strong>'+info.warnings.map(w=>'<p>'+esc(w)+'</p>').join('')+'</div>':'')+'<p class="member-help member-device-guide">有限期从计时基准计算，不因尚未绑定而暂停。到期参考按本次读取的套餐字段计算，登记状态不替代实时服务端校验；可手动刷新凭证核对。</p>'+assetMaintenance(d,'activation_days',t.code,'延长有效期')+assetMaintenance(d,'activation_uses',t.code,'追加使用次数')+'</article>';
+  }
+  function updateAppend(input){
+    const id=input.dataset.appendProduct,target=input.dataset.appendTarget,p=member.data?.config.products.find(p=>p.id===id);
+    member.quantityDrafts.set(quantityKey(id,target),input.value);
+    const price=p&&appendPrice(p,input.value),panel=input.closest('.member-maintenance-option');
+    panel.querySelector('[data-append-total]').textContent=price?price.totalPoints:'—';
+    panel.querySelector('[data-append-price]').textContent=price?'追加 '+price.requestedAmount+' 次':'请输入 1—1000000 的整数';
+    panel.querySelectorAll('[data-quantity]').forEach(b=>b.setAttribute('aria-pressed',String(Number(input.value)===Number(b.dataset.quantity))));
   }
 
   function coursesView(){
@@ -6082,35 +6800,364 @@ document.addEventListener('DOMContentLoaded',()=>{
     const image=typeof c.image==='string'&&/^data:image\/(png|jpeg|gif|webp);base64,[a-zA-Z0-9+/=]+$/.test(c.image)?'<img class="member-challenge-image" src="'+esc(c.image)+'" alt="平台登录验证码">':'';
     return '<form id="memberChallengeForm" class="member-form" style="margin-top:16px"><p class="member-muted">'+esc(c.message)+'</p>'+image+(c.type==='sms'?input('手机号码','memberChallengePhone','tel',c.phone||'','autocomplete="off"')+'<div>'+btn('发送短信验证码','courseSendCode')+'</div>':'')+(c.type==='continueLogin'?'':input('平台验证码','memberChallengeCode','text','','required autocomplete="one-time-code"'))+'<div><button class="member-secondary">'+(c.type==='continueLogin'?'确认继续登录':'提交验证码')+'</button></div></form>';
   }
+  function accountRetryView(){
+    return '<section class="member-card member-account-retry" role="status"><h3>账户信息读取未成功</h3><p class="member-help">此按钮仅重新读取账户资料，不会兑换、扣点或重发上次操作。资料恢复后，导航会恢复可用。</p><button type="button" class="member-primary" data-account-retry '+(member.busy?'disabled':'')+'>重新读取账户信息</button></section>';
+  }
+  function prepareFormFeedback(main){
+    main.querySelectorAll('form').forEach(form=>{
+      if(!form.querySelector('.member-validation-summary')){
+        const summary=document.createElement('p');summary.className='member-validation-summary';summary.hidden=true;summary.setAttribute('role','alert');summary.setAttribute('aria-atomic','true');form.prepend(summary);
+      }
+      form.querySelectorAll('input:not([type=checkbox]),select,textarea').forEach(field=>{
+        if(!field.id)return;
+        field.setAttribute('data-validation-field','');
+        let group=field.closest('.member-password-label,.member-field-feedback-wrap');
+        if(!group){const label=field.closest('label');if(!label)return;group=document.createElement('div');group.className='member-field-feedback-wrap';label.replaceWith(group);group.append(label);}
+        if(!group.querySelector('.member-field-feedback')){
+          const message=document.createElement('span');message.id=field.id+'Feedback';message.className='member-field-feedback';message.hidden=true;group.append(message);
+        }
+      });
+    });
+  }
+  function fieldFeedbackMessage(field){
+    const v=field.validity;if(v.valid)return '';
+    if(v.customError)return field.validationMessage||'请检查这一项。';
+    if(v.badInput)return '请输入有效的数字。';
+    if(v.valueMissing)return field.tagName==='SELECT'?'请选择这一项。':'请填写这一项。';
+    if(v.tooShort)return '请至少输入 '+field.minLength+' 个字符。';
+    if(v.tooLong)return '请不要超过 '+field.maxLength+' 个字符。';
+    if(v.rangeUnderflow)return '请填写不小于 '+field.min+' 的数字。';
+    if(v.rangeOverflow)return '请填写不大于 '+field.max+' 的数字。';
+    if(v.stepMismatch)return '请按要求填写整数。';
+    if(v.typeMismatch)return '请按要求填写有效的格式。';
+    if(v.patternMismatch)return '请按要求填写，不要使用不支持的字符。';
+    return '请检查这一项。';
+  }
+  function updateFormFeedback(form){
+    const summary=form.querySelector('.member-validation-summary');if(!summary)return;
+    const count=form.querySelectorAll('[data-validation-field][aria-invalid=true]').length;
+    summary.hidden=count===0;summary.textContent=count?'有 '+count+' 项内容需要修改，本次尚未提交。':'';
+  }
+  function updateFieldFeedback(field,message=fieldFeedbackMessage(field)){
+    const feedback=$(field.id+'Feedback'),form=field.closest('form');if(!feedback||!form)return;
+    feedback.textContent=message;feedback.hidden=!message;
+    const descriptions=(field.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean).filter(id=>id!==feedback.id);
+    if(message){field.setAttribute('aria-invalid','true');descriptions.push(feedback.id);}else field.removeAttribute('aria-invalid');
+    if(descriptions.length)field.setAttribute('aria-describedby',descriptions.join(' '));else field.removeAttribute('aria-describedby');
+    updateFormFeedback(form);
+  }
+  function adminReadPanel(page,label,rows,count,emptyMessage,pager=true){
+    const data=member.adminData,failed=member.error&&!!member.notice;
+    const reload='<button type="button" class="member-secondary" data-member-page="'+page+'" '+(member.busy?'disabled':'')+'>'+(!data&&failed?'重新读取':'刷新列表')+'</button>';
+    const head='<div class="member-section-head"><div><h3>'+esc(label)+'</h3><p class="member-help">'+(data?'本批显示 '+esc(count)+' 条记录':'数据返回后才展示记录')+'</p></div>'+reload+'</div>';
+    const state=!data?listPlaceholder(failed,label):rows||'<div class="member-empty member-admin-empty"><strong>'+esc(data.pagination?.hasMore?'本批暂无匹配记录':emptyMessage)+'</strong><p>'+esc(data.pagination?.hasMore?'仍有下一批，可继续查找。':'这是本次读取的结果，可按需刷新。')+'</p></div>';
+    const controls=data&&pager?listPager(data,page+'Prev',page+'Next'):'';
+    return '<section class="member-card member-admin-records" data-admin-list="'+page+'" aria-busy="'+String(!data&&!failed)+'">'+head+state+controls+'</section>';
+  }
+  function cdksView(){
+    const rows=member.adminData?.cdks||[];
+    const form='<section class="member-card member-admin-create"><span class="member-eyebrow">ISSUE POINTS</span><h3>创建兑换码</h3><p class="member-muted">生成后只在本次结果中展示完整 CDK，请及时保存。</p><form id="memberCreateCdksForm" class="member-form"><div class="member-form-two">'+input('每个 CDK 点数','memberCdkPoints','number','10','min="1" max="1000000" required')+input('生成数量','memberCdkCount','number','1','min="1" max="100" required')+'</div>'+input('有效天数','memberCdkDays','number','30','min="1" max="3650" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>生成 CDK</button></div></form>'+(member.createdCdks?'<div class="member-code">'+member.createdCdks.map(esc).join('\n')+'</div>'+btn('复制本次 CDK','copyCdks')+'<p class="member-muted">请保存本次发放结果。列表使用摘要编号，不展示完整 CDK。</p>':'')+'</section>';
+    const records=rows.map(c=>'<article class="member-row member-cdk-row"><div><strong class="member-cdk-digest">'+esc(c.digest.slice(0,16))+'…</strong><small>'+esc(c.points)+' 点 · '+esc(status(c.status))+'</small><small>到期 '+esc(fmt(c.expiresAt))+'</small></div>'+(c.status==='unused'?btn('作废','revokeCdk',false,'data-digest="'+esc(c.digest)+'"'):'')+'</article>').join('');
+    return title('CDK 发放。','点数只通过签到和管理员 CDK 获取，不开放充值。')+'<div class="member-admin-split">'+form+adminReadPanel('cdks','已发放记录',records,rows.length,'暂无已发放记录')+'</div>';
+  }
+  function claimsView(){
+    const rows=member.adminData?.claims||[];
+    const records=rows.map(c=>'<article class="member-row member-claim-row"><div><span class="member-eyebrow">待确认的凭证</span><strong>'+esc(c.code)+'</strong><small>申请用户 '+esc(c.userId)+'</small><p class="member-claim-note">'+esc(c.note||'未填写说明')+'</p></div><div class="member-actions">'+btn('确认绑定','reviewClaim',true,'data-claim="'+esc(c.id)+'" data-approve="true"')+btn('拒绝','reviewClaim',false,'data-claim="'+esc(c.id)+'" data-approve="false"')+'</div></article>').join('');
+    return title('确认历史凭证的归属。','请结合原发放记录核对，持有码本身不等于能够证明归属。')+adminReadPanel('claims','待审核申请',records,rows.length,'暂无待审核申请',!!member.adminData?.pagination);
+  }
   function adminView(){
-    if(member.page==='users')return title('用户管理。','开放注册。管理员可以停用账户或协助重置密码。')+'<section class="member-card"><form id="memberUserSearch" class="member-form"><label>查找用户<input id="memberUserQuery" placeholder="用户名"></label><div><button class="member-secondary">查找</button></div></form>'+(member.adminData?.users||[]).map(u=>'<div class="member-row"><div><strong>'+esc(u.username)+'</strong><small>'+esc(status(u.status))+' · 点数 '+esc(u.points)+' · 可用课程额度 '+esc(u.courseQuota)+'</small></div><div class="member-actions">'+btn(u.status==='active'?'停用':'恢复','userStatus',false,'data-user="'+esc(u.userId)+'" data-status="'+(u.status==='active'?'disabled':'active')+'"')+btn('重置密码','userReset',false,'data-user="'+esc(u.userId)+'"')+'</div></div>').join('')+'<div class="member-actions">'+btn('上一页','usersPrev',false,(member.adminData?.page||1)<=1?'disabled':'')+btn('下一页','usersNext',false,(member.adminData?.page||1)*20 >= (member.adminData?.total||0)?'disabled':'')+'</div></section>';
-    if(member.page==='cdks')return title('CDK 发放。','点数只通过签到和管理员 CDK 获取，不开放充值。')+'<section class="member-card"><form id="memberCreateCdksForm" class="member-form"><div class="member-form-two">'+input('每个 CDK 点数','memberCdkPoints','number','10','min="1" max="1000000" required')+input('生成数量','memberCdkCount','number','1','min="1" max="100" required')+'</div>'+input('有效天数','memberCdkDays','number','30','min="1" max="3650" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>生成 CDK</button></div></form>'+(member.createdCdks?'<div class="member-code">'+member.createdCdks.map(esc).join('\n')+'</div>'+btn('复制本次 CDK','copyCdks')+'<p class="member-muted">请保存本次发放结果。列表使用摘要编号，不展示完整 CDK。</p>':'')+'</section><section class="member-card">'+(member.adminData?.cdks||[]).map(c=>'<div class="member-row"><div><strong>'+esc(c.digest.slice(0,16))+'…</strong><small>'+esc(c.points)+' 点 · '+esc(status(c.status))+' · 到期 '+esc(fmt(c.expiresAt))+'</small></div>'+(c.status==='unused'?btn('作废','revokeCdk',false,'data-digest="'+esc(c.digest)+'"'):'')+'</div>').join('')+'<div class="member-actions">'+btn('上一页','cdksPrev',false,(member.adminData?.page||1)<=1?'disabled':'')+btn('下一页','cdksNext',false,(member.adminData?.page||1)*20 >= (member.adminData?.total||0)?'disabled':'')+'</div></section>';
-    if(member.page==='claims')return title('确认历史凭证的归属。','请结合原发放记录核对，持有码本身不等于能够证明归属。')+'<section class="member-card">'+((member.adminData?.claims||[]).length?(member.adminData.claims).map(c=>'<div class="member-row"><div><strong>'+esc(c.code)+'</strong><small>申请用户 '+esc(c.userId)+'<br>'+esc(c.note||'未填写说明')+'</small></div><div class="member-actions">'+btn('确认绑定','reviewClaim',true,'data-claim="'+esc(c.id)+'" data-approve="true"')+btn('拒绝','reviewClaim',false,'data-claim="'+esc(c.id)+'" data-approve="false"')+'</div></div>').join(''):'<div class="member-empty">暂无待审核申请。</div>')+'</section>';
+    if(member.page==='reviews')return reviewView();
+    if(member.page==='users'&&member.adminLedger)return title('用户账目。','仅查看此账户的点数和权益记录，不修改余额。')+'<div class="member-actions">'+btn('返回用户列表','userLedgerBack')+'</div><section class="member-card" style="margin-top:18px"><h3>'+esc(member.adminLedger.user.username)+'</h3>'+ledgerView(member.adminLedger,true)+'</section>';
+    if(member.page==='users')return usersView();
+    if(member.page==='cdks')return cdksView();
+    if(member.page==='claims')return claimsView();
     const config=member.adminData?.config;
-    if(!config)return title('兑换设置。','正在读取配置。');
+    if(!config)return title('兑换设置。','读取成功后才展示可以编辑的规则。')+adminReadPanel('config','兑换规则','',0,'暂无规则',false);
     return title('让兑换规则，清晰可控。','商品默认不上架。这里的点数价格仅为待编辑初值，保存并启用后才允许兑换。')+'<section class="member-card"><form id="memberConfigForm" class="member-form">'+input('每日签到奖励点数','memberSignInPoints','number',config.signInPoints,'min="1" max="1000000" required')+'<div class="member-edit-products">'+config.products.map((p,i)=>'<div class="member-edit-product" data-product-index="'+i+'"><h3>'+esc(p.title)+'</h3><div class="member-form-two">'+input('所需点数','memberPrice-'+i,'number',p.points,'min="1" max="1000000" required')+(p.amount?input('权益数量','memberAmount-'+i,'number',p.amount,'min="1" max="1000000" required'):'')+(p.days?input('天数','memberDays-'+i,'number',p.days,'min="1" max="1000000" required'):'')+(p.uses?input('次数','memberUses-'+i,'number',p.uses,'min="1" max="1000000" required'):'')+'</div><label class="member-course-check" style="margin-top:12px"><input type="checkbox" id="memberEnabled-'+i+'" '+(p.enabled?'checked':'')+'>启用兑换</label></div>').join('')+'</div><div><button class="member-primary" '+(member.busy?'disabled':'')+'>保存设置</button></div></form></section>';
   }
+  // Presentation only: reuse the live auth form, never copy secrets into state or markup.
+  function restoreAuthForm(main,form,busy,mode){
+    main.querySelector('#memberAuthForm').replaceWith(form);
+    form.querySelectorAll('input').forEach(el=>{el.readOnly=busy;});
+    const submit=form.querySelector('button.member-primary');submit.disabled=busy;
+    submit.textContent=busy?'正在处理…':mode==='register'?'创建账户':'登录用户中心';
+    form.setAttribute('aria-busy',String(busy));
+  }
+  function closeRowMenus(except=null,restoreFocus=false){
+    dialog.querySelectorAll('.member-row-menu[open]').forEach(menu=>{
+      if(menu===except)return;
+      menu.open=false;
+      menu.querySelector('summary').setAttribute('aria-expanded','false');
+      if(restoreFocus)menu.querySelector('summary').focus({preventScroll:true});
+    });
+  }
+  dialog.addEventListener('toggle',e=>{
+    const menu=e.target;
+    if(!menu.matches?.('.member-row-menu')||!dialog.contains(menu))return;
+    menu.querySelector('summary').setAttribute('aria-expanded',String(menu.open));
+    if(menu.open)closeRowMenus(menu);
+  },true);
+  document.addEventListener('click',e=>{
+    if(!dialog.open)return;
+    const menu=e.target.closest?.('.member-row-menu');
+    closeRowMenus(menu&&dialog.contains(menu)?menu:null);
+    if(menu&&e.target.closest('button')&&!e.target.closest('button').disabled)closeRowMenus();
+  });
+  dialog.addEventListener('keydown',e=>{
+    if(e.key!=='Escape'||!dialog.querySelector('.member-row-menu[open]'))return;
+    e.preventDefault();e.stopPropagation();closeRowMenus(null,true);
+  });
+  document.addEventListener('focusin',e=>{
+    if(dialog.open)closeRowMenus(e.target.closest?.('.member-row-menu')||null);
+  });
+  dialog.addEventListener('close',()=>{
+    closeRowMenus();
+    dialog.querySelectorAll('input[type=password],[data-private-field=password]').forEach(el=>{el.value='';el.type='password';});
+  });
+  function restorePendingForms(main,forms){
+    for(const form of forms){
+      const next=main.querySelector('#'+form.id);if(!next)continue;
+      const shape=f=>Array.from(f.querySelectorAll('input,select,textarea')).map(el=>el.id).join('|');
+      if(shape(form)!==shape(next))continue;
+      next.replaceWith(form);
+      form.querySelectorAll('input,select,textarea,button').forEach(el=>{el.disabled=member.busy;});
+    }
+  }
+  function resetPrivateFields(main){
+    main.querySelectorAll('[data-private-field=password]').forEach(el=>{el.type='password';});
+    main.querySelectorAll('[data-password-toggle]').forEach(el=>{el.textContent='显示';el.setAttribute('aria-pressed','false');el.setAttribute('aria-label','显示'+el.dataset.passwordLabel);el.disabled=member.busy;});
+  }
+  function filterAssets(main){
+    const field=main.querySelector('#memberAssetQuery');if(!field)return;
+    const query=field.value.trim().toLocaleLowerCase();let matched=0;
+    const cards=Array.from(main.querySelectorAll('.member-asset'));
+    cards.forEach(card=>{const name=card.querySelector('.member-asset-name').textContent.toLocaleLowerCase();card.hidden=!!query&&!name.includes(query);if(!card.hidden)matched++;});
+    const empty=main.querySelector('#memberAssetNoMatch');if(empty)empty.hidden=!query||matched>0;
+  }
+  function positionRowMenu(menu){
+    const panel=menu.querySelector('div');if(!panel?.getBoundingClientRect)return;
+    menu.dataset.direction='down';
+    const area=$('memberMain').getBoundingClientRect(),box=panel.getBoundingClientRect();
+    if(box.bottom>area.bottom-8)menu.dataset.direction='up';
+  }
+  dialog.addEventListener('toggle',e=>{if(e.target.matches?.('.member-row-menu')&&e.target.open&&dialog.contains(e.target))positionRowMenu(e.target);},true);
+  dialog.addEventListener('input',e=>{if(e.target.id==='memberAssetQuery')filterAssets($('memberMain'));});
+  dialog.addEventListener('click',e=>{
+    const toggle=e.target.closest('[data-password-toggle]');
+    if(toggle&&!member.busy){const field=$(toggle.dataset.passwordToggle);if(!field)return;const shown=field.type==='password';field.type=shown?'text':'password';toggle.textContent=shown?'隐藏':'显示';toggle.setAttribute('aria-pressed',String(shown));toggle.setAttribute('aria-label',(shown?'隐藏':'显示')+toggle.dataset.passwordLabel);}
+    if(e.target.closest('[data-asset-clear]')){const field=$('memberAssetQuery');if(field){field.value='';filterAssets($('memberMain'));field.focus({preventScroll:true});}}
+  });
+  // Unsaved settings presentation: compare only existing numeric/checkbox defaults.
+  let leavePanel=null,leaveBypass=null;
+  function configEditCount(form){
+    if(form?.id!=='memberConfigForm')return 0;
+    return Array.from(form.querySelectorAll('input')).filter(field=>{
+      if(!/^member(?:SignInPoints|(?:Price|Amount|Days|Uses|Enabled)-\d+)$/.test(field.id))return false;
+      if(field.type==='checkbox')return field.checked!==field.defaultChecked;
+      if(field.type==='number')return field.value!==field.defaultValue;
+      return false;
+    }).length;
+  }
+  function hasConfigEdits(main=$('memberMain')){
+    return member.admin&&member.page==='config'&&configEditCount(main?.querySelector('#memberConfigForm'))>0;
+  }
+  function prepareConfigEditState(main){
+    if(leavePanel&&!leavePanel.current())leavePanel.finish(false);
+    const form=main.querySelector('#memberConfigForm');if(!form||!member.admin||member.page!=='config')return;
+    let state=form.querySelector('[data-edit-status]');
+    if(!state){state=document.createElement('div');state.className='member-edit-state';state.dataset.editStatus='';state.hidden=true;state.innerHTML='<span role="status" aria-live="polite" aria-atomic="true"></span><button type="button" data-member-page="config">放弃修改</button>';form.prepend(state);}
+    const count=configEditCount(form),message=count?'有 '+count+' 项未保存修改。保存设置后才会生效。':'';
+    const text=state.querySelector('span');if(text.textContent!==message)text.textContent=message;
+    state.hidden=count===0;state.querySelector('button').disabled=member.busy;
+  }
+  function confirmConfigLeave(leave,source=document.activeElement){
+    if(leavePanel)return;
+    const epoch=member.epoch,form=$('memberMain').querySelector('#memberConfigForm');
+    const current=()=>dialog.open&&member.admin&&member.page==='config'&&!member.busy&&member.epoch===epoch&&form?.isConnected&&source?.isConnected&&$('memberMain').querySelector('#memberConfigForm')===form;
+    const box=document.createElement('dialog');box.className='member-leave-dialog';box.setAttribute('aria-labelledby','memberLeaveHeading');box.setAttribute('aria-describedby','memberLeaveDescription');
+    box.innerHTML='<span class="member-leave-eyebrow">UNSAVED CHANGES</span><h3 id="memberLeaveHeading">放弃未保存的修改？</h3><p id="memberLeaveDescription">当前兑换设置还没有保存。放弃后，这些编辑不会生效；已保存的价格与权益不受影响。</p><div class="member-leave-actions"><button type="button" data-leave-stay>继续编辑</button><button type="button" data-leave-discard>放弃修改</button></div>';
+    document.body.append(box);let done=false;
+    const finish=discard=>{
+      if(done)return;done=true;const active=current();if(leavePanel?.box===box)leavePanel=null;
+      box.close();box.remove();
+      if(!active)return;
+      if(discard)leave();else source.focus({preventScroll:true});
+    };
+    leavePanel={box,current,finish};
+    const stay=box.querySelector('[data-leave-stay]'),discard=box.querySelector('[data-leave-discard]');
+    stay.addEventListener('click',()=>finish(false));discard.addEventListener('click',()=>finish(true));
+    box.addEventListener('cancel',e=>{e.preventDefault();finish(false);});box.addEventListener('close',()=>finish(false));
+    box.addEventListener('keydown',e=>{
+      if(e.key!=='Tab')return;
+      if(e.shiftKey&&document.activeElement===stay){e.preventDefault();discard.focus({preventScroll:true});}
+      else if(!e.shiftKey&&document.activeElement===discard){e.preventDefault();stay.focus({preventScroll:true});}
+    });
+    box.showModal();stay.focus({preventScroll:true});
+  }
+  dialog.addEventListener('input',()=>prepareConfigEditState($('memberMain')));
+  dialog.addEventListener('change',()=>prepareConfigEditState($('memberMain')));
+  dialog.addEventListener('click',e=>{
+    const target=e.target.closest?.('[data-member-page],[data-member-close]');
+    if(!target||!dialog.contains(target)||target.disabled)return;
+    if(leaveBypass===target){leaveBypass=null;return;}
+    if(member.busy||!hasConfigEdits())return;
+    e.preventDefault();e.stopImmediatePropagation();
+    confirmConfigLeave(()=>{leaveBypass=target;try{target.click();}finally{leaveBypass=null;}},target);
+  },true);
+  dialog.addEventListener('cancel',e=>{
+    if(member.busy||!hasConfigEdits())return;
+    e.preventDefault();e.stopImmediatePropagation();confirmConfigLeave(()=>close());
+  },true);
+  dialog.addEventListener('close',()=>leavePanel?.finish(false));
+  window.addEventListener('beforeunload',e=>{
+    if(!dialog.open||member.busy||!hasConfigEdits())return;
+    e.preventDefault();e.returnValue='';
+  });
+  // Copy presentation only: never execute, persist, or transform the supplied text.
+  let copySequence=0,copyPanel=null;
+  function closeCopyPanel(restore=true){
+    const panel=copyPanel;if(!panel)return;copyPanel=null;
+    panel.field.value='';panel.box.close();panel.box.remove();
+    if(restore&&panel.current()){
+      const focus=panel.source?.isConnected&&!panel.source.disabled?panel.source:$('memberHeading');
+      focus?.focus({preventScroll:true});
+    }
+  }
+  function manualCopy(text,source,current){
+    const box=document.createElement('dialog');box.className='member-copy-dialog';
+    box.setAttribute('aria-labelledby','memberCopyHeading');box.setAttribute('aria-describedby','memberCopyDescription');
+    box.innerHTML='<header><span class="member-copy-eyebrow">COPY / RECOVERY</span><h3 id="memberCopyHeading">手动复制</h3><p id="memberCopyDescription">浏览器未完成自动复制。你可以在这里选择内容，手动复制后继续使用。</p></header><label for="memberCopyContent">待复制内容</label><textarea id="memberCopyContent" readonly spellcheck="false" autocomplete="off" autocapitalize="off" wrap="soft" aria-describedby="memberCopyHelp"></textarea><p id="memberCopyHelp" class="member-copy-help">电脑按 Ctrl/Cmd+C；手机长按内容并选择“复制”。</p><div class="member-copy-actions"><button type="button" data-copy-select>全选内容</button><button type="button" data-copy-close>关闭窗口</button></div><p class="member-copy-privacy">内容仅在此窗口显示，关闭后清除。手动选择不代表已经复制成功。</p>';
+    const field=box.querySelector('textarea');field.value=text;
+    const heading={copyToken:'手动复制答题代码',copyCdks:'手动复制 CDK',supportCopy:'手动复制诊断'}[source?.dataset?.member]||'手动复制';
+    box.querySelector('h3').textContent=heading;
+    document.body.append(box);copyPanel={box,field,source,current};
+    const select=()=>{field.focus({preventScroll:true});field.select();field.scrollTop=0;};
+    box.querySelector('[data-copy-select]').addEventListener('click',select);
+    box.querySelector('[data-copy-close]').addEventListener('click',()=>closeCopyPanel());
+    box.addEventListener('cancel',e=>{e.preventDefault();closeCopyPanel();});
+    box.addEventListener('keydown',e=>{
+      if(e.key!=='Tab')return;
+      const last=box.querySelector('[data-copy-close]');
+      if(e.shiftKey&&document.activeElement===field){e.preventDefault();last.focus({preventScroll:true});}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();field.focus({preventScroll:true});}
+    });
+    box.addEventListener('close',()=>{field.value='';box.remove();if(copyPanel?.box===box)copyPanel=null;});
+    box.showModal();select();
+  }
+  async function copyContent(text){
+    const sequence=++copySequence,epoch=member.epoch,token=member.token,admin=member.admin;
+    const source=document.activeElement;
+    const current=()=>sequence===copySequence&&epoch===member.epoch&&token===member.token&&admin===member.admin&&dialog.open;
+    closeCopyPanel(false);
+    try{
+      if(typeof navigator.clipboard?.writeText!=='function')throw Error('Clipboard unavailable');
+      await navigator.clipboard.writeText(text);
+    }catch{
+      if(current()){
+        if(member.notice==='已复制。')say('');
+        manualCopy(text,source,current);
+      }
+      return false;
+    }
+    if(current())say('已复制。');
+    return true;
+  }
+  dialog.addEventListener('close',()=>{copySequence++;closeCopyPanel(false);});
+  let validationFocus=null,feedbackGeneration=0;
+  dialog.addEventListener('invalid',e=>{
+    const field=e.target;if(!field.matches?.('[data-validation-field]')||!dialog.contains(field))return;
+    e.preventDefault();updateFieldFeedback(field);
+    if(validationFocus)return;
+    validationFocus=field;const generation=feedbackGeneration;
+    // Native invalid dispatch may run microtask checkpoints between fields.
+    requestAnimationFrame(()=>{if(generation!==feedbackGeneration)return;const first=validationFocus;validationFocus=null;if(dialog.open&&first?.isConnected&&!first.disabled){first.focus({preventScroll:true});first.scrollIntoView({block:'nearest'});}});
+  },true);
+  const refreshFieldFeedback=e=>{
+    const field=e.target;if(!field.matches?.('[data-validation-field]'))return;
+    // The original input handler clears match validity on the paired confirmation.
+    // Follow that native state after all listeners, without reading password values.
+    const pairedId=field.id==='memberPassword'?'memberConfirmPassword':field.id==='memberNewPassword'?'memberNewPasswordConfirm':'';
+    const pair=pairedId?$(pairedId):null,fields=[field];
+    if(pair&&pair.closest('form')===field.closest('form')&&dialog.contains(pair))fields.push(pair);
+    const invalid=fields.filter(item=>item.matches('[data-validation-field][aria-invalid=true]'));
+    if(!invalid.length)return;
+    const generation=feedbackGeneration;
+    // Trusted input may checkpoint microtasks between listeners; wait for the next frame.
+    requestAnimationFrame(()=>{if(generation!==feedbackGeneration||!dialog.open)return;for(const item of invalid)if(item.isConnected)updateFieldFeedback(item);});
+  };
+  dialog.addEventListener('input',refreshFieldFeedback);dialog.addEventListener('change',refreshFieldFeedback);
+  dialog.addEventListener('close',()=>{
+    feedbackGeneration++;validationFocus=null;
+    // Discard abandoned match errors; required/minlength and submit checks remain intact.
+    dialog.querySelectorAll('#memberConfirmPassword,#memberNewPasswordConfirm').forEach(field=>field.setCustomValidity(''));
+    dialog.querySelectorAll('[data-validation-field]').forEach(field=>updateFieldFeedback(field,''));
+  });
+  dialog.addEventListener('click',e=>{
+    if(!e.target.closest('[data-account-retry]')||member.admin||!member.token||member.busy)return;
+    const epoch=member.epoch,token=member.token;
+    work(async()=>{await refresh();if(epoch===member.epoch&&token===member.token&&member.data)member.notice='账户信息已重新读取。';});
+  });
   async function request(action,params={},mutation=false){
+    const requestToken=member.token,requestEpoch=member.epoch;
     if(location.protocol==='http:'&&!['localhost','127.0.0.1'].includes(location.hostname))throw Error('用户登录和点数功能需要 HTTPS，请使用安全入口。');
     const slot=JSON.stringify([member.user?.userId||'admin',action,params]);
+    const uid=member.user?.userId,tracked=mutation&&!member.admin&&!!uid&&journal.supports(action)&&member.data?.capabilities.operationStatus===true;
     let operationId=member.pending.get(slot);
+    if(tracked&&action==='purchase'&&!operationId&&journal.list(uid).some(n=>n.action==='purchase'&&n.status==='unknown'))throw Error('有尚未核对的兑换，请先前往点数明细核对回执，避免重复扣点。');
     if(mutation&&!operationId){operationId=crypto.randomUUID();member.pending.set(slot,operationId);}
+    if(tracked)journal.add({userId:uid,operationId,action});
+    const clientId='D-'+crypto.randomUUID();let stage='network',httpStatus=0,requestId='',backendVersion='',errorCode='';
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),action==='course'?130000:45000);
     try{
       if(member.admin&&!state.isAdmin)throw Error('请先登录管理后台。');
       const payload=member.admin?{admin:'1',action,...(state.adminSessionToken?{adminSessionToken:state.adminSessionToken}:{password:state.adminPwd}),...params,...(mutation?{operationId}:{})}:{module:'member',userAction:action,sessionToken:member.token,...params,...(mutation?{operationId}:{})};
       const response=await fetch(api,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
-      const result=await response.json();
-      if(!response.ok||result.ok===false){if(response.status===401&&!member.admin&&member.token){member.authMode='login';member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.user=null;member.data=null;member.run=false;}const e=new Error(result.error||result.message||'请求未成功');e.data=result;throw e;}
-      if(mutation)member.pending.delete(slot);return result;
-    }catch(e){if(e.name==='AbortError')throw Error('等待响应超时，结果可能已生效。请查看点数明细或任务状态，不要重复提交。');throw e;}
+      httpStatus=response.status;requestId=response.headers?.get?.('X-Request-Id')||'';backendVersion=response.headers?.get?.('X-GSS-Version')||'';stage='parse';
+      const result=await response.json();stage='server';errorCode=result.code||'';
+      if(!response.ok||result.ok===false){if(response.status===401&&!member.admin&&member.token&&requestToken===member.token&&requestEpoch===member.epoch){member.authMode='login';member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.user=null;member.data=null;member.run=false;}const e=new Error(result.error||result.message||'请求未成功');e.data=result;
+        const refused=['REVIEW_REQUIRED','REVIEW_LIMIT','REVIEW_NEW_ID_REQUIRED','VALIDATION_ERROR','TOKEN_NAME_INVALID','TOKEN_NAME_TAKEN','QUANTITY_INVALID','TOTAL_PRICE_REQUIRED','PRODUCT_CHANGED','PRODUCT_UNAVAILABLE','PRODUCT_INVALID','INSUFFICIENT_POINTS','NOT_OWNER','CODE_COLLISION','ACTIVATION_UNAVAILABLE','CDK_UNAVAILABLE','ALREADY_CHECKED_IN','ALREADY_OWNED','NOT_FOUND','CLAIM_PENDING','RATE_LIMITED','POINTS_LIMIT'];
+        if(tracked&&response.status>=400&&response.status<500&&refused.includes(result.code)){journal.settle(uid,operationId,'rejected');member.pending.delete(slot);e.rejected=true;}throw e;}
+      if(mutation){member.pending.delete(slot);member.committedId=operationId;}if(tracked)journal.settle(uid,operationId,'confirmed');return result;
+    }catch(e){
+      const support=safeDiagnostic({clientId,requestId,action,stage:e.name==='AbortError'?'timeout':stage,code:errorCode||(e.name==='AbortError'?'RESPONSE_TIMEOUT':stage==='parse'?'RESPONSE_INVALID':stage==='server'?'HTTP_'+httpStatus:'CONNECTION_FAILED'),status:httpStatus,backendVersion,operationId,outcome:e.rejected?'rejected':mutation?'unknown':'read'});
+      if(tracked&&!e.rejected){const uncertain=Error('本次操作结果待核对。请到点数明细查询，操作编号：'+operationId+'。不会自动重发。');uncertain.support=support;throw uncertain;}
+      if(e.name==='AbortError'){const timeout=Error(mutation?'等待响应超时，结果可能已生效。请查看点数明细或任务状态，不要重复提交。':'读取超时，请稍后重新读取。');timeout.support=support;throw timeout;}
+      if(stage==='network'||stage==='parse'){const unavailable=Error(stage==='parse'?'服务返回了无法解析的内容，请保留诊断编号。':'暂时无法连接服务，请保留诊断编号。');unavailable.support=support;throw unavailable;}
+      e.support=support;throw e;
+    }
     finally{clearTimeout(timer);}
   }
-  async function refresh(){member.data=await request('me');member.user=member.data.user;render();}
-  async function loadAdmin(params={}){const action={users:'memberUsers',cdks:'memberCdks',claims:'memberClaims',config:'memberConfig'}[member.page];member.adminData=null;render();try{member.adminData=await request(action,params);render();}catch(e){say(e.message,true);}}
-  async function loadLedger(page=1){member.ledger=await request('ledger',{page});render();}
-  async function work(fn){if(member.busy)return;member.busy=true;member.notice='正在处理…';member.error=false;render();try{await fn();}catch(e){member.notice=e.message;member.error=true;}finally{member.busy=false;render();}}
-  async function copy(text){await navigator.clipboard.writeText(text);say('已复制。');}
+  async function refresh(){const token=member.token,epoch=member.epoch;let result;try{result=await request('me',{includeAssets:false});}catch(e){if(token!==member.token||epoch!==member.epoch)return;throw e;}if(token!==member.token||epoch!==member.epoch)return;member.data=result;member.user=member.data.user;render();if(member.page==='assets'&&result.assetsLoaded===false)await loadAssets();}
+  async function loadAssets(){
+    const epoch=member.epoch,uid=member.user?.userId,readId=member.assetsReadId=(member.assetsReadId||0)+1;member.assetsLoading=true;render();
+    const current=()=>epoch===member.epoch&&uid===member.user?.userId&&readId===member.assetsReadId;
+    try{const result=await request('assets');if(!current())return;member.data.assets=result.assets;member.data.assetsLoaded=true;}
+    catch(e){if(current())throw e;}
+    finally{if(readId===member.assetsReadId&&uid===member.user?.userId){member.assetsLoading=false;if(current())render();}}
+  }
+  async function loadAdmin(params={}){
+    if(member.page==='reviews')return loadReviews();
+    const epoch=member.epoch,page=member.page,readId=member.adminReadId=(member.adminReadId||0)+1;member.adminData=null;render();
+    try{
+      if(!member.adminCapabilities){const info=await request('memberConfig');if(!member.admin||epoch!==member.epoch||page!==member.page||readId!==member.adminReadId)return;member.adminCapabilities=info.capabilities||{};}
+      const paged=member.adminCapabilities.cursorLists===true&&['users','cdks','claims'].includes(page);
+      const frame=paged?browseFrame(page,params.page||1,params.query??member.browseFrames[page]?.query??''):null;
+      const number=params.page||1;
+      const action=paged?{users:'memberUsersPage',cdks:'memberCdksPage',claims:'memberClaimsPage'}[page]:{users:'memberUsers',cdks:'memberCdks',claims:'memberClaims',config:'memberConfig'}[page];
+      const result=await request(action,paged?{cursor:frame.cursors[number-1],query:frame.query}:params);
+      if(!member.admin||epoch!==member.epoch||page!==member.page||readId!==member.adminReadId)return;
+      if(paged){frame.cursors[number]=result.pagination.nextCursor;result.page=number;result[{users:'users',cdks:'cdks',claims:'claims'}[page]]=result.rows;}
+      member.adminData=result;render();
+    }catch(e){if(epoch===member.epoch&&page===member.page&&readId===member.adminReadId){member.diagnostic=e.support||null;say(e.message,true);}}
+  }
+  async function loadLedger(page=1){
+    const epoch=member.epoch,uid=member.user?.userId,readId=member.ledgerReadId=(member.ledgerReadId||0)+1;
+    const current=()=>epoch===member.epoch&&uid===member.user?.userId&&member.page==='ledger'&&readId===member.ledgerReadId;
+    try{const result=await request('ledger',{page});if(!current())return;member.ledger=result;render();}
+    catch(e){if(current())throw e;}
+  }
+  async function work(fn){if(member.busy)return;member.committedId='';member.diagnostic=null;member.busy=true;member.notice='正在处理…';member.error=false;render();try{await fn();}catch(e){member.diagnostic=e.support?{...e.support,...(member.committedId?{outcome:'confirmed',operationId:member.committedId}:{})}:null;member.notice=member.committedId?'操作已确认成功，但后续页面未刷新。请勿重复提交；请查看明细或重新登录。操作编号：'+member.committedId+'。'+e.message:e.message;member.error=true;}finally{member.busy=false;if(member.notice==='正在处理…')member.notice='';render();}}
+  async function copy(text){return copyContent(text);}
   async function course(action,params={}){const result=await request('course',{courseAction:action,...params});if(result.batch)member.batch=result.batch;if(result.billing&&member.data)member.data.courseQuota=result.billing.available;return result;}
   async function runCourse(){
     if(!member.batch)return;
@@ -6126,27 +7173,45 @@ document.addEventListener('DOMContentLoaded',()=>{
   dialog.addEventListener('input',e=>{
     if(e.target.dataset.tokenProduct)member.tokenDrafts.set(e.target.dataset.tokenProduct,e.target.value);
     if(e.target.dataset.appendProduct){
-      const id=e.target.dataset.appendProduct,target=e.target.dataset.appendTarget,p=member.data?.config.products.find(p=>p.id===id);
-      member.quantityDrafts.set(quantityKey(id,target),e.target.value);
-      const price=p&&appendPrice(p,e.target.value);e.target.closest('.member-maintenance-option').querySelector('[data-append-price]').textContent=price?'本次追加 '+price.requestedAmount+' 次，合计 '+price.totalPoints+' 点':'请输入 1—1000000 的整数次数';
+      updateAppend(e.target);
     }
+    if(['memberNewPassword','memberNewPasswordConfirm'].includes(e.target.id))$('memberNewPasswordConfirm')?.setCustomValidity('');
     if(['memberPassword','memberConfirmPassword'].includes(e.target.id))$('memberConfirmPassword')?.setCustomValidity('');
   });
   dialog.addEventListener('change',e=>{const id=e.target.dataset.courseId;if(id){e.target.checked?member.selected.add(id):member.selected.delete(id);}});
   dialog.addEventListener('click',e=>{
     if(e.target.closest('[data-member-close]')){close();return;}
-    const page=e.target.closest('[data-member-page]');if(page){if(member.busy)return;member.page=page.dataset.memberPage;member.notice='';render();if(member.admin)loadAdmin();else if(member.token&&member.page==='ledger')loadLedger().catch(err=>say(err.message,true));return;}
+    const page=e.target.closest('[data-member-page]');if(page){if(member.busy)return;member.epoch++;member.adminLedger=null;member.recovery=null;member.reviewDetail=null;member.page=page.dataset.memberPage;member.notice='';render();$('memberMain').scrollTop=0;if(member.admin)loadAdmin();else if(member.token&&member.page==='assets'&&member.data?.assetsLoaded===false)loadAssets().catch(err=>{member.diagnostic=err.support||null;say(err.message,true);});else if(member.token&&member.page==='ledger')loadLedger().catch(err=>say(err.message,true));else if(member.token&&member.page==='reviews')loadReviews().catch(err=>say(err.message,true));return;}
     const b=e.target.closest('[data-member]');if(!b||b.disabled)return;
     const action=b.dataset.member;
+    if(action==='appendPreset'){if(member.busy)return;const input=b.closest('.member-maintenance-option').querySelector('[data-append-product]');input.value=b.dataset.quantity;updateAppend(input);return;}
     if(action==='authSwitch'){member.authMode=member.authMode==='login'?'register':'login';member.notice='';render();return;}
     if(action==='coursePause'&&member.run){member.run=false;member.notice='当前请求完成后，不再发送后续步骤。';render();return;}
+    if(action==='supportCopy'){copy(JSON.stringify(member.diagnostic,null,2)).catch(()=>say('复制未成功，请展开诊断手动记录编号。',true));return;}
     if(action==='copy'||action==='copyToken'||action==='copyCdks'){const text=action==='copyToken'?"=javascript:$.getScript('"+api+'?token='+encodeURIComponent(b.dataset.code)+"')":action==='copyCdks'?member.createdCdks.join('\n'):b.dataset.code;copy(text).catch(()=>say('复制未成功，请手动选择复制。',true));return;}
     const target=action==='purchase'?(b.dataset.target||''):'';
     const tokenName=action==='purchase'?(member.tokenDrafts.get(b.dataset.product)||'').trim():'';
     const quantityRaw=action==='purchase'?member.quantityDrafts.get(quantityKey(b.dataset.product,target)):undefined;
     const challengePhone=action==='courseSendCode'?value('memberChallengePhone'):'';
     work(async()=>{
-      if(action==='checkin'){await request('checkin',{},true);await refresh();member.notice='签到成功。';}
+      if(action==='assetsLoad')await loadAssets();
+      else if(action==='openReviews'||action==='userReviews'||action==='openHoldReviews'){member.page='reviews';member.reviewUser=b.dataset.user||'';member.reviewDetail=null;member.reviewHold=action==='openHoldReviews';member.reviewFilter='pending';await loadReviews();}
+      else if(action==='reviewOpen')await loadReviewDetail(b.dataset.user,b.dataset.review);
+      else if(action==='reviewBack'){member.reviewDetail=null;await loadReviews();}
+      else if(action==='reviewRefresh')await loadReviews(member.reviewPage);
+      else if(action==='reviewPending'||action==='reviewAll'){member.reviewFilter=action==='reviewAll'?'all':'pending';member.reviewDetail=null;await loadReviews();}
+      else if(action==='reviewTransactions'||action==='reviewHolds'){member.reviewHold=action==='reviewHolds';member.reviewDetail=null;await loadReviews();}
+      else if(action==='reviewPrev'||action==='reviewNext')await loadReviews(member.reviewPage+(action==='reviewNext'?1:-1));
+      else if(action==='operationLookup')await lookupOperation(b.dataset.operation);
+      else if(action==='userLedger')await loadUserLedger(b.dataset.user);
+      else if(action==='userLedgerBack'){member.adminLedger=null;await loadAdmin();}
+      else if(action==='adminLedgerPrev'||action==='adminLedgerNext')await loadUserLedger(member.adminLedger.user.userId,member.adminLedger.page+(action==='adminLedgerNext'?1:-1));
+      else if(action==='logoutAll'){
+        if(member.data?.capabilities.logoutAllSessions!==true)throw Error('请先升级后端以使用退出全部登录。');
+        if(!await ask('确认退出此账户的全部登录？本页面也需要重新登录。'))return;
+        await request('logoutAll',{},true);member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.pending.clear();member.user=null;member.data=null;member.authMode='login';member.notice='全部登录已失效，请重新登录。';
+      }
+      else if(action==='checkin'){await request('checkin',{},true);await refresh();member.notice='签到成功。';}
       else if(action==='purchase'){
         const quote=member.data.config.products.find(p=>p.id===b.dataset.product);
         if(!quote)throw Error('商品已变化，请重新登录后读取。');
@@ -6162,7 +7227,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         await request('purchase',{productId:b.dataset.product,target,quote,...(tokenName?{tokenName}:{}),...quantity},true);
         member.tokenDrafts.delete(b.dataset.product);member.quantityDrafts.delete(quantityKey(b.dataset.product,target));await refresh();member.notice=target?'权益已追加到指定凭证。':'兑换成功，权益已发放到你的账户。';
       }
-      else if(action==='logout'){await request('logout');member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.user=null;member.data=null;member.run=false;member.notice='已退出登录。';}
+      else if(action==='logout'){await request('logout');member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.pending.clear();member.ledger=null;member.recovery=null;member.epoch++;member.user=null;member.data=null;member.run=false;member.notice='已退出登录。';}
       else if(action==='ledgerPrev'||action==='ledgerNext')await loadLedger((member.ledger?.page||1)+(action==='ledgerNext'?1:-1));
       else if(action==='courseList'){const r=await course('list',{forceRefresh:true});member.courses=r.courses||[];member.notice='课程读取完成。';}
       else if(action==='courseStatus'){await course('batchStatus');await refresh();member.notice='已刷新任务与额度。';}
@@ -6173,11 +7238,11 @@ document.addEventListener('DOMContentLoaded',()=>{
       else if(action==='courseRun')await runCourse();
       else if(action==='coursePause'){await course('batchPause',{batchId:member.batch?.batchId});member.notice='任务已暂停。';}
       else if(action==='courseCancel'){if(!await ask('确认取消任务？结果不明的课程额度会保留待核对。'))return;await course('batchCancel',{batchId:member.batch?.batchId,confirm:true});await refresh();member.notice='任务已取消，未确认的结果仍需核对。';}
-      else if(action==='userStatus'){await request('memberUserStatus',{userId:b.dataset.user,status:b.dataset.status},true);await loadAdmin();member.notice='账户状态已更新，旧会话失效。';}
+      else if(action==='userStatus'){if(!await ask(b.dataset.status==='disabled'?'确认停用此账户？该用户的已有登录将失效。':'确认恢复此账户？'))return;await request('memberUserStatus',{userId:b.dataset.user,status:b.dataset.status},true);await loadAdmin();member.notice='账户状态已更新，旧会话失效。';}
       else if(action==='userReset'){const next=await ask('设置至少 10 位临时密码，再通过可靠方式告知该用户。',true);if(!next)return;await request('memberResetPassword',{userId:b.dataset.user,newPassword:next},true);member.notice='密码已重置，旧会话失效。';}
       else if(action==='reviewClaim'){if(!await ask('已核对原发放记录，确认处理这条申请？'))return;await request('memberReviewClaim',{claimId:b.dataset.claim,approve:b.dataset.approve==='true'},true);await loadAdmin();member.notice='申请已处理。';}
       else if(action==='revokeCdk'){if(!await ask('确认作废这个未领取 CDK？'))return;await request('memberRevokeCdk',{digest:b.dataset.digest},true);await loadAdmin();member.notice='CDK 已作废。';}
-      else if(['usersPrev','usersNext','cdksPrev','cdksNext'].includes(action)){await loadAdmin({page:(member.adminData?.page||1)+(action.endsWith('Next')?1:-1)});}
+      else if(['usersPrev','usersNext','cdksPrev','cdksNext','claimsPrev','claimsNext'].includes(action)){await loadAdmin({page:(member.adminData?.page||1)+(action.endsWith('Next')?1:-1)});}
     });
   });
   dialog.addEventListener('submit',e=>{
@@ -6193,21 +7258,33 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
     if(form==='memberCdkForm')payload={code:value('memberCdk')};
     if(form==='memberClaimForm')payload={kind:value('memberClaimKind'),code:value('memberClaimCode'),note:value('memberClaimNote')};
-    if(form==='memberPasswordForm')payload={currentPassword:value('memberCurrentPassword'),newPassword:value('memberNewPassword')};
+    if(form==='memberOperationForm')payload={operationId:value('memberOperationId').trim()};
+    if(form==='memberReviewSearch')payload={userId:value('memberReviewUser').trim()};
+    if(form==='memberReviewNote')payload={userId:member.reviewDetail.review.userId,reviewId:member.reviewDetail.review.reviewId,revision:member.reviewDetail.review.revision,workflow:value('memberReviewWorkflow'),note:value('memberReviewNoteText')};
+    if(form==='memberPasswordForm'){
+      payload={currentPassword:value('memberCurrentPassword'),newPassword:value('memberNewPassword'),confirmPassword:value('memberNewPasswordConfirm')};
+      if(payload.newPassword!==payload.confirmPassword){$('memberNewPasswordConfirm').setCustomValidity('两次输入的新密码不一致');$('memberNewPasswordConfirm').reportValidity();return;}
+    }
     if(form==='memberCourseLoginForm')payload={courseUsername:value('memberCourseUsername'),coursePassword:value('memberCoursePassword')};
     if(form==='memberChallengeForm')payload={challengeId:member.challenge?.id,code:value('memberChallengeCode'),phone:value('memberChallengePhone')};
     if(form==='memberCreateCdksForm')payload={count:Number(value('memberCdkCount')),points:Number(value('memberCdkPoints')),validDays:Number(value('memberCdkDays'))};
     if(form==='memberUserSearch')payload={query:value('memberUserQuery')};
     if(form==='memberConfigForm'){const base=member.adminData.config;payload={config:{signInPoints:Number(value('memberSignInPoints')),products:base.products.map((p,i)=>({...p,points:Number(value('memberPrice-'+i)),...(p.amount?{amount:Number(value('memberAmount-'+i))}:{}),...(p.days?{days:Number(value('memberDays-'+i))}:{}),...(p.uses?{uses:Number(value('memberUses-'+i))}:{}),enabled:$('memberEnabled-'+i).checked}))}};}
     work(async()=>{
-      if(form==='memberAuthForm'){const r=await request(member.authMode,payload);member.token=r.sessionToken;member.user=r.user;member.page='home';await refresh();member.notice='欢迎来到你的空间。';}
+      if(form==='memberAuthForm'){const r=await request(member.authMode,payload);member.epoch++;member.ledger=null;member.recovery=null;member.pending.clear();member.token=r.sessionToken;member.user=r.user;member.page='home';await refresh();$('memberMain').scrollTop=0;member.notice='欢迎来到你的空间。';}
+      else if(form==='memberReviewSearch'){member.reviewUser=payload.userId;member.reviewDetail=null;await loadReviews();}
+      else if(form==='memberReviewNote'){
+        if(!await ask('确认保存此跟进记录？备注将向用户展示；不会修改余额、权益或课程结算。'))return;
+        await request('memberReviewUpdate',payload,true);await loadReviewDetail(payload.userId,payload.reviewId);member.notice='跟进记录已保存；未改动余额、权益或课程结算。';
+      }
+      else if(form==='memberOperationForm')await lookupOperation(payload.operationId);
       else if(form==='memberCdkForm'){await request('redeemCdk',payload,true);await refresh();member.notice='CDK 已兑换，点数已到账。';}
       else if(form==='memberClaimForm'){await request('claim',payload,true);await refresh();member.notice='已提交，等待管理员核对归属。';}
       else if(form==='memberPasswordForm'){await request('changePassword',payload,true);member.authMode='login';member.token='';member.tokenDrafts.clear();member.quantityDrafts.clear();member.user=null;member.data=null;member.notice='密码已更新，请重新登录。';}
       else if(form==='memberCourseLoginForm'||form==='memberChallengeForm'){const r=await course(form==='memberChallengeForm'?'challenge':'login',payload);member.challenge=r.challenge||null;member.notice=r.message||'网课登录响应已返回，可尝试读取课程。';}
       else if(form==='memberCreateCdksForm'){const r=await request('memberCreateCdks',payload,true);member.createdCdks=r.cdks;await loadAdmin();member.notice='CDK 已生成，请保存本次结果。';}
       else if(form==='memberUserSearch')await loadAdmin(payload);
-      else if(form==='memberConfigForm'){await request('memberSaveConfig',payload,true);await loadAdmin();member.notice='设置已保存，仅影响后续签到和兑换。';}
+      else if(form==='memberConfigForm'){if(!await ask('确认保存兑换与签到设置？新价格仅用于之后的操作，已有权益不会重置。'))return;await request('memberSaveConfig',payload,true);await loadAdmin();member.notice='设置已保存，仅影响后续签到和兑换。';}
     });
   });
 });
