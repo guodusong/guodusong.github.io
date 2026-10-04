@@ -1099,7 +1099,27 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="1.16.0-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="1.18.0-rc1"><style id="snowMemberDesign">
+/* Account settings v21: isolated information hierarchy, no business overrides. */
+.member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
+.member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
+.member-account-identity>div{min-width:0}.member-account-identity>div>span{display:block;font-size:11px;color:#6d806b;margin-bottom:4px}.member-account-identity strong{display:block;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.member-account-identity>p{margin:0 0 0 auto;font-size:11px;color:#6c7f67;line-height:1.8;flex-shrink:1}
+.member-account-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:22px;align-items:start}
+.member-account-layout>.member-card{min-width:0;margin:0}.member-account-layout header{margin:0 0 24px}.member-account-layout header h3{font-size:17px;line-height:1.6;margin:7px 0 10px}.member-account-layout header p{font-size:12px;color:#6e806b;line-height:1.9;margin:0;overflow-wrap:anywhere}
+.member-account-password>.member-form{max-width:480px}.member-account-password .member-account-effect{border-top:1px solid #edf0e7;padding-top:16px;margin:22px 0 0;font-size:11px;color:#74836e;line-height:1.9}
+.member-account-session-row{padding:0 0 22px}.member-account-session-row h4{font-size:13px;margin:0 0 8px}.member-account-session-row>p{font-size:11px;color:#6b7e67;line-height:1.9;margin:0 0 14px}.member-account-session-row>button{min-height:44px}
+.member-account-session-all{border-top:1px solid #edf0e7;padding-top:22px}.member-account-session-all>button{color:#8b5f4e;background:#faf5f0;border-color:#e8dacf}
+.member-account-session-all>button:disabled{color:#84917d;background:#f6f7f3;border-color:#e5e9df}
+.member-account-session-row>.member-account-session-note{font-size:11px;line-height:1.85;margin:12px 0 0;color:#7b826e}
+.member-account-session-foot{padding-top:16px;border-top:1px solid #edf0e7;font-size:11px;line-height:1.8;margin:0;color:#7b8974}
+@media(max-width:1100px){.member-account-layout{grid-template-columns:1fr}.member-account-password>.member-form{max-width:480px}}
+@media(max-width:760px){.member-account-identity{padding:16px;flex-wrap:wrap;gap:12px;margin-bottom:18px}.member-account-identity>p{margin:0;width:100%;padding-top:12px;border-top:1px solid #dde5d5}.member-account-identity>p br{display:none}.member-account-layout{gap:18px}.member-account-layout>.member-card{padding:20px}.member-account-layout header{margin-bottom:20px}.member-account-session-row>button,.member-account-password .member-form>div>button{width:100%;min-height:44px}.member-account-session-row>p,.member-account-session-foot,.member-account-session-row>.member-account-session-note{font-size:12px}}
+/* Asset local-filter feedback v20: scoped to the existing workspace. */
+.member-asset-filter-status{font-size:12px;line-height:1.8;color:#526a5f;margin:0 0 18px;font-variant-numeric:tabular-nums}
+.member-asset-section-empty{margin:0;padding:20px;border:1px dashed #dce4de;border-radius:10px;background:#f8faf7;color:#61776a;font-size:12px;line-height:1.9;overflow-wrap:anywhere}
+.member-asset-section-empty[hidden]{display:none}
+.member-asset-section [data-asset-section-count]{font-variant-numeric:tabular-nums;white-space:nowrap}
 /* Receipt query state v18: no global component overrides. */
 .member-receipt-query{min-width:0}
 .member-receipt-query .member-receipt-label{display:block;font-size:11px;line-height:1.8;color:#687970;margin-top:14px}
@@ -6582,7 +6602,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'12.15.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'12.17.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -6621,8 +6641,17 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(member.page==='shop')return shopView(d);
     if(member.page==='assets')return d.assetsLoaded===false?title('我的凭证。','需要时读取权益，避免每次登录都扫描全部数据。')+'<section class="member-card">'+(member.assetsLoading?listPlaceholder(false,'凭证'):member.error?listPlaceholder(true,'凭证'):'<p class="member-muted">凭证尚未读取。读取后可以复制代码、追加次数或续期。</p>')+btn('读取我的凭证','assetsLoad',true,member.assetsLoading?'disabled':'')+'</section>':assetsView(d,a);
     if(member.page==='ledger')return ledgerWorkspaceView(d);
-    if(member.page==='account')return title('账户设置。','修改密码后，已有登录会话会失效。')+'<section class="member-card"><form id="memberPasswordForm" class="member-form">'+input('当前密码','memberCurrentPassword','password','','autocomplete="current-password" required')+input('新密码','memberNewPassword','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+input('确认新密码','memberNewPasswordConfirm','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>修改密码</button></div></form><div class="member-actions">'+btn('退出当前登录','logout')+btn('退出全部登录','logoutAll')+'</div></section>';
+    if(member.page==='account')return accountView();
     return coursesView();
+  }
+
+  // Account settings presentation only: original password fields and business actions.
+  function accountView(){
+    const allSessions=member.data?.capabilities?.logoutAllSessions===true;
+    return title('账户设置。','分开管理账户密码与登录状态，每个操作都有明确的影响范围。')+
+      '<section class="member-account-identity" aria-label="当前账户"><span class="member-account-avatar" aria-hidden="true">'+esc((member.user?.username||'S').slice(0,1).toUpperCase())+'</span><div><span>当前账户</span><strong>'+esc(member.user?.username||'')+'</strong></div><p>这里管理的是 SNOW 用户账户，<br>不是 21TB 网课账号。</p></section>'+
+      '<div class="member-account-layout"><section class="member-card member-account-password" aria-labelledby="memberPasswordHeading"><header><span class="member-eyebrow">ACCOUNT PASSWORD</span><h3 id="memberPasswordHeading">修改账户密码</h3><p id="memberPasswordGuide">新密码为 10–128 位，两次输入需一致。请使用当前 SNOW 账户密码验证。</p></header>'+'<form id="memberPasswordForm" class="member-form" aria-describedby="memberPasswordGuide memberPasswordEffect">'+input('当前密码','memberCurrentPassword','password','','autocomplete="current-password" required')+input('新密码','memberNewPassword','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+input('确认新密码','memberNewPasswordConfirm','password','','autocomplete="new-password" minlength="10" maxlength="128" required')+'<div><button class="member-primary" '+(member.busy?'disabled':'')+'>修改密码</button></div></form>'+'<p id="memberPasswordEffect" class="member-account-effect">修改成功后，已有登录会话将失效，需要使用新密码重新登录。</p></section>'+
+      '<aside class="member-card member-account-sessions" aria-labelledby="memberSessionHeading"><header><span class="member-eyebrow">SIGN-IN CONTROL</span><h3 id="memberSessionHeading">登录管理</h3><p>按影响范围选择退出方式，不会删除账户、点数或已兑换权益。</p></header><section class="member-account-session-row"><h4>仅退出当前登录</h4><p>结束本页面的用户登录。再次使用用户中心时，需要重新登录。</p>'+btn('退出当前登录','logout')+'</section><section class="member-account-session-row member-account-session-all"><h4>退出全部登录</h4><p>使此账户已有的登录会话全部失效，本页面也会退出。</p>'+btn('退出全部登录','logoutAll',false,allSessions?'aria-describedby="memberSessionSupport"':'disabled aria-describedby="memberSessionSupport"')+'<p id="memberSessionSupport" class="member-account-session-note">'+(allSessions?'执行前会再次确认，请留意其他页面正在进行的操作。':'当前服务未提供此能力，暂不可使用。当前登录仍可单独退出。')+'</p></section><p class="member-account-session-foot">此处不展示登录设备或在线会话列表。</p></aside></div>';
   }
 
   const actionLabel=a=>({purchase:'权益兑换 / 追加',redeemCdk:'CDK 兑换',checkin:'每日签到',claim:'凭证绑定申请'}[a]||'账户操作');
@@ -6754,7 +6783,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const metric=(n,label)=>'<div><b>'+esc(n)+'</b><span>'+esc(label)+'</span></div>';
     const tokens=a.tokens.map(t=>'<article class="member-asset"><div class="member-asset-header"><span class="member-asset-kind">SCRIPT ACCESS</span><span class="member-asset-badge">'+(t.remain>0?'可使用':'暂无次数')+'</span></div><strong class="member-asset-name">'+esc(t.token)+'</strong><div class="member-asset-metrics">'+metric(t.remain,'剩余次数')+metric(t.used,'已用次数')+'</div><div class="member-actions">'+btn('复制答题代码','copyToken',true,'data-code="'+esc(t.token)+'"')+btn('复制 Token','copy',false,'data-code="'+esc(t.token)+'"')+'</div><p class="member-help">Token 用于 GSS 提取；答题代码粘贴到 21TB 地址栏，删除首个等号后执行。</p>'+assetMaintenance(d,'token_add',t.token,'追加次数')+'</article>').join('');
     const devices=a.activations.map(t=>deviceAssetView(d,t)).join('');
-    return title('我的凭证。','查看、使用和管理你的权益。追加与续期会在确认后扣除点数。')+walletContext(d)+'<div class="member-asset-toolbar"><label>查找已读取的凭证<input id="memberAssetQuery" type="search" maxlength="100" placeholder="按 Token 或设备码查找" autocomplete="off"></label><button type="button" class="member-secondary" data-asset-clear>清除筛选</button>'+btn('刷新凭证','assetsLoad',false,member.assetsLoading?'disabled':'')+'</div><p class="member-help">仅筛选本次已读取的凭证，不会重新查询题库或自动执行业务。</p><p id="memberAssetNoMatch" class="member-filter-empty" hidden role="status">已读取的凭证中没有匹配结果，请清除筛选或手动刷新。</p><div class="member-assets-columns"><section class="member-asset-section"><div class="member-section-head"><h3>脚本凭证</h3><span>'+a.tokens.length+' 份</span></div>'+(tokens||emptyAccess('还没有脚本凭证','先兑换使用次数，再复制专属答题代码。'))+'</section><section class="member-asset-section"><div class="member-section-head"><h3>设备绑定码</h3><span>'+a.activations.length+' 份</span></div>'+(devices||emptyAccess('还没有设备绑定码','兑换设备套餐后，绑定码会显示在这里。'))+'</section></div><details class="member-claim-section"><summary><span>绑定以前的凭证</span><small>已有 Token 或设备码？申请归属审核</small></summary><div class="member-card"><form id="memberClaimForm" class="member-form"><div class="member-form-two"><label>类型<select id="memberClaimKind"><option value="token">Token</option><option value="activation">设备绑定码</option></select></label>'+input('凭证','memberClaimCode','text','','required autocomplete="off"')+'</div>'+input('归属说明','memberClaimNote','text','','maxlength="200" placeholder="如发放时间、用途或备注，供管理员核对"')+'<div><button class="member-secondary" '+(member.busy?'disabled':'')+'>提交绑定申请</button></div></form>'+a.claims.map(c=>'<div class="member-row"><div><strong>'+esc(c.code)+'</strong><small>'+esc(status(c.status))+'</small></div></div>').join('')+'</div></details>';
+    return title('我的凭证。','查看、使用和管理你的权益。追加与续期会在确认后扣除点数。')+walletContext(d)+'<div class="member-asset-toolbar"><label>查找已读取的凭证<input id="memberAssetQuery" type="search" maxlength="100" aria-controls="memberTokenAssets memberDeviceAssets" aria-describedby="memberAssetFilterHelp" placeholder="按 Token 或设备码查找" autocomplete="off"></label><button type="button" class="member-secondary" data-asset-clear>清除筛选</button>'+btn('刷新凭证','assetsLoad',false,member.assetsLoading?'disabled':'')+'</div><p id="memberAssetFilterHelp" class="member-help">仅筛选本次已读取的凭证，不会重新查询题库或自动执行业务。</p><p id="memberAssetFilterStatus" class="member-asset-filter-status" role="status" aria-live="polite" aria-atomic="true">已读取 '+(a.tokens.length+a.activations.length)+' 份凭证</p><p id="memberAssetNoMatch" class="member-filter-empty" hidden role="note">已读取的凭证中没有匹配结果，请清除筛选或手动刷新。</p><div class="member-assets-columns"><section class="member-asset-section" id="memberTokenAssets" data-asset-section="token"><div class="member-section-head"><h3>脚本凭证</h3><span data-asset-section-count>'+a.tokens.length+' 份</span></div><p class="member-asset-section-empty" data-asset-section-empty hidden>本次筛选没有匹配的脚本凭证，清除筛选可查看已读取记录。</p>'+(tokens||emptyAccess('还没有脚本凭证','先兑换使用次数，再复制专属答题代码。'))+'</section><section class="member-asset-section" id="memberDeviceAssets" data-asset-section="activation"><div class="member-section-head"><h3>设备绑定码</h3><span data-asset-section-count>'+a.activations.length+' 份</span></div><p class="member-asset-section-empty" data-asset-section-empty hidden>本次筛选没有匹配的设备绑定码，清除筛选可查看已读取记录。</p>'+(devices||emptyAccess('还没有设备绑定码','兑换设备套餐后，绑定码会显示在这里。'))+'</section></div><details class="member-claim-section"><summary><span>绑定以前的凭证</span><small>已有 Token 或设备码？申请归属审核</small></summary><div class="member-card"><form id="memberClaimForm" class="member-form"><div class="member-form-two"><label>类型<select id="memberClaimKind"><option value="token">Token</option><option value="activation">设备绑定码</option></select></label>'+input('凭证','memberClaimCode','text','','required autocomplete="off"')+'</div>'+input('归属说明','memberClaimNote','text','','maxlength="200" placeholder="如发放时间、用途或备注，供管理员核对"')+'<div><button class="member-secondary" '+(member.busy?'disabled':'')+'>提交绑定申请</button></div></form>'+a.claims.map(c=>'<div class="member-row"><div><strong>'+esc(c.code)+'</strong><small>'+esc(status(c.status))+'</small></div></div>').join('')+'</div></details>';
   }
   // Device presentation only: interpret the existing asset fields, never authorize usage.
   function deviceEntitlement(t,now=Date.now()){
@@ -6933,6 +6962,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     const cards=Array.from(main.querySelectorAll('.member-asset'));
     cards.forEach(card=>{const name=card.querySelector('.member-asset-name').textContent.toLocaleLowerCase();card.hidden=!!query&&!name.includes(query);if(!card.hidden)matched++;});
     const empty=main.querySelector('#memberAssetNoMatch');if(empty)empty.hidden=!query||matched>0;
+    const summary=main.querySelector('#memberAssetFilterStatus');
+    if(summary)summary.textContent=query?'筛选结果 '+matched+' / '+cards.length+' 份':'已读取 '+cards.length+' 份凭证';
+    main.querySelectorAll('[data-asset-section]').forEach(section=>{
+      const items=Array.from(section.querySelectorAll('.member-asset')),shown=items.filter(card=>!card.hidden).length;
+      const count=section.querySelector('[data-asset-section-count]');
+      if(count)count.textContent=query?'匹配 '+shown+' / '+items.length+' 份':items.length+' 份';
+      const hint=section.querySelector('[data-asset-section-empty]');
+      if(hint)hint.hidden=!query||!items.length||shown>0;
+    });
   }
   function positionRowMenu(menu){
     const panel=menu.querySelector('div');if(!panel?.getBoundingClientRect)return;
