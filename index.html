@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="1.18.0-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="1.22.0-rc1"><meta name="snow-frontend-version" content="12.21.0-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -1601,6 +1601,386 @@ html{scrollbar-gutter:stable}
  .member-shop-footer button{width:100%}.member-access-empty{min-height:238px;padding:24px 18px}
  .member-ledger-layout{gap:18px}.member-ledger-list>.member-section-head{flex-wrap:wrap;gap:8px}.member-ledger-list>.member-section-head>span{font-size:11px}
  .member-ledger-tools>summary,.member-ledger-tools>.member-recovery{padding:18px}.member-ledger-guide{padding:20px 2px}
+}
+
+</style><style id="snowUiAuditDesign">
+/* 12.18 UI audit: neutral-text contrast and measured mobile target sizes only.
+   No hidden capability is enabled, no event handler or business flow is replaced. */
+
+/* A consistent readable secondary tone on white, sage and off-white surfaces. */
+#userPanel p,
+#adminLoginCard p,
+#adminMain p,
+#adminMain small,
+.product-sheet p,
+.product-sheet small,
+.product-sheet label,
+.product-sheet .sheet-intro,
+.product-sheet .field-note {
+  color: #526457;
+}
+
+#memberMain :is(p, small, label, .member-muted, .member-help, .member-eyebrow):not(.member-status-chip):not(.member-field-error) {
+  color: #526457;
+}
+
+#memberMain .member-status-chip[data-status="active"] {
+  color: #476345;
+}
+
+#memberMain .member-status-chip[data-status="disabled"] {
+  color: #8a523b;
+}
+
+.member-confirm p,
+.member-leave-dialog p,
+.member-copy-panel p {
+  color: #526457;
+}
+
+/* Keep danger/error semantics; these are not neutral helper text. */
+#memberMain .member-device-data-note p,
+#memberMain .member-device-time-note {
+  color: #785437;
+}
+
+@media (max-width: 760px) {
+  #memberDialog button,
+  #memberDialog summary,
+  #adminMain button,
+  #adminMain summary,
+  #userPanel button,
+  #userPanel summary,
+  .product-sheet button,
+  .product-sheet summary,
+  .modal-box button,
+  .modal-box summary,
+  .member-confirm button,
+  .member-leave-dialog button,
+  .member-copy-panel button {
+    min-height: 44px;
+  }
+
+  #memberDialog .member-presets button {
+    padding-block: 10px;
+  }
+
+  #memberDialog .member-course-check {
+    min-height: 44px;
+  }
+
+  #subTokens button.credential-name {
+    min-height: 44px;
+  }
+
+  #subCourse .connection-details > summary,
+  #subCourse #courseConnection > summary {
+    min-height: 44px;
+    padding-block: 12px;
+    box-sizing: border-box;
+  }
+}
+
+</style><style id="snowFeedbackDesign">
+/* Desktop/public/member toast layout is unchanged; only the mobile workbench uses a dock. */
+.snow-feedback-dock { display: contents; }
+.snow-feedback-toggle[hidden],
+.snow-feedback-preview[hidden],
+#toastStack[data-snow-feedback-active="true"][hidden] { display: none !important; }
+
+@media (max-width: 760px) {
+  .snow-feedback-dock[data-active="true"] {
+    position: fixed;
+    left: max(14px, env(safe-area-inset-left));
+    right: max(14px, env(safe-area-inset-right));
+    bottom: calc(82px + env(safe-area-inset-bottom) + var(--snow-feedback-stack-height, 0px));
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    background: #fafbf6;
+    box-shadow: 0 6px 22px #19392e16;
+  }
+
+  #toastStack[data-snow-feedback-active="true"] {
+    position: fixed;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    left: max(14px, env(safe-area-inset-left));
+    right: max(14px, env(safe-area-inset-right));
+    transform: none;
+    width: auto;
+    max-width: none;
+    max-height: min(180px, 24dvh);
+    flex-direction: column;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    pointer-events: auto;
+    z-index: 60;
+    padding: 0 8px 8px;
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 12px 12px;
+    background: #fafbf6;
+    box-shadow: 0 8px 22px #19392e16;
+  }
+
+  /* Keep the original DOM order/timers, but put the newest message first visually.
+     The frozen creator already limits the stack to three messages. */
+  #toastStack[data-snow-feedback-active="true"] .toast-item:last-child { order: -3; }
+  #toastStack[data-snow-feedback-active="true"] .toast-item:nth-last-child(2) { order: -2; }
+  #toastStack[data-snow-feedback-active="true"] .toast-item:nth-last-child(3) { order: -1; }
+  #toastStack[data-snow-feedback-active="true"] .toast-dismiss { color: #526457; }
+
+  .snow-feedback-dock[data-active="true"][data-expanded="false"] { border-radius: 12px; }
+  .snow-feedback-dock[data-active="true"]:is([data-context="sheet"], [data-context="overlay"]),
+  #toastStack[data-snow-feedback-active="true"]:is([data-snow-feedback-context="sheet"], [data-snow-feedback-context="overlay"]) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    flex: none;
+    box-shadow: none;
+  }
+  .snow-feedback-dock[data-active="true"]:is([data-context="sheet"], [data-context="overlay"]) { margin-top: 12px; }
+  body[data-snow-feedback-context="overlay"] :is(.input-box, .confirm-box) {
+    max-height: calc(var(--snow-visible-height, 100dvh) - 24px);
+    overflow: auto;
+  }
+
+  .snow-feedback-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 44px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: #435b48;
+    font: inherit;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .snow-feedback-toggle > span:last-child { flex: none; font-weight: 600; }
+  .snow-feedback-toggle[data-error="true"] { color: #8c3934; border-left: 3px solid #aa5148; }
+  .snow-feedback-toggle:focus-visible { outline: 2px solid #476345; outline-offset: 2px; }
+
+  .snow-feedback-preview {
+    margin: 0;
+    padding: 0 10px 4px;
+    color: #526457;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .snow-feedback-preview[data-error="true"] { color: #8c3934; }
+
+  body[data-snow-feedback-active="true"] .app {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom) + var(--snow-mobile-feedback-height, 0px));
+  }
+}
+
+</style><style id="snowWorkspaceDesign">
+/* First-level page scenes; the original business surfaces and field styles are retained. */
+body:is([data-snow-scene="personal"], [data-snow-scene="accounts"]) { overflow: hidden; }
+body:is([data-snow-scene="personal"], [data-snow-scene="accounts"]) > .app,
+body:is([data-snow-scene="personal"], [data-snow-scene="accounts"]) > #toastStack,
+body:is([data-snow-scene="personal"], [data-snow-scene="accounts"]) > .snow-feedback-dock,
+body:is([data-snow-scene="personal"], [data-snow-scene="accounts"]) > .network-status,
+body[data-snow-scene="personal"] > .snow-sidebar,
+body[data-snow-scene="personal"] > .snow-mobile-nav { display: none !important; }
+
+#memberDialog.workspace-page[hidden] { display: none !important; }
+#memberDialog.workspace-page {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  min-width: 0;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #f5f7f3;
+  overflow: hidden;
+}
+#memberDialog .member-head { height: 80px; padding: 0 36px; gap: 20px; }
+#memberDialog .member-logo { min-width: 0; gap: 12px; }
+#memberDialog .member-logo strong { font: inherit; }
+#memberDialog .workspace-context { border-left: 1px solid #dce5dc; padding-left: 16px; margin-left: 6px; font-size: 13px; font-weight: 500; letter-spacing: 0; color: #526457; }
+#memberDialog .workspace-switch { display: flex; gap: 10px; flex: none; }
+#memberDialog .workspace-switch button { min-height: 44px; padding: 9px 14px; border: 1px solid #dce5dc; border-radius: 8px; background: #fff; color: #385743; font: inherit; font-size: 12px; }
+#memberDialog .workspace-switch button:hover { background: #f1f5ed; }
+#memberDialog .member-layout { height: calc(100% - 80px); grid-template-columns: 236px minmax(0, 1fr); }
+#memberDialog .member-main { min-height: 0; padding: 36px 40px; }
+#memberDialog .member-nav { min-height: 0; }
+#memberDialog[data-auth="true"] .member-layout { display: grid; grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr); }
+#memberDialog[data-auth="true"] .member-main { display: flex; align-items: safe center; justify-content: center; padding: 40px; background: #fff; }
+#memberDialog[data-auth="true"] .member-auth { width: 100%; max-width: 470px; margin: 0; padding: 12px 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+#memberDialog[data-auth="true"] .member-page-title { margin-bottom: 32px; }
+#memberDialog .workspace-welcome { position: relative; padding: clamp(40px, 6vw, 90px); background: #1c4032; color: #eff4e8; overflow-x: hidden; overflow-y: auto; }
+.workspace-welcome .workspace-kicker { display: block; font-size: 10px; letter-spacing: 2px; color: #bed0bd; margin-bottom: 42px; }
+.workspace-welcome h2 { position: relative; z-index: 1; margin: 0; font-size: clamp(28px, 3.1vw, 44px); line-height: 1.55; font-weight: 500; letter-spacing: -.7px; }
+.workspace-welcome > p { position: relative; z-index: 1; font-size: 14px; color: #c4d3c1; line-height: 2; margin: 22px 0 42px; }
+.workspace-welcome ul { position: relative; z-index: 1; list-style: none; padding: 0; margin: 0; display: grid; gap: 24px; }
+.workspace-welcome li { display: flex; align-items: baseline; gap: 18px; }
+.workspace-welcome li > span { font-size: 10px; color: #c0d2b5; border-top: 1px solid #738d6b; padding-top: 8px; }
+.workspace-welcome li strong { display: block; font-size: 14px; font-weight: 500; }
+.workspace-welcome li small { display: block; color: #bfd0be; font-size: 12px; margin-top: 7px; line-height: 1.7; }
+.workspace-welcome-tree { position: absolute; right: 0; bottom: 0; width: min(280px, 70%); opacity: .055; pointer-events: none; }
+.workspace-welcome-tree svg { display: block; width: 100%; }
+
+/* User management is a module of the original admin shell, not another floating window. */
+#memberDialog[data-role="admin"] { width: calc(100% - var(--snow-sidebar)); margin-left: var(--snow-sidebar); }
+#memberDialog[data-role="admin"] .member-logo > svg,
+#memberDialog[data-role="admin"] .member-logo > strong { display: none; }
+#memberDialog[data-role="admin"] .workspace-context { margin: 0; padding: 0; border: 0; color: #294534; font-size: 18px; font-weight: 600; }
+#memberDialog[data-role="admin"] .member-layout { display: flex; flex-direction: column; }
+#memberDialog[data-role="admin"] .member-nav { flex: none; padding: 16px 36px; border-bottom: 1px solid #e1e8dd; background: #fff; }
+#memberDialog[data-role="admin"] .member-nav-profile,
+#memberDialog[data-role="admin"] .member-nav-foot { display: none; }
+#memberDialog[data-role="admin"] .member-nav-links { display: flex; gap: 8px; }
+#memberDialog[data-role="admin"] .member-nav-links button { width: auto; margin: 0; min-height: 44px; padding: 10px 16px; color: #526457; }
+#memberDialog[data-role="admin"] .member-nav-links button[aria-current="page"] { background: #eaf1e4; color: #294f39; }
+#memberDialog[data-role="admin"] .member-nav-links button:hover { background: #f0f5ec; }
+#memberDialog[data-role="admin"] .member-nav button:focus-visible { outline-color: #476345; }
+#memberDialog[data-role="admin"] .member-main { flex: 1; min-height: 0; }
+.snow-accounts-entry svg { width: 20px; height: 20px; flex: none; }
+.snow-sidebar #adminSubtabs { position: static; backdrop-filter: none; box-shadow: none; }
+
+@media (max-width: 960px) and (min-width: 761px) {
+  #memberDialog .member-head { padding-inline: 24px; }
+  #memberDialog .member-main { padding: 28px; }
+  #memberDialog[data-auth="true"] .member-layout { grid-template-columns: minmax(270px, .8fr) minmax(0, 1.2fr); }
+  #memberDialog .workspace-welcome { padding: 40px 28px; }
+}
+@media (max-width: 760px) {
+  #memberDialog .member-head { height: calc(64px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 16px 0; gap: 8px; }
+  #memberDialog .member-logo { font-size: 21px; gap: 8px; }
+  #memberDialog .member-logo svg { width: 22px; height: 30px; }
+  #memberDialog[data-role="user"] .workspace-context { display: none; }
+  #memberDialog .workspace-switch { gap: 6px; }
+  #memberDialog .workspace-switch button { padding-inline: 10px; }
+  #memberDialog .member-layout { display: flex; flex-direction: column; height: calc(100% - 64px - env(safe-area-inset-top)); }
+  #memberDialog .member-main { padding: 24px 16px calc(24px + env(safe-area-inset-bottom)); flex: 1; min-height: 0; }
+  #memberDialog[data-auth="true"] .member-layout { display: flex; }
+  #memberDialog[data-auth="true"] .workspace-welcome { display: none; }
+  #memberDialog[data-auth="true"] .member-main { display: block; padding: 32px 22px; }
+  #memberDialog[data-auth="true"] .member-auth { margin: 0 auto; }
+  #memberDialog[data-role="admin"] { width: 100%; margin: 0; height: calc(100dvh - 76px - env(safe-area-inset-bottom)); }
+  #memberDialog[data-role="admin"] .member-head { padding-inline: 16px; }
+  #memberDialog[data-role="admin"] .workspace-context { font-size: 16px; }
+  #memberDialog[data-role="admin"] .member-nav { padding: 8px; }
+  #memberDialog[data-role="admin"] .member-nav-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+  #memberDialog[data-role="admin"] .member-nav-links button { width: 100%; padding: 8px 2px; gap: 4px; font-size: 11px; min-height: 48px; }
+  body[data-snow-mode="workspace"] .snow-mobile-nav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (min-width: 600px) and (max-width: 760px) and (max-height: 520px) {
+  #memberDialog .member-head { height: calc(48px + env(safe-area-inset-top)); }
+  #memberDialog .member-layout { height: calc(100% - 48px - env(safe-area-inset-top)); }
+  #memberDialog[data-role="user"] .member-nav-links { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  #memberDialog[data-auth="true"] .member-main { padding-block: 22px; }
+}
+
+</style><style id="snowWorkspacePolish">
+/* Scoped presentation refinement. Existing fields, records and business actions are retained. */
+#memberDialog.workspace-page[data-auth="false"] .member-main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  --workspace-main-top: 36px;
+}
+#memberDialog[data-auth="false"] .member-muted,
+#memberDialog[data-auth="false"] .member-help,
+#memberDialog[data-auth="false"] .member-account-layout header p,
+#memberDialog[data-auth="false"] .member-account-effect,
+#memberDialog[data-auth="false"] .member-account-session-row > p,
+#memberDialog[data-auth="false"] .member-account-session-foot { font-size: 12.5px; line-height: 1.85; }
+#memberDialog[data-auth="false"] .member-user-identity strong { font-size: 14px; line-height: 1.65; }
+#memberDialog[data-auth="false"] .member-user-identity .member-status-chip,
+#memberDialog[data-auth="false"] .member-user-balances small { font-size: 11px; line-height: 1.65; }
+#memberDialog[data-auth="false"] .member-user-list .member-user-row { padding-block: 16px; }
+#memberDialog[data-auth="false"] .member-user-list .member-search-bar {
+  position: sticky;
+  top: calc(0px - var(--workspace-main-top, 36px));
+  z-index: 4;
+  max-width: none;
+  margin-bottom: 16px;
+  padding-block: 8px 14px;
+  border-bottom: 1px solid #e6ece1;
+  background: #fff;
+}
+#memberDialog .navigation-scroll-help { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+@media (min-width: 761px) and (max-width: 960px) {
+  #memberDialog.workspace-page[data-auth="false"] .member-main { --workspace-main-top: 28px; }
+}
+
+@media (max-width: 760px) {
+  #memberDialog.workspace-page[data-auth="false"] .member-main { --workspace-main-top: 24px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav { padding: 8px 12px; min-width: 0; background: #fff; border-bottom: 1px solid #e1e8dd; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links {
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #a8b99e transparent;
+  }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links::-webkit-scrollbar { height: 5px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links::-webkit-scrollbar-thumb { background: #a8b99e; border-radius: 4px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links button {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 100px;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 12px;
+    flex-direction: row;
+    gap: 7px;
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #526457;
+  }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links button[aria-current="page"] { color: #294f39; background: #eaf1e4; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-links button:hover { background: #f0f5ec; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav button:focus-visible { outline: 2px solid #476345; outline-offset: -3px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-nav-icon { width: 17px; height: 17px; }
+  #memberDialog[data-role="admin"] .member-user-list { padding: 16px; }
+  #memberDialog[data-role="admin"] .member-user-list .member-search-bar { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  #memberDialog[data-role="admin"] .member-user-list .member-user-row { grid-template-columns: minmax(0, 1fr) 100px; gap: 10px; padding-block: 14px; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-identity { grid-column: 1; align-items: flex-start; gap: 8px; }
+  #memberDialog[data-role="admin"] .member-user-identity strong { font-size: 13px; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-balances { grid-column: 2; grid-template-columns: 1fr; align-self: center; gap: 8px; padding-left: 0; max-width: none; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-balances > span { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-balances b { font-size: 18px; white-space: nowrap; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-balances small { white-space: nowrap; }
+  #memberDialog[data-role="admin"] .member-user-row .member-user-actions { display: grid; grid-template-columns: 1fr 1.25fr .65fr; grid-column: 1 / -1; gap: 4px; margin: 0; }
+  #memberDialog[data-role="admin"] .member-user-actions > button { min-height: 44px; width: 100%; padding: 8px 4px; font-size: 12px !important; background: #f7faf4; border-color: #e3eadf; }
+  #memberDialog[data-role="admin"] .member-row-menu > summary { min-height: 44px; justify-content: center; padding: 8px 4px; font-size: 12px; border: 1px solid #e3eadf; background: #f7faf4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #memberDialog.workspace-page .member-nav-links { scroll-behavior: auto; }
 }
 
 </style></head><body>
@@ -6501,6 +6881,140 @@ console.log('Link · Token 管理 v11.12.9 — 已就绪');
   if(typeof module==='object'&&module.exports)module.exports={create,KEY};else root.SnowTransactionJournal=Object.freeze({create});
 })(typeof window==='undefined'?null:window);
 
+</script><script id="snowWorkspaceShell">
+/* Primary page presentation. No authentication, requests, persistence or business handlers. */
+window.SnowWorkspace = (() => {
+  'use strict';
+  const accountIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6m1 3a5 5 0 0 1 4 5"/></svg>';
+
+  function create({tree, onOpen, onClose, requestLeave}) {
+    const root = document.createElement('section');
+    root.id = 'memberDialog'; // Retain stable field/event scoping; this is no longer a dialog.
+    root.className = 'member-dialog workspace-page';
+    root.hidden = true;
+    root.setAttribute('aria-labelledby', 'memberHeading');
+    root.innerHTML = '<header class="member-head"><div class="member-logo">' + tree + '<strong>snow.</strong><span class="workspace-context">个人工作区</span></div><nav class="workspace-switch" aria-label="工作区入口"><button type="button" class="member-close" data-member-close>提取入口</button><button type="button" class="workspace-link" data-workspace-admin>管理后台</button></nav></header><div class="member-layout"><aside class="workspace-welcome" hidden><span class="workspace-kicker">YOUR PERSONAL WORKSPACE</span><h2>每一份权益，<br>都井井有条。</h2><p>登录自己的空间。<br>凭证、点数和学习任务，在这里各归其位。</p><ul><li><span>01</span><div><strong>凭证与设备</strong><small>查看已有权益，按需管理。</small></div></li><li><span>02</span><div><strong>点数与兑换</strong><small>看清余额与每一笔记录。</small></div></li><li><span>03</span><div><strong>任务与核对</strong><small>不确定的结果，先核对再继续。</small></div></li></ul><div class="workspace-welcome-tree" aria-hidden="true">' + tree + '</div></aside><nav class="member-nav" aria-label="用户中心导航"></nav><main class="member-main" id="memberMain"></main></div>';
+    document.body.append(root);
+    const nativeNav = document.getElementById('adminSubtabs');
+    const mobileNav = document.querySelector('.snow-mobile-nav');
+    const entry = document.createElement('button');
+    entry.type = 'button'; entry.className = 'member-entry'; entry.textContent = '用户中心';
+    entry.dataset.workspaceEntry = 'personal';
+    entry.addEventListener('click', () => onOpen(false));
+    document.querySelector('.segmented')?.append(entry);
+    const desktopEntry = document.createElement('button');
+    desktopEntry.type = 'button'; desktopEntry.className = 'subtab snow-accounts-entry';
+    desktopEntry.dataset.workspaceEntry = 'accounts';
+    desktopEntry.innerHTML = accountIcon + '<span>用户管理</span>';
+    nativeNav.querySelector('[data-subtab="overview"]').after(desktopEntry);
+    const mobileEntry = document.createElement('button');
+    mobileEntry.type = 'button'; mobileEntry.className = 'snow-accounts-entry';
+    mobileEntry.dataset.workspaceEntry = 'accounts';
+    mobileEntry.innerHTML = accountIcon + '<span>用户</span>';
+    mobileEntry.setAttribute('aria-label', '用户管理');
+    mobileNav.insertBefore(mobileEntry, document.getElementById('snowMore'));
+    const adminLink = root.querySelector('[data-workspace-admin]');
+    let current = {admin: false, isAuth: true, busy: false, page: 'home'};
+    let nativeSelection = [];
+    let nativeAttributes = [];
+    const isOpen = () => !root.hidden;
+    const nativeAdminReady = () => !document.getElementById('adminMain').classList.contains('hidden');
+    const nativeButtons = () => [...nativeNav.querySelectorAll('[data-subtab]'), ...mobileNav.querySelectorAll('button:not(.snow-accounts-entry)')];
+    function deactivateNativeSelection() {
+      for (const node of nativeButtons()) {
+        if (node.classList.contains('active')) node.classList.remove('active');
+        if (node.classList.contains('selected')) node.classList.remove('selected');
+        if (node.getAttribute('aria-current') === 'page') node.setAttribute('aria-current', 'false');
+      }
+    }
+    // The frozen shell can refresh its selected mobile item after a read completes.
+    // While this module is visible, suppress only that stale presentation selection.
+    const selectionObserver = new MutationObserver(records => {
+      if (!isOpen() || !current.admin || !records.some(record => !record.target.matches('.snow-accounts-entry'))) return;
+      deactivateNativeSelection();
+    });
+    for (const nav of [nativeNav, mobileNav]) selectionObserver.observe(nav, {subtree: true, attributes: true, attributeFilter: ['class', 'aria-current']});
+
+    function setEntryState(active) {
+      for (const button of [desktopEntry, mobileEntry]) {
+        button.classList.toggle('active', active);
+        button.classList.toggle('selected', active);
+        button.setAttribute('aria-current', active ? 'page' : 'false');
+        button.disabled = active && current.busy;
+      }
+    }
+    for (const button of [desktopEntry, mobileEntry]) {
+      button.addEventListener('click', event => {
+        // Do not pass a new module key into the frozen workbench's delegated handler.
+        event.stopPropagation();
+        if (!nativeAdminReady() || isOpen() && current.admin) return;
+        onOpen(true);
+      });
+    }
+    adminLink.addEventListener('click', () => requestLeave(() => {
+      onClose(true);
+      document.querySelector('.seg-btn[data-panel="admin"]').click();
+    }, adminLink));
+    document.addEventListener('click', event => {
+      if (!isOpen() || !current.admin) return;
+      const target = event.target.closest('.snow-sidebar [data-subtab], .snow-sidebar [data-snow-public], .snow-mobile-nav [data-snow-go], #snowMoreDialog [data-snow-go], #snowMoreDialog [data-snow-public]');
+      if (!target) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+      requestLeave(() => { onClose(true); target.click(); }, target);
+    }, true);
+    // If the original administrator session UI disappears, never leave its account page exposed.
+    new MutationObserver(() => {
+      if (isOpen() && current.admin && !nativeAdminReady()) onClose(true);
+    }).observe(document.getElementById('adminMain'), {attributes: true, attributeFilter: ['class']});
+
+    function show(admin) {
+      if (admin && !nativeAdminReady()) return false;
+      current.admin = admin;
+      if (admin) {
+        nativeSelection = nativeButtons().map(node => ({node, active: node.classList.contains('active'), selected: node.classList.contains('selected')}));
+        nativeAttributes = nativeButtons().map(node => ({node, current: node.getAttribute('aria-current')}));
+        deactivateNativeSelection();
+      }
+      const more = document.getElementById('snowMoreDialog');
+      if (more?.open) more.close();
+      root.hidden = false;
+      document.body.dataset.snowScene = admin ? 'accounts' : 'personal';
+      setEntryState(admin);
+      return true;
+    }
+    function hide(preserveNative = false) {
+      root.hidden = true;
+      delete document.body.dataset.snowScene;
+      setEntryState(false);
+      for (const {node, active, selected} of nativeSelection) if (node.isConnected) {
+        node.classList.toggle('active', active); node.classList.toggle('selected', selected);
+      }
+      for (const {node, current} of nativeAttributes) if (node.isConnected) {
+        if (current === null) node.removeAttribute('aria-current'); else node.setAttribute('aria-current', current);
+      }
+      nativeSelection = [];
+      nativeAttributes = [];
+      if (!preserveNative) {
+        const target = current.admin ? nativeNav.querySelector('[data-subtab="overview"]') : document.querySelector('.seg-btn[data-panel="user"]');
+        target?.click(); target?.focus({preventScroll: true});
+      }
+    }
+    function sync(state) {
+      current = {...state};
+      root.dataset.auth = String(state.isAuth);
+      root.querySelector('.workspace-welcome').hidden = !state.isAuth;
+      root.querySelector('.workspace-context').textContent = state.admin ? '用户与权益' : state.isAuth ? '用户登录' : '个人工作区';
+      root.querySelector('[data-member-close]').textContent = state.admin ? '管理首页' : '提取入口';
+      adminLink.hidden = state.admin; adminLink.disabled = state.busy;
+      root.querySelector('.member-nav').setAttribute('aria-label', state.admin ? '用户与权益分类' : '用户中心导航');
+      setEntryState(isOpen() && state.admin);
+      if (isOpen()) document.title = 'Snow · ' + (state.admin ? '用户管理' : state.isAuth ? '用户登录' : '个人工作区');
+    }
+    return Object.freeze({root, show, hide, sync, isOpen});
+  }
+  return Object.freeze({create});
+})();
+
 </script><script id="snowMemberUI">
 /* Member UI is an additive module. No replacement of the frozen RC5 handlers. */
 document.addEventListener('DOMContentLoaded',()=>{
@@ -6510,15 +7024,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   const api=typeof API_URL==='string'?API_URL:'https://1416699676-1w13q832ym.ap-beijing.tencentscf.com';
   const journal=SnowTransactionJournal.create();
   const member={browseFrames:{},adminCapabilities:null,diagnostic:null,reviewData:null,reviewDetail:null,reviewFilter:"pending",reviewUser:"",reviewHold:false,reviewPage:1,epoch:0,recoveryRead:null,recoveryReadId:0,recovery:null,adminLedger:null,token:'',user:null,data:null,page:'home',admin:false,authMode:'login',busy:false,notice:'',error:false,pending:new Map(),tokenDrafts:new Map(),quantityDrafts:new Map(),courses:[],selected:new Set(),preview:null,batch:null,run:false,challenge:null};
-  const dialog=document.createElement('dialog');dialog.id='memberDialog';dialog.className='member-dialog';dialog.setAttribute('aria-labelledby','memberHeading');
   const tree='<svg viewBox="0 0 64 80" fill="none" aria-hidden="true"><path d="M32 5 17 27h10L11 44h12L5 63h54L41 44h12L37 27h10L32 5Z" fill="currentColor"/><path d="M32 19v54M32 37l-8-6m8 18 13-10M32 57l-15-9" stroke="#f6f5f1" stroke-width="2" stroke-linecap="round"/></svg>';
-  dialog.innerHTML='<header class="member-head"><div class="member-logo">'+tree+'snow.<span class="member-label">PERSONAL SPACE</span></div><button class="member-close" data-member-close>返回工作台</button></header><div class="member-layout"><nav class="member-nav" aria-label="用户中心导航"></nav><main class="member-main" id="memberMain"></main></div>';
-  document.body.append(dialog);
-  const entry=document.createElement('button');entry.type='button';entry.className='member-entry';entry.textContent='用户中心';entry.addEventListener('click',()=>open(false));
-  document.querySelector('.segmented')?.append(entry);
-  const management=document.createElement('button');management.type='button';management.className='member-entry';management.textContent='用户与点数';management.addEventListener('click',()=>open(true));$('adminMain')?.prepend(management);
-  function open(admin){member.epoch++;member.browseFrames={};member.adminCapabilities=null;member.diagnostic=null;member.adminLedger=null;member.reviewDetail=null;member.reviewData=null;member.reviewUser='';member.admin=admin;member.page=admin?'users':'home';member.notice='';member.error=false;dialog.showModal();render();if(admin)loadAdmin();else if(member.token)refresh().catch(e=>say(e.message,true));}
-  function close(){member.epoch++;member.run=false;dialog.close();}
+  const workspace=SnowWorkspace.create({tree,onOpen:open,onClose:close,requestLeave:leaveWorkspace});
+  const dialog=workspace.root;
+  function leaveWorkspace(action,source){if(member.busy)return;if(hasConfigEdits())confirmConfigLeave(action,source);else action();}
+  function open(admin){if(admin&&!state.isAdmin)return;member.epoch++;member.browseFrames={};member.adminCapabilities=null;member.diagnostic=null;member.adminLedger=null;member.reviewDetail=null;member.reviewData=null;member.reviewUser='';member.admin=admin;member.page=admin?'users':'home';member.notice='';member.error=false;if(!workspace.show(admin))return;render();if(admin)loadAdmin();else if(member.token)refresh().catch(e=>say(e.message,true));}
+  function close(preserveNative=false){member.epoch++;member.run=false;workspace.hide(preserveNative);dialog.dispatchEvent(new Event('close'));}
   dialog.addEventListener('cancel',()=>{member.epoch++;member.run=false;});
   async function ask(message,passwordMode=false){
     const box=document.createElement('dialog');box.className='member-confirm';box.setAttribute('aria-labelledby','memberConfirmHeading');box.setAttribute('aria-describedby','memberConfirmDescription');
@@ -6576,6 +7087,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     main.dataset.owner=owner;main.dataset.working=String(member.busy);
     restoreWorkspaceFocus(main,focused,navFocused,samePage);
     main.querySelectorAll('details').forEach(el=>{if(expanded.includes(el.dataset.ledgerId||el.dataset.maintenanceKey||el.className))el.open=true;});
+    workspace.sync({admin:member.admin,isAuth,busy:member.busy,page:member.page});
   }
 
   function clearDismissedFeedback(){
@@ -6583,7 +7095,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     member.error=false;member.diagnostic=null;
   }
   function restoreWorkspaceFocus(main,focused,navFocused,samePage){
-    if(!dialog.open||member.busy||focused?.isConnected&&!focused.disabled)return;
+    if(!workspace.isOpen()||member.busy||focused?.isConnected&&!focused.disabled)return;
     let target;
     if(!samePage||navFocused)target=main.querySelector('#memberHeading');
     else if(focused?.id)target=$(focused.id);
@@ -6602,7 +7114,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'12.17.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'12.21.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -6927,7 +7439,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(menu.open)closeRowMenus(menu);
   },true);
   document.addEventListener('click',e=>{
-    if(!dialog.open)return;
+    if(!workspace.isOpen())return;
     const menu=e.target.closest?.('.member-row-menu');
     closeRowMenus(menu&&dialog.contains(menu)?menu:null);
     if(menu&&e.target.closest('button')&&!e.target.closest('button').disabled)closeRowMenus();
@@ -6937,7 +7449,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     e.preventDefault();e.stopPropagation();closeRowMenus(null,true);
   });
   document.addEventListener('focusin',e=>{
-    if(dialog.open)closeRowMenus(e.target.closest?.('.member-row-menu')||null);
+    if(workspace.isOpen())closeRowMenus(e.target.closest?.('.member-row-menu')||null);
   });
   dialog.addEventListener('close',()=>{
     closeRowMenus();
@@ -7011,7 +7523,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   function confirmConfigLeave(leave,source=document.activeElement){
     if(leavePanel)return;
     const epoch=member.epoch,form=$('memberMain').querySelector('#memberConfigForm');
-    const current=()=>dialog.open&&member.admin&&member.page==='config'&&!member.busy&&member.epoch===epoch&&form?.isConnected&&source?.isConnected&&$('memberMain').querySelector('#memberConfigForm')===form;
+    const current=()=>workspace.isOpen()&&member.admin&&member.page==='config'&&!member.busy&&member.epoch===epoch&&form?.isConnected&&source?.isConnected&&$('memberMain').querySelector('#memberConfigForm')===form;
     const box=document.createElement('dialog');box.className='member-leave-dialog';box.setAttribute('aria-labelledby','memberLeaveHeading');box.setAttribute('aria-describedby','memberLeaveDescription');
     box.innerHTML='<span class="member-leave-eyebrow">UNSAVED CHANGES</span><h3 id="memberLeaveHeading">放弃未保存的修改？</h3><p id="memberLeaveDescription">当前兑换设置还没有保存。放弃后，这些编辑不会生效；已保存的价格与权益不受影响。</p><div class="member-leave-actions"><button type="button" data-leave-stay>继续编辑</button><button type="button" data-leave-discard>放弃修改</button></div>';
     document.body.append(box);let done=false;
@@ -7048,7 +7560,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   },true);
   dialog.addEventListener('close',()=>leavePanel?.finish(false));
   window.addEventListener('beforeunload',e=>{
-    if(!dialog.open||member.busy||!hasConfigEdits())return;
+    if(!workspace.isOpen()||member.busy||!hasConfigEdits())return;
     e.preventDefault();e.returnValue='';
   });
   // Copy presentation only: never execute, persist, or transform the supplied text.
@@ -7085,7 +7597,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   async function copyContent(text){
     const sequence=++copySequence,epoch=member.epoch,token=member.token,admin=member.admin;
     const source=document.activeElement;
-    const current=()=>sequence===copySequence&&epoch===member.epoch&&token===member.token&&admin===member.admin&&dialog.open;
+    const current=()=>sequence===copySequence&&epoch===member.epoch&&token===member.token&&admin===member.admin&&workspace.isOpen();
     closeCopyPanel(false);
     try{
       if(typeof navigator.clipboard?.writeText!=='function')throw Error('Clipboard unavailable');
@@ -7108,7 +7620,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(validationFocus)return;
     validationFocus=field;const generation=feedbackGeneration;
     // Native invalid dispatch may run microtask checkpoints between fields.
-    requestAnimationFrame(()=>{if(generation!==feedbackGeneration)return;const first=validationFocus;validationFocus=null;if(dialog.open&&first?.isConnected&&!first.disabled){first.focus({preventScroll:true});first.scrollIntoView({block:'nearest'});}});
+    requestAnimationFrame(()=>{if(generation!==feedbackGeneration)return;const first=validationFocus;validationFocus=null;if(workspace.isOpen()&&first?.isConnected&&!first.disabled){first.focus({preventScroll:true});first.scrollIntoView({block:'nearest'});}});
   },true);
   const refreshFieldFeedback=e=>{
     const field=e.target;if(!field.matches?.('[data-validation-field]'))return;
@@ -7121,7 +7633,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!invalid.length)return;
     const generation=feedbackGeneration;
     // Trusted input may checkpoint microtasks between listeners; wait for the next frame.
-    requestAnimationFrame(()=>{if(generation!==feedbackGeneration||!dialog.open)return;for(const item of invalid)if(item.isConnected)updateFieldFeedback(item);});
+    requestAnimationFrame(()=>{if(generation!==feedbackGeneration||!workspace.isOpen())return;for(const item of invalid)if(item.isConnected)updateFieldFeedback(item);});
   };
   dialog.addEventListener('input',refreshFieldFeedback);dialog.addEventListener('change',refreshFieldFeedback);
   dialog.addEventListener('close',()=>{
@@ -7326,5 +7838,189 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
 });
+
+</script><script id="snowFeedbackUI">
+/* Mobile presentation only. The frozen toast creator, dismissal and timers remain unchanged. */
+(() => {
+  'use strict';
+
+  // Pure description of already-rendered messages; no persistence or requests.
+  function describeFeedback(messages, expanded) {
+    const latest = messages.at(-1);
+    return {
+      count: messages.length,
+      latest: latest?.text || '',
+      latestError: !!latest?.error,
+      hasError: messages.some(message => message.error),
+      expanded: messages.length ? !!expanded : true
+    };
+  }
+  // END_PURE_FEEDBACK_MODEL
+
+  function mount() {
+    const stack = document.getElementById('toastStack');
+    if (!stack || document.getElementById('snowFeedbackDock')) return;
+
+    const dock = document.createElement('section');
+    dock.id = 'snowFeedbackDock';
+    dock.className = 'snow-feedback-dock';
+    const toggle = document.createElement('button');
+    toggle.id = 'snowFeedbackToggle';
+    toggle.type = 'button';
+    toggle.className = 'snow-feedback-toggle';
+    toggle.setAttribute('aria-controls', 'toastStack');
+    toggle.hidden = true;
+    const title = document.createElement('span');
+    const action = document.createElement('span');
+    toggle.append(title, action);
+    const preview = document.createElement('p');
+    preview.className = 'snow-feedback-preview';
+    preview.setAttribute('role', 'status');
+    preview.setAttribute('aria-live', 'polite');
+    preview.setAttribute('aria-atomic', 'true');
+    preview.hidden = true;
+
+    stack.before(dock);
+    dock.append(toggle, preview);
+    const mobile = window.matchMedia('(max-width: 760px)');
+    let expanded = true;
+    let active = false;
+    let context = 'page';
+    let overlayOwner = null;
+
+    // Native sheets deliberately move toastStack. Leave its sheet/body parent contract intact.
+    // Only a plain input/confirm overlay needs an inline message area after its existing controls.
+    function syncLocation() {
+      const overlay = mobile.matches && document.body.dataset.snowMode === 'workspace'
+        ? document.querySelector('.input-overlay.show .input-box, .confirm-overlay.show .confirm-box') : null;
+      if (overlay) {
+        if (stack.parentElement !== overlay) {
+          overlayOwner = stack.parentElement;
+          overlay.append(stack);
+        }
+      } else if (overlayOwner) {
+        const owner = overlayOwner.isConnected && (overlayOwner.tagName !== 'DIALOG' || overlayOwner.open)
+          ? overlayOwner : document.body;
+        if (stack.parentElement.closest('.input-overlay, .confirm-overlay')) owner.append(stack);
+        overlayOwner = null;
+      }
+      if (dock.parentElement !== stack.parentElement || dock.nextElementSibling !== stack) stack.before(dock);
+      // This is our own container, never an original business field or dialog branch.
+      dock.inert = false;
+      context = overlay ? 'overlay' : stack.parentElement.tagName === 'DIALOG' ? 'sheet' : 'page';
+      dock.dataset.context = context;
+      stack.dataset.snowFeedbackContext = context;
+      document.body.dataset.snowFeedbackContext = context;
+    }
+
+    function reserveSpace() {
+      const stackHeight = active && expanded ? stack.getBoundingClientRect().height : 0;
+      document.body.style.setProperty('--snow-feedback-stack-height', `${stackHeight}px`);
+      const height = active && context === 'page' ? Math.ceil(dock.getBoundingClientRect().height + stackHeight) : 0;
+      document.body.style.setProperty('--snow-mobile-feedback-height', `${height}px`);
+    }
+
+    function sync() {
+      syncLocation();
+      const messages = Array.from(stack.children).map(item => ({
+        text: item.dataset.message || item.querySelector('span')?.textContent || '',
+        error: item.classList.contains('err')
+      }));
+      const model = describeFeedback(messages, expanded);
+      active = mobile.matches && document.body.dataset.snowMode === 'workspace' && model.count > 0;
+      if (!active || !model.count) expanded = true;
+      dock.dataset.active = String(active);
+      stack.dataset.snowFeedbackActive = String(active);
+      document.body.dataset.snowFeedbackActive = String(active && context === 'page');
+      dock.dataset.expanded = String(expanded);
+      toggle.hidden = !active;
+      stack.hidden = active && !expanded;
+      preview.hidden = !active || expanded;
+      toggle.setAttribute('aria-expanded', String(expanded));
+      title.textContent = `操作提示 · ${model.count}条${model.hasError ? '（含错误）' : ''}`;
+      action.textContent = expanded ? '收起' : '展开';
+      toggle.dataset.error = String(model.hasError);
+      preview.dataset.error = String(model.latestError);
+      // textContent keeps arbitrary server messages as text, never markup.
+      if (preview.textContent !== model.latest) preview.textContent = model.latest;
+      reserveSpace();
+    }
+
+    toggle.addEventListener('click', () => { expanded = !expanded; sync(); });
+    new MutationObserver(sync).observe(stack, {childList: true, subtree: true, characterData: true});
+    new MutationObserver(sync).observe(document.body, {attributes: true, attributeFilter: ['data-snow-mode']});
+    new MutationObserver(records => {
+      const relocated = records.some(record => record.type === 'childList' &&
+        [...record.addedNodes, ...record.removedNodes].includes(stack));
+      const modalChanged = records.some(record => record.type === 'attributes' &&
+        (record.target === document.body || record.target.matches('dialog, .input-overlay, .confirm-overlay')));
+      if (relocated || modalChanged) sync();
+    }).observe(document.body, {childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'open']});
+    mobile.addEventListener('change', sync);
+    const resize = new ResizeObserver(reserveSpace);
+    resize.observe(dock);resize.observe(stack);
+    sync();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount, {once: true});
+  else mount();
+})();
+
+</script><script id="snowNavigationPolish">
+/* Only reveal existing navigation buttons; never activate them or move business nodes. */
+(() => {
+  'use strict';
+  function fitScroll({start, end, activeStart, activeEnd, scroll, max}) {
+    let target = scroll;
+    if (activeStart < start + 8) target += activeStart - start - 8;
+    else if (activeEnd > end - 8) target += activeEnd - end + 8;
+    return Math.max(0, Math.min(max, target));
+  }
+  window.SnowNavigationPolish = Object.freeze({fitScroll});
+  document.addEventListener('DOMContentLoaded', () => {
+    const root = document.getElementById('memberDialog');
+    if (!root) return;
+    const nav = root.querySelector('.member-nav');
+    const narrow = window.matchMedia('(max-width: 760px)');
+    let observedTrack = null;
+    const observer = new ResizeObserver(sync);
+    function reveal(track, button) {
+      if (!narrow.matches || !button || track.clientWidth === 0) return;
+      const a = track.getBoundingClientRect(), b = button.getBoundingClientRect();
+      const target = fitScroll({start:a.left, end:a.right, activeStart:b.left, activeEnd:b.right, scroll:track.scrollLeft, max:Math.max(0, track.scrollWidth - track.clientWidth)});
+      if (Math.abs(target - track.scrollLeft) > .5) track.scrollLeft = target;
+    }
+    function sync() {
+      const track = nav.querySelector('.member-nav-links');
+      if (!track) return;
+      if (observedTrack !== track) {
+        observer.disconnect(); observedTrack = track; observer.observe(track);
+        track.addEventListener('focusin', event => {
+          const button = event.target.closest('button');
+          if (button && track.contains(button)) reveal(track, button);
+        });
+      }
+      const scrollable = narrow.matches && track.scrollWidth > track.clientWidth + 1 && track.clientWidth > 0;
+      if (track.getAttribute('tabindex') !== (scrollable ? '0' : '-1')) track.setAttribute('tabindex', scrollable ? '0' : '-1');
+      if (scrollable) {
+        let help = nav.querySelector('#snowNavigationScrollHelp');
+        if (!help) {
+          help = document.createElement('span'); help.id = 'snowNavigationScrollHelp'; help.className = 'navigation-scroll-help';
+          help.textContent = '栏目可以左右滚动。使用 Tab 键依次访问栏目，当前栏目会保持可见。'; nav.append(help);
+        }
+        if (track.getAttribute('aria-describedby') !== help.id) track.setAttribute('aria-describedby', help.id);
+        reveal(track, track.querySelector('[aria-current="page"]'));
+      } else {
+        track.removeAttribute('aria-describedby');
+        if (!narrow.matches && track.scrollLeft !== 0) track.scrollLeft = 0;
+      }
+    }
+    new MutationObserver(sync).observe(nav, {childList:true, subtree:true, attributes:true, attributeFilter:['aria-current']});
+    new MutationObserver(sync).observe(root, {attributes:true, attributeFilter:['hidden','data-role','data-auth']});
+    narrow.addEventListener('change', sync);
+    window.addEventListener('resize', sync, {passive:true});
+    sync();
+  });
+})();
 
 </script></body></html>
