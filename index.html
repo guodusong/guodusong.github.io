@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="1.22.0-rc1"><meta name="snow-frontend-version" content="12.21.0-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="1.27.0-rc1"><meta name="snow-frontend-version" content="12.26.0-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -1981,6 +1981,352 @@ body[data-snow-scene="personal"] > .snow-mobile-nav { display: none !important; 
 }
 @media (prefers-reduced-motion: reduce) {
   #memberDialog.workspace-page .member-nav-links { scroll-behavior: auto; }
+}
+
+</style><style id="snowWorkbenchRefinement">
+/* 12.22: presentation for the original administrator workbench only.
+   Existing forms, details, delegated roots and request handlers are retained. */
+body[data-snow-mode="workspace"] .app {
+  position: relative;
+  width: calc(100% - var(--snow-sidebar));
+  max-width: 1352px;
+  margin-left: calc(var(--snow-sidebar) + max(0px, (100% - var(--snow-sidebar) - 1352px) / 2));
+  padding-inline: 36px;
+}
+
+#subQuestions .record-eyebrow,
+#subDevices .device-identity > span,
+#subLogs .activity-entry .log-time,
+#subLogs .activity-source .log-meta {
+  font-size: 12px;
+  color: #526457;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+#subLogs .activity-entry { padding-block: 16px; }
+#subLogs .activity-entry::before { top: 24px; }
+#subLogs .activity-entry .log-top { margin-bottom: 6px; gap: 6px 10px; }
+#subLogs .activity-entry .log-badge { font-size: 11.5px; }
+#subLogs .activity-entry .log-body { font-size: 14px; line-height: 1.75; }
+#subLogs .activity-source { margin-top: 6px; }
+#subLogs .activity-source > summary { min-height: 44px; font-size: 12px; padding-block: 6px; }
+
+#subQuestions .module-utilities > p,
+#subQuestions .module-heading p,
+#subDevices .module-heading p,
+#subLogs .module-heading p,
+#subHealth .module-heading p,
+#subHealth .stat-card2-label,
+#subHealth .stat-card2-sub,
+#subHealth .operation-center-sub,
+#subHealth .result-card { font-size: 12.5px; line-height: 1.85; }
+
+#subDevices .device-allowance b {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  body[data-snow-mode="workspace"] .app {
+    width: 100%; max-width: none; margin-left: 0;
+    padding-left: max(18px, env(safe-area-inset-left));
+    padding-right: max(18px, env(safe-area-inset-right));
+  }
+  body[data-snow-mode="workspace"] .snow-page-heading { padding-block: 20px 16px; }
+  #adminMain .module-heading { padding-bottom: 16px; margin-bottom: 16px; gap: 12px; }
+  #subQuestions .question-record h3 { font-size: 16px; line-height: 1.75; }
+  #subQuestions .record-eyebrow { gap: 6px 12px; }
+
+  #subDevices .device-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 14px 12px;
+    padding-block: 18px;
+  }
+  #subDevices .device-identity { grid-column: 1; grid-row: 1; gap: 6px; }
+  #subDevices .register-status { grid-column: 2; grid-row: 1; font-size: 11.5px; }
+  #subDevices .device-allowance {
+    grid-column: 1; grid-row: 2;
+    display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 0;
+    font-size: 12px; line-height: 1.8;
+  }
+  #subDevices .device-allowance b { margin-left: 6px; }
+  #subDevices .device-inspector { grid-column: 2; grid-row: 2; margin-top: 0; }
+  #subDevices .device-inspector > summary { min-height: 44px; min-width: 80px; margin-left: auto; }
+  #subDevices .device-inspector[open] { grid-column: 1 / -1; grid-row: 3; }
+  #subDevices .device-inspector-body { margin-top: 12px; }
+
+  #subLogs .activity-entry { padding-left: 18px; }
+  .snow-mobile-nav #snowMore { min-width: 44px; }
+  .snow-mobile-nav #snowMore > span { white-space: nowrap; }
+}
+
+</style><style id="snowResponsiveBalance">
+/* Only existing administrator category and user-list presentation changes. */
+@media (min-width: 761px) and (max-width: 1100px) {
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-nav {
+    padding: 14px 24px;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-nav-links {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-nav-links button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 9px 6px;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  /* These SVGs are aria-hidden; full original text labels remain visible. */
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-nav-links .member-nav-icon {
+    display: none;
+  }
+}
+
+@media (min-width: 761px) {
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-actions > button,
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > summary {
+    min-height: 44px;
+    padding: 8px 10px;
+    border: 1px solid #e3eadf;
+    border-radius: 8px;
+    background: #f7faf4;
+    font-size: 12.5px !important;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-actions > button:hover,
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > summary:hover {
+    background: #edf3e7;
+    border-color: #c5d4bc;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > div {
+    width: 160px;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > div > button {
+    min-height: 44px;
+    padding: 10px 12px;
+    font-size: 12.5px !important;
+    line-height: 1.6;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-actions > button:focus-visible,
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > summary:focus-visible,
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-row-menu > div > button:focus-visible {
+    outline: 2px solid #476345;
+    outline-offset: -3px;
+  }
+}
+
+</style><style id="snowListSearchPolish">
+/* Existing authenticated administrator user-list nodes only. */
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar {
+  grid-template-columns: minmax(0, 560px) max-content;
+  justify-content: start;
+  align-items: end;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar > label {
+  min-width: 0;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar > label > input {
+  min-width: 0;
+  width: 100%;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar > button {
+  min-width: 88px;
+  min-height: 46px;
+  height: 46px;
+  padding: 10px 20px;
+  white-space: nowrap;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-empty,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-read-state {
+  min-height: 108px;
+  padding: 24px 20px;
+  border: 1px solid #e3eadf;
+  border-radius: 10px;
+  background: #f7faf4;
+  color: #4f6758;
+  font-size: 14px;
+  line-height: 1.8;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-read-state > p {
+  margin: 0 0 12px;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.8;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-read-state > strong {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-read-state.member-empty > p {
+  max-width: 560px;
+  margin: 0;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-ledger-pagination {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e3eadf;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list > .member-ledger-pagination > span {
+  color: #4f6758;
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+@media (max-width: 760px) {
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-user-list .member-search-bar > button {
+    min-width: 72px;
+    padding-inline: 14px;
+  }
+}
+
+</style><style id="snowAdminFormPolish">
+/* Presentation only. Original numeric fields, native checkboxes and actions remain intact. */
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="cdks"] #memberCreateCdksForm {
+  min-width: 0;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm label,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="cdks"] #memberCreateCdksForm label {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4f6758;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-edit-product h3,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="cdks"] .member-admin-create > h3 {
+  font-size: 16px;
+  line-height: 1.5;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-course-check {
+  min-height: 46px;
+  padding: 10px 12px;
+  gap: 10px;
+  border: 1px solid #dce5d8;
+  border-radius: 8px;
+  background: #f7faf4;
+  cursor: pointer;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-course-check:has(input:checked) {
+  color: #355a43;
+  border-color: #becfb5;
+  background: #eaf2e5;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-course-check:focus-within {
+  outline: 2px solid #285740;
+  outline-offset: 2px;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-course-check input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="cdks"] .member-admin-create > .member-muted {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #4f6758;
+}
+/* Keep all seven-digit allowed values readable in the narrow phone layout. */
+@media (max-width: 420px) {
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="config"] #memberConfigForm .member-form-two,
+  #memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="cdks"] #memberCreateCdksForm .member-form-two {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+}
+
+</style><style id="snowLedgerReadability">
+/* Ledger readability. Existing records, native details and business actions only. */
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-top strong {
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-top small {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #4f6758;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-amount[data-direction="out"] b {
+  color: #885540;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-amount[data-direction="neutral"] b {
+  font-size: 13.5px;
+  color: #4f6758;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry details > summary {
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid #dce5d8;
+  border-radius: 8px;
+  background: #f7faf4;
+  color: #355a43;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry details[open] > summary {
+  border-color: #becfb5;
+  background: #eaf2e5;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry details > summary:focus-visible {
+  outline: 2px solid #285740;
+  outline-offset: 2px;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry details > .member-muted {
+  font-size: 13.5px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-operation-id {
+  font-size: 12.5px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-main[data-page="ledger"] .member-ledger-pagination > span,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="users"] .member-card:has(> h3) > .member-ledger-pagination > span {
+  font-size: 12.5px;
+  color: #4f6758;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-tools > summary small,
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-guide p {
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-list > .member-empty,
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-list > .member-read-state,
+#memberDialog.workspace-page[data-auth="false"] .member-ledger-list > .member-read-state p,
+#memberDialog.workspace-page[data-auth="false"][data-role="admin"] .member-main[data-page="users"] .member-card:has(> h3) > .member-empty {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #4f6758;
+}
+/* Full-width descriptions and wrap-safe numbers on the narrow phone layout. */
+@media (max-width: 420px) {
+  #memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  #memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    text-align: left;
+    min-width: 0;
+  }
+  #memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-amount b {
+    overflow-wrap: anywhere;
+  }
 }
 
 </style></head><body>
@@ -7114,7 +7460,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'12.21.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'12.26.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -8020,6 +8366,49 @@ document.addEventListener('DOMContentLoaded',()=>{
     narrow.addEventListener('change', sync);
     window.addEventListener('resize', sync, {passive:true});
     sync();
+  });
+})();
+
+</script><script id="snowWorkbenchOrientation">
+/* Presentation only: read existing DOM state; never trigger navigation or requests. */
+(() => {
+  'use strict';
+  const destinations = Object.freeze({
+    questions: Object.freeze({short: '题库', title: '资料题库'}),
+    devices: Object.freeze({short: '设备', title: '设备绑定'}),
+    emergency: Object.freeze({short: '应急', title: '应急代码'}),
+    health: Object.freeze({short: '状态', title: '系统状态'})
+  });
+  function describeMore(page) {
+    const item = Object.hasOwn(destinations, page) ? destinations[page] : null;
+    return Object.freeze({label: item ? item.short : '更多', aria: item ? '更多功能，当前：' + item.title : '更多功能', current: item ? 'page' : 'false'});
+  }
+  function versionLabel(version) {
+    return typeof version === 'string' && /^12\.\d+\.\d+-rc[1-9]\d*$/.test(version) ? version.replace('-rc', ' RC') : null;
+  }
+  window.SnowWorkbenchRefinement = Object.freeze({describeMore, versionLabel});
+  document.addEventListener('DOMContentLoaded', () => {
+    const more = document.getElementById('snowMore'), dialog = document.getElementById('snowMoreDialog');
+    const version = versionLabel(document.querySelector('meta[name="snow-frontend-version"]')?.getAttribute('content'));
+    if (version) {
+      const footer = document.querySelector('.snow-footer'), sidebarVersion = document.querySelector('.snow-sidebar-foot .snow-eyebrow');
+      if (footer) footer.textContent = 'SNOW WORKSPACE / FRONTEND ' + version;
+      if (sidebarVersion) sidebarVersion.textContent = 'CEDAR / UI ' + version;
+    }
+    if (!more || !dialog) return;
+    const label = more.querySelector('span');
+    function update() {
+      const native = document.body.getAttribute('data-snow-mode') === 'workspace' && !document.body.hasAttribute('data-snow-scene');
+      const descriptor = describeMore(native ? document.body.getAttribute('data-studio-page') : null);
+      if (label && label.textContent !== descriptor.label) label.textContent = descriptor.label;
+      more.setAttribute('aria-label', descriptor.aria);
+      more.setAttribute('aria-current', descriptor.current);
+      more.setAttribute('aria-controls', dialog.id);
+      more.setAttribute('aria-expanded', String(dialog.open));
+    }
+    new MutationObserver(update).observe(document.body, {attributes: true, attributeFilter: ['data-snow-mode', 'data-studio-page', 'data-snow-scene']});
+    new MutationObserver(update).observe(dialog, {attributes: true, attributeFilter: ['open']});
+    update();
   });
 })();
 
