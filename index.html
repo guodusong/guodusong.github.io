@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="1.27.0-rc1"><meta name="snow-frontend-version" content="12.26.0-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="1.28.0-rc1"><meta name="snow-frontend-version" content="12.27.0-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2326,6 +2326,99 @@ body[data-snow-mode="workspace"] .app {
   }
   #memberDialog.workspace-page[data-auth="false"] .member-ledger-entry .member-ledger-amount b {
     overflow-wrap: anywhere;
+  }
+}
+
+</style><style id="snowQuantityReadability">
+/* Quantity and helper readability. Existing native controls and business actions only. */
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-maintenance > summary {
+  font-size: 13.5px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-append-header {
+  flex-wrap: wrap;
+  line-height: 1.7;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-append-header strong {
+  font-size: 13.5px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-append-header > span,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary > span,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary div > span,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary small,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-append-footer p,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-renewal small {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #526457;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-quantity-label {
+  font-size: 13px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(44px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-presets button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 4px;
+  font-size: 13px !important;
+  line-height: 1.5;
+  white-space: normal;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-presets button:focus-visible {
+  outline: 2px solid #285740;
+  outline-offset: 2px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="true"] .member-auth .member-profile-note {
+  font-size: 13px;
+  line-height: 1.85;
+  color: #526457;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="true"] .member-auth .member-form label {
+  font-size: 13px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-balance-strip .member-stat > span,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-quick-link strong {
+  font-size: 13px;
+  line-height: 1.7;
+  text-wrap: balance;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-balance-strip .member-stat small,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-quick-link small,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="account"] .member-account-identity > p,
+#memberDialog.workspace-page[data-auth="false"] #memberMain[data-page="reviews"] .member-review-item > div > small {
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #526457;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-balance-strip .member-stat small,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-balance-strip .member-stat button {
+  text-wrap: balance;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="home"] .member-balance-strip .member-stat button {
+  font-size: 12.5px !important;
+  line-height: 1.8;
+}
+@media (max-width: 760px) {
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-append-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid #e2e8da;
+    padding-top: 14px;
+  }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary > div {
+    display: flex;
+    align-items: baseline;
+  }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"] #memberMain[data-page="assets"] .member-price-summary b {
+    font-size: 26px;
   }
 }
 
@@ -7460,7 +7553,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'12.26.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'12.27.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
