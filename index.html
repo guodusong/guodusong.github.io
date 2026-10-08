@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.1-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.2-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2799,6 +2799,16 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
   }
 }
 
+#courseSummary .course-inventory-scope {
+  flex-basis: 100%; display: flex; align-items: center; gap: 8px 16px;
+  flex-wrap: wrap; padding: 12px 0; border-bottom: 1px solid var(--border);
+  margin-bottom: 8px; line-height: 1.65; overflow-wrap: anywhere;
+}
+#courseSummary .course-scope-description { color: var(--text-secondary); }
+#courseSummary .course-show-all { min-height: 44px; padding: 8px 14px; }
+#courseSummary .course-expired-note { flex-basis: 100%; white-space: normal; line-height: 1.65; }
+#courseSummary:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; }
+
 </style></head><body>
 
 
@@ -3061,8 +3071,8 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
             <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
           </div>
           <details class="course-advanced"><summary>更多筛选</summary><div class="course-toolbar">
-            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">显示过期课程</label>
-            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox">显示学习地图额外条目</label>
+            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox" checked>显示过期课程</label>
+            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox" checked>显示学习地图额外条目</label>
           </div></details>
           <div id="courseBatchPanel" class="course-batch-panel hidden"></div>
           <div id="courseSummary" class="course-summary"></div>
@@ -6455,7 +6465,9 @@ function renderCourseList() {
   const container = $('courseListContainer');
   if (!container) return;
   if (!state.courseCourses.length) {
-    container.innerHTML = '<div class="empty">没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">可勾选“显示过期课程”或点击刷新</span></div>';
+    container.innerHTML = (state.courseAllCourses || []).length
+      ? '<div class="empty">没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">请检查上方筛选范围，或点击“显示全部课程”；不需要重新读取平台</span></div>'
+      : '<div class="empty">暂无课程<br><span style="font-size:.78rem;">平台未返回课程记录，可点击“刷新课程”重新读取。</span></div>';
     return;
   }
   const html = state.courseGroups.map(group => {
@@ -6490,11 +6502,23 @@ function renderCourseSummary() {
   const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
   const cacheLayer = state.courseListCache?.layer;
   const cacheText = cacheLayer === 'redis' ? 'Redis 短缓存' : cacheLayer === 'memory' ? '函数内短缓存' : cacheLayer === 'upstream' ? '平台实时读取' : '读取来源未知';
-  el.innerHTML = `<span class="course-summary-item"><strong>${total}</strong> 门课程</span>
+  const all = [...new Map((state.courseAllCourses || []).map(course => [String(course.courseId), course])).values()];
+  const hidden = Math.max(0, all.length - total);
+  const filters = [];
+  if ($('courseIncludeExpired')?.checked !== true) filters.push('隐藏过期 / 未开放课程');
+  if ($('courseIncludeMapOnly')?.checked !== true) filters.push('隐藏学习地图额外条目');
+  if ($('coursePendingOnly')?.checked === true) filters.push('只看待完成');
+  const range = filters.length ? '筛选中：' + filters.join('；') : '全部课程（含历史和学习地图条目）';
+  el.innerHTML = `<div class="course-inventory-scope" role="status" aria-live="polite">
+    <span>已读取 <strong>${all.length}</strong> 门 · 当前显示 <strong>${total}</strong> 门 · 已隐藏 <strong>${hidden}</strong> 门</span>
+    <span class="course-scope-description">${escapeHtml(range)}</span>
+    ${filters.length ? '<button type="button" class="btn btn-ghost btn-sm course-show-all" id="courseShowAll">显示全部课程</button>' : ''}
+  </div><span class="course-summary-item"><strong>${total}</strong> 门课程</span>
     <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
     <span class="course-summary-item danger" title="未获得平台整课完成标记的课程；包含信息待补全条目，不等同于可执行任务。"><strong>${pending}</strong> 门待完成</span>
     ${incomplete ? `<span class="course-summary-item" title="已计入待完成；详细资料未核实，仍保持只读。">其中 <strong>${incomplete}</strong> 门信息待补全（只读）</span>` : ''}
     <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
+      ${expired ? '<span class="course-summary-item course-expired-note">过期课程仅查看，不能执行；待完成数量包含过期未完成课程。</span>' : ''}
     <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>
     <span class="course-summary-item">${escapeHtml(cacheText)}</span>`;
 }
@@ -7939,7 +7963,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.1 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.2 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -8935,6 +8959,20 @@ document.addEventListener('DOMContentLoaded',()=>{
       new MutationObserver(normalize).observe(heading, {childList: true});
     }
   }, {once: true});
+})();
+
+</script><script id="snowCourseVisibilityUI">
+/* Local display controls only. No authentication, network or business writes. */
+(() => {
+  document.addEventListener('click', event => {
+    if (!event.target.closest?.('#courseShowAll')) return;
+    for (const [id, checked] of [['courseIncludeExpired',true],['courseIncludeMapOnly',true],['coursePendingOnly',false]]) {
+      const input = document.getElementById(id);
+      if (input && input.checked !== checked) input.click();
+    }
+    const summary = document.getElementById('courseSummary');
+    if (summary) { summary.setAttribute('tabindex','-1'); summary.focus(); }
+  });
 })();
 
 </script></body></html>
