@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.0-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.1-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2769,6 +2769,34 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
 }
 @media (prefers-reduced-motion: reduce) {
   #memberDialog.workspace-page *, body[data-snow-mode="workspace"] .app * { scroll-behavior: auto; transition: none; }
+}
+
+</style><style id="snowCourseCountDesign">
+/* Only the course-count labels introduced by this fix. No global redesign. */
+#courseListPanel .course-group-header {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  row-gap: 6px;
+}
+#courseListPanel .course-group-title {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+#courseListPanel .course-group-meta {
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.65;
+}
+@media (max-width: 760px) {
+  #courseListPanel .course-group-meta {
+    flex-basis: 100%;
+    margin: 4px 0 0;
+    text-align: left;
+  }
 }
 
 </style></head><body>
@@ -6067,7 +6095,9 @@ function courseExamExecutionEnabled() {
 }
 
 function courseHasPending(course) {
-  return Boolean(courseNextWorkflow(course) || courseHasPendingExam(course));
+  // List/filter semantics only, not permission to execute. Unknown details and
+  // map-only entries lack a whole-course completion flag and must not vanish.
+  return Boolean(course && !coursePlatformComplete(course));
 }
 
 function courseBatchWorkflow(course) {
@@ -6377,8 +6407,8 @@ function renderCourseCard(course) {
   const disabled = !allowed || completed || batchLocked || !state.courseAuthenticated || !state.courseApiCompatible ? ' disabled' : '';
   const selectedPart = state.coursePartChoices.get(String(course?.courseId || '')) || next || (pendingExam ? 'exam' : 'video');
   const workflowAttr = courseAttr(next || (pendingExam ? 'exam' : 'auto'));
-  const source = course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
-  const platformState = course?.courseFinished === true || course?.platformCompleted === true ? '平台整课标记已完成' : '平台整课仍待完成';
+  const source = course?.mapOnly === true ? '学习地图（详情待补全）' : course?.statusSource === 'unverified' ? '课程详情未核实' : course?.statusSource === 'course-detail' ? '平台课程详情' : '平台课程列表';
+  const platformState = completed ? '平台整课标记已完成' : '尚未标记整课完成';
   let nextHtml = '';
   let actionHtml = `<button class="btn btn-primary" data-course-action="complete" data-course-id="${courseId}"${disabled}>完成该课程</button>
     <div class="course-part-action"><select class="input" data-course-part="${courseId}" aria-label="选择要完成的环节"${disabled}>
@@ -6386,7 +6416,7 @@ function renderCourseCard(course) {
     </select><button class="btn btn-ghost" data-course-action="part" data-course-id="${courseId}"${disabled}>只完成所选项</button></div>`;
 
   if (!allowed) {
-    nextHtml = `<div class="course-next-step blocked">${course?.mapOnly === true ? '学习地图额外条目：只读展示' : escapeHtml(course?.eligibility?.reason || '当前课程不可执行')}</div>`;
+    nextHtml = `<div class="course-next-step blocked">${course?.mapOnly === true ? completed ? '平台已标记整课完成；详情未补全，仅只读展示。' : '计入待完成；课程详情待补全，目前仅只读展示，不执行任务。' : escapeHtml(course?.eligibility?.reason || '当前课程不可执行')}</div>`;
     actionHtml = '<span class="text-muted text-sm">仅查看，不执行写入</span>';
   } else if (completed) {
     nextHtml = '<div class="course-next-step">平台已确认整课完成，无需重复执行。</div>';
@@ -6438,7 +6468,7 @@ function renderCourseList() {
       <button class="course-group-header" type="button" data-course-group-toggle="${courseAttr(key)}" aria-expanded="${collapsed ? 'false' : 'true'}">
         <span class="course-group-chevron">${collapsed ? '▸' : '▾'}</span>
         <span class="course-group-title">${escapeHtml(group.groupName || '未命名课程组')}</span>
-        <span class="course-group-meta">${children.length} 门 · 平台完成 ${complete}/${children.length} · ${escapeHtml(groupSource)}</span>
+        <span class="course-group-meta">${children.length} 门 · 平台完成 ${complete}/${children.length} · 待完成 ${children.filter(courseHasPending).length} · ${escapeHtml(groupSource)}</span>
       </button>
       <div class="course-group-body${collapsed ? ' collapsed' : ''}">${children.map(renderCourseCard).join('')}</div>
     </section>`;
@@ -6449,16 +6479,21 @@ function renderCourseList() {
 function renderCourseSummary() {
   const el = $('courseSummary');
   if (!el) return;
-  const total = state.courseCourses.length;
-  const pending = state.courseCourses.filter(courseHasPending).length;
-  const expired = state.courseCourses.filter(course => course?.eligibility?.status === 'expired').length;
-  const platformCompleted = state.courseGroups.reduce((sum, group) => sum + Number(group.completedCount || 0), 0);
+  // The same course may appear in several learning-map groups. Count unique
+  // course IDs here rather than summing per-group completion counts.
+  const courses = [...new Map(state.courseCourses.map(course => [String(course.courseId), course])).values()];
+  const total = courses.length;
+  const pending = courses.filter(courseHasPending).length;
+  const expired = courses.filter(course => course?.eligibility?.status === 'expired').length;
+  const platformCompleted = courses.filter(coursePlatformComplete).length;
+  const incomplete = courses.filter(course => courseHasPending(course) && (course.mapOnly === true || course.statusSource === 'unverified')).length;
   const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
   const cacheLayer = state.courseListCache?.layer;
   const cacheText = cacheLayer === 'redis' ? 'Redis 短缓存' : cacheLayer === 'memory' ? '函数内短缓存' : cacheLayer === 'upstream' ? '平台实时读取' : '读取来源未知';
   el.innerHTML = `<span class="course-summary-item"><strong>${total}</strong> 门课程</span>
     <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
-    <span class="course-summary-item danger"><strong>${pending}</strong> 门待完成</span>
+    <span class="course-summary-item danger" title="未获得平台整课完成标记的课程；包含信息待补全条目，不等同于可执行任务。"><strong>${pending}</strong> 门待完成</span>
+    ${incomplete ? `<span class="course-summary-item" title="已计入待完成；详细资料未核实，仍保持只读。">其中 <strong>${incomplete}</strong> 门信息待补全（只读）</span>` : ''}
     <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
     <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>
     <span class="course-summary-item">${escapeHtml(cacheText)}</span>`;
@@ -7904,7 +7939,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.0 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.1 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
