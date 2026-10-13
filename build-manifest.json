@@ -1,5 +1,5 @@
 {
-  "name": "root-r10",
+  "name": "root-r4",
   "base": "/",
   "version": "15.0.0-alpha.60",
   "connectionProfile": "full-business-candidate",
@@ -386,12 +386,12 @@
       "sha256": "336BA562C4B8EFBC84E361ED319F43AF7ECCCE85C40910CD80576A5775292008"
     },
     {
-      "path": "assets/index-CSCU_tZ9.js",
-      "sha256": "D7508592903F7C7A35F3B9B755E9C697B2D626F315ECFB99C5442AB01E2B716F"
+      "path": "assets/index-0nfkpXKN.css",
+      "sha256": "4AD26415E18F1849E82BEB91E4562D659DADF39F210705A7BA5BBCA3E8E0102D"
     },
     {
-      "path": "assets/index-DuO7KxU-.css",
-      "sha256": "400FD8765299780A7B924CA51E094769791C5B6337DF00767F0A3BCE206EFE43"
+      "path": "assets/index-BzxLwL-o.js",
+      "sha256": "EB04D064B4548AD1C7C1F342DA3373EE148E45A0F83AC1B423F7EF7BCBDE4BE0"
     },
     {
       "path": "cedar.svg",
@@ -399,7 +399,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "97ECED8DE041D79A6CAC4E57899D98BE2741F5C5018FD07B20DE2189C376DA0D"
+      "sha256": "840962ECEA3FF2E20F2C2918BD243E193D5ADC433CAA976B03D4A65D82D48007"
     },
     {
       "path": "vendor/APACHE-2.0.txt",
@@ -418,5 +418,5 @@
       "sha256": "0DCBC967984DE297BD4233CBB77FEBAD8A396C72D8AC0CFAB09094D6D7F6E805"
     }
   ],
-  "maintenance": "alpha60-design-r1"
+  "maintenance": "alpha60-workspace-r1"
 }
