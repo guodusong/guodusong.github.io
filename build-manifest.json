@@ -386,8 +386,8 @@
       "sha256": "336BA562C4B8EFBC84E361ED319F43AF7ECCCE85C40910CD80576A5775292008"
     },
     {
-      "path": "assets/index-DLowgJze.js",
-      "sha256": "AA9932A9A194314983698EB8A5FA952D06F20D14ADB870B7A1DA8CCDC9AE10B3"
+      "path": "assets/index-Dkyj-n14.js",
+      "sha256": "FDDFE15E24361DE2873950D8EAA897B562832F6C4AEEA4841AA7E1F5D5B6C27E"
     },
     {
       "path": "assets/index-Ds_RYtcB.css",
@@ -399,7 +399,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "E952B90039824BC6609069969873892A438C3EB7B8E12ABC80E5B5BC08A90560"
+      "sha256": "75129155FC84E4F1F29A387FE717F0F9DEC2A41037B2CB1A4457D4FFD568DF60"
     },
     {
       "path": "vendor/APACHE-2.0.txt",
@@ -418,5 +418,5 @@
       "sha256": "0DCBC967984DE297BD4233CBB77FEBAD8A396C72D8AC0CFAB09094D6D7F6E805"
     }
   ],
-  "maintenance": "alpha60-learning-r2"
+  "maintenance": "alpha60-learning-r3"
 }
