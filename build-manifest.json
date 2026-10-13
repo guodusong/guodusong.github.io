@@ -1,5 +1,5 @@
 {
-  "name": "root-r4",
+  "name": "root-r2",
   "base": "/",
   "version": "15.0.0-alpha.60",
   "connectionProfile": "full-business-candidate",
@@ -390,8 +390,8 @@
       "sha256": "4AD26415E18F1849E82BEB91E4562D659DADF39F210705A7BA5BBCA3E8E0102D"
     },
     {
-      "path": "assets/index-BzxLwL-o.js",
-      "sha256": "EB04D064B4548AD1C7C1F342DA3373EE148E45A0F83AC1B423F7EF7BCBDE4BE0"
+      "path": "assets/index-B5YbgcgL.js",
+      "sha256": "4C654A5FB62710F697CEBC5FD7CF1B826C7E54C70741615ECF4AE894F8B610AC"
     },
     {
       "path": "cedar.svg",
@@ -399,7 +399,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "840962ECEA3FF2E20F2C2918BD243E193D5ADC433CAA976B03D4A65D82D48007"
+      "sha256": "2F1480437455D1DFE8076EA4C035843A2DCEDCD0F5E92DC4D58409C1870571BB"
     },
     {
       "path": "vendor/APACHE-2.0.txt",
@@ -418,5 +418,5 @@
       "sha256": "0DCBC967984DE297BD4233CBB77FEBAD8A396C72D8AC0CFAB09094D6D7F6E805"
     }
   ],
-  "maintenance": "alpha60-workspace-r1"
+  "maintenance": "alpha60-course-connect-r1"
 }
