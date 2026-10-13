@@ -386,8 +386,8 @@
       "sha256": "336BA562C4B8EFBC84E361ED319F43AF7ECCCE85C40910CD80576A5775292008"
     },
     {
-      "path": "assets/index--N3SALpy.js",
-      "sha256": "D1C3D2E9AF73AB144C53D40D51CB362E20936A3AFDD5EE52399AE78692C804F3"
+      "path": "assets/index-CeRwScpo.js",
+      "sha256": "7714338FBDD63B41AE280609F59925D4EEC4CEA3B8FA59F69D2CA73692D506CA"
     },
     {
       "path": "assets/index-DxTM5S9G.css",
@@ -399,7 +399,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "4DB1C98FBC43A62F217EE16E064BEFBBAA0922D62C75CB1BFA2C280E62186467"
+      "sha256": "C3F114BA310EF2A1E586E47E4CA8249CC165BD60DC3E7C343725A271C16C4B54"
     },
     {
       "path": "vendor/APACHE-2.0.txt",
@@ -418,7 +418,5 @@
       "sha256": "0DCBC967984DE297BD4233CBB77FEBAD8A396C72D8AC0CFAB09094D6D7F6E805"
     }
   ],
-  "sourceBuildManifestSha256": "319E5A1DF386D086F2C2A07C40EEF971C56169AA691E82AAF48D002640B96340",
-  "deploymentPreservesOriginalCnameBytes": true,
-  "presentationMaintenance": "alpha60-formal-copy-r1"
+  "maintenance": "alpha60-complete-r1"
 }
