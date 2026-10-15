@@ -1,7 +1,7 @@
 {
-  "name": "root-r6",
+  "name": "root-r4",
   "base": "/",
-  "version": "15.0.0-alpha.63-workspace.1",
+  "version": "15.0.0-alpha.64-credentials.1",
   "connectionProfile": "full-business-candidate",
   "productionConnectionEnabled": true,
   "productionPilotRoles": [
@@ -386,12 +386,12 @@
       "sha256": "336BA562C4B8EFBC84E361ED319F43AF7ECCCE85C40910CD80576A5775292008"
     },
     {
-      "path": "assets/index-BDlao92t.css",
-      "sha256": "1A71AD60AA99557F60C7E8250C03C444A3EFA152213BFCFCDC8A21B74DDB8E0A"
+      "path": "assets/index-By3GI8_w.js",
+      "sha256": "FBC62D00F72CDCBBA9B55EF79A1277FC575BE702657FB38ADBB4A400A3FA8FE6"
     },
     {
-      "path": "assets/index-Dm9oprCv.js",
-      "sha256": "FF327A292AA2BC018840C4284E91F6D69A0E6FB367048ED0F2DE1B7D43D48D09"
+      "path": "assets/index-CDG_jUim.css",
+      "sha256": "9E6B06C46A1839F857E747C554B40F69CD2FCE5C595BDED99A644E942097A86D"
     },
     {
       "path": "cedar.svg",
@@ -399,7 +399,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "5D8BD2F0C92C91C2E13DEF9FB89B4362F02FC7BEB17A57FC834E642E32B5127C"
+      "sha256": "B8DADC247E8D00878033D289A0F79EB92EB9999D4D885AB45090174DBE8032E6"
     },
     {
       "path": "snow-mark.svg",
