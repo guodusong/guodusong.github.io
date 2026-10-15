@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.2-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.3-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2809,7 +2809,52 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
 #courseSummary .course-expired-note { flex-basis: 100%; white-space: normal; line-height: 1.65; }
 #courseSummary:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; }
 
-</style></head><body>
+</style>
+<style id="snowPrimaryNavigationDesign">
+/* Three peer destinations. Shared sizing, spacing and selection on every scene. */
+body .app nav.snow-primary-nav,
+#memberDialog.workspace-page nav.snow-primary-nav {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 4px; width: max-content; max-width: 100%; padding: 4px;
+  margin-left: auto; border: 1px solid var(--snow-line, #dce3e9);
+  border-radius: 12px; background: var(--snow-surface, #fff); box-shadow: none;
+}
+body .app nav.snow-primary-nav > .snow-primary-link,
+#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 1 1 0; min-width: 80px; min-height: 44px; margin: 0; padding: 10px 20px;
+  border: 1px solid transparent; border-radius: 8px;
+  background: transparent; color: var(--snow-muted, #526175);
+  font: 500 14px/1.5 system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+  letter-spacing: 0; white-space: nowrap; cursor: pointer; box-shadow: none;
+  transition: background .15s, color .15s;
+}
+body .app nav.snow-primary-nav > .snow-primary-link:hover:not(.active),
+#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link:hover:not(.active) {
+  background: var(--snow-soft, #edf6f2); color: var(--snow-brand, #196b5c);
+}
+body .app nav.snow-primary-nav > .snow-primary-link.active,
+#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link.active {
+  background: #193f34; color: #fff; border-color: #193f34;
+}
+body .app nav.snow-primary-nav > .snow-primary-link:focus-visible,
+#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link:focus-visible {
+  outline: 3px solid var(--snow-brand, #196b5c); outline-offset: 2px;
+}
+body[data-snow-mode="workspace"] #snowLocation { margin-right: 280px; }
+@media (max-width: 760px) {
+  body .app nav.snow-primary-nav { width: 100%; }
+  body:is([data-snow-mode="workspace"], [data-snow-mode="login"]) .app nav.snow-primary-nav { position: static; margin-bottom: 16px; }
+  body[data-snow-mode="workspace"] #snowLocation { margin-right: 0; }
+  body .app nav.snow-primary-nav > .snow-primary-link,
+  #memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link { min-width: 0; padding: 8px 12px; font-size: 13px; }
+  #memberDialog.workspace-page { display: flex; flex-direction: column; }
+  #memberDialog.workspace-page .member-head { flex: 0 0 auto; height: auto; min-height: 72px; flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+  #memberDialog.workspace-page nav.snow-primary-nav { flex: 0 0 100%; width: 100%; margin: 0; }
+  #memberDialog.workspace-page > .member-layout { height: auto; flex: 1; min-height: 0; }
+}
+</style>
+</head><body>
 
 
 <!-- Toast -->
@@ -2862,9 +2907,9 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
 </header>
 
   <!-- Segmented Control -->
-  <nav class="segmented">
-    <button class="seg-btn active" data-panel="user">提取</button>
-    <button class="seg-btn" data-panel="admin">管理</button>
+  <nav class="segmented snow-primary-nav" aria-label="主导航">
+    <button type="button" class="seg-btn snow-primary-link active" data-panel="user" data-primary-destination="user" aria-controls="userPanel" aria-current="page">提取</button>
+    <button type="button" class="seg-btn snow-primary-link" data-panel="admin" data-primary-destination="admin" aria-controls="adminPanel" aria-current="false">后台</button>
   </nav>
 
   <!-- ═══ User Panel ═══ -->
@@ -7740,15 +7785,18 @@ window.SnowWorkspace = (() => {
     root.className = 'member-dialog workspace-page';
     root.hidden = true;
     root.setAttribute('aria-labelledby', 'memberHeading');
-    root.innerHTML = '<header class="member-head"><div class="member-logo">' + tree + '<strong>snow.</strong><span class="workspace-context">个人工作区</span></div><nav class="workspace-switch" aria-label="工作区入口"><button type="button" class="member-close" data-member-close>提取入口</button><button type="button" class="workspace-link" data-workspace-admin>管理后台</button></nav></header><div class="member-layout"><aside class="workspace-welcome" hidden><span class="workspace-kicker">YOUR PERSONAL WORKSPACE</span><h2>每一份权益，<br>都井井有条。</h2><p>登录自己的空间。<br>凭证、点数和学习任务，在这里各归其位。</p><ul><li><span>01</span><div><strong>凭证与设备</strong><small>查看已有权益，按需管理。</small></div></li><li><span>02</span><div><strong>点数与兑换</strong><small>看清余额与每一笔记录。</small></div></li><li><span>03</span><div><strong>任务与核对</strong><small>不确定的结果，先核对再继续。</small></div></li></ul><div class="workspace-welcome-tree" aria-hidden="true">' + tree + '</div></aside><nav class="member-nav" aria-label="用户中心导航"></nav><main class="member-main" id="memberMain"></main></div>';
+    root.innerHTML = '<header class="member-head"><div class="member-logo">' + tree + '<strong>snow.</strong><span class="workspace-context">个人工作区</span></div><nav class="workspace-switch snow-primary-nav" aria-label="主导航"><button type="button" class="member-close snow-primary-link" data-member-close data-primary-destination="user" aria-controls="userPanel" aria-current="false">提取</button><button type="button" class="snow-primary-link" data-workspace-personal data-primary-destination="personal" aria-controls="memberMain" aria-current="page">用户</button><button type="button" class="workspace-link snow-primary-link" data-workspace-admin data-primary-destination="admin" aria-controls="adminPanel" aria-current="false">后台</button></nav></header><div class="member-layout"><aside class="workspace-welcome" hidden><span class="workspace-kicker">YOUR PERSONAL WORKSPACE</span><h2>每一份权益，<br>都井井有条。</h2><p>登录自己的空间。<br>凭证、点数和学习任务，在这里各归其位。</p><ul><li><span>01</span><div><strong>凭证与设备</strong><small>查看已有权益，按需管理。</small></div></li><li><span>02</span><div><strong>点数与兑换</strong><small>看清余额与每一笔记录。</small></div></li><li><span>03</span><div><strong>任务与核对</strong><small>不确定的结果，先核对再继续。</small></div></li></ul><div class="workspace-welcome-tree" aria-hidden="true">' + tree + '</div></aside><nav class="member-nav" aria-label="用户中心导航"></nav><main class="member-main" id="memberMain"></main></div>';
     document.body.append(root);
     const nativeNav = document.getElementById('adminSubtabs');
     const mobileNav = document.querySelector('.snow-mobile-nav');
     const entry = document.createElement('button');
-    entry.type = 'button'; entry.className = 'member-entry'; entry.textContent = '用户中心';
+    entry.type = 'button'; entry.className = 'member-entry snow-primary-link'; entry.textContent = '用户';
+    entry.dataset.primaryDestination = 'personal';
+    entry.setAttribute('aria-controls', 'memberDialog');
+    entry.setAttribute('aria-current', 'false');
     entry.dataset.workspaceEntry = 'personal';
     entry.addEventListener('click', () => onOpen(false));
-    document.querySelector('.segmented')?.append(entry);
+    document.querySelector('.segmented')?.insertBefore(entry, document.querySelector('.segmented [data-panel="admin"]'));
     const desktopEntry = document.createElement('button');
     desktopEntry.type = 'button'; desktopEntry.className = 'subtab snow-accounts-entry';
     desktopEntry.dataset.workspaceEntry = 'accounts';
@@ -7761,11 +7809,28 @@ window.SnowWorkspace = (() => {
     mobileEntry.setAttribute('aria-label', '用户管理');
     mobileNav.insertBefore(mobileEntry, document.getElementById('snowMore'));
     const adminLink = root.querySelector('[data-workspace-admin]');
+    const extractLink = root.querySelector('[data-member-close]');
+    const personalLink = root.querySelector('[data-workspace-personal]');
     let current = {admin: false, isAuth: true, busy: false, page: 'home'};
     let nativeSelection = [];
     let nativeAttributes = [];
     const isOpen = () => !root.hidden;
     const nativeAdminReady = () => !document.getElementById('adminMain').classList.contains('hidden');
+    // Only presentation state: the original panel, authentication and request handlers stay intact.
+    function syncPrimaryNavigation() {
+      const destination = isOpen() ? (current.admin ? 'admin' : 'personal')
+        : document.getElementById('adminPanel').classList.contains('active') ? 'admin' : 'user';
+      for (const button of document.querySelectorAll('.snow-primary-nav [data-primary-destination]')) {
+        const active = button.dataset.primaryDestination === destination;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-current', active ? 'page' : 'false');
+      }
+    }
+    const primaryObserver = new MutationObserver(syncPrimaryNavigation);
+    for (const id of ['userPanel', 'adminPanel']) {
+      primaryObserver.observe(document.getElementById(id), {attributes: true, attributeFilter: ['class']});
+    }
+    syncPrimaryNavigation();
     const nativeButtons = () => [...nativeNav.querySelectorAll('[data-subtab]'), ...mobileNav.querySelectorAll('button:not(.snow-accounts-entry)')];
     function deactivateNativeSelection() {
       for (const node of nativeButtons()) {
@@ -7798,10 +7863,26 @@ window.SnowWorkspace = (() => {
         onOpen(true);
       });
     }
-    adminLink.addEventListener('click', () => requestLeave(() => {
+    // The existing capture-phase unsaved-edit guard still handles data-member-close.
+    extractLink.addEventListener('click', event => {
+      event.stopPropagation();
+      if (current.busy) return;
       onClose(true);
-      document.querySelector('.seg-btn[data-panel="admin"]').click();
-    }, adminLink));
+      const target = document.querySelector('.seg-btn[data-panel="user"]');
+      target.click(); target.focus({preventScroll: true});
+    });
+    personalLink.addEventListener('click', () => {
+      if (!current.admin) return;
+      requestLeave(() => { onClose(true); onOpen(false); personalLink.focus({preventScroll: true}); }, personalLink);
+    });
+    adminLink.addEventListener('click', () => {
+      if (current.admin) return;
+      requestLeave(() => {
+        onClose(true);
+        const target = document.querySelector('.seg-btn[data-panel="admin"]');
+        target.click(); target.focus({preventScroll: true});
+      }, adminLink);
+    });
     document.addEventListener('click', event => {
       if (!isOpen() || !current.admin) return;
       const target = event.target.closest('.snow-sidebar [data-subtab], .snow-sidebar [data-snow-public], .snow-mobile-nav [data-snow-go], #snowMoreDialog [data-snow-go], #snowMoreDialog [data-snow-public]');
@@ -7827,6 +7908,7 @@ window.SnowWorkspace = (() => {
       root.hidden = false;
       document.body.dataset.snowScene = admin ? 'accounts' : 'personal';
       setEntryState(admin);
+      syncPrimaryNavigation();
       return true;
     }
     function hide(preserveNative = false) {
@@ -7841,6 +7923,7 @@ window.SnowWorkspace = (() => {
       }
       nativeSelection = [];
       nativeAttributes = [];
+      syncPrimaryNavigation();
       if (!preserveNative) {
         const target = current.admin ? nativeNav.querySelector('[data-subtab="overview"]') : document.querySelector('.seg-btn[data-panel="user"]');
         target?.click(); target?.focus({preventScroll: true});
@@ -7852,8 +7935,9 @@ window.SnowWorkspace = (() => {
       root.querySelector('.workspace-welcome').hidden = !state.isAuth;
       const authLabel = root.querySelector('#memberMain').dataset.authMode === 'register' ? '用户注册' : '用户登录';
       root.querySelector('.workspace-context').textContent = state.admin ? '用户与权益' : state.isAuth ? authLabel : '个人工作区';
-      root.querySelector('[data-member-close]').textContent = state.admin ? '管理首页' : '提取入口';
-      adminLink.hidden = state.admin; adminLink.disabled = state.busy;
+      adminLink.hidden = false;
+      for (const button of [extractLink, personalLink, adminLink]) button.disabled = state.busy;
+      syncPrimaryNavigation();
       root.querySelector('.member-nav').setAttribute('aria-label', state.admin ? '用户与权益分类' : '用户中心导航');
       setEntryState(isOpen() && state.admin);
       if (isOpen()) document.title = 'Snow · ' + (state.admin ? '用户管理' : state.isAuth ? authLabel : '个人工作区');
@@ -7963,7 +8047,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.2 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.3 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
