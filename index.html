@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.3-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.5-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2853,6 +2853,102 @@ body[data-snow-mode="workspace"] #snowLocation { margin-right: 280px; }
   #memberDialog.workspace-page nav.snow-primary-nav { flex: 0 0 100%; width: 100%; margin: 0; }
   #memberDialog.workspace-page > .member-layout { height: auto; flex: 1; min-height: 0; }
 }
+</style>
+<style id="snowUnifiedAccessDesign">
+/* Authentication keeps the extraction page's outer frame and two-column stage. */
+body[data-snow-access] { overflow: auto; }
+body[data-snow-access="personal"] > .app { display: block !important; }
+body[data-snow-access="admin"] .header { display: flex; }
+body[data-snow-access="admin"] #adminPanel { display: none; }
+body[data-snow-access="admin"] .snow-topline { padding: 18px 0 12px; }
+body[data-snow-access="admin"] .app nav.snow-primary-nav {
+  position: static; inset: auto; z-index: auto; margin: 0 0 22px auto;
+}
+#userPanel > .card[data-login-scene="admin"],
+#userPanel > .card[data-login-scene="personal"] { min-height: 476px; }
+body[data-snow-access] .snow-public-art > svg { display: block; width: 300px; height: 202px; max-width: 100%; }
+
+/* Preserve the real member form, event delegation, validation and feedback. */
+#memberDialog.workspace-page.snow-access-embedded {
+  position: static; inset: auto; display: block; width: 100%; height: auto;
+  min-width: 0; max-width: none; max-height: none; margin: 0; padding: 0;
+  border: 0; border-radius: 0; box-shadow: none; overflow: visible;
+  background: transparent; color: var(--text); font: inherit;
+}
+#memberDialog.workspace-page.snow-access-embedded > .member-head,
+#memberDialog.workspace-page.snow-access-embedded .workspace-welcome,
+#memberDialog.workspace-page.snow-access-embedded .member-nav { display: none !important; }
+#memberDialog.workspace-page.snow-access-embedded > .member-layout {
+  display: block; height: auto; margin: 0; padding: 0; background: transparent; border: 0;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-main {
+  display: block; width: 100%; max-width: none; min-height: 0; padding: 0;
+  margin: 0; border: 0; background: transparent; overflow: visible;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-auth {
+  width: 100%; max-width: none; margin: 0; padding: 0; border: 0;
+  border-radius: 0; background: transparent; box-shadow: none;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-page-title { margin: 0 0 24px; padding: 0; border: 0; }
+#memberDialog.workspace-page.snow-access-embedded .member-page-title h2 {
+  font-size: 25px; font-weight: 500; line-height: 1.5; letter-spacing: -.5px; margin: 18px 0 10px;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-page-title .member-muted { font-size: 13px; line-height: 1.9; }
+#memberDialog.workspace-page.snow-access-embedded .member-form { display: grid; gap: 14px; margin: 0; }
+#memberDialog.workspace-page.snow-access-embedded .member-form label { font-size: 13px; font-weight: 400; color: var(--text); }
+#memberDialog.workspace-page.snow-access-embedded .member-form input {
+  min-width: 0; width: 100%; min-height: 44px; padding: 10px 13px;
+  border: 1px solid var(--field-border, #ccd5df); border-radius: 8px;
+  background: #fff; color: var(--text); font-size: 14px; box-sizing: border-box;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-form .member-password-field input { padding-right: 58px; }
+#memberDialog.workspace-page.snow-access-embedded .member-form > .member-primary { min-height: 49px; font-size: 13px; font-weight: 500; border-radius: 8px; }
+#memberDialog.workspace-page.snow-access-embedded .member-actions { margin-top: 12px; }
+#memberDialog.workspace-page.snow-access-embedded .member-auth-switch { min-height: 36px; font-size: 12px; padding: 6px 0; }
+#userPanel > .card #memberDialog.snow-access-embedded .member-profile-note {
+  margin: 12px 0 0; padding: 0; font-size: 11px; line-height: 1.8; color: var(--text-secondary); border: 0;
+}
+#memberDialog.workspace-page.snow-access-embedded .member-auth-feedback:empty { display: none; }
+
+/* The administrator form occupies the same white card, without its old split-screen story. */
+#userPanel > .card #adminLoginCard {
+  width: 100%; max-width: none; margin: 0; padding: 0; border: 0;
+  border-radius: 0; background: transparent; box-shadow: none;
+}
+#userPanel > .card #adminLoginCard .snow-form-heading { margin-bottom: 10px; }
+#userPanel > .card #adminLoginCard > .flex { display: grid; grid-template-columns: 1fr; gap: 15px; }
+#userPanel > .card #adminLoginCard #loginAdminBtn { width: 100%; min-height: 49px; }
+@media (max-width: 760px) {
+  body[data-snow-access="admin"] .snow-topline { padding: 15px 0; }
+  body[data-snow-access="admin"] .app nav.snow-primary-nav { margin-bottom: 16px; }
+  #userPanel > .card[data-login-scene="admin"], #userPanel > .card[data-login-scene="personal"] { min-height: 0; }
+  #memberDialog.workspace-page.snow-access-embedded .member-page-title h2 { font-size: 23px; }
+  #memberDialog.workspace-page.snow-access-embedded .member-form input { min-height: 48px; font-size: 16px; }
+}
+
+</style>
+<style id="snowSquareUIDesign">
+/* Important declarations in a layer override legacy unlayered !important rules.
+   This applies to current and dynamically created UI, including pseudo-elements. */
+@layer snowSquareUI {
+  *, *::before, *::after, *::backdrop, *::file-selector-button {
+    border-radius: 0 !important;
+    border-start-start-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+    border-end-start-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+  }
+  *::-webkit-scrollbar, *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-thumb, *::-webkit-scrollbar-corner {
+    border-radius: 0 !important;
+  }
+}
+/* The illustration's sun is artwork, not a rounded UI surface. Keep its circle
+   as an SVG background while the decorative element itself also has zero radius. */
+.snow-public-art .studio-sun {
+  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 86'%3E%3Ccircle cx='43' cy='43' r='43' fill='%23e3e9d4'/%3E%3C/svg%3E");
+}
+
 </style>
 </head><body>
 
@@ -8047,7 +8143,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.3 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.5 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -9058,5 +9154,114 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (summary) { summary.setAttribute('tabindex','-1'); summary.focus(); }
   });
 })();
+
+</script>
+<script id="snowUnifiedAccess">
+/* Presentation adapter only. Reparent original forms; never clone them or send requests. */
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+  const byId = id => document.getElementById(id);
+  const publicPanel = byId('userPanel'), adminPanel = byId('adminPanel');
+  const card = publicPanel.querySelector(':scope > .card');
+  const memberRoot = byId('memberDialog'), adminCard = byId('adminLoginCard');
+  const art = publicPanel.querySelector('.snow-public-art');
+  const originalArt = art.innerHTML;
+  const extractContent = document.createElement('div');
+  extractContent.id = 'snowExtractContent';
+  while (card.firstChild) extractContent.append(card.firstChild);
+  card.append(extractContent, adminCard);
+  adminCard.hidden = true;
+  const nav = document.querySelector('.app .snow-primary-nav');
+  const snowflakes = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 202\" fill=\"none\" aria-hidden=\"true\">\n  <circle cx=\"208\" cy=\"52\" r=\"40\" fill=\"#e5eee9\"/>\n  <circle cx=\"92\" cy=\"115\" r=\"49\" fill=\"#eef3ef\"/>\n  <g stroke=\"#567d70\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" transform=\"translate(139 98)\">\n    <path d=\"M0-53V53M-45.9-26.5 45.9 26.5M-45.9 26.5 45.9-26.5\"/>\n    <path d=\"m-11-42 11 11 11-11m-22 84 11-11 11 11M-42-11l15-4-4-15M42 11l-15 4 4 15M-31 30l4-15-15-4M31-30l-4 15 15 4\"/>\n    <path d=\"m0-19 16.5 9.5v19L0 19l-16.5-9.5v-19Z\" stroke=\"#8ca99a\" stroke-width=\"1.8\"/>\n  </g>\n  <g stroke=\"#9aafa3\" stroke-width=\"2\" stroke-linecap=\"round\" transform=\"translate(226 112) rotate(15)\">\n    <path d=\"M0-27V27M-23.4-13.5 23.4 13.5M-23.4 13.5 23.4-13.5m-6-8 6 6 6-6m-12 43 6-6 6 6M-22-4l8-2-2-8M22 4l-8 2 2 8M-16 14l2-8-8-2M16-14l-2 8 8 2\"/>\n  </g>\n  <g stroke=\"#79978a\" stroke-width=\"1.7\" stroke-linecap=\"round\" transform=\"translate(62 58) rotate(-12)\">\n    <path d=\"M0-20V20M-17.3-10 17.3 10M-17.3 10 17.3-10m-5-6 5 5 5-5m-10 32 5-5 5 5M-16-3l6-2-2-6M16 3l-6 2 2 6M-12 11l2-6-6-2M12-11l-2 6 6 2\"/>\n  </g>\n  <g fill=\"#b7c9be\"><circle cx=\"41\" cy=\"127\" r=\"3\"/><circle cx=\"184\" cy=\"157\" r=\"3\"/><circle cx=\"257\" cy=\"59\" r=\"2.4\"/><circle cx=\"111\" cy=\"25\" r=\"2.4\"/><circle cx=\"73\" cy=\"161\" r=\"2\"/></g>\n  <g stroke=\"#a8bfb2\" stroke-width=\"1.5\" stroke-linecap=\"round\"><path d=\"M255 145v10m-5-5h10M180 31v8m-4-4h8\"/></g>\n  <path d=\"M21 189H281\" stroke=\"#d1dcc4\"/>\n</svg>\n";
+  const cabin = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 202\" fill=\"none\" aria-hidden=\"true\">\n  <circle cx=\"197\" cy=\"54\" r=\"44\" fill=\"#e3e9d4\"/>\n  <path d=\"M25 173c31-11 66-10 94-3 40-12 80-14 154 2v14H25Z\" fill=\"#eaf0e9\"/>\n  <g fill=\"#a4b794\"><path d=\"m47 47-18 30h10L21 103h13l-20 31h65l-20-31h13L54 77h11Z\"/><path d=\"M43 128h8v43h-8Z\"/></g>\n  <g fill=\"#638460\"><path d=\"m87 25-23 38h13L53 98h16l-29 39h94l-29-39h16L97 63h13Z\"/><path d=\"M83 130h9v45h-9Z\"/></g>\n  <g stroke=\"#f5f8f2\" stroke-width=\"3\" stroke-linecap=\"round\"><path d=\"m64 99 18-27m-42 66 32-38M86 48v99m0-49 15-12m-15 30-19-14\"/></g>\n  <path d=\"M207 70h13v31h-13Z\" fill=\"#829274\"/><path d=\"M204 68h19v6h-19Z\" fill=\"#f5f8f2\"/>\n  <path d=\"M121 111h99v62h-99Z\" fill=\"#a0af89\"/>\n  <path d=\"m108 116 61-55 66 55Z\" fill=\"#496f48\"/>\n  <path d=\"m108 116 61-55 66 55-12-3-54-41-49 42Z\" fill=\"#f6f8f3\"/>\n  <path d=\"m119 115 50-43 54 41\" stroke=\"#dbe5d6\" stroke-width=\"2\"/>\n  <path d=\"M165 135h22v38h-22Z\" fill=\"#526d50\"/>\n  <circle cx=\"181\" cy=\"155\" r=\"1.4\" fill=\"#e9ead7\"/>\n  <path d=\"M134 132h21v21h-21ZM198 132h14v21h-14Z\" fill=\"#eee8bf\"/>\n  <path d=\"M145 132v21m-11-10h21m50-11v21m-7-10h14\" stroke=\"#7f916e\" stroke-width=\"2\"/>\n  <path d=\"M127 156h29m34 4h24M119 173h105\" stroke=\"#eef3e9\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n  <g fill=\"#78966b\"><path d=\"m251 54-18 29h10l-20 28h13l-24 35h78l-24-35h13l-20-28h10Z\"/><path d=\"M247 139h8v36h-8Z\"/></g>\n  <path d=\"m232 86 15-23m-25 83 24-31m5-42v80m0-38 13-11m-13 29-16-12\" stroke=\"#f3f7ee\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n  <path d=\"M190 55c-7-8 8-11 1-19s6-11 2-19\" stroke=\"#c9d7cb\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n  <g fill=\"#b8cabc\"><circle cx=\"35\" cy=\"30\" r=\"2.5\"/><circle cx=\"117\" cy=\"29\" r=\"2.8\"/><circle cx=\"145\" cy=\"47\" r=\"2\"/><circle cx=\"270\" cy=\"32\" r=\"2.4\"/><circle cx=\"231\" cy=\"47\" r=\"2\"/><circle cx=\"27\" cy=\"91\" r=\"2\"/><circle cx=\"113\" cy=\"83\" r=\"2.7\"/><circle cx=\"276\" cy=\"106\" r=\"2.5\"/><circle cx=\"70\" cy=\"161\" r=\"2.2\"/></g>\n  <path d=\"M21 189H281\" stroke=\"#d1dcc4\"/>\n</svg>\n";
+  let lastArt = 'extract';
+
+  function moveRoot(parent) {
+    if (memberRoot.parentElement === parent) return;
+    const focused = document.activeElement;
+    parent.append(memberRoot);
+    if (memberRoot.contains(focused)) focused.focus({preventScroll: true});
+  }
+
+  function synchronize() {
+    const memberOpen = !memberRoot.hidden;
+    const memberAuth = memberOpen && memberRoot.dataset.auth === 'true';
+    const administratorReady = !byId('adminMain').classList.contains('hidden');
+    const administratorSelected = adminPanel.classList.contains('active');
+    const scene = memberAuth ? 'personal' : memberOpen ? null
+      : administratorSelected ? (administratorReady ? null : 'admin') : 'extract';
+
+    if (memberAuth) {
+      memberRoot.classList.add('snow-access-embedded');
+      moveRoot(card);
+      if (administratorSelected) switchPanel('user');
+    } else {
+      moveRoot(document.body);
+      memberRoot.classList.remove('snow-access-embedded');
+    }
+    if (scene) {
+      if (document.body.dataset.snowAccess !== scene) document.body.dataset.snowAccess = scene;
+      if (!publicPanel.classList.contains('active')) publicPanel.classList.add('active');
+      card.dataset.loginScene = scene;
+    } else {
+      if (document.body.hasAttribute('data-snow-access')) delete document.body.dataset.snowAccess;
+      delete card.dataset.loginScene;
+      if (administratorSelected && publicPanel.classList.contains('active')) publicPanel.classList.remove('active');
+    }
+    extractContent.hidden = scene !== 'extract';
+    adminCard.hidden = scene !== 'admin';
+    if (scene && scene !== lastArt) {
+      art.innerHTML = scene === 'personal' ? snowflakes : scene === 'admin' ? cabin : originalArt;
+      art.dataset.decoration = scene;
+      lastArt = scene;
+    }
+    if (memberAuth) {
+      const title = memberRoot.querySelector('.member-page-title');
+      if (title && !title.querySelector('.snow-access-eyebrow')) {
+        const eyebrow = document.createElement('div');
+        eyebrow.className = 'snow-eyebrow snow-access-eyebrow';
+        eyebrow.textContent = '02 / PERSONAL ACCOUNT';
+        title.prepend(eyebrow);
+      }
+    }
+    const busy = memberAuth && byId('memberMain').getAttribute('aria-busy') === 'true';
+    for (const button of nav.querySelectorAll('button')) button.disabled = busy;
+    if (scene) {
+      const label = scene === 'personal'
+        ? (byId('memberMain').dataset.authMode === 'register' ? '用户注册' : '用户登录')
+        : scene === 'admin' ? '管理员登录' : '用户提取';
+      const location = byId('snowLocation');
+      if (location.textContent !== label) location.textContent = label;
+      const title = 'Snow · ' + label;
+      if (document.title !== title) document.title = title;
+    }
+  }
+
+  // Native top-level navigation is now visible during member authentication.
+  // Forward to the existing shell's leave handlers, including its busy guards.
+  nav.addEventListener('click', event => {
+    if (memberRoot.hidden || memberRoot.dataset.auth !== 'true') return;
+    const button = event.target.closest('[data-primary-destination]');
+    if (!button || !nav.contains(button)) return;
+    event.preventDefault(); event.stopImmediatePropagation();
+    const destination = button.dataset.primaryDestination;
+    if (destination === 'personal') return;
+    const target = memberRoot.querySelector(destination === 'admin' ? '[data-workspace-admin]' : '[data-member-close]');
+    target?.click();
+    if (memberRoot.hidden) button.focus({preventScroll: true});
+  }, true);
+
+  const observer = new MutationObserver(synchronize);
+  observer.observe(memberRoot, {attributes: true, attributeFilter: ['hidden', 'data-auth', 'data-role']});
+  for (const panel of [adminPanel, publicPanel, byId('adminMain')]) {
+    observer.observe(panel, {attributes: true, attributeFilter: ['class']});
+  }
+  observer.observe(byId('memberMain'), {attributes: true, attributeFilter: ['data-auth-mode', 'aria-busy']});
+  observer.observe(byId('snowLocation'), {childList: true});
+  // Use the original admin card and original identifiers/event handlers.
+  const adminEyebrow = adminCard.querySelector('.snow-form-heading .snow-eyebrow');
+  if (adminEyebrow) adminEyebrow.textContent = '03 / ADMINISTRATOR ACCESS';
+  synchronize();
+});
 
 </script></body></html>
