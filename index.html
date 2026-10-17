@@ -951,7 +951,7 @@ body[data-studio-page=overview] .stats{display:none!important}.studio-hero{backg
 /* Credentials: list browsing, contextual multi-select, then explicit record management. */
 body[data-studio-page=tokens] .stats{border:0;border-bottom:1px solid var(--border);background:transparent;border-radius:0;padding:3px 0 24px;margin-bottom:27px;max-width:690px}.stats .stat-num{font-size:29px;font-weight:500}.stats .stat-label{font-size:11px}.stats .stat-item{padding:0 25px}.stats .stat-item:first-child{padding-left:0}.stats .stat-item.danger .stat-num{color:var(--text)}.credentials-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:21px}.credentials-heading h3{font-size:17px;font-weight:500;margin:0}.credentials-heading p{font-size:12px;color:var(--product-muted);margin-top:6px}.credentials-toolbar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:19px}.credentials-filter-group,.credentials-tools{display:flex;align-items:center;gap:9px}.filter-summary{font-size:12px;color:var(--product-muted)}.credentials-toolbar .btn{min-height:38px;font-size:12px}.credentials-filter-group #clearFilterBtn{border:0;padding:7px;color:#687d68}.action-menu{position:relative}.action-menu>summary{list-style:none;border:1px solid var(--border);border-radius:8px;min-height:38px;padding:8px 13px;font-size:12px;cursor:pointer}.action-menu>summary::-webkit-details-marker{display:none}.action-menu>summary::after{content:'⌄';margin-left:10px}.action-menu-items{position:absolute;right:0;top:calc(100% + 7px);min-width:170px;background:white;border:1px solid var(--border);box-shadow:0 9px 25px #263b3010;border-radius:10px;padding:6px;z-index:20}.action-menu-items>.btn{display:block;text-align:left;width:100%;border:0;border-radius:6px}.action-menu-items>.btn:last-child{margin-top:5px;border-top:1px solid var(--border);border-radius:0}.credentials-bulk{display:flex;align-items:center;gap:18px;padding:10px 16px;background:#eaf0e3;border-radius:8px;margin-bottom:15px;font-size:13px}.credentials-bulk #deleteSelectedBtn{margin-left:auto}.credentials-select-all{display:none;align-items:center;gap:10px;font-size:12px;padding:13px 18px;border-bottom:1px solid var(--border)}#subTokens[data-selecting=true] .credentials-select-all{display:flex}.credential-select{display:none}#subTokens[data-selecting=true] .credential-select{display:block;position:absolute;left:16px;top:calc(50% - 10px)}.credential-select input,.credentials-select-all input{width:18px;height:18px;accent-color:var(--accent)}.credentials-list{border-top:1px solid var(--border)}.credentials-columns{display:grid;grid-template-columns:minmax(170px,1fr) 130px 155px 78px;gap:30px;font-size:11px;color:var(--product-muted);padding:14px 19px}.credential-row{position:relative;display:grid;grid-template-columns:minmax(170px,1fr) 130px 155px 78px;align-items:center;gap:30px;background:white;padding:22px 19px;border-bottom:1px solid var(--border-light)}.credential-row:hover{background:#fcfdf9}.credential-row.selected{background:#eff4e8}#subTokens[data-selecting=true] .credential-row,#subTokens[data-selecting=true] .credentials-columns{padding-left:50px}.credential-identity{min-width:0}.credential-name{display:block;background:transparent;border:0;font-size:15px;font-weight:550;color:var(--text);text-align:left;padding:0;min-height:28px;overflow-wrap:anywhere;cursor:pointer}.credential-identity small{display:block;color:var(--product-muted);font-size:11px;margin-top:5px;overflow-wrap:anywhere}.credential-balance{display:flex;align-items:baseline;gap:8px}.credential-balance strong{font-size:23px;font-weight:500;font-variant-numeric:tabular-nums}.credential-balance span{font-size:11px;color:var(--product-muted)}.credential-balance.exhausted strong{color:#9b6c47}.credential-usage{display:grid;gap:5px;font-size:11px;color:var(--product-muted)}.credential-usage b{font-weight:400;color:var(--body-copy);margin-left:10px;font-variant-numeric:tabular-nums}.credential-manage{min-height:38px;font-size:12px;padding:8px 12px;white-space:nowrap}.credential-manage span{margin-left:5px}
 /* One consistent side panel. Original submit/confirmation handlers are retained. */
-.product-sheet{width:480px;max-width:calc(100vw - 20px);height:100dvh;max-height:100dvh;margin:0 0 0 auto;border:0;border-radius:16px 0 0 16px;background:#fafbf7;color:var(--text);padding:0;overflow:auto;box-shadow:-18px 0 60px #172e2418}.product-sheet::backdrop{background:#1a2d254f;backdrop-filter:blur(3px)}body:has(.product-sheet[open]){overflow:hidden}.product-sheet-header{position:sticky;top:0;z-index:2;background:#fafbf7;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:25px 27px;border-bottom:1px solid var(--border)}.product-sheet-header h2{font-size:21px;font-weight:500;margin-top:7px}.product-sheet-body{padding:26px 27px 36px}.sheet-close{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 11px;min-height:40px;color:var(--product-muted);font-size:12px;cursor:pointer}.product-sheet .inline-form.open{background:none;border:0;padding:0;margin:0;box-shadow:none;max-height:none;overflow:visible}.product-sheet .inline-form>.flex{display:grid;grid-template-columns:1fr;gap:22px}.product-sheet .inline-form #addTokenBtn{margin-top:5px;width:100%}.product-sheet textarea{min-height:180px}.credential-detail-name{font-size:25px;line-height:1.6;overflow-wrap:anywhere}.credential-detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:25px 0 27px;margin:15px 0 10px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.credential-detail-stats strong{display:block;font-size:27px;font-weight:500;font-variant-numeric:tabular-nums}.credential-detail-stats span{font-size:11px;color:var(--product-muted)}.credential-detail-actions{display:grid}.detail-action{position:relative;display:grid;gap:6px;text-align:left;padding:22px 22px 22px 0;border:0;border-bottom:1px solid var(--border);background:none;cursor:pointer}.detail-action::after{content:'→';position:absolute;right:0;top:30px;color:#80937b}.detail-action strong{font-size:14px;font-weight:500;color:var(--text)}.detail-action span{font-size:12px;color:var(--product-muted)}.detail-action:hover strong{color:#54794a}.credential-danger{margin-top:26px}.credential-danger summary{font-size:13px;color:#90634d;cursor:pointer;min-height:44px}.credential-danger p{font-size:12px;color:var(--product-muted);line-height:1.9;margin:9px 0 15px}.credential-danger .btn{width:100%;display:block;margin-top:10px}
+.product-sheet{width:480px;max-width:calc(100vw - 20px);height:100dvh;max-height:100dvh;margin:0 0 0 auto;border:0;border-radius:16px 0 0 16px;background:#fafbf7;color:var(--text);padding:0;overflow:auto;box-shadow:-18px 0 60px #172e2418}.product-sheet::backdrop{background:#1a2d254f;backdrop-filter:blur(3px)}body:has(.product-sheet[open]){overflow:hidden}.product-sheet-header{position:sticky;top:0;z-index:2;background:#fafbf7;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:25px 27px;border-bottom:1px solid var(--border)}.product-sheet-header h2{font-size:21px;font-weight:500;margin-top:7px}.product-sheet-body{padding:26px 27px 36px}.sheet-close{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 11px;min-height:40px;color:var(--product-muted);font-size:12px;cursor:pointer}.product-sheet .inline-form.open{background:none;border:0;padding:0;margin:0;box-shadow:none;max-height:none;overflow:visible}.product-sheet .inline-form>.flex{display:grid;grid-template-columns:1fr;gap:22px}.product-sheet .inline-form #addTokenBtn{margin-top:5px;width:100%}.product-sheet textarea{min-height:180px}.credential-detail-name{font-size:25px;line-height:1.6;overflow-wrap:anywhere}.credential-detail-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:25px 0 27px;margin:15px 0 10px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.credential-detail-stats strong{display:block;font-size:27px;font-weight:500;font-variant-numeric:tabular-nums}.credential-detail-stats span{font-size:11px;color:var(--product-muted)}.credential-detail-actions{display:grid}.detail-action{position:relative;display:grid;gap:6px;text-align:left;padding:22px 0;border:0;border-bottom:1px solid var(--border);background:none;cursor:pointer}.detail-action strong{font-size:14px;font-weight:500;color:var(--text)}.detail-action span{font-size:12px;color:var(--product-muted)}.detail-action:hover strong{color:#54794a}.credential-danger{margin-top:26px}.credential-danger summary{font-size:13px;color:#90634d;cursor:pointer;min-height:44px}.credential-danger p{font-size:12px;color:var(--product-muted);line-height:1.9;margin:9px 0 15px}.credential-danger .btn{width:100%;display:block;margin-top:10px}
 /* Platform connection: restrained form width, connected summary, secondary technical detail. */
 .learning-connection{padding:26px 0 23px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:27px!important;background:none;border-radius:0}.learning-connection .course-head{align-items:flex-start;gap:25px}.learning-connection .course-head h3{font-size:17px}.learning-connection .course-head p{font-size:12px;margin-top:7px}.learning-connection .course-badges{margin-left:auto}.learning-connection #courseAuthBadge{font-size:11px;padding:5px 11px}.learning-connection .course-connection{background:none;border:0;padding:0;margin:24px 0 0;max-width:580px;border-radius:0}.learning-connection .course-connection>summary{font-size:14px;list-style:none;font-weight:500;padding:0;min-height:0;cursor:default}.learning-connection .course-connection>summary::-webkit-details-marker{display:none}.learning-connection .course-login-grid{grid-template-columns:1fr 1fr;gap:18px;margin-top:17px}.learning-connection .course-login-grid label{font-size:12px}.learning-connection .course-actions{margin-top:19px}.learning-connection .course-session-message{max-width:760px;border:0;border-left:2px solid #b8c7b0;border-radius:0;background:transparent;padding:4px 0 4px 13px;margin:18px 0 0;font-size:12px}.learning-connection[data-connected=true] .course-session-message{font-size:11px;color:var(--product-muted);border:0;padding:0;margin-top:8px}.connection-ready{font-size:13px;margin:17px 0 0;color:var(--body-copy)}.connection-details{margin-top:16px}.connection-details summary{color:var(--product-muted);font-size:12px;cursor:pointer;min-height:36px;padding:6px 0}.connection-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:13px 0}.connection-meta .btn{font-size:12px;min-height:36px}.learning-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:0 0 15px}.learning-toolbar>div:first-child{margin-right:auto}.learning-toolbar h3{font-size:17px;font-weight:500}.learning-toolbar p{font-size:12px;color:var(--product-muted);margin:6px 0}.learning-toolbar .toolbar-sep{display:none}.learning-filters{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin:12px 0 17px;font-size:12px}.learning-filters>.course-advanced{margin:0;border:0;padding:0}.learning-filters>.course-advanced>summary{font-size:12px;min-height:36px;padding:6px 0}.learning-filters .course-toolbar{border:0;padding:8px 0}.learning-connection .course-challenge{max-width:580px}.learning-connection[data-busy=true] #courseLoginBtn{cursor:progress}
 /* Task processing is not platform completion. Progress includes settled failures/cancellations. */
@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.11-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.17-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -3279,6 +3279,158 @@ body[data-snow-mode="workspace"] .app > .snow-topline > span {
 }
 
 </style>
+<style id="snowUnifiedInputFocus">
+/* Reference: administrator login input = a 1px green border, no halo or outline.
+   Restrict the reset to text-entry controls; keep button/checkbox/file focus cues. */
+:root { --snow-input-focus-color: #176b5b; }
+@layer snowUnifiedInputFocus {
+  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select):is(:focus,:focus-visible) {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select):not([aria-invalid="true"]):is(:focus,:focus-visible) {
+    border-color: var(--snow-input-focus-color) !important;
+  }
+  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select)[aria-invalid="true"]:is(:focus,:focus-visible) {
+    border-color: #9f6a55 !important;
+  }
+}
+/* Important declarations in a named layer consistently override old per-page
+   focus styles. Invalid-field border colors and existing validation stay intact. */
+
+</style>
+<style id="snowInteractionMotion">
+/* Presentation only. Keep native click, toggle, dialog and request timing intact.
+   All additions are opt-in to normal motion; the existing reduced-motion layer remains. */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.member-quick-link,.studio-continue,.snow-shortcut,.detail-action,
+      .studio-text-button,.text-action,.credential-name,.credential-manage,
+      .member-nav-links button,.member-tabs button,summary) {
+    transition: background-color 160ms ease, border-color 160ms ease,
+      color 160ms ease, transform 120ms ease, filter 120ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    :is(.member-quick-link,.studio-continue,.snow-shortcut):hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: #b8cdc1;
+      background-color: #f7faf8;
+    }
+    :is(.detail-action,.credential-name):hover:not(:disabled) {
+      background-color: #f0f6f2;
+    }
+    :is(.studio-text-button,.text-action):hover:not(:disabled) {
+      color: #176b5b;
+    }
+  }
+  :is(.member-quick-link,.studio-continue,.snow-shortcut,.detail-action,
+      .studio-text-button,.text-action,.credential-name):active:not(:disabled) {
+    transform: translateY(1px);
+    filter: brightness(.97);
+  }
+
+  /* Menus enter as one surface, not as individually moving options. */
+  :is(.action-menu,.member-row-menu)[open] > :not(summary) {
+    animation: snowMenuReveal 140ms ease-out;
+  }
+
+  /* Existing records stay visible while fetching; only newly rendered rows reveal. */
+  :is(.activity-entry,.question-record,.credential-row,.device-row,.member-user-row) {
+    animation: snowRecordReveal 180ms ease-out;
+  }
+  :is(#logsContainer,#questionSearchResult) {
+    transition: opacity 140ms ease;
+  }
+  :is(#logsContainer,#questionSearchResult)[aria-busy="true"] { opacity: .65; }
+  .list-feedback[data-state="loading"]::before {
+    animation: snowLoadingBreathe 1s ease-in-out infinite alternate;
+  }
+  .interaction-error:not([hidden]) { animation: snowRecordReveal 160ms ease-out; }
+
+  /* Native details still own their open state and keyboard behavior. */
+  :is(.device-inspector,.question-inspector,.module-help,.credential-danger,
+      .record-danger,.access-alternative,.access-maintenance)[open] > :not(summary) {
+    animation: snowContentReveal 160ms ease-out;
+  }
+  @supports (interpolate-size: allow-keywords) and selector(details::details-content) {
+    :is(.device-inspector,.question-inspector,.module-help,.credential-danger,
+        .record-danger,.access-alternative,.access-maintenance)::details-content {
+      interpolate-size: allow-keywords;
+      height: 0;
+      overflow: clip;
+      transition: height 180ms cubic-bezier(.2,.8,.2,1),
+        content-visibility 180ms allow-discrete;
+    }
+    :is(.device-inspector,.question-inspector,.module-help,.credential-danger,
+        .record-danger,.access-alternative,.access-maintenance)[open]::details-content {
+      height: auto;
+    }
+  }
+
+  /* Baseline fallback: a short entry. No timeout or delayed business callback. */
+  :is(#confirmOverlay,#inputOverlay,#editQuestionModal,#excelConfigModal,
+      #questionStatsModal).show > :is(.confirm-box,.input-box,.interaction-card,.qstats-card) {
+    animation: snowContentReveal 180ms ease-out;
+  }
+  dialog.product-sheet[open] { animation: snowContentReveal 180ms ease-out; }
+
+  /* Supporting browsers also fade closed surfaces without deferring their close.
+     A closed overlay immediately stops accepting pointer events. */
+  @supports (transition-behavior: allow-discrete) {
+    :is(#confirmOverlay,#inputOverlay,#editQuestionModal,#excelConfigModal,#questionStatsModal) {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease, display 160ms allow-discrete;
+    }
+    :is(#confirmOverlay,#inputOverlay,#editQuestionModal,#excelConfigModal,#questionStatsModal).show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    dialog.product-sheet {
+      opacity: 0;
+      transform: translateX(12px);
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 180ms cubic-bezier(.2,.8,.2,1),
+        display 180ms allow-discrete, overlay 180ms allow-discrete;
+    }
+    dialog.product-sheet[open] {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      animation: none;
+    }
+    dialog.product-sheet::backdrop {
+      opacity: 0;
+      transition: opacity 160ms ease, display 180ms allow-discrete, overlay 180ms allow-discrete;
+    }
+    dialog.product-sheet[open]::backdrop { opacity: 1; }
+    @starting-style {
+      :is(#confirmOverlay,#inputOverlay,#editQuestionModal,#excelConfigModal,#questionStatsModal).show {
+        opacity: 0;
+      }
+      dialog.product-sheet[open] { opacity: 0; transform: translateX(12px); }
+      dialog.product-sheet[open]::backdrop { opacity: 0; }
+    }
+    @media (max-width: 760px) {
+      dialog.product-sheet { transform: translateY(12px); }
+      dialog.product-sheet[open] { transform: translateY(0); }
+      @starting-style { dialog.product-sheet[open] { opacity: 0; transform: translateY(12px); } }
+    }
+  }
+}
+
+@keyframes snowMenuReveal {
+  from { opacity: .4; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes snowContentReveal {
+  from { opacity: .5; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes snowRecordReveal { from { opacity: .55; } to { opacity: 1; } }
+@keyframes snowLoadingBreathe { from { opacity: .35; } to { opacity: 1; } }
+
+</style>
 </head><body>
 
 
@@ -3797,9 +3949,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const status=el('snowCourseState'),shortcuts=home.querySelector('.snow-shortcuts');
   home.replaceChildren();
   const hero=make('section','studio-hero');
-  hero.innerHTML='<div class="studio-hero-copy"><div class="snow-eyebrow">MAKE ROOM FOR PROGRESS</div><h2>每一点进步，<br>都值得被看见。</h2><p>从一门课程开始，让学习更有条理。</p><button class="btn btn-primary" data-snow-go="course">进入学习管理 <span aria-hidden="true">→</span></button></div><div class="studio-orbit" role="img"><div><strong id="studioCompleted">—</strong><span id="studioTotal"></span><small>平台确认完成</small></div></div><span class="studio-hero-tree" aria-hidden="true">'+tree+'</span>';
+  hero.innerHTML='<div class="studio-hero-copy"><div class="snow-eyebrow">MAKE ROOM FOR PROGRESS</div><h2>每一点进步，<br>都值得被看见。</h2><p>从一门课程开始，让学习更有条理。</p><button class="btn btn-primary" data-snow-go="course">进入学习管理</button></div><div class="studio-orbit" role="img"><div><strong id="studioCompleted">—</strong><span id="studioTotal"></span><small>平台确认完成</small></div></div><span class="studio-hero-tree" aria-hidden="true">'+tree+'</span>';
   const columns=make('div','studio-home-columns');
-  columns.innerHTML='<section><div class="studio-section-heading"><h3>接下来，继续学习</h3><button class="studio-text-button" data-snow-go="course">查看课程 →</button></div><div id="studioContinue"></div><p class="studio-data-note" id="studioDataNote"></p></section><section class="studio-attention"><div class="studio-section-heading"><h3>需要留意</h3><span>先确认，再继续</span></div><div class="studio-connection"><span>学习平台连接</span></div><p id="studioAttention"></p><button class="studio-text-button" data-snow-go="course">查看状态与诊断 →</button></section>';
+  columns.innerHTML='<section><div class="studio-section-heading"><h3>接下来，继续学习</h3><button class="studio-text-button" data-snow-go="course">查看课程</button></div><div id="studioContinue"></div><p class="studio-data-note" id="studioDataNote"></p></section><section class="studio-attention"><div class="studio-section-heading"><h3>需要留意</h3><span>先确认，再继续</span></div><div class="studio-connection"><span>学习平台连接</span></div><p id="studioAttention"></p><button class="studio-text-button" data-snow-go="course">查看状态与诊断</button></section>';
   columns.querySelector('.studio-connection').append(status);
   const quick=make('section','studio-quick');quick.innerHTML='<div class="studio-section-heading"><h3>工作空间里的其他事</h3><span>各归其位，随时可用</span></div>';quick.append(shortcuts);
   home.append(hero,columns,quick);
@@ -3829,7 +3981,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const symbol=make('span','studio-course-art');symbol.setAttribute('aria-hidden','true');
     const copy=make('span','studio-continue-copy');
     copy.append(make('small','',loaded?'最近读取的课程':'LEARNING STARTS HERE'),make('strong','',!loaded?'先连接，了解你的学习进度':next?next.courseName||'未命名课程':courses.length?'当前读取的课程均已完成':'当前未读取到课程'),make('span','',!loaded?'进入学习管理后读取平台状态':next?'进入学习管理查看详情与可执行环节':'可刷新课程，查看是否有新的安排'));
-    entry.append(symbol,copy,make('span','studio-entry-arrow','→'));el('studioContinue').replaceChildren(entry);
+    entry.append(symbol,copy);el('studioContinue').replaceChildren(entry);
     el('studioDataNote').textContent=state.courseLoading?'正在读取，暂保留上次结果。':loaded?'统计基于最近一次读取的全部课程，不随列表筛选变化；不是实时监控。':'尚未读取课程。连接账号并读取课程后，即可查看学习进度。';
     el('studioAttention').textContent=!loaded?'连接学习平台后，这里会汇总课程状态。':!state.courseApiCompatible?'当前接口尚未确认兼容，请先查看学习管理中的具体提示。':unavailable?unavailable+' 门未完成课程当前仅可查看或不满足执行条件，请在课程详情中确认原因。':'操作结果以平台复核为准。遇到失败或待确认，请先查看执行诊断，不要重复提交。';
   }
@@ -3858,7 +4010,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const caption=make('span','',rate===null?'视频进度待确认':'视频学习 '+rate+'%');
       const track=make('span','studio-track');const fill=make('i','');fill.style.width=(rate??0)+'%';track.append(fill);progress.append(caption,track);
-      const open=make('button','btn btn-ghost studio-open','查看详情 →');open.type='button';open.dataset.studioOpen='';open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-label','查看详情：'+name);
+      const open=make('button','btn btn-ghost studio-open','查看详情');open.type='button';open.dataset.studioOpen='';open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-label','查看详情：'+name);
       card.prepend(art);card.append(progress,open,dialog);
       dialog.addEventListener('cancel',()=>{activeDialog=null;returnFocus=null;});
     }
@@ -4053,7 +4205,7 @@ function renderSnowDeviceRow(a) {
     <div class="device-identity"><strong>${e(a.label||'未命名设备')}</strong><span>${code}</span></div>
     <span class="register-status ${['revoked','expired','exhausted'].includes(a.status)?'muted':''}">${e(status)}</span>
     <div class="device-allowance"><span>剩余天数 <b>${e(days)}</b></span><span>剩余次数 <b>${e(uses)}</b></span></div>
-    <details class="device-inspector"><summary aria-label="管理激活码 ${code}">管理 <span aria-hidden="true">→</span></summary><div class="device-inspector-body">
+    <details class="device-inspector"><summary aria-label="管理激活码 ${code}">管理</summary><div class="device-inspector-body">
       <dl class="record-facts"><div><dt>绑定设备</dt><dd>${e(a.device||'未绑定')}</dd></div><div><dt>绑定时间</dt><dd>${e(a.bound_at?formatQuestionBatchTime(a.bound_at):'未绑定')}</dd></div><div><dt>初始天数 / 当前设置</dt><dd>${e(snowAllowance(a.init_expires_days??a.expires_days))} / ${e(snowAllowance(a.expires_days))}</dd></div><div><dt>初始次数 / 当前设置</dt><dd>${e(snowAllowance(a.init_max_uses??a.max_uses))} / ${e(snowAllowance(a.max_uses))}</dd></div></dl>
       <div class="record-actions"><button class="btn btn-ghost" data-action="copyCode" data-code="${code}">复制激活码</button><button class="btn btn-ghost" data-action="editDeviceDays" data-code="${code}">调整天数</button><button class="btn btn-ghost" data-action="editDeviceUses" data-code="${code}">调整次数</button></div>
       <details class="record-danger"><summary>状态与删除</summary><p>暂停与删除会再次确认，恢复会直接提交。</p><div class="record-actions">${a.status==='revoked'?`<button class="btn btn-ghost" data-action="restoreActivation" data-code="${code}">恢复使用</button>`:`<button class="btn btn-ghost" data-action="revokeActivation" data-code="${code}">暂停使用</button>`}<button class="btn btn-danger" data-action="deleteActivation" data-code="${code}">删除激活码</button></div></details>
@@ -4061,7 +4213,7 @@ function renderSnowDeviceRow(a) {
 }
 function renderSnowQuestionRow(q) {
   const e=escapeHtml;
-  return `<article class="question-record" role="listitem" data-qid="${e(q.id)}"><div class="record-eyebrow"><span>${e(q.category||'未分组')}</span><span>ID ${e(q.id)}</span></div><h3>${e(q.text)}</h3><details class="question-inspector"><summary>答案与管理 <span aria-hidden="true">→</span></summary><div class="question-inspector-body"><div class="question-options">${(Array.isArray(q.options)?q.options:[]).map(option=>`<p>${e(option)}</p>`).join('')||'<p>未提供选项</p>'}</div><div class="question-answer"><span>已存答案</span><strong>${e(q.answer||'未提供')}</strong></div><div class="record-actions"><button class="btn btn-ghost" data-action="editQ">编辑题目</button><details class="record-danger"><summary>删除题目</summary><button class="btn btn-danger" data-action="deleteQ">删除这道题</button></details></div></div></details></article>`;
+  return `<article class="question-record" role="listitem" data-qid="${e(q.id)}"><div class="record-eyebrow"><span>${e(q.category||'未分组')}</span><span>ID ${e(q.id)}</span></div><h3>${e(q.text)}</h3><details class="question-inspector"><summary>答案与管理</summary><div class="question-inspector-body"><div class="question-options">${(Array.isArray(q.options)?q.options:[]).map(option=>`<p>${e(option)}</p>`).join('')||'<p>未提供选项</p>'}</div><div class="question-answer"><span>已存答案</span><strong>${e(q.answer||'未提供')}</strong></div><div class="record-actions"><button class="btn btn-ghost" data-action="editQ">编辑题目</button><details class="record-danger"><summary>删除题目</summary><button class="btn btn-danger" data-action="deleteQ">删除这道题</button></details></div></div></details></article>`;
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
@@ -4117,10 +4269,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   sheet.querySelector('.sheet-close').addEventListener('click',closeDevice);sheet.addEventListener('cancel',e=>{e.preventDefault();closeDevice();});
   new MutationObserver(()=>{if(sheet.open&&!form.classList.contains('open'))closeDevice();}).observe(form,{attributes:true,attributeFilter:['class']});
 
-  // Activity: timeline + explicit pagination, destructive maintenance tucked away.
+  // Activity: timeline + explicit pagination and a direct, low-emphasis clear action.
   const logs=$('subLogs'),oldLogTools=logs.firstElementChild,clearLogs=$('clearLogsBtn');
-  const logHead=heading('活动记录','按时间查看操作，展开记录可查看来源。');const logRefresh=make('button','btn btn-ghost','刷新记录');logRefresh.type='button';logRefresh.addEventListener('click',()=>loadLogs(true));
-  const logTools=make('div','module-heading-actions');logTools.append(logRefresh,menu('日志维护',[clearLogs]));logHead.append(logTools);oldLogTools.replaceWith(logHead);
+  const logHead=heading('活动记录','按时间查看操作，IP 与属地直接显示。');const logRefresh=make('button','btn btn-ghost','刷新记录');logRefresh.type='button';logRefresh.addEventListener('click',()=>loadLogs(true));
+  const logTools=make('div','module-heading-actions');clearLogs.type='button';clearLogs.className=logRefresh.className;logTools.append(logRefresh,clearLogs);logHead.append(logTools);oldLogTools.replaceWith(logHead);
   const moreLogs=make('button','btn btn-ghost activity-more','加载更多');moreLogs.type='button';moreLogs.addEventListener('click',()=>loadLogs(false));logs.append(moreLogs);
   const syncLogs=()=>{moreLogs.hidden=!state.logHasMore;moreLogs.disabled=state.logLoading;logRefresh.disabled=state.logLoading;};new MutationObserver(syncLogs).observe($('logsContainer'),{childList:true,subtree:true});syncLogs();
 
@@ -5606,7 +5758,7 @@ function renderTokenTable(items) {
         <div class="credential-identity"><button type="button" class="credential-name" data-credential-open="${token}" aria-label="管理凭证 ${token}">${token}</button><small>${renamed?'原名 '+escapeHtml(t.originalToken):'访问凭证'}</small></div>
         <div class="credential-balance${Number(t.remain)<=0?' exhausted':''}"><strong>${escapeHtml(t.remain)}</strong><span>${Number(t.remain)<=0?'次数已用完':'次可用'}</span></div>
         <div class="credential-usage"><span>初始 <b>${escapeHtml(t.initCount)}</b></span><span>已用 <b>${escapeHtml(t.used)}</b></span></div>
-        <button type="button" class="btn btn-ghost credential-manage" data-credential-open="${token}" aria-label="查看凭证 ${token} 详情">管理 <span aria-hidden="true">→</span></button>
+        <button type="button" class="btn btn-ghost credential-manage" data-credential-open="${token}" aria-label="查看凭证 ${token} 详情">管理</button>
       </article>`;
     }).join('')}</div>`;
 }
@@ -5793,7 +5945,7 @@ function renderLogEntry(log) {
   div.className = 'log-entry activity-entry';
   div.innerHTML = `<div class="log-top"><span class="log-time">[${ts}]</span><span class="log-badge ${isAdmin?'admin':'user'}">${isAdmin?'管理员':`用户(${escapeHtml(log.token||'未知')})`}</span></div>
     <div class="log-body">${actText}</div>
-    <details class="activity-source"><summary>来源信息</summary><div class="log-meta"><span class="log-ip">${escapeHtml(log.ip||'未知IP')}</span><span class="log-loc" title="${escapeHtml(log.location||'未知属地')}">${escapeHtml(log.location||'未知属地')}</span></div></details>`;
+    <div class="activity-source"><div class="log-meta"><span class="log-ip">${escapeHtml(log.ip||'未知IP')}</span><span class="log-loc" title="${escapeHtml(log.location||'未知属地')}">${escapeHtml(log.location||'未知属地')}</span></div></div>`;
   return div;
 }
 
@@ -8475,7 +8627,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.11 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.17 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -8495,7 +8647,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(failed)return '<div class="member-empty member-read-state" role="status"><strong>'+esc(label)+'读取未成功</strong><p>请先查看上方错误说明。这里不代表没有数据，不会自动重试。</p></div>';
     return '<div class="member-read-state" role="status" aria-live="polite"><p>正在读取'+esc(label)+'，请稍候。</p><div class="member-skeleton" aria-hidden="true">'+[1,2,3].map(()=>'<div class="member-skeleton-row"><i></i><span><i></i><i></i></span></div>').join('')+'</div></div>';
   }
-  function quickLink(page,label,description){return '<button type="button" class="member-quick-link" data-member-page="'+page+'">'+navIcon(page)+'<span><strong>'+esc(label)+'</strong><small>'+esc(description)+'</small></span><span class="member-link-arrow" aria-hidden="true">→</span></button>';}
+  function quickLink(page,label,description){return '<button type="button" class="member-quick-link" data-member-page="'+page+'">'+navIcon(page)+'<span><strong>'+esc(label)+'</strong><small>'+esc(description)+'</small></span></button>';}
   function homeView(d,a){
     const pending=d.assetsLoaded===false?'—':a.holds.filter(h=>h.status==='held').length;
     return title('我的空间','你好，'+member.user.username+'。查看账户状态，继续常用操作。')+
