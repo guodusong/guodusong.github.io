@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.20-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.21-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -3622,6 +3622,91 @@ body[data-snow-mode="workspace"] #subOverview .snow-learning-content .studio-con
 #subDevices[data-snow-read-state="error"] #activationTableContainer>.empty {display:none;}
 [data-snow-read-state="error"]>.snow-read-stamp {color:#9b4f43;}
 @media(max-width:1100px){.snow-overview-management {grid-template-columns:1fr;}}
+
+</style>
+<style id="snowMemberLearningWorkspace">
+/* Scoped to the personal learning page. Original controls own focus and motion. */
+#memberDialog[data-role="user"] .member-learning-workspace .member-card {margin:0;padding:24px;}
+#memberDialog[data-role="user"] .member-learning-workspace .member-learning-courses {padding:0;}
+#memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm {max-width:none;width:100%;}
+#memberDialog[data-role="user"] .member-learning-page-heading {display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+#memberDialog[data-role="user"] .member-learning-heading-copy {flex:1;min-width:240px;}
+#memberDialog[data-role="user"] .member-learning-page-heading>[data-member="courseStatus"] {flex-shrink:0;}
+#memberDialog[data-role="user"] .member-learning-workspace {min-width:0;}
+#memberDialog[data-role="user"] .member-learning-workspace .member-card {margin:0;padding:24px;min-width:0;}
+#memberDialog[data-role="user"] .member-learning-workspace h3 {font-size:17px;line-height:1.6;margin:0;}
+#memberDialog[data-role="user"] .member-learning-account {margin-bottom:24px!important;}
+#memberDialog[data-role="user"] .member-learning-account-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+#memberDialog[data-role="user"] .member-learning-account-heading>div:first-child {display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+#memberDialog[data-role="user"] .member-learning-connection {font-size:12px;line-height:1.8;padding:3px 9px;background:#f0f3f6;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-connection[data-connection="connected"] {background:#eaf4ef;color:#176b5b;}
+#memberDialog[data-role="user"] .member-learning-connection:is([data-connection="challenge"],[data-connection="expired"]) {color:#8c573a;background:#f7f0e8;}
+#memberDialog[data-role="user"] .member-learning-account-note {font-size:12px;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-workspace .member-actions {margin:0;gap:12px;}
+#memberDialog[data-role="user"] .member-learning-login {border-top:1px solid #dfe5ec;margin-top:20px;padding-top:20px;}
+#memberDialog[data-role="user"] .member-learning-login .member-form {gap:16px;margin:0;}
+#memberDialog[data-role="user"] .member-learning-login .member-form-two {max-width:none;}
+#memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;}
+#memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm>.member-form-two {width:100%;}
+#memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm>div:last-child {padding-top:29px;}
+#memberDialog[data-role="user"] .member-learning-login #memberChallengeForm {max-width:680px;}
+#memberDialog[data-role="user"] .member-learning-columns {display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start;}
+#memberDialog[data-role="user"] .member-learning-workspace .member-learning-courses {padding:0;overflow:visible;}
+#memberDialog[data-role="user"] .member-learning-section-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;flex-wrap:wrap;}
+#memberDialog[data-role="user"] .member-learning-section-heading>span {font-size:12px;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-course-list .member-row {margin:0;padding:20px 24px;border:0;border-top:1px solid #dfe5ec;min-height:88px;}
+#memberDialog[data-role="user"] .member-learning-course-list .member-course-check {width:100%;min-width:0;gap:14px;align-items:center;}
+#memberDialog[data-role="user"] .member-learning-course-list .member-course-check>span {min-width:0;overflow-wrap:anywhere;}
+#memberDialog[data-role="user"] .member-learning-course-list .member-course-check strong {font-size:14px;line-height:1.7;}
+#memberDialog[data-role="user"] .member-learning-course-list .member-course-check small {font-size:12px;line-height:1.8;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-empty {min-height:230px;display:flex;justify-content:center;align-items:center;flex-direction:column;gap:10px;padding:32px 24px!important;border-top:1px solid #dfe5ec;}
+#memberDialog[data-role="user"] .member-learning-empty>strong {font-size:15px;color:#344253;}
+#memberDialog[data-role="user"] .member-learning-empty>p {margin:0;max-width:380px;font-size:13px;line-height:1.9;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-empty>small {font-size:12px;line-height:1.9;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-selection {padding:18px 24px;border-top:1px solid #dfe5ec;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+#memberDialog[data-role="user"] .member-learning-selection>span {font-size:13px;color:#5e6b7b;}
+#memberDialog[data-role="user"] .member-learning-selection [data-member="coursePreviewAll"],#memberDialog[data-role="user"] .member-learning-account [data-member="courseLogout"],#memberDialog[data-role="user"] .member-learning-account [data-course-login-toggle] {border-color:transparent;background:transparent;color:#176b5b;}
+#memberDialog[data-role="user"] .member-learning-preview {padding:22px 24px;border-top:1px solid #dfe5ec;background:#eff6f2;}
+#memberDialog[data-role="user"] .member-learning-preview p {font-size:13px;line-height:1.9;margin:10px 0;}
+#memberDialog[data-role="user"] .member-learning-read-time {margin:0;padding:14px 24px;border-top:1px solid #dfe5ec;font-size:12px;line-height:1.9;color:#5e6b7b;overflow-wrap:anywhere;}
+#memberDialog[data-role="user"] .member-learning-task-column {min-width:0;}
+#memberDialog[data-role="user"] .member-learning-task .member-actions {display:grid;grid-template-columns:1fr;margin:18px 0 0;}
+#memberDialog[data-role="user"] .member-learning-task .member-actions>button {width:100%;}
+#memberDialog[data-role="user"] .member-learning-task .member-row {margin:0;padding:16px 0;display:block;overflow-wrap:anywhere;}
+#memberDialog[data-role="user"] .member-learning-task .member-row:first-of-type {margin-top:18px;}
+#memberDialog[data-role="user"] .member-learning-task .member-row:last-child {padding-bottom:0;}
+#memberDialog[data-role="user"] .member-learning-task .member-row strong {font-size:13px;line-height:1.8;}
+#memberDialog[data-role="user"] .member-learning-task .member-row small {font-size:12px;line-height:1.9;}
+#memberDialog[data-role="user"] .member-learning-task>.member-muted {font-size:13px;line-height:1.9;overflow-wrap:anywhere;}
+#memberDialog[data-role="user"] .member-learning-task-empty {margin-top:20px;}
+#memberDialog[data-role="user"] .member-learning-task-empty>strong {font-size:14px;font-weight:500;}
+#memberDialog[data-role="user"] .member-learning-rules {background:#f8faf9;border:1px solid #dfe5ec;border-top:0;padding:20px 24px;}
+#memberDialog[data-role="user"] .member-learning-rules h3 {font-size:13px;}
+#memberDialog[data-role="user"] .member-learning-rules p {margin:10px 0 0;font-size:12px;line-height:1.95;color:#5e6b7b;}
+@media(max-width:1100px){
+  #memberDialog[data-role="user"] .member-learning-columns {grid-template-columns:1fr;}
+  #memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm {grid-template-columns:1fr;}
+  #memberDialog[data-role="user"] .member-learning-login #memberCourseLoginForm>div:last-child {padding-top:0;}
+  #memberDialog[data-role="user"] .member-learning-task .member-actions {display:flex;flex-wrap:wrap;}
+  #memberDialog[data-role="user"] .member-learning-task .member-actions>button {width:auto;}
+}
+@media(max-width:760px){
+  #memberDialog[data-role="user"] .member-learning-workspace .member-card {padding:20px;}
+  #memberDialog[data-role="user"] .member-learning-workspace .member-learning-courses {padding:0;}
+  #memberDialog[data-role="user"] .member-learning-workspace .member-card {padding:20px;}
+  #memberDialog[data-role="user"] .member-learning-workspace .member-learning-courses {padding:0;}
+  #memberDialog[data-role="user"] .member-learning-section-heading,#memberDialog[data-role="user"] .member-learning-selection,#memberDialog[data-role="user"] .member-learning-preview {padding:18px 20px;}
+  #memberDialog[data-role="user"] .member-learning-course-list .member-row {padding:18px 20px;}
+  #memberDialog[data-role="user"] .member-learning-rules {padding:18px 20px;}
+  #memberDialog[data-role="user"] .member-learning-account {margin-bottom:20px!important;}
+  #memberDialog[data-role="user"] .member-learning-columns {gap:20px;}
+  #memberDialog[data-role="user"] .member-learning-account-heading .member-actions {width:100%;}
+  #memberDialog[data-role="user"] .member-learning-account-note {width:100%;}
+  #memberDialog[data-role="user"] .member-learning-selection .member-actions {width:100%;justify-content:space-between;gap:8px;}
+  #memberDialog[data-role="user"] .member-learning-selection button {min-width:0;}
+  #memberDialog[data-role="user"] .member-learning-heading-copy {min-width:0;flex-basis:100%;}
+  #memberDialog[data-role="user"] .member-learning-empty {padding:24px 20px!important;min-height:210px;}
+}
 
 </style>
 </head><body>
@@ -8796,6 +8881,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     resetPrivateFields(main);
     prepareFormFeedback(main);
     prepareConfigEditState(main);
+    syncCourseWorkspace(main);
     if(member.page==='assets')filterAssets(main);
     main.dataset.authMode=isAuth?member.authMode:'';
     if(focused?.isConnected&&!focused.disabled)focused.focus({preventScroll:true});
@@ -8830,7 +8916,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.20 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.21 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -9050,10 +9136,72 @@ document.addEventListener('DOMContentLoaded',()=>{
     panel.querySelectorAll('[data-quantity]').forEach(b=>b.setAttribute('aria-pressed',String(Number(input.value)===Number(b.dataset.quantity))));
   }
 
-  function coursesView(){
-    const b=member.batch;
-    return title('学习任务，按完成结算。','仅平台确认整门课程完成才消耗额度；结果不明时保留预留，先核对再继续。')+'<section class="member-card"><h3>连接网课账户</h3><form id="memberCourseLoginForm" class="member-form"><div class="member-form-two">'+input('网课账号','memberCourseUsername','text','','autocomplete="off" required')+input('网课密码','memberCoursePassword','password','','autocomplete="off" required')+'</div><div><button class="member-primary" '+(member.busy?'disabled':'')+'>登录网课</button></div></form>'+challengeView()+'<div class="member-actions">'+btn('读取课程','courseList')+btn('刷新任务与结算','courseStatus')+btn('退出网课','courseLogout')+'</div></section>'+(b?'<section class="member-card"><h3>当前任务 · '+esc(status(b.status))+'</h3><p class="member-muted">'+esc(b.reason)+'<br>课程 '+esc(b.completedCourses)+' / '+esc(b.totalCourses)+' · 失败 '+esc(b.failedCourses)+'</p><div class="member-actions">'+btn('开始 / 继续任务','courseRun',true,['running','paused','stopped'].includes(b.status)?'':'disabled')+btn('暂停后续步骤','coursePause')+btn('取消任务','courseCancel')+'</div>'+(b.items||[]).map(i=>'<div class="member-row"><div><strong>'+esc(i.courseName)+'</strong><small>'+esc(status(i.status))+' · '+esc(i.reason)+'</small></div></div>').join('')+'</section>':'')+'<section class="member-card"><h3>选择课程</h3><div class="member-actions">'+btn('预览所选课程','coursePreviewSelected',true)+btn('预览全部课程','coursePreviewAll')+'</div>'+(member.preview?'<div class="member-notice" style="margin-top:16px">可执行 '+esc(member.preview.executableCount)+' 门，跳过 '+esc(member.preview.skippedCount)+' 门。当前可用额度 '+esc(member.data?.courseQuota)+' 门。'+btn('确认创建任务','courseCreate',true)+'</div>':'')+(member.courses.length?member.courses.map(c=>'<div class="member-row"><label class="member-course-check"><input type="checkbox" data-course-id="'+esc(c.courseId)+'" '+(member.selected.has(c.courseId)?'checked':'')+' '+(c.courseFinished?'disabled':'')+'><span><strong>'+esc(c.courseName)+'</strong><small>'+esc(c.courseFinished?'平台确认已完成':'未完成或待确认')+'</small></span></label></div>').join(''):'<div class="member-empty">登录后读取课程。不会自动执行。</div>')+'</section>';
+  // Presentation metadata only: no credentials, requests, persistence or billing rules.
+  const coursePresentation={connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null};
+  function resetCoursePresentation(){Object.assign(coursePresentation,{connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null});}
+  function courseBatchLabel(b){return b.batchId&&b.batchId===coursePresentation.createdBatchId&&b.status==='running'&&!member.run?'待开始':status(b.status);}
+  function courseReadLabel(){
+    const p=coursePresentation;
+    if(p.listPhase==='loading')return p.listRead?'正在更新，保留上次课程':'正在读取课程';
+    if(p.listPhase==='error')return p.listRead?'本次读取失败，保留上次课程':'课程尚未读取成功';
+    if(p.listRead)return '最近读取 '+member.courses.length+' 门';
+    return member.courses.length?'页面保留 '+member.courses.length+' 门，请重新读取核对':'尚未读取课程';
   }
+  function courseConnectionLabel(){return {unknown:'连接待确认',connected:'已连接',disconnected:'未连接',challenge:'需要登录验证',expired:'连接已失效'}[coursePresentation.connection];}
+  function coursePresentationResult(action,result){
+    if(['login','challenge','status'].includes(action)){
+      if(result.loggedIn===true)coursePresentation.connection='connected';
+      else if(result.challenge)coursePresentation.connection='challenge';
+      else if(result.loggedIn===false)coursePresentation.connection='disconnected';
+      else if(action==='login'||action==='challenge')coursePresentation.connection='unknown';
+      if(['login','challenge'].includes(action))coursePresentation.loginExpanded=coursePresentation.connection!=='connected';
+    }
+    if(action==='list'){
+      coursePresentation.listRead=true;coursePresentation.listPhase='ready';coursePresentation.listTime=Date.now();
+      // A successful list is evidence of that read, not proof of a live session.
+    }
+    if(action==='logout'){coursePresentation.connection='disconnected';coursePresentation.loginExpanded=true;}
+    if(Object.hasOwn(result,'batch')){coursePresentation.taskRead=true;coursePresentation.taskEmpty=result.batch===null;}
+    if(action==='batchCreate')coursePresentation.createdBatchId=result.batch?.batchId||null;
+    if(['batchStep','batchResume','batchPause','batchCancel'].includes(action)||(action==='batchStatus'&&result.batch&&(result.batch.status!=='running'||Number(result.batch.completedCourses)>0)))coursePresentation.createdBatchId=null;
+  }
+  function coursePresentationFailure(action,error){
+    if(action==='list')coursePresentation.listPhase='error';
+    if(['login','challenge'].includes(action)){coursePresentation.connection='unknown';coursePresentation.loginExpanded=true;}
+    if(error.data?.code==='SESSION_EXPIRED')coursePresentation.connection='expired';
+  }
+  function syncCourseWorkspace(main){
+    const surface=main.querySelector('.member-learning-workspace');if(!surface)return;
+    const selected=surface.querySelector('[data-course-selection-count]');
+    if(selected)selected.textContent='已选 '+member.selected.size+' 门';
+    const reading=surface.querySelector('[data-course-read-label]');
+    if(reading)reading.textContent=courseReadLabel();
+    const batchLabel=surface.querySelector('[data-course-batch-status]');
+    if(batchLabel&&member.batch)batchLabel.textContent=courseBatchLabel(member.batch);
+    // Reflect the existing btn() exception immediately when runCourse starts.
+    // The original pause handler still waits for the current request to finish.
+    const pause=surface.querySelector('[data-member="coursePause"]');
+    if(pause)pause.disabled=member.busy&&!member.run;
+    const heading=main.querySelector('.member-page-title'),refresh=main.querySelector('[data-member="courseStatus"]');
+    if(heading&&refresh&&!heading.classList.contains('member-learning-page-heading')){
+      const copy=document.createElement('div');copy.className='member-learning-heading-copy';
+      while(heading.firstChild)copy.append(heading.firstChild);
+      heading.classList.add('member-learning-page-heading');heading.append(copy,refresh);
+    }
+  }
+  function coursesView(){
+    const b=member.batch,p=coursePresentation;
+    const expanded=p.connection!=='connected'||p.loginExpanded||!!member.challenge;
+    const login='<form id="memberCourseLoginForm" class="member-form"><div class="member-form-two">'+input('网课账号','memberCourseUsername','text','','autocomplete="off" required')+input('网课密码','memberCoursePassword','password','','autocomplete="off" required')+'</div><div><button class="member-primary" '+(member.busy?'disabled':'')+'>登录网课</button></div></form>';
+    const account='<section class="member-card member-learning-account"><header class="member-learning-account-heading"><div><h3>网课账户</h3><span class="member-learning-connection" data-connection="'+p.connection+'">'+esc(courseConnectionLabel())+'</span><span class="member-learning-account-note">连接状态以最近返回结果为准</span></div><div class="member-actions">'+btn('读取课程','courseList')+btn('刷新任务与结算','courseStatus')+(p.connection==='connected'?'<button type="button" class="member-secondary" data-course-login-toggle aria-controls="memberCourseLoginPanel" aria-expanded="'+expanded+'" '+(member.busy?'disabled':'')+'>'+(expanded?'收起登录':'重新登录')+'</button>':'')+btn('退出网课','courseLogout')+'</div></header><div id="memberCourseLoginPanel" class="member-learning-login" '+(expanded?'':'hidden')+'>'+login+challengeView()+'</div></section>';
+    const courses=member.courses.length?'<div class="member-learning-course-list">'+member.courses.map(c=>'<div class="member-row"><label class="member-course-check"><input type="checkbox" data-course-id="'+esc(c.courseId)+'" '+(member.selected.has(c.courseId)?'checked':'')+' '+(c.courseFinished?'disabled':'')+'><span><strong>'+esc(c.courseName)+'</strong><small>'+esc(c.courseFinished?'平台确认已完成':'未完成或待确认')+'</small></span></label></div>').join('')+'</div>':'<div class="member-empty member-learning-empty"><strong>'+(p.listRead?'本次未读取到课程':'课程会显示在这里')+'</strong><p>'+(p.listRead?'这是本次读取的结果，可按需重新读取。':p.connection==='connected'?'账户已连接，点击“读取课程”查看课程。':'连接账户后，手动读取课程；已连接的账户也可直接读取核对。')+'</p><small>读取和预览都不会自动开始任务。</small></div>';
+    const preview=member.preview?'<section class="member-learning-preview" aria-label="任务预览"><h3>任务预览</h3><p>可执行 '+esc(member.preview.executableCount)+' 门，跳过 '+esc(member.preview.skippedCount)+' 门。当前可用额度 '+esc(member.data?.courseQuota)+' 门。</p><p class="member-help">确认创建后仍需手动开始；预览不会执行课程。</p>'+btn('确认创建任务','courseCreate',true)+'</section>':'';
+    const coursePanel='<section class="member-card member-learning-courses"><header class="member-learning-section-heading"><h3>选择课程</h3><span data-course-read-label role="status" aria-live="polite">'+esc(courseReadLabel())+'</span></header>'+courses+'<footer class="member-learning-selection"><span data-course-selection-count role="status" aria-live="polite">已选 '+esc(member.selected.size)+' 门</span><div class="member-actions">'+btn('预览全部课程','coursePreviewAll')+btn('预览所选课程','coursePreviewSelected',true)+'</div></footer>'+preview+(p.listTime?'<p class="member-learning-read-time">最近成功读取 '+esc(new Date(p.listTime).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}))+'；这是最近读取的课程，不代表实时平台状态。</p>':'')+'</section>';
+    const task=b?'<section class="member-card member-learning-task"><h3>当前任务 · <span data-course-batch-status>'+esc(courseBatchLabel(b))+'</span></h3>'+(p.taskRead&&p.taskEmpty?'<p class="member-help">本次未返回任务，上次任务信息暂保留；请先核对再操作。</p>':'')+'<p class="member-muted">'+esc(b.reason)+'<br>课程 '+esc(b.completedCourses)+' / '+esc(b.totalCourses)+' · 失败 '+esc(b.failedCourses)+'</p><div class="member-actions">'+btn('开始 / 继续任务','courseRun',true,['running','paused','stopped'].includes(b.status)?'':'disabled')+btn('暂停后续步骤','coursePause')+btn('取消任务','courseCancel')+'</div>'+(b.items||[]).map(i=>'<div class="member-row"><div><strong>'+esc(i.courseName)+'</strong><small>'+esc(i.status==='pending'?'待开始':status(i.status))+' · '+esc(i.reason)+'</small></div></div>').join('')+'</section>':'<section class="member-card member-learning-task"><h3>当前任务</h3><div class="member-learning-task-empty"><strong>'+(p.taskRead?'本次未读取到当前任务':'尚未读取当前任务')+'</strong><p class="member-help">已创建的任务，可通过页面右上方“刷新任务与结算”查看。</p></div></section>';
+    const rules='<section class="member-learning-rules" aria-label="额度结算规则"><h3>额度结算</h3><p>仅平台确认整门课程完成后消耗额度。结果不明时保留预留，先核对再继续。</p></section>';
+    return title('学习任务，按完成结算。','连接账户，选择课程，先预览再开始。')+'<div class="member-learning-workspace">'+account+'<div class="member-learning-columns">'+coursePanel+'<aside class="member-learning-task-column" aria-label="任务与结算">'+task+rules+'</aside></div></div>';
+  }
+
   function challengeView(){
     const c=member.challenge;if(!c)return '';
     if(!['securityCode','sms','continueLogin'].includes(c.type))return '<p class="member-muted">'+esc(c.message||'平台需要人工处理此验证，请先在平台核对登录状态。')+'</p>';
@@ -9427,7 +9575,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   async function work(fn){if(member.busy)return;member.committedId='';member.diagnostic=null;member.busy=true;member.notice='正在处理…';member.error=false;render();try{await fn();}catch(e){member.diagnostic=e.support?{...e.support,...(member.committedId?{outcome:'confirmed',operationId:member.committedId}:{})}:null;member.notice=member.committedId?'操作已确认成功，但后续页面未刷新。请勿重复提交；请查看明细或重新登录。操作编号：'+member.committedId+'。'+e.message:e.message;member.error=true;}finally{member.busy=false;if(member.notice==='正在处理…')member.notice='';render();}}
   async function copy(text){return copyContent(text);}
-  async function course(action,params={}){const result=await request('course',{courseAction:action,...params});if(result.batch)member.batch=result.batch;if(result.billing&&member.data)member.data.courseQuota=result.billing.available;return result;}
+  async function course(action,params={}){if(action==='list'){coursePresentation.listPhase='loading';syncCourseWorkspace($('memberMain'));}if(action==='batchStep'||action==='batchResume'){coursePresentation.createdBatchId=null;syncCourseWorkspace($('memberMain'));}let result;try{result=await request('course',{courseAction:action,...params});}catch(error){coursePresentationFailure(action,error);throw error;}coursePresentationResult(action,result);if(result.batch)member.batch=result.batch;if(result.billing&&member.data)member.data.courseQuota=result.billing.available;return result;}
   async function runCourse(){
     if(!member.batch)return;
     if(['paused','stopped'].includes(member.batch.status))await course('batchResume',{batchId:member.batch.batchId});
@@ -9448,6 +9596,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(['memberPassword','memberConfirmPassword'].includes(e.target.id))$('memberConfirmPassword')?.setCustomValidity('');
   });
   dialog.addEventListener('change',e=>{const id=e.target.dataset.courseId;if(id){e.target.checked?member.selected.add(id):member.selected.delete(id);}});
+  dialog.addEventListener('change',e=>{if(e.target.matches('[data-course-id]'))syncCourseWorkspace($('memberMain'));});
+  dialog.addEventListener('click',e=>{const toggle=e.target.closest('[data-course-login-toggle]');if(!toggle||member.busy)return;coursePresentation.loginExpanded=!coursePresentation.loginExpanded;const expanded=coursePresentation.loginExpanded||!!member.challenge,panel=$('memberCourseLoginPanel');if(panel)panel.hidden=!expanded;toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'收起登录':'重新登录';if(expanded)$('memberCourseUsername')?.focus();});
   dialog.addEventListener('click',e=>{
     if(e.target.closest('[data-member-close]')){close();return;}
     const page=e.target.closest('[data-member-page]');if(page){if(member.busy)return;member.epoch++;member.adminLedger=null;member.recovery=null;member.reviewDetail=null;member.page=page.dataset.memberPage;member.notice='';render();$('memberMain').scrollTop=0;if(member.admin)loadAdmin();else if(member.token&&member.page==='assets'&&member.data?.assetsLoaded===false)loadAssets().catch(err=>{member.diagnostic=err.support||null;say(err.message,true);});else if(member.token&&member.page==='ledger')loadLedger().catch(err=>say(err.message,true));else if(member.token&&member.page==='reviews')loadReviews().catch(err=>say(err.message,true));return;}
@@ -9540,7 +9690,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(form==='memberUserSearch')payload={query:value('memberUserQuery')};
     if(form==='memberConfigForm'){const base=member.adminData.config;payload={config:{signInPoints:Number(value('memberSignInPoints')),products:base.products.map((p,i)=>({...p,points:Number(value('memberPrice-'+i)),...(p.amount?{amount:Number(value('memberAmount-'+i))}:{}),...(p.days?{days:Number(value('memberDays-'+i))}:{}),...(p.uses?{uses:Number(value('memberUses-'+i))}:{}),enabled:$('memberEnabled-'+i).checked}))}};}
     work(async()=>{
-      if(form==='memberAuthForm'){const r=await request(member.authMode,payload);member.epoch++;member.ledger=null;member.recovery=null;member.pending.clear();member.token=r.sessionToken;member.user=r.user;member.page='home';await refresh();$('memberMain').scrollTop=0;member.notice='欢迎来到你的空间。';}
+      if(form==='memberAuthForm'){const r=await request(member.authMode,payload);member.epoch++;member.ledger=null;member.recovery=null;member.pending.clear();member.token=r.sessionToken;member.user=r.user;resetCoursePresentation();member.page='home';await refresh();$('memberMain').scrollTop=0;member.notice='欢迎来到你的空间。';}
       else if(form==='memberReviewSearch'){member.reviewUser=payload.userId;member.reviewDetail=null;await loadReviews();}
       else if(form==='memberReviewNote'){
         if(!await ask('确认保存此跟进记录？备注将向用户展示；不会修改余额、权益或课程结算。'))return;
