@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.24-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.30-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -3908,6 +3908,125 @@ body[data-snow-mode="workspace"] #subOverview .snow-learning-content .studio-con
 }
 
 </style>
+<style id="snowVisibleConnectionInfo">
+/* Always-visible metadata only; no changes to login or connection actions. */
+#subCourse .snow-admin-learning-account .snow-admin-connection-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+#subCourse .snow-admin-connection-info .snow-admin-connection-label {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--snow-muted);
+}
+#subCourse .snow-admin-connection-info .connection-meta {
+  min-width: 0;
+  padding: 0;
+  gap: 8px;
+}
+
+</style>
+<style id="snowCourseFilterPopover">
+#subCourse .snow-course-filter { position: relative; flex: none; min-width: 0; }
+#subCourse #snowCourseFilterButton { display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px 8px; min-height: 44px; }
+#subCourse .snow-course-filter-status { font-size: 11px; color: var(--primary); white-space: nowrap; }
+#subCourse .snow-course-filter-panel {
+  position: absolute; z-index: 35; top: calc(100% + 8px); left: 0;
+  width: min(340px, calc(100vw - 64px)); max-height: calc(100dvh - 120px);
+  overflow: auto; padding: 12px 16px; box-sizing: border-box;
+  background: #fff; border: 1px solid var(--snow-line); box-shadow: 0 8px 24px #1a302b14;
+}
+#subCourse .snow-course-filter[data-placement="above"] .snow-course-filter-panel { top: auto; bottom: calc(100% + 8px); }
+#subCourse .snow-course-filter-panel > label { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; padding: 8px 0; white-space: normal; font-size: 13px; line-height: 1.6; }
+#subCourse .snow-course-filter-panel input[type="checkbox"] { width: 16px; height: 16px; margin: 0; flex: none; }
+#subCourse .snow-course-filter-footer { display: flex; align-items: start; flex-direction: column; gap: 8px; border-top: 1px solid var(--snow-line); padding-top: 12px; margin-top: 8px; }
+#subCourse .snow-course-filter-footer p { font-size: 12px; color: var(--snow-muted); line-height: 1.8; margin: 0; }
+#subCourse .snow-course-filter-footer > .btn { align-self: flex-end; }
+#subCourse #courseSummary { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0 0 16px; padding: 12px 0; border-top: 1px solid var(--snow-line); border-bottom: 1px solid var(--snow-line); }
+#subCourse #courseSummary .course-inventory-scope { flex-basis: 100%; gap: 4px 12px; margin: 0 0 2px; padding: 0; border: 0; line-height: 1.8; }
+#subCourse #courseSummary .course-summary-item { display: inline-flex; align-items: baseline; gap: 3px; margin: 0; padding: 0; min-height: 0; border: 0; background: transparent; font-size: 12px; line-height: 1.8; }
+#subCourse #courseSummary .course-expired-note { flex-basis: 100%; order: 1; }
+@media(max-width:760px){
+  #subCourse .snow-admin-learning-courses .learning-toolbar { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; align-items: stretch; }
+  #subCourse .learning-toolbar > div:first-child { grid-column: 1 / -1; }
+  #subCourse .learning-toolbar #courseBatchAllBtn { grid-column: 1 / -1; width: 100%; }
+  #subCourse .snow-course-filter { display: flex; }
+  #subCourse #snowCourseFilterButton,#subCourse .learning-toolbar #courseRefreshBtn { width: 100%; height: 100%; margin: 0; }
+}
+
+</style>
+<style id="snowCourseSummaryLayout">
+#subCourse #courseSummary {
+  display: block; margin: 0 0 16px; padding: 14px 0;
+  border-top: 1px solid var(--snow-line); border-bottom: 1px solid var(--snow-line);
+}
+#subCourse #courseSummary .snow-course-summary {
+  display: grid; gap: 4px; width: 100%; margin: 0; padding: 0; border: 0;
+}
+#subCourse .snow-course-summary-row {
+  display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 16px;
+}
+#subCourse .snow-course-summary-current { color: var(--snow-ink); font-size: 14px; line-height: 1.8; }
+#subCourse .snow-course-summary-current > strong { font-size: 17px; font-weight: 650; font-variant-numeric: tabular-nums; }
+#subCourse .snow-course-summary-read { color: var(--snow-muted); font-size: 12px; white-space: nowrap; }
+#subCourse .snow-course-summary-breakdown { display: inline-block; margin-left: 12px; color: var(--snow-muted); font-size: 12px; }
+#subCourse #courseSummary .course-scope-description { color: var(--snow-muted); font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+#subCourse .snow-course-summary-note { margin: 4px 0 0; color: var(--snow-muted); font-size: 12px; line-height: 1.8; }
+#subCourse #courseReadDiagnostics { padding: 12px 0 0; color: var(--snow-muted); font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+#subCourse #courseReadDiagnostics[hidden] { display: none; }
+@media(max-width:760px){
+  #subCourse #courseSummary { padding: 12px 0; }
+  #subCourse .snow-course-summary-current { min-width: 0; }
+  #subCourse .snow-course-summary-breakdown { margin-left: 0; display: block; }
+}
+
+</style>
+<style id="snowCourseGroupCards">
+#subCourse #courseListContainer .snow-course-group-card {
+  margin: 0 0 12px; padding: 0; border: 1px solid var(--snow-line); border-radius: 0;
+  background: #fff; box-shadow: none; min-width: 0; overflow: visible;
+}
+#subCourse .snow-course-group-card > .course-group-header {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 5px 16px;
+  width: 100%; min-height: 78px; padding: 15px 16px; margin: 0; border: 0;
+  background: transparent; text-align: left; border-radius: 0; box-shadow: none; transform: none;
+}
+#subCourse .snow-course-group-card > .course-group-header::after { content: none; }
+#subCourse .snow-course-group-card > .course-group-header:hover { background: #f4f8f6; }
+#subCourse .snow-course-group-card .course-group-title { font-size: 15px; font-weight: 600; line-height: 1.7; min-width: 0; overflow-wrap: anywhere; }
+#subCourse .snow-course-group-card .course-group-meta { grid-column: 1; grid-row: 2; margin: 0; justify-self: start; text-align: left; font-size: 12px; color: var(--snow-muted); line-height: 1.8; }
+#subCourse .snow-course-group-toggle { grid-column: 2; grid-row: 1 / span 2; font-size: 12px; font-weight: 400; color: var(--primary); white-space: nowrap; }
+#subCourse .snow-course-group-card > .course-group-body { display: block; padding: 0; border-top: 1px solid var(--snow-line); background: #fff; }
+#subCourse .snow-course-group-card > .course-group-body[hidden] { display: none; }
+#subCourse .snow-course-group-card article.course-card[data-studio-enhanced] {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 8px 16px;
+  margin: 0; padding: 5px 16px; min-height: 56px; min-width: 0; border: 0; border-bottom: 1px solid var(--snow-line);
+  background: transparent; border-radius: 0; box-shadow: none; transform: none;
+}
+#subCourse .snow-course-group-card article.course-card[data-studio-enhanced]:last-child { border-bottom: 0; }
+#subCourse .snow-course-group-card article.course-card[data-studio-enhanced]:hover { background: #f8faf9; }
+#subCourse .snow-course-group-card article.course-card[data-studio-enhanced] > .course-card-top {
+  grid-column: 1; grid-row: 1;
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 8px 12px; min-width: 0;
+}
+#subCourse .snow-course-group-card .course-card-name { font-size: 13px; font-weight: 400; line-height: 1.8; overflow-wrap: anywhere; }
+#subCourse .snow-course-group-card .course-card-top > .course-badge { flex: none; margin: 0; padding: 2px 6px; font-size: 11px; line-height: 1.8; }
+#subCourse .snow-course-group-card .snow-course-detail-link {
+  grid-column: 2; grid-row: 1; align-self: center;
+  border: 0; background: transparent; box-shadow: none; padding: 4px 0 4px 4px;
+  min-height: 44px; min-width: 64px; color: var(--primary); font-size: 12px; white-space: nowrap;
+}
+#subCourse .snow-course-group-card .snow-course-detail-link:hover { background: transparent; text-decoration: underline; text-underline-offset: 4px; }
+@media(max-width:760px){
+  #subCourse .snow-course-group-card > .course-group-header { padding: 13px 14px; gap: 4px 12px; min-height: 76px; }
+  #subCourse .snow-course-group-card .course-group-title { font-size: 14px; }
+  #subCourse .snow-course-group-card article.course-card[data-studio-enhanced] { padding: 6px 14px; gap: 8px 12px; min-height: 64px; }
+  #subCourse .snow-course-group-card article.course-card[data-studio-enhanced] > .course-card-top { flex-direction: column; align-items: flex-start; gap: 3px; }
+}
+
+</style>
 </head><body>
 
 
@@ -4167,11 +4286,11 @@ body[data-snow-mode="workspace"] #subOverview .snow-learning-content .studio-con
             <button id="courseRefreshBtn" class="btn btn-ghost btn-sm">刷新课程</button>
             <button id="courseTasksBtn" class="btn btn-ghost btn-sm">执行记录</button>
             <span class="toolbar-sep"></span>
-            <label class="checkbox"><input id="coursePendingOnly" type="checkbox">只看待完成</label>
+            <label class="checkbox"><input id="courseIncludeCompleted" type="checkbox">已完成课程</label>
           </div>
           <details class="course-advanced"><summary>更多筛选</summary><div class="course-toolbar">
-            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox" checked>显示过期课程</label>
-            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox" checked>显示学习地图额外条目</label>
+            <label class="checkbox"><input id="courseIncludeExpired" type="checkbox">过期课程</label>
+            <label class="checkbox"><input id="courseIncludeMapOnly" type="checkbox" checked>学习地图课程</label>
           </div></details>
           <div id="courseBatchPanel" class="course-batch-panel hidden"></div>
           <div id="courseSummary" class="course-summary"></div>
@@ -4476,19 +4595,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const close=make('button','btn btn-ghost','关闭');close.type='button';close.dataset.studioClose='';heading.append(close);
       dialog.append(heading,make('h2','studio-sheet-title',name));
       [...card.children].filter(n=>n!==top).forEach(n=>dialog.append(n));
-      const art=make('span','studio-course-art');art.setAttribute('aria-hidden','true');
-      const progress=make('div','studio-row-progress');
       const raw=course?.studyRate;
       const known=raw!==null&&raw!==undefined&&raw!==''&&Number.isFinite(Number(raw));
-      const rate=known?Math.min(100,Math.max(0,Number(raw))):null;
       if(!known){
         const value=dialog.querySelector('.course-status-item .course-status-value');
         if(value){value.textContent='进度待确认（平台未返回）';value.className='course-status-value neutral';}
       }
-      const caption=make('span','',rate===null?'视频进度待确认':'视频学习 '+rate+'%');
-      const track=make('span','studio-track');const fill=make('i','');fill.style.width=(rate??0)+'%';track.append(fill);progress.append(caption,track);
-      const open=make('button','btn btn-ghost studio-open','查看详情');open.type='button';open.dataset.studioOpen='';open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-label','查看详情：'+name);
-      card.prepend(art);card.append(progress,open,dialog);
+      const readonly=course?.mapOnly===true||course?.statusSource==='unverified'||course?.eligibility?.allowed!==true;
+      const badge=top.querySelector('.course-badge');
+      if(readonly&&!coursePlatformComplete(course)&&badge){badge.textContent='仅查看';badge.title=course?.eligibility?.reason||'课程详情未补全或不满足执行条件';}
+      const open=make('button','btn btn-ghost studio-open snow-course-detail-link','查看详情');open.type='button';open.dataset.studioOpen='';open.setAttribute('aria-haspopup','dialog');open.setAttribute('aria-label','查看详情：'+name);
+      card.append(open,dialog);
       dialog.addEventListener('cancel',()=>{activeDialog=null;returnFocus=null;});
     }
   }
@@ -4613,8 +4730,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   heading.after(accountActions);
   $('courseLoginBtn').textContent='连接学习平台';
   connection.querySelector('summary').textContent='连接账号';
-  const tech=document.createElement('details');tech.className='connection-details snow-admin-text-disclosure';
-  tech.innerHTML='<summary>连接详情</summary><div class="connection-meta"></div>';
+  const tech=document.createElement('section');tech.className='connection-details snow-admin-connection-info';tech.setAttribute('aria-label','连接详情');
+  tech.innerHTML='<span class="snow-admin-connection-label">连接详情</span><div class="connection-meta"></div>';
   tech.querySelector('div').append($('courseSessionBadge'),$('courseApiBadge'));
   account.append(tech);
   const empty=document.createElement('p');empty.className='snow-admin-learning-empty';
@@ -4627,9 +4744,63 @@ document.addEventListener('DOMContentLoaded',()=>{
   courses.setAttribute('aria-labelledby','snowAdminCoursesHeading');
   const title=document.createElement('div');title.innerHTML='<h3 id="snowAdminCoursesHeading">课程</h3><p>显示最近读取的课程，刷新后更新。</p>';
   toolbar.prepend(title);
-  const filters=document.createElement('div');filters.className='learning-filters';
-  filters.append(toolbar.querySelector('label'),list.querySelector('details.course-advanced'));
-  courses.append(toolbar,filters,$('courseSummary'),$('courseListContainer'));
+  // Move the original checkboxes, retaining their IDs and original change handlers.
+  const filterWrap=document.createElement('div');filterWrap.className='snow-course-filter';
+  const filterButton=document.createElement('button');filterButton.type='button';filterButton.id='snowCourseFilterButton';filterButton.className='btn btn-ghost btn-sm';
+  filterButton.setAttribute('aria-controls','snowCourseFilterPanel');filterButton.setAttribute('aria-expanded','false');
+  filterButton.innerHTML='<span>筛选课程</span><span class="snow-course-filter-status" hidden>已调整</span>';
+  const filterPanel=document.createElement('div');filterPanel.id='snowCourseFilterPanel';filterPanel.className='snow-course-filter-panel';filterPanel.hidden=true;
+  filterPanel.setAttribute('role','group');filterPanel.setAttribute('aria-label','课程显示条件');
+  const advanced=list.querySelector('details.course-advanced');
+  const completedLabel=toolbar.querySelector('label');
+  const advancedLabels=[...advanced.querySelectorAll('label')];
+  filterPanel.append(advancedLabels[0],completedLabel,advancedLabels[1]);
+  advanced.remove();
+  const resetFilters=document.createElement('button');resetFilters.type='button';resetFilters.className='btn btn-ghost btn-sm';resetFilters.textContent='恢复默认';
+  const filterFooter=document.createElement('div');filterFooter.className='snow-course-filter-footer';
+  const filterHint=document.createElement('p');filterHint.textContent='筛选条件共同生效；仅调整显示，执行范围以预览确认为准。';
+  filterFooter.append(filterHint,resetFilters);filterPanel.append(filterFooter);
+  filterWrap.append(filterButton,filterPanel);toolbar.insertBefore(filterWrap,$('courseRefreshBtn'));
+  courses.append(toolbar,$('courseSummary'),$('courseListContainer'));
+  const filterFields=['courseIncludeExpired','courseIncludeCompleted','courseIncludeMapOnly'].map(id=>filterPanel.querySelector('#'+id));
+  function syncFilterStatus(){
+    const adjusted=filterFields.some(field=>field.checked!==field.defaultChecked);
+    filterButton.querySelector('.snow-course-filter-status').hidden=!adjusted;
+    filterButton.setAttribute('aria-label',adjusted?'筛选课程，已调整':'筛选课程');
+    resetFilters.disabled=!adjusted;
+  }
+  function positionFilter(){
+    if(filterPanel.hidden)return;
+    filterWrap.dataset.placement='below';
+    filterPanel.style.maxHeight='';
+    const buttonBox=filterButton.getBoundingClientRect(),panelHeight=filterPanel.getBoundingClientRect().height;
+    const bottomReserve=window.matchMedia('(max-width:760px)').matches?88:16;
+    const below=Math.max(0,window.innerHeight-bottomReserve-buttonBox.bottom-8);
+    const above=Math.max(0,buttonBox.top-24);
+    const useAbove=below<panelHeight&&above>below;
+    filterWrap.dataset.placement=useAbove?'above':'below';
+    filterPanel.style.maxHeight=Math.floor(Math.max(0,useAbove?above:below))+'px';
+  }
+  function closeFilter(returnFocus=false){filterPanel.hidden=true;filterButton.setAttribute('aria-expanded','false');if(returnFocus)filterButton.focus({preventScroll:true});}
+  filterButton.addEventListener('click',()=>{
+    if(!filterPanel.hidden){closeFilter();return;}
+    filterPanel.hidden=false;filterButton.setAttribute('aria-expanded','true');positionFilter();filterFields[0].focus({preventScroll:true});
+  });
+  for(const field of filterFields)field.addEventListener('change',syncFilterStatus);
+  resetFilters.addEventListener('click',()=>{
+    const adjusted=filterFields.some(field=>field.checked!==field.defaultChecked);
+    for(const field of filterFields)field.checked=field.defaultChecked;
+    if(adjusted)filterFields[0].dispatchEvent(new Event('change',{bubbles:true}));
+    syncFilterStatus();positionFilter();
+  });
+  document.addEventListener('click',event=>{if(!filterPanel.hidden&&!filterWrap.contains(event.target))closeFilter();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!filterPanel.hidden){event.preventDefault();event.stopPropagation();closeFilter(true);}});
+  filterWrap.addEventListener('focusout',event=>{if(event.relatedTarget&&!filterWrap.contains(event.relatedTarget))closeFilter();});
+  window.addEventListener('resize',positionFilter);
+  window.addEventListener('scroll',event=>{if(!filterPanel.contains(event.target))positionFilter();},{capture:true,passive:true});
+  new MutationObserver(syncFilterStatus).observe(courses.querySelector('#courseSummary'),{childList:true,subtree:true});
+  new MutationObserver(()=>{if(pane.classList.contains('hidden'))closeFilter();}).observe(pane,{attributes:true,attributeFilter:['class']});
+  syncFilterStatus();
   const task=document.createElement('aside');task.className='snow-admin-learning-task';
   task.setAttribute('aria-labelledby','snowAdminTaskHeading');
   task.innerHTML='<h3 id="snowAdminTaskHeading">当前任务</h3><div class="snow-admin-task-empty"><strong>暂未显示当前任务</strong><p>任务状态以最近读取结果为准。新任务仍需在课程区确认范围。</p></div>';
@@ -4644,7 +4815,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   recordToggle.textContent='收起';recordToggle.setAttribute('aria-controls','snowAdminRecordBody');recordToggle.setAttribute('aria-expanded','true');
   recordActions.append($('courseTasksBtn'),recordToggle);recordHead.append(recordActions);
   const recordBody=document.createElement('div');recordBody.id='snowAdminRecordBody';recordBody.append($('courseOutput'));
-  record.append(recordHead,recordBody);list.after(record);
+  const readDiagnostics=document.createElement('div');readDiagnostics.id='courseReadDiagnostics';readDiagnostics.hidden=true;
+  record.append(recordHead,readDiagnostics,recordBody);list.after(record);
+  renderCourseSummary();
 
   let loginExpanded=false,previousConnected=false;
   const stacked=window.matchMedia('(max-width: 1279px)');
@@ -5224,6 +5397,9 @@ const state = {
   courseListCache: null,
   courseCollapsed: new Set(),
   courseGroupsInitialized: false,
+  courseGroupViewAccount: '',
+  courseGroupPendingAccount: '',
+  courseGroupSeen: new Set(),
   courseLoading: false,
   courseBusy: false,
   coursePartChoices: new Map(),
@@ -7547,12 +7723,12 @@ function makeStandaloneCourseGroup(course) {
 
 function applyCourseFilters({ render = true } = {}) {
   const includeExpired = $('courseIncludeExpired')?.checked === true;
-  const pendingOnly = $('coursePendingOnly')?.checked === true;
+  const includeCompleted = $('courseIncludeCompleted')?.checked === true;
   const includeMapOnly = $('courseIncludeMapOnly')?.checked === true;
   const courses = (state.courseAllCourses || [])
     .filter(course => includeMapOnly || course?.mapOnly !== true)
-    .filter(course => includeExpired || course?.eligibility?.allowed === true || includeMapOnly && course?.mapOnly === true)
-    .filter(course => !pendingOnly || courseHasPending(course));
+    .filter(course => includeExpired || course?.eligibility?.status !== 'expired')
+    .filter(course => includeCompleted || courseHasPending(course));
   const visibleIds = new Set(courses.map(course => String(course?.courseId || '')));
   const groups = [];
   const groupedIds = new Set();
@@ -7640,28 +7816,59 @@ function renderCourseCard(course) {
   </article>`;
 }
 
+// In-memory view state only; no storage, requests or execution policy changes.
+function resetCourseGroupViewAccount(username) {
+  const account = String(username || '').trim();
+  if (!account || state.courseGroupViewAccount === account) return;
+  state.courseGroupViewAccount = account;
+  state.courseCollapsed.clear();
+  state.courseGroupSeen.clear();
+  state.courseGroupsInitialized = false;
+  // Do not show the previous account's inventory if the new account's read fails.
+  state.courseAllCourses = []; state.courseAllGroups = [];
+  state.courseCourses = []; state.courseGroups = [];
+  state.courseById.clear(); state.courseListCache = null;
+  state.coursePartChoices.clear();
+  renderCourseSummary();
+}
+
+function initializeCourseGroupView() {
+  for (const group of [...(state.courseAllGroups || []), ...(state.courseGroups || [])]) {
+    const key = courseGroupKey(group);
+    if (state.courseGroupSeen.has(key)) continue;
+    state.courseGroupSeen.add(key);
+    state.courseCollapsed.add(key);
+  }
+}
+
 function renderCourseList() {
   const container = $('courseListContainer');
   if (!container) return;
+  initializeCourseGroupView();
   if (!state.courseCourses.length) {
     container.innerHTML = (state.courseAllCourses || []).length
-      ? '<div class="empty">没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">请检查上方筛选范围，或点击“显示全部课程”；不需要重新读取平台</span></div>'
+      ? '<div class="empty">没有符合当前筛选条件的课程<br><span style="font-size:.78rem;">请调整上方“筛选课程”，无需重新读取平台</span></div>'
       : '<div class="empty">暂无课程<br><span style="font-size:.78rem;">平台未返回课程记录，可点击“刷新课程”重新读取。</span></div>';
     return;
   }
-  const html = state.courseGroups.map(group => {
+  const allGroups = new Map((state.courseAllGroups || []).map(group => [courseGroupKey(group), group]));
+  const html = state.courseGroups.map((group, index) => {
     const key = courseGroupKey(group);
     const collapsed = state.courseCollapsed.has(key);
     const children = Array.isArray(group.courses) ? group.courses : [];
-    const complete = Number(group.completedCount || 0);
-    const groupSource = group.groupSource === 'learning-map' ? '学习地图真实分组' : group.groupSource === 'platform' ? '平台课程组' : '单门课程';
-    return `<section class="course-group" data-course-group-key="${courseAttr(key)}">
-      <button class="course-group-header" type="button" data-course-group-toggle="${courseAttr(key)}" aria-expanded="${collapsed ? 'false' : 'true'}">
-        <span class="course-group-chevron">${collapsed ? '▸' : '▾'}</span>
+    const original = allGroups.get(key);
+    const originalChildren = Array.isArray(original?.courses) ? original.courses : children;
+    const total = new Set(originalChildren.map(course => String(course.courseId))).size;
+    const visible = new Set(children.map(course => String(course.courseId))).size;
+    const countText = total === visible ? `共 ${total} 门课程` : `全组 ${total} 门 · 当前显示 ${visible} 门`;
+    const bodyId = `snowCourseGroupBody-${index}`;
+    return `<section class="course-group snow-course-group-card" data-course-group-key="${courseAttr(key)}">
+      <button class="course-group-header" type="button" data-course-group-toggle="${courseAttr(key)}" aria-expanded="${collapsed ? 'false' : 'true'}" aria-controls="${bodyId}">
         <span class="course-group-title">${escapeHtml(group.groupName || '未命名课程组')}</span>
-        <span class="course-group-meta">${children.length} 门 · 平台完成 ${complete}/${children.length} · 待完成 ${children.filter(courseHasPending).length} · ${escapeHtml(groupSource)}</span>
+        <span class="snow-course-group-toggle">${collapsed ? '展开' : '收起'}</span>
+        <span class="course-group-meta">${escapeHtml(countText)}</span>
       </button>
-      <div class="course-group-body${collapsed ? ' collapsed' : ''}">${children.map(renderCourseCard).join('')}</div>
+      <div id="${bodyId}" class="course-group-body${collapsed ? ' collapsed' : ''}"${collapsed ? ' hidden' : ''}>${collapsed ? '' : children.map(renderCourseCard).join('')}</div>
     </section>`;
   }).join('');
   container.innerHTML = html;
@@ -7670,36 +7877,36 @@ function renderCourseList() {
 function renderCourseSummary() {
   const el = $('courseSummary');
   if (!el) return;
-  // The same course may appear in several learning-map groups. Count unique
-  // course IDs here rather than summing per-group completion counts.
-  const courses = [...new Map(state.courseCourses.map(course => [String(course.courseId), course])).values()];
-  const total = courses.length;
-  const pending = courses.filter(courseHasPending).length;
-  const expired = courses.filter(course => course?.eligibility?.status === 'expired').length;
-  const platformCompleted = courses.filter(coursePlatformComplete).length;
-  const incomplete = courses.filter(course => courseHasPending(course) && (course.mapOnly === true || course.statusSource === 'unverified')).length;
-  const mapGroups = state.courseGroups.filter(group => group.groupSource === 'learning-map').length;
-  const cacheLayer = state.courseListCache?.layer;
-  const cacheText = cacheLayer === 'redis' ? 'Redis 短缓存' : cacheLayer === 'memory' ? '函数内短缓存' : cacheLayer === 'upstream' ? '平台实时读取' : '读取来源未知';
+  // Count unique course IDs, not the same course repeated in learning-map groups.
+  const courses = [...new Map((state.courseCourses || []).map(course => [String(course.courseId), course])).values()];
   const all = [...new Map((state.courseAllCourses || []).map(course => [String(course.courseId), course])).values()];
-  const hidden = Math.max(0, all.length - total);
-  const filters = [];
-  if ($('courseIncludeExpired')?.checked !== true) filters.push('隐藏过期 / 未开放课程');
-  if ($('courseIncludeMapOnly')?.checked !== true) filters.push('隐藏学习地图额外条目');
-  if ($('coursePendingOnly')?.checked === true) filters.push('只看待完成');
-  const range = filters.length ? '筛选中：' + filters.join('；') : '全部课程（含历史和学习地图条目）';
-  el.innerHTML = `<div class="course-inventory-scope" role="status" aria-live="polite">
-    <span>已读取 <strong>${all.length}</strong> 门 · 当前显示 <strong>${total}</strong> 门 · 已隐藏 <strong>${hidden}</strong> 门</span>
-    <span class="course-scope-description">${escapeHtml(range)}</span>
-    ${filters.length ? '<button type="button" class="btn btn-ghost btn-sm course-show-all" id="courseShowAll">显示全部课程</button>' : ''}
-  </div><span class="course-summary-item"><strong>${total}</strong> 门课程</span>
-    <span class="course-summary-item"><strong>${platformCompleted}</strong> 门平台完成</span>
-    <span class="course-summary-item danger" title="未获得平台整课完成标记的课程；包含信息待补全条目，不等同于可执行任务。"><strong>${pending}</strong> 门待完成</span>
-    ${incomplete ? `<span class="course-summary-item" title="已计入待完成；详细资料未核实，仍保持只读。">其中 <strong>${incomplete}</strong> 门信息待补全（只读）</span>` : ''}
-    <span class="course-summary-item"><strong>${expired}</strong> 门过期</span>
-      ${expired ? '<span class="course-summary-item course-expired-note">过期课程仅查看，不能执行；待完成数量包含过期未完成课程。</span>' : ''}
-    <span class="course-summary-item">${mapGroups ? '学习地图真实分组已启用' : '未返回学习地图分组'}</span>
-    <span class="course-summary-item">${escapeHtml(cacheText)}</span>`;
+  const pending = courses.filter(courseHasPending).length;
+  const completed = courses.filter(coursePlatformComplete).length;
+  const expired = courses.filter(course => course?.eligibility?.status === 'expired').length;
+  const includeExpired = $('courseIncludeExpired')?.checked === true;
+  const includeCompleted = $('courseIncludeCompleted')?.checked === true;
+  const includeMapOnly = $('courseIncludeMapOnly')?.checked === true;
+  const range = [includeExpired ? '含过期课程' : '未过期', includeCompleted ? '待完成及已完成' : '待完成'];
+  if (includeMapOnly) range.push('含学习地图课程');
+  const mixed = pending > 0 && completed > 0;
+  el.innerHTML = `<div class="course-inventory-scope snow-course-summary" role="status" aria-live="polite" aria-atomic="true">
+    <div class="snow-course-summary-row">
+      <div class="snow-course-summary-current">当前显示 <strong>${courses.length}</strong> 门${mixed ? `<span class="snow-course-summary-breakdown">待完成 ${pending} · 已完成 ${completed}</span>` : ''}</div>
+      <span class="snow-course-summary-read">共读取 ${all.length} 门</span>
+    </div>
+    <div class="course-scope-description">${escapeHtml(range.join(' · '))}</div>
+    ${includeExpired && expired > 0 ? '<p class="snow-course-summary-note">过期课程仅供查看，不能执行。</p>' : ''}
+  </div>`;
+
+  // Reading metadata belongs with diagnostics, not the primary course list.
+  const diagnostics = $('courseReadDiagnostics');
+  if (diagnostics) {
+    const cacheLayer = state.courseListCache?.layer;
+    const cacheText = cacheLayer === 'redis' ? 'Redis 短缓存' : cacheLayer === 'memory' ? '函数内短缓存' : cacheLayer === 'upstream' ? '平台实时读取' : '读取来源未知';
+    const mapGroups = (state.courseAllGroups || []).some(group => group.groupSource === 'learning-map');
+    diagnostics.textContent = `最近读取来源：${cacheText}${mapGroups ? ' · 按学习地图分组' : ''}`;
+    diagnostics.hidden = !state.courseListCache && !all.length;
+  }
 }
 
 function renderCourseSessionState() {
@@ -7782,7 +7989,8 @@ async function loginCourse() {
     // 密码只在本次请求中使用；挑战期间由服务端加密暂存。
     $('coursePassword').value = '';
     setCourseSessionResult(data);
-    if (state.courseAuthenticated) { showToast('网课登录成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
+    state.courseGroupPendingAccount = username;
+    if (state.courseAuthenticated) { resetCourseGroupViewAccount(username); showToast('网课登录成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
     else if (state.courseChallenge) showToast('需要完成网课登录验证');
   } catch (e) {
     $('coursePassword').value = '';
@@ -7806,7 +8014,7 @@ async function submitCourseChallenge(sendOnly = false) {
     });
     $('courseChallengeCode').value = '';
     setCourseSessionResult(data);
-    if (state.courseAuthenticated) { showToast('网课登录验证成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
+    if (state.courseAuthenticated) { resetCourseGroupViewAccount(state.courseGroupPendingAccount); showToast('网课登录验证成功'); await loadCourseList(); await loadCourseBatchStatus({ silent: true }); }
     else showToast('验证状态已更新');
   } catch (e) {
     state.courseSessionMessage = e.message || '网课登录验证失败';
@@ -7826,7 +8034,7 @@ async function logoutCourse() {
       if (key.startsWith(`${state.courseSessionId}:`)) state.courseExecutionKeys.delete(key);
     }
     savePendingCourseExecutions();
-    state.courseAllCourses = []; state.courseAllGroups = []; state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseListCache = null; state.courseCollapsed.clear(); state.courseGroupsInitialized = false;
+    state.courseAllCourses = []; state.courseAllGroups = []; state.courseCourses = []; state.courseGroups = []; state.courseById.clear(); state.courseListCache = null; state.courseCollapsed.clear(); state.courseGroupsInitialized = false; state.courseGroupSeen.clear(); state.courseGroupViewAccount = ''; state.courseGroupPendingAccount = '';
     state.coursePartChoices.clear(); state.courseBatch = null; state.courseBatchPumping = false; state.courseBatchPauseRequested = false; state.courseBatchCancelRequested = false; state.courseDiagnostics = null; state.courseClientWaitMs = 0; state.courseLastStep = '请求准备'; state.courseLastRequestMs = 0; state.courseLastClientRequestMs = 0;
     setCourseSessionResult(data); $('courseListPanel').classList.add('hidden'); $('courseOutput').innerHTML = '';
     updateCourseBatchUi();
@@ -7859,10 +8067,8 @@ async function loadCourseList({ forceRefresh = false } = {}) {
       : state.courseAllCourses.map(makeStandaloneCourseGroup);
     state.courseListCache = data.cache && typeof data.cache === 'object' ? data.cache : null;
     applyCourseFilters({ render: false });
-    if (!state.courseGroupsInitialized) {
-      state.courseGroups.filter(group => group.collapsible === true || Number(group.count || group.courses?.length || 0) > 1).forEach(group => state.courseCollapsed.add(courseGroupKey(group)));
-      state.courseGroupsInitialized = true;
-    }
+    initializeCourseGroupView();
+    state.courseGroupsInitialized = true;
     renderCourseSummary(); renderCourseList(); updateCourseBatchUi();
   } catch (e) {
     if (e.sessionStatus === 'expired') { state.courseAuthenticated = false; state.courseSessionStatus = 'expired'; state.courseChallenge = null; renderCourseSessionState(); $('courseListPanel').classList.add('hidden'); }
@@ -8375,6 +8581,8 @@ $('courseListContainer').addEventListener('click', async e => {
     const key = groupToggle.dataset.courseGroupToggle;
     if (state.courseCollapsed.has(key)) state.courseCollapsed.delete(key); else state.courseCollapsed.add(key);
     renderCourseList();
+    const replacement = [...$('courseListContainer').querySelectorAll('[data-course-group-toggle]')].find(node => node.dataset.courseGroupToggle === key);
+    replacement?.focus({ preventScroll: true });
     return;
   }
   const button = e.target.closest('[data-course-action]');
@@ -8514,7 +8722,7 @@ $('courseChallengeCode').addEventListener('keypress', e => { if (e.key === 'Ente
 $('courseRefreshBtn').addEventListener('click', () => loadCourseList({ forceRefresh: true }));
 $('courseTasksBtn').addEventListener('click', loadCourseTasks);
 $('courseBatchAllBtn').addEventListener('click', () => startCourseBatch('all'));
-['courseIncludeExpired', 'coursePendingOnly', 'courseIncludeMapOnly'].forEach(id => {
+['courseIncludeExpired', 'courseIncludeCompleted', 'courseIncludeMapOnly'].forEach(id => {
   $(id).addEventListener('change', () => applyCourseFilters());
 });
 
@@ -9184,7 +9392,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.24 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.30 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -10229,19 +10437,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 
 </script><script id="snowCourseVisibilityUI">
-/* Local display controls only. No authentication, network or business writes. */
-(() => {
-  document.addEventListener('click', event => {
-    if (!event.target.closest?.('#courseShowAll')) return;
-    for (const [id, checked] of [['courseIncludeExpired',true],['courseIncludeMapOnly',true],['coursePendingOnly',false]]) {
-      const input = document.getElementById(id);
-      if (input && input.checked !== checked) input.click();
-    }
-    const summary = document.getElementById('courseSummary');
-    if (summary) { summary.setAttribute('tabindex','-1'); summary.focus(); }
-  });
-})();
-
+/* Course display is controlled exclusively by the filter popover. */
 </script>
 <script id="snowUnifiedAccess">
 /* Presentation adapter only. Reparent original forms; never clone them or send requests. */
