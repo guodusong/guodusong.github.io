@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.34-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.35-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -7855,13 +7855,13 @@ function renderCourseBatchPanel() {
   const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
   const needsReview = ['paused', 'stopped'].includes(batch.status);
   const attentionHtml = failed > 0 || needsReview
-    ? `<aside class="task-attention"><h4>${needsReview ? '任务已暂停，请先查看原因' : '部分课程需要处理'}</h4><p>${failed > 0 ? `${failed} 门课程失败。` : ''}${needsReview ? '请先查看当前课程和平台返回的说明；写入结果待确认时先复核，不要重复提交。' : '请查看下方各门课程的具体原因；技术信息收在“性能与诊断”中。'}</p></aside>`
+    ? `<aside class="task-attention"><h4>${needsReview ? '任务已暂停，请先查看原因' : '部分课程需要处理'}</h4><p>${failed > 0 ? `${failed} 门课程失败。` : ''}${needsReview ? '请恢复登录或连接后继续，也可以取消并重新开始。' : '请查看下方各门课程的具体原因；技术信息收在“性能与诊断”中。'}</p></aside>`
     : '';
   const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
   const waitingHint = state.courseBatchPauseRequested
     ? ' · 正在等待当前步骤结束后暂停'
     : state.courseBatchCancelRequested
-      ? ' · 正在等待当前步骤结束后取消'
+      ? ' · 正在取消，不再提交后续步骤'
       : '';
   const performance = batch.performance && typeof batch.performance === 'object' ? batch.performance : {};
   const timing = performance.segments && typeof performance.segments === 'object' ? performance.segments : {};
@@ -8487,18 +8487,22 @@ function courseBatchPreviewMessage(preview) {
     const includesEvaluation = items.some(item => (item.plannedWorkflows || []).includes('evaluation'));
     const includesExam = items.some(item => (item.plannedWorkflows || []).includes('exam'));
     const policy = includesEvaluation
-      ? '课程评估按当前已实现规则执行：星级选择 5 星，数字评分取可用最高值，必填文字填写“好”，非必填文字留空；遇到未识别字段会停止，不猜测。'
+      ? '课程评估按当前已实现规则执行：星级选择 5 星，数字评分取可用最高值，必填文字填写“好”，非必填文字留空；遇到未识别字段会跳过该课程，不猜测。'
       : '';
-    const examPolicy = includesExam ? '考试仅使用题库中已安全匹配的答案，题面或答案不完整时停止，不自动补考。' : '';
-    return `执行范围：${scope}\n可执行 ${items.length} 门 · 已完成 ${skipped.length - blocked.length} 门 · 暂不可执行 ${blocked.length} 门\n\n${preview.taskScope === 'full' ? '每步后重新读取后续要求，整课完成必须由平台确认。' : '不会代做其他环节；前置条件不足时不扩大范围。'}\n${[policy, examPolicy].filter(Boolean).join('\n')}\n单门资源问题会记录并继续其他课程；登录失效或提交结果不明会暂停。关闭页面会停止后续请求，任务进度保留。\n\n${scopeNames}${blocked.length ? '\n\n暂未执行：\n' + blocked.map(item => `${item.courseName || item.courseId}：${item.reason}`).join('\n') : ''}`;
+    const examPolicy = includesExam ? '考试仅使用题库中已安全匹配的答案，题面或答案不完整时跳过该课程，不自动补考。' : '';
+    return `执行范围：${scope}\n可执行 ${items.length} 门 · 已完成 ${skipped.length - blocked.length} 门 · 暂不可执行 ${blocked.length} 门\n\n${preview.taskScope === 'full' ? '每步后重新读取后续要求，整课完成必须由平台确认。' : '不会代做其他环节；前置条件不足时不扩大范围。'}\n${[policy, examPolicy].filter(Boolean).join('\n')}\n单门课程失败会记录并跳过，继续下一门；本轮不自动重试。只有登录失效等全局问题才停止整批。关闭页面会停止后续请求，任务进度保留。\n\n${scopeNames}${blocked.length ? '\n\n暂未执行：\n' + blocked.map(item => `${item.courseName || item.courseId}：${item.reason}`).join('\n') : ''}`;
   }
-  return `平台最新预览：可执行 ${items.length} 门，跳过 ${skipped.length} 门。\n\n只会依次完成视频学习和课程评价；不会进入或提交考试。${examSkipped ? `\n其中 ${examSkipped} 门涉及考试，考试部分将跳过。` : ''}\n任一步骤完成后都会复核平台状态；出现异常会自动停止。\n\n${names}${extra}`;
+  return `平台最新预览：可执行 ${items.length} 门，跳过 ${skipped.length} 门。\n\n只会依次完成视频学习和课程评价；不会进入或提交考试。${examSkipped ? `\n其中 ${examSkipped} 门涉及考试，考试部分将跳过。` : ''}\n每步后复核平台状态；单门课程失败则跳过，继续下一门。\n\n${names}${extra}`;
 }
 
 async function startCourseBatch(mode = 'all', { taskScope = 'full', courseIds = [] } = {}) {
   if (state.courseBusy || state.courseBatchPumping) return;
   if (!state.courseApiCompatible) {
     showToast(state.courseApiMessage || '当前云函数不支持一键完成', true);
+    return;
+  }
+  if (state.courseApi?.capabilities?.simpleBatchExecution !== true) {
+    showToast('请先更新后端至 11.13.10 或更高版本，再开始新任务', true);
     return;
   }
   if (courseBatchActive()) {
@@ -8530,10 +8534,6 @@ async function startCourseBatch(mode = 'all', { taskScope = 'full', courseIds = 
       const skipped = Array.isArray(preview.skipped) ? preview.skipped : [];
       const reasons = skipped.slice(0, 10).map(item => `${item.courseName || item.courseId}：${item.reason || '不可执行'}`).join('\n');
       showCourseOutput('所选范围当前无需执行或尚不可执行', reasons || '平台未返回所选范围的待完成环节。', 'warning', previewResult);
-      return;
-    }
-    if (preview.examExecutionEnabled !== true && (preview.items || []).some(item => (item.plannedWorkflows || []).includes('exam'))) {
-      showCourseOutput('尚未开始：考试能力未开启', '本次范围包含考试，但后端尚未启用考试提交。可以先选择仅视频或仅评估；完整任务需要先启用并验证考试能力。没有创建或执行任务。', 'warning', previewResult);
       return;
     }
     showCourseOutput('一键完成预览已生成', courseBatchPreviewMessage(preview), 'warning', previewResult);
@@ -8636,7 +8636,7 @@ async function pumpCourseBatch() {
       showCourseOutput(`${courseBatchScopeTitle(batch)}已停止`, `${batch.reason || '平台复核未通过'}\n未开始的课程没有执行，可修复后点击“继续剩余课程”。`, 'error', { batch });
       showToast('任务遇到问题，已停止', true);
     } else if (batch?.status === 'paused') {
-      showCourseOutput(`${courseBatchScopeTitle(batch)}已暂停`, '当前步骤已处理完毕，后续课程尚未执行；恢复后只会继续本任务范围。', 'warning', { batch });
+      showCourseOutput(`${courseBatchScopeTitle(batch)}已暂停`, '任务已暂停，后续课程尚未执行；继续后只处理本轮剩余课程。', 'warning', { batch });
     } else if (batch?.status === 'cancelled') {
       showCourseOutput(`${courseBatchScopeTitle(batch)}已取消`, '未开始的课程不会执行，本任务范围外的环节也不会被执行。', 'warning', { batch });
     }
@@ -8693,38 +8693,22 @@ async function resumeCourseBatch() {
 }
 
 async function cancelCourseBatch() {
-  if (!courseBatchActive()) return;
-  const wasPumping = state.courseBatchPumping;
-  if (wasPumping) {
-    state.courseBatchPauseRequested = true;
-    updateCourseBatchUi();
-  }
-  const confirmed = await showConfirm('取消一键完成任务', '确定取消当前任务吗？\n正在执行的单个步骤会先等待平台返回；所有尚未开始的课程都不会执行。');
-  if (!confirmed) {
-    state.courseBatchPauseRequested = false;
-    updateCourseBatchUi();
-    if (!state.courseBatchPumping && state.courseBatch?.status === 'paused') await resumeCourseBatch();
-    return;
-  }
-
-  state.courseBatchPauseRequested = false;
+  if (!courseBatchActive() || state.courseBatchCancelRequested) return;
   state.courseBatchCancelRequested = true;
+  state.courseBatchPauseRequested = false;
   updateCourseBatchUi();
-  if (state.courseBatchPumping) {
-    showToast('将在当前步骤返回后取消任务');
-    return;
-  }
   try {
     const result = await courseFetch('batchCancel', { batchId: state.courseBatch.batchId, confirm: true });
     state.courseBatch = result.batch || state.courseBatch;
-    state.courseBatchCancelRequested = false;
-    renderCourseList();
-    updateCourseBatchUi();
-    showCourseOutput('一键完成已取消', '未开始的课程不会执行。', 'warning', result);
-  } catch (e) {
-    state.courseBatchCancelRequested = false;
-    updateCourseBatchUi();
-    showToast(`取消任务失败：${e.message}`, true);
+    if(state.courseBatch.status!=='cancelled')throw new Error('后端尚未确认取消，请更新后端或读取任务状态');
+    renderCourseList();updateCourseBatchUi();
+    showCourseOutput('任务已取消', '后续课程不再执行。可以重新点击“完成全部课程”，按平台最新状态开始新一轮。', 'warning', result);
+  } catch(e) {
+    showToast('取消请求未确认：'+e.message, true);
+    await loadCourseBatchStatus({silent:true});
+  } finally {
+    if(!state.courseBatchPumping){state.courseBatchCancelRequested=false;state.courseBusy=false;}
+    renderCourseList();updateCourseBatchUi();
   }
 }
 
@@ -9684,7 +9668,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.34 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.35 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -9965,8 +9949,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     const courses=member.courses.length?'<div class="member-learning-course-list">'+member.courses.map(c=>'<div class="member-row"><label class="member-course-check"><input type="checkbox" data-course-id="'+esc(c.courseId)+'" '+(member.selected.has(c.courseId)?'checked':'')+' '+(c.courseFinished?'disabled':'')+'><span><strong>'+esc(c.courseName)+'</strong><small>'+esc(c.courseFinished?'平台确认已完成':'未完成或待确认')+'</small></span></label></div>').join('')+'</div>':'<div class="member-empty member-learning-empty"><strong>'+(p.listRead?'本次未读取到课程':'课程会显示在这里')+'</strong><p>'+(p.listRead?'这是本次读取的结果，可按需重新读取。':p.connection==='connected'?'账户已连接，点击“读取课程”查看课程。':'连接账户后，手动读取课程；已连接的账户也可直接读取核对。')+'</p><small>读取和预览都不会自动开始任务。</small></div>';
     const preview=member.preview?'<section class="member-learning-preview" aria-label="任务预览"><h3>任务预览</h3><p>可执行 '+esc(member.preview.executableCount)+' 门，跳过 '+esc(member.preview.skippedCount)+' 门。当前可用额度 '+esc(member.data?.courseQuota)+' 门。</p><p class="member-help">确认创建后仍需手动开始；预览不会执行课程。</p>'+btn('确认创建任务','courseCreate',true)+'</section>':'';
     const coursePanel='<section class="member-card member-learning-courses"><header class="member-learning-section-heading"><h3>选择课程</h3><span data-course-read-label role="status" aria-live="polite">'+esc(courseReadLabel())+'</span></header>'+courses+'<footer class="member-learning-selection"><span data-course-selection-count role="status" aria-live="polite">已选 '+esc(member.selected.size)+' 门</span><div class="member-actions">'+btn('预览全部课程','coursePreviewAll')+btn('预览所选课程','coursePreviewSelected',true)+'</div></footer>'+preview+(p.listTime?'<p class="member-learning-read-time">最近成功读取 '+esc(new Date(p.listTime).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}))+'；这是最近读取的课程，不代表实时平台状态。</p>':'')+'</section>';
-    const task=b?'<section class="member-card member-learning-task"><h3>当前任务 · <span data-course-batch-status>'+esc(courseBatchLabel(b))+'</span></h3>'+(p.taskRead&&p.taskEmpty?'<p class="member-help">本次未返回任务，上次任务信息暂保留；请先核对再操作。</p>':'')+'<p class="member-muted">'+esc(b.reason)+'<br>课程 '+esc(b.completedCourses)+' / '+esc(b.totalCourses)+' · 失败 '+esc(b.failedCourses)+'</p><div class="member-actions">'+btn('开始 / 继续任务','courseRun',true,['running','paused','stopped'].includes(b.status)?'':'disabled')+btn('暂停后续步骤','coursePause')+btn('取消任务','courseCancel')+'</div>'+(b.items||[]).map(i=>'<div class="member-row"><div><strong>'+esc(i.courseName)+'</strong><small>'+esc(i.status==='pending'?'待开始':status(i.status))+' · '+esc(i.reason)+'</small></div></div>').join('')+'</section>':'<section class="member-card member-learning-task"><h3>当前任务</h3><div class="member-learning-task-empty"><strong>'+(p.taskRead?'本次未读取到当前任务':'尚未读取当前任务')+'</strong><p class="member-help">已创建的任务，可通过页面右上方“刷新任务与结算”查看。</p></div></section>';
-    const rules='<section class="member-learning-rules" aria-label="额度结算规则"><h3>额度结算</h3><p>仅平台确认整门课程完成后消耗额度。结果不明时保留预留，先核对再继续。</p></section>';
+    const task=b?'<section class="member-card member-learning-task"><h3>当前任务 · <span data-course-batch-status>'+esc(courseBatchLabel(b))+'</span></h3>'+(p.taskRead&&p.taskEmpty?'<p class="member-help">本次未返回任务，上次任务信息暂保留；请先核对再操作。</p>':'')+'<p class="member-muted">'+esc(b.reason)+'<br>课程 '+esc(b.completedCourses)+' / '+esc(b.totalCourses)+' · 失败 '+esc(b.failedCourses)+'</p><div class="member-actions">'+btn('开始 / 继续任务','courseRun',true,['running','paused','stopped'].includes(b.status)?'':'disabled')+btn('暂停后续步骤','coursePause')+'<button type="button" class="member-secondary" data-member="courseCancel" '+(['completed','completed_with_errors','cancelled'].includes(b.status)?'disabled':'')+'>取消任务</button>'+'</div>'+(b.items||[]).map(i=>'<div class="member-row"><div><strong>'+esc(i.courseName)+'</strong><small>'+esc(i.status==='pending'?'待开始':status(i.status))+' · '+esc(i.reason)+'</small></div></div>').join('')+'</section>':'<section class="member-card member-learning-task"><h3>当前任务</h3><div class="member-learning-task-empty"><strong>'+(p.taskRead?'本次未读取到当前任务':'尚未读取当前任务')+'</strong><p class="member-help">已创建的任务，可通过页面右上方“刷新任务与结算”查看。</p></div></section>';
+    const rules='<section class="member-learning-rules" aria-label="额度结算规则"><h3>额度结算</h3><p>仅平台确认整门课程完成后消耗额度；本轮失败或取消的课程释放预留，不计作完成。</p></section>';
     return title('学习任务，按完成结算。','连接账户，选择课程，先预览再开始。')+'<div class="member-learning-workspace">'+account+'<div class="member-learning-columns">'+coursePanel+'<aside class="member-learning-task-column" aria-label="任务与结算">'+task+rules+'</aside></div></div>';
   }
 
@@ -10335,7 +10319,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(member.batch.status!=='running')break;
       await new Promise(resolve=>setTimeout(resolve,650));
     }}finally{member.run=false;}
-    await refresh();member.notice='任务状态已更新；未确认的结果不会自动重复写入。';
+    await refresh();member.notice='本轮结束，失败课程已跳过。可重新读取课程并开始下一轮。';
   }
   dialog.addEventListener('input',e=>{
     if(e.target.dataset.tokenProduct)member.tokenDrafts.set(e.target.dataset.tokenProduct,e.target.value);
@@ -10355,6 +10339,11 @@ document.addEventListener('DOMContentLoaded',()=>{
     const action=b.dataset.member;
     if(action==='appendPreset'){if(member.busy)return;const input=b.closest('.member-maintenance-option').querySelector('[data-append-product]');input.value=b.dataset.quantity;updateAppend(input);return;}
     if(action==='authSwitch'){member.authMode=member.authMode==='login'?'register':'login';member.notice='';render();return;}
+    if(action==='courseCancel'){
+      member.run=false;
+      course('batchCancel',{batchId:member.batch?.batchId,confirm:true}).then(async()=>{await refresh();member.notice='任务已取消，可重新读取课程开始新一轮。';render();}).catch(e=>say('取消未确认：'+e.message,true));
+      return;
+    }
     if(action==='coursePause'&&member.run){member.run=false;member.notice='当前请求完成后，不再发送后续步骤。';render();return;}
     if(action==='supportCopy'){copy(JSON.stringify(member.diagnostic,null,2)).catch(()=>say('复制未成功，请展开诊断手动记录编号。',true));return;}
     if(action==='copy'||action==='copyToken'||action==='copyCdks'){const text=action==='copyToken'?"=javascript:$.getScript('"+api+'?token='+encodeURIComponent(b.dataset.code)+"')":action==='copyCdks'?member.createdCdks.join('\n'):b.dataset.code;copy(text).catch(()=>say('复制未成功，请手动选择复制。',true));return;}
@@ -10406,7 +10395,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       else if(action==='courseCreate'){if(!member.preview)return;await course('batchCreate',{previewId:member.preview.previewId,confirm:true});member.preview=null;member.notice='任务已创建，点击开始后才执行。';}
       else if(action==='courseRun')await runCourse();
       else if(action==='coursePause'){await course('batchPause',{batchId:member.batch?.batchId});member.notice='任务已暂停。';}
-      else if(action==='courseCancel'){if(!await ask('确认取消任务？结果不明的课程额度会保留待核对。'))return;await course('batchCancel',{batchId:member.batch?.batchId,confirm:true});await refresh();member.notice='任务已取消，未确认的结果仍需核对。';}
+      
       else if(action==='userStatus'){if(!await ask(b.dataset.status==='disabled'?'确认停用此账户？该用户的已有登录将失效。':'确认恢复此账户？'))return;await request('memberUserStatus',{userId:b.dataset.user,status:b.dataset.status},true);await loadAdmin();member.notice='账户状态已更新，旧会话失效。';}
       else if(action==='userReset'){const next=await ask('设置至少 10 位临时密码，再通过可靠方式告知该用户。',true);if(!next)return;await request('memberResetPassword',{userId:b.dataset.user,newPassword:next},true);member.notice='密码已重置，旧会话失效。';}
       else if(action==='reviewClaim'){if(!await ask('已核对原发放记录，确认处理这条申请？'))return;await request('memberReviewClaim',{claimId:b.dataset.claim,approve:b.dataset.approve==='true'},true);await loadAdmin();member.notice='申请已处理。';}
