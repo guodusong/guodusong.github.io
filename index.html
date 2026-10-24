@@ -445,7 +445,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v13.0.36 RC1
+GSS Responsive UI · v13.0.37 RC1
    HTTP only changes transport guards; course and answer workflows remain unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.36-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.37-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -5482,12 +5482,12 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '13.0.36 RC1';
+const COURSE_FRONTEND_VERSION = '13.0.37 RC1';
 // 本页配套的云函数版本，与页面自身版本分开记录；部署时应与它一致。
-const COURSE_EXPECTED_BACKEND_VERSION = '11.13.16';
+const COURSE_EXPECTED_BACKEND_VERSION = '11.13.17';
 const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '13.0.36 RC1';
+const API_CLIENT_VERSION = '13.0.37 RC1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -5953,7 +5953,7 @@ const ADMIN_MUTATING_ACTIONS = new Set([
   'deleteActivation', 'updateActivationDays', 'updateActivationUses', 'deleteActivationsBatch',
   'clearAllActivations'
 ]);
-const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus', 'pendingWriteStatus']);
+const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus', 'pendingWriteStatus', 'accountTaskStatus']);
 const ADMIN_OPERATION_LABELS = Object.freeze({
   add: '新增 Token', updateRemain: '修改 Token 次数', reset: '重置 Token', renameToken: '重命名 Token',
   delete: '删除 Token', deleteBatch: '批量删除 Token', clearAll: '清空 Token', import: '导入 Token',
@@ -7857,9 +7857,38 @@ function courseCacheTimingText(performance) {
   return parts.length ? '缓存细分（属于缓存总耗时，不另行相加）：' + parts.join(' · ') : '当前记录未包含缓存细分；不能据缓存总耗时判断底层 Redis 延迟。';
 }
 
+// Account management is a separate projection. Never feed this snapshot to
+// courseBatch or the current browser's execution pump.
+function accountTaskViewHtml() {
+  if (state.isAdmin && state.courseAccountTaskIdentityPending) return '<p class="field-note">正在更新当前账号的任务记录。</p>';
+  if (!state.isAdmin || !state.courseAuthenticated || !state.courseAccountTask) return '';
+  const view = state.courseAccountTask, task = view.task;
+  // Preserve live progress rendering for this browser's own task. The account
+  // projection is for discovery/management, never an execution checkpoint.
+  if (task?.taskId && task.taskId === state.courseBatch?.batchId) return '';
+  const refresh = '<button type="button" class="btn btn-ghost btn-sm" data-account-task-action="refresh">刷新任务</button>';
+  if (!task) return `<header class="task-header"><h3>账号任务</h3></header><p class="task-description">${escapeHtml(view.availability === 'not-indexed' ? '暂未建立账号级任务索引；不代表没有旧任务。' : '任务记录暂未读取，请刷新后再试。')}</p><div class="course-batch-actions">${refresh}</div>`;
+  const labels = { running: '处理中', paused: '已暂停', stopped: '已停止', completed: '本轮已结束', completed_with_errors: '本轮已结束，有未完成课程', cancelled: '已取消后续处理', cancel_requested: '已受理取消，等待原任务停止' };
+  const items = Array.isArray(task.items) ? task.items : [];
+  const results = items.map(item => `<div class="task-result-row"><span class="task-result-state ${item.status === 'failed' ? 'failed' : item.status === 'completed' ? 'done' : ''}">${escapeHtml(({failed:'未完成',completed:'已确认',cancelled:'已取消',running:'处理中',pending:'待处理'})[item.status] || '未知')}</span><div><h4>${escapeHtml(item.courseName)}</h4><p>${escapeHtml(item.reason)}</p></div></div>`).join('');
+  return `<header class="task-header"><div><span class="section-label">当前网课账号</span><h3>${escapeHtml(labels[task.status] || '状态待核对')}</h3></div></header>
+    <div class="task-metrics"><div><strong>${Number(task.confirmedInSnapshot || 0)}<small> / ${Number(task.totalCourses || 0)}</small></strong><span>原任务已确认</span></div><div><strong>${Number(task.failedCourses || 0)}</strong><span>未完成课程</span></div></div>
+    <div class="course-batch-actions">${refresh}${task.canCancel ? '<button type="button" class="btn btn-ghost btn-sm" data-account-task-action="cancel">取消任务</button>' : ''}</div>
+    <p class="field-note">按网课账号查看，可跨设备取消。这里是任务记录快照，不是本次平台复核结果。</p>
+    ${task.status === 'cancel_requested' ? '<p class="field-note">不再允许原任务提交后续步骤；已经发出的请求不能撤回。点击刷新查看后续状态。</p>' : ''}
+    <details class="task-scope-details"><summary>课程结果（${Number(task.totalCourses || 0)}）</summary>${results}${task.truncated ? '<p class="field-note">仅展示前 1000 条记录。</p>' : ''}</details>`;
+}
+
 function renderCourseBatchPanel() {
   const panel = $('courseBatchPanel');
   if (!panel) return;
+  const accountView = accountTaskViewHtml();
+  if (accountView) {
+    panel.classList.remove('hidden');
+    panel.dataset.taskStatus = state.courseAccountTask?.task?.status || 'unknown';
+    panel.innerHTML = accountView;
+    return;
+  }
   const batch = state.courseBatch;
   if (!batch) {
     panel.classList.add('hidden');
@@ -7963,7 +7992,7 @@ function renderCourseBatchPanel() {
     <div class="course-batch-actions">${actions}</div>
     ${attentionHtml}
     ${blockedItems.length||cancelled||examSkipped?`<p class="field-note">未执行 ${blockedItems.length} 门 · 已取消 ${cancelled} 门${examSkipped?' · 历史任务未包含考试 '+examSkipped+' 门':''}</p>`:''}
-    ${itemHtml?`<section class="task-results"><h3>课程结果</h3>${itemHtml}</section>`:''}
+    ${itemHtml?`<details class="task-scope-details"><summary>课程结果（${total}）</summary><section class="task-results">${itemHtml}</section></details>`:''}
     <details class="task-scope-details"><summary>执行范围与未执行原因</summary><p>${escapeHtml(courseBatchScopeDescription(batch))}</p>${blockedItems.map(item=>`<p>${escapeHtml(item.courseName||item.courseId||'课程')}：${escapeHtml(item.reason||'当前不可执行')}</p>`).join('')}</details>
     ${diagnosticHtml}`;
 }
@@ -8309,6 +8338,7 @@ async function loginCourse() {
   const username = $('courseUsername').value.trim();
   const password = $('coursePassword').value;
   if (!username || !password) { showToast('请输入网课账号和密码', true); return; }
+  invalidateAccountTaskView();
   const btn = $('courseLoginBtn'); const orig = btn.textContent;
   btn.disabled = true; btn.textContent = '登录中...';
   try {
@@ -8354,6 +8384,7 @@ async function submitCourseChallenge(sendOnly = false) {
 async function logoutCourse() {
   const ok = await showConfirm('退出网课会话', '确定清除当前浏览器对应的网课会话吗？');
   if (!ok) return;
+  invalidateAccountTaskView();
   const btn = $('courseLogoutBtn'); const orig = btn.textContent; btn.disabled = true; btn.textContent = '退出中...';
   try {
     const data = await courseFetch('logout');
@@ -8492,6 +8523,49 @@ function showCourseOutput(title, detail, tone = 'success', raw = null) {
   output.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+function invalidateAccountTaskView() {
+  state.courseAccountTaskEpoch = Number(state.courseAccountTaskEpoch || 0) + 1;
+  state.courseAccountTaskRequest = Number(state.courseAccountTaskRequest || 0) + 1;
+  state.courseAccountTask = null;
+  state.courseAccountTaskIdentityPending = true;
+  renderCourseBatchPanel();
+}
+
+async function loadAccountTaskView() {
+  if (!state.isAdmin || !state.courseAuthenticated) return null;
+  const epoch = Number(state.courseAccountTaskEpoch || 0), sessionId = state.courseSessionId;
+  const request = state.courseAccountTaskRequest = Number(state.courseAccountTaskRequest || 0) + 1;
+  const current = () => state.isAdmin && state.courseAuthenticated && sessionId === state.courseSessionId && epoch === Number(state.courseAccountTaskEpoch || 0) && request === state.courseAccountTaskRequest;
+  try {
+    const data = await courseFetch('accountTaskStatus');
+    if (!current()) return null;
+    if (!data.accountTask || !['found','not-indexed','record-unavailable'].includes(data.accountTask.availability)) throw Error('snapshot unavailable');
+    state.courseAccountTask = data.accountTask;
+  } catch (_) {
+    if (!current()) return null;
+    state.courseAccountTask = { task: null, availability: 'unavailable' };
+  }
+  state.courseAccountTaskIdentityPending = false;
+  renderCourseBatchPanel();
+  return state.courseAccountTask;
+}
+
+async function cancelAccountTaskView() {
+  const task = state.courseAccountTask?.task;
+  if (!state.isAdmin || !state.courseAuthenticated || !task?.canCancel) return;
+  const epoch = Number(state.courseAccountTaskEpoch || 0), sessionId = state.courseSessionId, taskId = task.taskId;
+  const request = state.courseAccountTaskRequest = Number(state.courseAccountTaskRequest || 0) + 1;
+  try {
+    const data = await courseFetch('accountTaskCancel', { taskId, confirm: true });
+    if (!state.isAdmin || !state.courseAuthenticated || sessionId !== state.courseSessionId || epoch !== Number(state.courseAccountTaskEpoch || 0) || request !== state.courseAccountTaskRequest) return;
+    if (!data.accountTask?.task || data.accountTask.task.taskId !== taskId) throw Error('task changed');
+    state.courseAccountTask = data.accountTask;
+    renderCourseBatchPanel();
+  } catch (_) {
+    if (epoch === Number(state.courseAccountTaskEpoch || 0) && sessionId === state.courseSessionId && request === state.courseAccountTaskRequest && state.isAdmin && state.courseAuthenticated) showToast('取消结果尚未确认，请刷新任务核对；不会自动重发。', true);
+  }
+}
+
 async function loadCourseBatchStatus({ silent = false } = {}) {
   if (!state.isAdmin) {
     // Login expiry must not erase the currently displayed checkpoint.
@@ -8502,8 +8576,10 @@ async function loadCourseBatchStatus({ silent = false } = {}) {
     const data = await courseFetch('batchStatus');
     state.courseBatch = data.batch || null;
     updateCourseBatchUi();
+    await loadAccountTaskView();
     return state.courseBatch;
   } catch (e) {
+    await loadAccountTaskView();
     if (!silent) showToast(`一键完成状态读取失败：${e.message}`, true);
     return null;
   }
@@ -8580,6 +8656,7 @@ async function startCourseBatch(mode = 'all', { taskScope = 'full', courseIds = 
 
     const created = await courseFetch('batchCreate', { previewId: preview.previewId, confirm: true });
     state.courseBatch = created.batch || null;
+    state.courseAccountTask = null; // Discard the previous display snapshot only.
     state.courseBatchPauseRequested = false;
     state.courseBatchCancelRequested = false;
     renderCourseList();
@@ -8874,7 +8951,7 @@ function describePendingWrite(pending) {
   if (!pending || typeof pending.present !== 'boolean') return '没有取得有效的旧记录快照，当前状态未知；没有删除标记或提交学习进度。';
   if (pending?.present !== true) return '当前快照未找到未决标记。这不代表课程已完成，也不代表可以自动重试；本次没有修改任何记录。';
   const origin = { batch: '批次任务', single: '单次操作', unknown: '未知来源' }[pending.originType] || '未知来源';
-  const availability = { found: '已找到来源批次', 'different-session': '来源是另一个 GSS 会话，本页不读取该会话详情', 'not-found': '来源批次记录已不可用', 'not-available': '本页没有可用来源记录', unverified: '来源记录身份未能验证' }[pending.origin?.availability] || '来源尚未确定';
+  const availability = { found: '已找到同账号的来源批次', 'different-session': '来源是另一个 GSS 会话，本页不读取该会话详情', 'origin-unknown': '来源会话未记录或格式无效，不能判断是否来自其他设备', 'not-found': '来源批次记录已不可用', 'not-available': '本页没有可用来源记录', unverified: '来源记录身份未能验证' }[pending.origin?.availability] || '来源尚未确定';
   const createdAt = typeof pending.createdAt === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(pending.createdAt) && Number.isFinite(Date.parse(pending.createdAt)) ? new Date(pending.createdAt).toLocaleString('zh-CN') : '时间未记录';
   return `标记时间：${createdAt}；类型：${origin}；${availability}。仅查询记录来源，未核验平台完成状态、未删除标记、未提交学习进度。`;
 }
@@ -8954,6 +9031,14 @@ $('courseOutput').addEventListener('click', e => {
 });
 
 $('courseBatchPanel').addEventListener('click', async e => {
+  const accountButton = e.target.closest('[data-account-task-action]');
+  if (accountButton && !accountButton.disabled) {
+    accountButton.disabled = true;
+    if (accountButton.dataset.accountTaskAction === 'refresh') await loadAccountTaskView();
+    if (accountButton.dataset.accountTaskAction === 'cancel') await cancelAccountTaskView();
+    if (accountButton.isConnected) accountButton.disabled = false;
+    return;
+  }
   const originButton = e.target.closest('[data-course-pending-origin]');
   if (originButton && !originButton.disabled) {
     originButton.disabled = true;
@@ -9442,7 +9527,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdminSession();
 
-console.log('Link · Token 管理 v13.0.36 RC1 — 已就绪');
+console.log('Link · Token 管理 v13.0.37 RC1 — 已就绪');
 </script>
 <script id="snowMemberJournal">
 (function(root){
@@ -9744,7 +9829,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.36 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.37 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
