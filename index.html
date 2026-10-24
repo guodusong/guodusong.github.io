@@ -445,7 +445,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v11.12.9 SCF-hosted frontend fallback
+GSS Responsive UI · v13.0.36 RC1
    HTTP only changes transport guards; course and answer workflows remain unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1099,7 +1099,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.35-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.36-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -5482,10 +5482,12 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '11.12.9';
+const COURSE_FRONTEND_VERSION = '13.0.36 RC1';
+// 本页配套的云函数版本，与页面自身版本分开记录；部署时应与它一致。
+const COURSE_EXPECTED_BACKEND_VERSION = '11.13.16';
 const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '11.12.9';
+const API_CLIENT_VERSION = '13.0.36 RC1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -5527,7 +5529,7 @@ function applyTransportSecurityPolicy() {
 
 function publicVerifyErrorMessage(error) {
   if (isLegacyHttpCompatibilityMode() && error?.code === 'NETWORK_ERROR') {
-    return 'HTTP 兼容接口未生效或被浏览器拦截，请确认 v11.12.9 后端已经部署';
+    return `HTTP 兼容接口未生效或被浏览器拦截，请确认 v${COURSE_EXPECTED_BACKEND_VERSION} 后端已经部署`;
   }
   return error?.message || '验证失败';
 }
@@ -5951,7 +5953,7 @@ const ADMIN_MUTATING_ACTIONS = new Set([
   'deleteActivation', 'updateActivationDays', 'updateActivationUses', 'deleteActivationsBatch',
   'clearAllActivations'
 ]);
-const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus']);
+const COURSE_READ_ONLY_ACTIONS = new Set(['status', 'list', 'inspect', 'verify', 'preview', 'tasks', 'batchStatus', 'executeStatus', 'pendingWriteStatus']);
 const ADMIN_OPERATION_LABELS = Object.freeze({
   add: '新增 Token', updateRemain: '修改 Token 次数', reset: '重置 Token', renameToken: '重命名 Token',
   delete: '删除 Token', deleteBatch: '批量删除 Token', clearAll: '清空 Token', import: '导入 Token',
@@ -6044,7 +6046,7 @@ function acceptBackendMetadata(metadata = {}) {
   };
   const currentAdminProtocol = Number(state.backendMetadata.protocols.admin || 0);
   if (currentAdminProtocol < ADMIN_API_PROTOCOL_VERSION) state.backendCompatibility = 'incompatible';
-  else if (state.backendMetadata.version && state.backendMetadata.version !== COURSE_FRONTEND_VERSION) state.backendCompatibility = 'version-drift';
+  else if (state.backendMetadata.version && state.backendMetadata.version !== COURSE_EXPECTED_BACKEND_VERSION) state.backendCompatibility = 'version-drift';
   else state.backendCompatibility = 'compatible';
   renderDeploymentStatus();
 }
@@ -6055,16 +6057,16 @@ function renderDeploymentStatus() {
   const meta = state.backendMetadata;
   const last = state.lastApiRequest;
   if (!meta) {
-    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}，尚未读取云函数版本。请先执行快速检测。</div>`;
+    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}（配套后端 v${escapeHtml(COURSE_EXPECTED_BACKEND_VERSION)}），尚未读取云函数版本。请先执行快速检测。</div>`;
     return;
   }
   const lastText = last ? ` · 最近请求 ${escapeHtml(last.namespace)}/${escapeHtml(last.action || '-')} · ${escapeHtml(last.requestId || '无编号')} · ${escapeHtml(formatCourseDuration(last.durationMs || 0))}` : '';
   if (state.backendCompatibility === 'incompatible') {
-    body.innerHTML = `<div class="deployment-warning error">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)} 与云函数 v${escapeHtml(meta.version || '未知')} 的管理协议不兼容（需要 ${ADMIN_API_PROTOCOL_VERSION}，返回 ${Number(meta.protocols?.admin || 0)}）。为防止错版写入，管理写操作已停止${lastText}</div>`;
+    body.innerHTML = `<div class="deployment-warning error">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}（配套后端 v${escapeHtml(COURSE_EXPECTED_BACKEND_VERSION)}）与云函数 v${escapeHtml(meta.version || '未知')} 的管理协议不兼容（需要 ${ADMIN_API_PROTOCOL_VERSION}，返回 ${Number(meta.protocols?.admin || 0)}）。为防止错版写入，管理写操作已停止${lastText}</div>`;
   } else if (state.backendCompatibility === 'version-drift') {
-    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}，云函数 v${escapeHtml(meta.version || '未知')}（${escapeHtml(meta.buildId || '无构建标识')}）；协议兼容，但建议部署成同一版本${lastText}</div>`;
+    body.innerHTML = `<div class="deployment-warning warn">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)}（配套后端 v${escapeHtml(COURSE_EXPECTED_BACKEND_VERSION)}），云函数 v${escapeHtml(meta.version || '未知')}（${escapeHtml(meta.buildId || '无构建标识')}）；协议兼容，但当前云函数不是本页配套的 v${escapeHtml(COURSE_EXPECTED_BACKEND_VERSION)}${lastText}</div>`;
   } else {
-    body.innerHTML = `<div class="deployment-warning ok">前端与云函数版本一致：v${escapeHtml(meta.version || COURSE_FRONTEND_VERSION)} · ${escapeHtml(meta.buildId || '无构建标识')} · 管理/答题/网课协议 ${Number(meta.protocols?.admin || 0)}/${Number(meta.protocols?.answer || 0)}/${Number(meta.protocols?.course || 0)}${lastText}</div>`;
+    body.innerHTML = `<div class="deployment-warning ok">前端 v${escapeHtml(COURSE_FRONTEND_VERSION)} 与云函数版本一致：v${escapeHtml(meta.version || COURSE_EXPECTED_BACKEND_VERSION)} · ${escapeHtml(meta.buildId || '无构建标识')} · 管理/答题/网课协议 ${Number(meta.protocols?.admin || 0)}/${Number(meta.protocols?.answer || 0)}/${Number(meta.protocols?.course || 0)}${lastText}</div>`;
   }
 }
 
@@ -6398,7 +6400,7 @@ function acceptCourseApiMetadata(data) {
     && workflows.includes('video')
     && workflows.includes('evaluation');
   if (!state.courseApi) {
-    state.courseApiMessage = `云函数没有返回版本能力信息，请部署支持一键完成的 v${COURSE_FRONTEND_VERSION} 后端。`;
+    state.courseApiMessage = `云函数没有返回版本能力信息，请部署支持一键完成的 v${COURSE_EXPECTED_BACKEND_VERSION} 后端。`;
   } else if (!state.courseApiCompatible) {
     state.courseApiMessage = `当前云函数尚未支持统一课程任务（需要协议 v${COURSE_API_PROTOCOL_VERSION}）。为避免执行范围不一致，先暂停新任务，请部署匹配后端。`;
   } else {
@@ -7773,7 +7775,7 @@ const COURSE_BATCH_STATUS_LABELS = Object.freeze({
   paused: '已暂停',
   stopped: '遇到问题，已停止',
   completed: '已完成',
-  completed_with_errors: '已完成，但有失败课程',
+  completed_with_errors: '本轮已结束，有未完成课程',
   cancelled: '已取消',
 });
 
@@ -7829,6 +7831,32 @@ function renderCourseBatchControls() {
   allBtn.title = title;
 }
 
+// Presentation only: never changes item status, retry policy or platform state.
+function courseReadFailureView(item) {
+  const code = item.errorCode || item.lastFailure?.errorCode;
+  if (code === 'COURSE_UNRESOLVED_WRITE') return {
+    label: '待核对', reason: '此前操作的结果尚未确认，当前课程受到未决记录保护。',
+    help: '可查看旧记录来源；查询不会删除标记，也不会重新提交。', pendingOrigin: true,
+  };
+  if (code !== 'COURSE_RESOURCE_UNAVAILABLE') return null;
+  const entries = item.lastFailure?.resourceDiagnostics?.entries || item.resourceDiagnostics?.entries || [];
+  const hasDirectory = entries.some(e => e.stage === 'legacy-tree' && e.outcome === 'accepted' && e.resourceCount > 0);
+  const rejectedResource = entries.some(e => e.stage === 'legacy-resource' && e.outcome === 'rejected' && e.reason === 'resource-missing');
+  const playerMissing = entries.some(e => e.stage === 'screen-page' && e.outcome === 'rejected' && e.reason === 'player-missing');
+  if (hasDirectory && rejectedResource) return { label: '读取异常', reason: '课程目录已读取，但小节响应中的资源信息尚未识别。', help: '不代表课程没有视频；需要核对小节响应和会话状态。' };
+  if (playerMissing) return { label: '读取异常', reason: '已收到课程页面，但尚未识别出可用播放器。', help: '可能与动态加载或会话状态有关；尚未确定具体原因。' };
+  return { label: '读取异常', reason: item.reason || '课程资源读取结果不完整。', help: '请查看分阶段诊断；没有把缺失信息当作零进度。' };
+}
+
+function courseCacheTimingText(performance) {
+  const entries = [['courseListRead','课程列表缓存读取'],['courseListParse','课程列表缓存解析'],['learningMapRead','学习地图缓存读取'],['learningMapParse','学习地图缓存解析']];
+  const parts = entries.filter(([key]) => Number(performance?.cacheBreakdown?.[key]?.count) > 0).map(([key,label]) => {
+    const v = performance.cacheBreakdown[key];
+    return `${label} ${formatCourseDuration(v.totalMs)}（${v.count}次${v.errors ? `，异常${v.errors}次` : ''}）`;
+  });
+  return parts.length ? '缓存细分（属于缓存总耗时，不另行相加）：' + parts.join(' · ') : '当前记录未包含缓存细分；不能据缓存总耗时判断底层 Redis 延迟。';
+}
+
 function renderCourseBatchPanel() {
   const panel = $('courseBatchPanel');
   if (!panel) return;
@@ -7854,8 +7882,11 @@ function renderCourseBatchPanel() {
     : 0;
   const statusLabel = COURSE_BATCH_STATUS_LABELS[batch.status] || batch.status || '未知状态';
   const needsReview = ['paused', 'stopped'].includes(batch.status);
+  const readFailures = items.filter(item => item.status === 'failed' && item.errorCode === 'COURSE_RESOURCE_UNAVAILABLE').length;
+  const pendingOrigins = items.filter(item => item.status === 'failed' && item.errorCode === 'COURSE_UNRESOLVED_WRITE').length;
+  const breakdownText = [readFailures ? `读取异常 ${readFailures} 门` : '', pendingOrigins ? `历史待核对 ${pendingOrigins} 门` : ''].filter(Boolean).join('，');
   const attentionHtml = failed > 0 || needsReview
-    ? `<aside class="task-attention"><h4>${needsReview ? '任务已暂停，请先查看原因' : '部分课程需要处理'}</h4><p>${failed > 0 ? `${failed} 门课程失败。` : ''}${needsReview ? '请恢复登录或连接后继续，也可以取消并重新开始。' : '请查看下方各门课程的具体原因；技术信息收在“性能与诊断”中。'}</p></aside>`
+    ? `<aside class="task-attention"><h4>${needsReview ? '任务已暂停，请先查看原因' : '部分课程需要处理'}</h4><p>${failed > 0 ? `${failed} 门课程未完成。${breakdownText ? escapeHtml(breakdownText) + '。' : ''}` : ''}${needsReview ? '请根据具体原因处理；取消或新建任务不等于核对历史结果。' : '请查看下方各门课程的具体原因；技术信息收在“性能与诊断”中。'}</p></aside>`
     : '';
   const stepDelay = Math.round(Number(state.courseBatchCurrentDelayMs || state.courseBatchDelayMs || 650));
   const waitingHint = state.courseBatchPauseRequested
@@ -7905,8 +7936,11 @@ function renderCourseBatchPanel() {
     const planned = (Array.isArray(item.plannedWorkflows) ? item.plannedWorkflows : []).map(courseWorkflowLabel).join(' → ');
     const verifiedSteps = Array.isArray(item.steps) ? item.steps.filter(step => step.verified === true).length : 0;
     const suspended=itemStatus==='running'&&['paused','stopped'].includes(batch.status);
-    const label=suspended?'已暂停':COURSE_BATCH_ITEM_LABELS[itemStatus]||itemStatus;
-    return `<div class="task-result-row"><span class="task-result-state ${suspended?'paused':stateClass}">${escapeHtml(label)}</span><div><h4>${escapeHtml(item.courseName||item.courseId||'未命名课程')}</h4><p>${planned?escapeHtml(planned)+' · ':''}已验证 ${verifiedSteps} 步${item.examSkipped?' · 历史任务未包含考试':''}</p>${item.reason?`<p class="task-result-reason">${escapeHtml(item.reason)}</p>`:''}</div></div>`;
+    const view = itemStatus === 'failed' ? courseReadFailureView(item) : null;
+    const label=view?.label || (suspended?'已暂停':COURSE_BATCH_ITEM_LABELS[itemStatus]||itemStatus);
+    const reason = view?.reason || item.reason;
+    const noWrite = item.failureStage === 'before-platform-write' && item.platformWriteAttempted === false;
+    return `<div class="task-result-row"><span class="task-result-state ${suspended?'paused':stateClass}">${escapeHtml(label)}</span><div><h4>${escapeHtml(item.courseName||item.courseId||'未命名课程')}</h4><p>${planned?escapeHtml(planned)+' · ':''}已验证 ${verifiedSteps} 步${item.examSkipped?' · 历史任务未包含考试':''}</p>${reason?`<p class="task-result-reason">${escapeHtml(reason)}</p>`:''}${view?.help?`<p>${escapeHtml(view.help)}</p>`:''}${noWrite?'<p>本轮未发起平台写入；不代表历史上没有写入。</p>':''}${view?.pendingOrigin?`<button type="button" class="btn btn-ghost btn-sm" data-course-pending-origin="${escapeHtml(item.courseId)}">查看旧记录（只读）</button>`:''}</div></div>`;
   }).join('');
 
   const currentItem = items.find(item => String(item.courseId || '') === String(batch.currentCourseId || ''));
@@ -7915,13 +7949,14 @@ function renderCourseBatchPanel() {
   const diagnosticHtml = `<details class="course-advanced course-batch-diagnostics"><summary>性能与诊断</summary>
       <div class="course-batch-meta"><strong>当前课程：</strong>${escapeHtml(currentText)} · <strong>当前步骤：</strong>${escapeHtml(currentStep)}</div>
       <div class="course-batch-meta">本次浏览器请求 ${escapeHtml(formatCourseDuration(state.courseLastClientRequestMs))} · 服务端 ${escapeHtml(formatCourseDuration(lastRequestMs))} · 累计服务端 ${escapeHtml(formatCourseDuration(performance.serverElapsedMs || 0))}<br>${escapeHtml(timingHtml)} · 浏览器步骤间等待 ${escapeHtml(formatCourseDuration(state.courseClientWaitMs))} · 当前步骤间隔约 ${stepDelay}ms</div>
+      <div class="course-batch-meta">${escapeHtml(courseCacheTimingText(performance))}</div>
       ${failureDiagnosticHtml || '<div class="course-batch-meta">当前没有记录到失败步骤。</div>'}
     </details>`;
 
   panel.classList.remove('hidden');
   panel.dataset.taskStatus=batch.status||'unknown';
   panel.innerHTML=`<header class="task-header"><div><span class="section-label">${escapeHtml(scopeTitle)}</span><h3>${escapeHtml(statusLabel)}${escapeHtml(waitingHint)}</h3></div><span class="task-status-dot" aria-hidden="true"></span></header>
-    <p class="task-description">${escapeHtml(batch.reason||courseBatchScopeDescription(batch))}</p>
+    <p class="task-description">${escapeHtml(batch.status === 'completed_with_errors' ? `本轮处理已结束，平台确认完成 ${completed}/${total} 门；其余结果请逐项核对。` : batch.reason||courseBatchScopeDescription(batch))}</p>
     ${['running','paused','stopped'].includes(batch.status)?`<p class="task-current">当前课程 <strong>${escapeHtml(currentText)}</strong></p>`:''}
     <div class="task-metrics"><div><strong>${completed}<small> / ${total}</small></strong><span>平台确认完成</span></div><div><strong>${failed}</strong><span>失败课程</span></div><div><strong>${Number(batch.completedSteps||0)}</strong><span>已验证步骤</span></div></div>
     <div class="task-progress-caption"><span>任务处理进度（含失败、取消）</span><span>${settled} / ${total}</span></div><div class="course-batch-progress"><span style="width:${percent}%"></span></div>
@@ -8835,12 +8870,41 @@ async function executeCourse(courseId, workflow) {
   finally { state.courseBusy = false; }
 }
 
+function describePendingWrite(pending) {
+  if (!pending || typeof pending.present !== 'boolean') return '没有取得有效的旧记录快照，当前状态未知；没有删除标记或提交学习进度。';
+  if (pending?.present !== true) return '当前快照未找到未决标记。这不代表课程已完成，也不代表可以自动重试；本次没有修改任何记录。';
+  const origin = { batch: '批次任务', single: '单次操作', unknown: '未知来源' }[pending.originType] || '未知来源';
+  const availability = { found: '已找到来源批次', 'different-session': '来源是另一个 GSS 会话，本页不读取该会话详情', 'not-found': '来源批次记录已不可用', 'not-available': '本页没有可用来源记录', unverified: '来源记录身份未能验证' }[pending.origin?.availability] || '来源尚未确定';
+  const createdAt = typeof pending.createdAt === 'string' && /^\d{4}-\d{2}-\d{2}T/.test(pending.createdAt) && Number.isFinite(Date.parse(pending.createdAt)) ? new Date(pending.createdAt).toLocaleString('zh-CN') : '时间未记录';
+  return `标记时间：${createdAt}；类型：${origin}；${availability}。仅查询记录来源，未核验平台完成状态、未删除标记、未提交学习进度。`;
+}
+
+async function inspectCoursePendingOrigin(courseId) {
+  const sessionId = state.courseSessionId;
+  try {
+    const data = await courseFetch('pendingWriteStatus', { courseId });
+    if (sessionId !== state.courseSessionId) return;
+    showCourseOutput('旧记录来源（只读）', describePendingWrite(data.pendingWrite), 'warning', { pendingWrite: data.pendingWrite });
+  } catch (error) {
+    const message = error.code === 'VALIDATION_ERROR' ? '当前云函数尚未支持此只读查询，请先核对部署版本；未删除旧记录，也未发起平台写入。' : error.message;
+    showCourseOutput('旧记录来源暂未读取', message, 'error');
+  }
+}
+
+function renderCourseTaskHistory() {
+  const tasks = Array.isArray(state.courseTaskRecords) ? state.courseTaskRecords : [];
+  const limit = Math.min(tasks.length, Math.max(20, Number(state.courseTaskVisibleCount || 20)));
+  const list = tasks.length ? `<div class="course-task-list">${tasks.slice(0, limit).map(task => `<div class="course-task-item"><strong>${escapeHtml(task.status || '未知')}</strong> · ${escapeHtml(task.workflow || 'auto')} · ${escapeHtml(task.courseId || '')}<br><span>${escapeHtml(redactCourseDiagnosticText(task.reason || task.finishedAt || task.createdAt || ''))}</span></div>`).join('')}</div>` : '<div class="text-muted">暂无执行记录</div>';
+  $('courseOutput').innerHTML = `<div class="course-output-card"><div class="course-output-title">最近执行记录（本次返回 ${tasks.length} 条）</div>${list}<p class="field-note">已显示 ${limit}/${tasks.length} 条。本次最多读取最近 100 条，不代表完整历史。</p>${limit < tasks.length ? '<button type="button" class="btn btn-ghost btn-sm" data-course-task-more>显示更早记录</button>' : ''}</div>`;
+}
+
 async function loadCourseTasks() {
   try {
     const data = await courseFetch('tasks');
     const tasks = Array.isArray(data.tasks) ? data.tasks : [];
-    const list = tasks.length ? `<div class="course-task-list">${tasks.slice(0, 20).map(task => `<div class="course-task-item"><strong>${escapeHtml(task.status || '未知')}</strong> · ${escapeHtml(task.workflow || 'auto')} · ${escapeHtml(task.courseId || '')}<br><span>${escapeHtml(task.reason || task.finishedAt || task.createdAt || '')}</span></div>`).join('')}</div>` : '<div class="text-muted">暂无执行记录</div>';
-    $('courseOutput').innerHTML = `<div class="course-output-card"><div class="course-output-title">最近执行记录（${tasks.length}）</div>${list}</div>`;
+    state.courseTaskRecords = tasks;
+    state.courseTaskVisibleCount = 20;
+    renderCourseTaskHistory();
   } catch (e) { showCourseOutput('执行记录读取失败', e.message, 'error'); showToast(`执行记录读取失败：${e.message}`, true); }
 }
 
@@ -8878,6 +8942,11 @@ $('courseListContainer').addEventListener('click', async e => {
 });
 
 $('courseOutput').addEventListener('click', e => {
+  if (e.target.closest('[data-course-task-more]')) {
+    state.courseTaskVisibleCount = Number(state.courseTaskVisibleCount || 20) + 20;
+    renderCourseTaskHistory();
+    return;
+  }
   const button = e.target.closest('[data-course-copy-diagnostics]');
   if (!button) return;
   const text = $('courseOutput').querySelector('[data-course-diagnostics]')?.textContent;
@@ -8885,6 +8954,13 @@ $('courseOutput').addEventListener('click', e => {
 });
 
 $('courseBatchPanel').addEventListener('click', async e => {
+  const originButton = e.target.closest('[data-course-pending-origin]');
+  if (originButton && !originButton.disabled) {
+    originButton.disabled = true;
+    await inspectCoursePendingOrigin(originButton.dataset.coursePendingOrigin);
+    if (originButton.isConnected) originButton.disabled = false;
+    return;
+  }
   const button = e.target.closest('[data-course-batch-action]');
   if (!button || button.disabled) return;
   const action = button.dataset.courseBatchAction;
@@ -9366,7 +9442,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdminSession();
 
-console.log('Link · Token 管理 v11.12.9 — 已就绪');
+console.log('Link · Token 管理 v13.0.36 RC1 — 已就绪');
 </script>
 <script id="snowMemberJournal">
 (function(root){
@@ -9668,7 +9744,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.35 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.36 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
