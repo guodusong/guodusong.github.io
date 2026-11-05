@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc5"><title>Snow · 雪松工作台</title>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="13.0.45-consistency-v01"><title>Snow · 雪松工作台</title>
 <style id="snowBootStyle">
 html[data-snow-boot-state="loading"] body { overflow: hidden !important; }
 html[data-snow-boot-state="loading"] body > :not(#snowBootScreen) {
@@ -489,7 +489,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v13.0.44 RC1
+GSS Responsive UI · v13.0.45 RC1
    HTTP only changes transport guards; course and answer workflows remain unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1143,7 +1143,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.44-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.45-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -2854,146 +2854,6 @@ body[data-snow-mode="workspace"] #subOverview .snow-shortcut p { font-size: 13px
 #courseSummary:focus-visible { outline: 2px solid #2563eb; outline-offset: 4px; }
 
 </style>
-<style id="snowPrimaryNavigationDesign">
-/* Three peer destinations. Shared sizing, spacing and selection on every scene. */
-body .app nav.snow-primary-nav,
-#memberDialog.workspace-page nav.snow-primary-nav {
-  display: flex; align-items: center; justify-content: flex-end;
-  gap: 4px; width: max-content; max-width: 100%; padding: 4px;
-  margin-left: auto; border: 1px solid var(--snow-line, #dce3e9);
-  border-radius: 12px; background: var(--snow-surface, #fff); box-shadow: none;
-}
-body .app nav.snow-primary-nav > .snow-primary-link,
-#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link {
-  display: inline-flex; align-items: center; justify-content: center;
-  flex: 1 1 0; min-width: 80px; min-height: 44px; margin: 0; padding: 10px 20px;
-  border: 1px solid transparent; border-radius: 8px;
-  background: transparent; color: var(--snow-muted, #526175);
-  font: 500 14px/1.5 system-ui, -apple-system, "Microsoft YaHei", sans-serif;
-  letter-spacing: 0; white-space: nowrap; cursor: pointer; box-shadow: none;
-  transition: background .15s, color .15s;
-}
-body .app nav.snow-primary-nav > .snow-primary-link:hover:not(.active),
-#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link:hover:not(.active) {
-  background: var(--snow-soft, #edf6f2); color: var(--snow-brand, #196b5c);
-}
-body .app nav.snow-primary-nav > .snow-primary-link.active,
-#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link.active {
-  background: #193f34; color: #fff; border-color: #193f34;
-}
-body .app nav.snow-primary-nav > .snow-primary-link:focus-visible,
-#memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link:focus-visible {
-  outline: 3px solid var(--snow-brand, #196b5c); outline-offset: 2px;
-}
-body[data-snow-mode="workspace"] #snowLocation { margin-right: 280px; }
-@media (max-width: 760px) {
-  body .app nav.snow-primary-nav { width: 100%; }
-  body:is([data-snow-mode="workspace"], [data-snow-mode="login"]) .app nav.snow-primary-nav { position: static; margin-bottom: 16px; }
-  body[data-snow-mode="workspace"] #snowLocation { margin-right: 0; }
-  body .app nav.snow-primary-nav > .snow-primary-link,
-  #memberDialog.workspace-page nav.snow-primary-nav > .snow-primary-link { min-width: 0; padding: 8px 12px; font-size: 13px; }
-  #memberDialog.workspace-page { display: flex; flex-direction: column; }
-  #memberDialog.workspace-page .member-head { flex: 0 0 auto; height: auto; min-height: 72px; flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
-  #memberDialog.workspace-page nav.snow-primary-nav { flex: 0 0 100%; width: 100%; margin: 0; }
-  #memberDialog.workspace-page > .member-layout { height: auto; flex: 1; min-height: 0; }
-}
-</style>
-<style id="snowUnifiedAccessDesign">
-/* Authentication keeps the extraction page's outer frame and two-column stage. */
-body[data-snow-access] { overflow: auto; }
-body[data-snow-access="personal"] > .app { display: block !important; }
-body[data-snow-access="admin"] .header { display: flex; }
-body[data-snow-access="admin"] #adminPanel { display: none; }
-body[data-snow-access="admin"] .snow-topline { padding: 18px 0 12px; }
-body[data-snow-access="admin"] .app nav.snow-primary-nav {
-  position: static; inset: auto; z-index: auto; margin: 0 0 22px auto;
-}
-#userPanel > .card[data-login-scene="admin"],
-#userPanel > .card[data-login-scene="personal"] { min-height: 476px; }
-body[data-snow-access] .snow-public-art > svg { display: block; width: 300px; height: 202px; max-width: 100%; }
-
-/* Preserve the real member form, event delegation, validation and feedback. */
-#memberDialog.workspace-page.snow-access-embedded {
-  position: static; inset: auto; display: block; width: 100%; height: auto;
-  min-width: 0; max-width: none; max-height: none; margin: 0; padding: 0;
-  border: 0; border-radius: 0; box-shadow: none; overflow: visible;
-  background: transparent; color: var(--text); font: inherit;
-}
-#memberDialog.workspace-page.snow-access-embedded > .member-head,
-#memberDialog.workspace-page.snow-access-embedded .workspace-welcome,
-#memberDialog.workspace-page.snow-access-embedded .member-nav { display: none !important; }
-#memberDialog.workspace-page.snow-access-embedded > .member-layout {
-  display: block; height: auto; margin: 0; padding: 0; background: transparent; border: 0;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-main {
-  display: block; width: 100%; max-width: none; min-height: 0; padding: 0;
-  margin: 0; border: 0; background: transparent; overflow: visible;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-auth {
-  width: 100%; max-width: none; margin: 0; padding: 0; border: 0;
-  border-radius: 0; background: transparent; box-shadow: none;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-page-title { margin: 0 0 24px; padding: 0; border: 0; }
-#memberDialog.workspace-page.snow-access-embedded .member-page-title h2 {
-  font-size: 25px; font-weight: 500; line-height: 1.5; letter-spacing: -.5px; margin: 18px 0 10px;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-page-title .member-muted { font-size: 13px; line-height: 1.9; }
-#memberDialog.workspace-page.snow-access-embedded .member-form { display: grid; gap: 14px; margin: 0; }
-#memberDialog.workspace-page.snow-access-embedded .member-form label { font-size: 13px; font-weight: 400; color: var(--text); }
-#memberDialog.workspace-page.snow-access-embedded .member-form input {
-  min-width: 0; width: 100%; min-height: 44px; padding: 10px 13px;
-  border: 1px solid var(--field-border, #ccd5df); border-radius: 8px;
-  background: #fff; color: var(--text); font-size: 14px; box-sizing: border-box;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-form .member-password-field input { padding-right: 58px; }
-#memberDialog.workspace-page.snow-access-embedded .member-form > .member-primary { min-height: 49px; font-size: 13px; font-weight: 500; border-radius: 8px; }
-#memberDialog.workspace-page.snow-access-embedded .member-actions { margin-top: 12px; }
-#memberDialog.workspace-page.snow-access-embedded .member-auth-switch { min-height: 36px; font-size: 12px; padding: 6px 0; }
-#userPanel > .card #memberDialog.snow-access-embedded .member-profile-note {
-  margin: 12px 0 0; padding: 0; font-size: 11px; line-height: 1.8; color: var(--text-secondary); border: 0;
-}
-#memberDialog.workspace-page.snow-access-embedded .member-auth-feedback:empty { display: none; }
-
-/* The administrator form occupies the same white card, without its old split-screen story. */
-#userPanel > .card #adminLoginCard {
-  width: 100%; max-width: none; margin: 0; padding: 0; border: 0;
-  border-radius: 0; background: transparent; box-shadow: none;
-}
-#userPanel > .card #adminLoginCard .snow-form-heading { margin-bottom: 10px; }
-#userPanel > .card #adminLoginCard > .flex { display: grid; grid-template-columns: 1fr; gap: 15px; }
-#userPanel > .card #adminLoginCard #loginAdminBtn { width: 100%; min-height: 49px; }
-@media (max-width: 760px) {
-  body[data-snow-access="admin"] .snow-topline { padding: 15px 0; }
-  body[data-snow-access="admin"] .app nav.snow-primary-nav { margin-bottom: 16px; }
-  #userPanel > .card[data-login-scene="admin"], #userPanel > .card[data-login-scene="personal"] { min-height: 0; }
-  #memberDialog.workspace-page.snow-access-embedded .member-page-title h2 { font-size: 23px; }
-  #memberDialog.workspace-page.snow-access-embedded .member-form input { min-height: 48px; font-size: 16px; }
-}
-
-</style>
-<style id="snowSquareUIDesign">
-/* Important declarations in a layer override legacy unlayered !important rules.
-   This applies to current and dynamically created UI, including pseudo-elements. */
-@layer snowSquareUI {
-  *, *::before, *::after, *::backdrop, *::file-selector-button {
-    border-radius: 0 !important;
-    border-start-start-radius: 0 !important;
-    border-start-end-radius: 0 !important;
-    border-end-start-radius: 0 !important;
-    border-end-end-radius: 0 !important;
-  }
-  *::-webkit-scrollbar, *::-webkit-scrollbar-track,
-  *::-webkit-scrollbar-thumb, *::-webkit-scrollbar-corner {
-    border-radius: 0 !important;
-  }
-}
-/* The illustration's sun is artwork, not a rounded UI surface. Keep its circle
-   as an SVG background while the decorative element itself also has zero radius. */
-.snow-public-art .studio-sun {
-  background: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 86'%3E%3Ccircle cx='43' cy='43' r='43' fill='%23e3e9d4'/%3E%3C/svg%3E");
-}
-
-</style>
 <style id="snowMotionFeedbackDesign">
 /* Only visual response: no dimensions, positioning, rounded corners or click delays. */
 :is(.snow-primary-link,.btn,.member-primary,.member-secondary,.member-danger,.subtab) {
@@ -3068,279 +2928,6 @@ details[open] > .access-disclosure-heading .access-when-open { display: inline; 
 #userPanel > .card[data-access-stage="ready"]:has(.access-maintenance:not([open])) .access-instructions {
   margin-top: 0;
 }
-
-</style>
-<style id="snowAdminFrameDesign">
-/* One administrator frame. Public access and the personal workspace stay unchanged. */
-:root {
-  --snow-admin-content: 1440px;
-  --snow-admin-gutter: 32px;
-  --snow-admin-header: 72px;
-}
-body[data-snow-mode="workspace"]:not([data-snow-access]) > .app {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: var(--snow-admin-header) auto auto;
-  align-content: start;
-  width: calc(100% - var(--snow-sidebar)); max-width: none;
-  margin: 0 0 0 var(--snow-sidebar); padding: 0 0 32px;
-}
-body[data-snow-mode="workspace"] .app > .snow-topline {
-  grid-column: 1; grid-row: 1;
-  height: var(--snow-admin-header); min-height: 0;
-  margin: 0; padding: 0 var(--snow-admin-gutter);
-  align-items: center; gap: 12px;
-  font-size: 14px; letter-spacing: 0; color: var(--snow-ink);
-}
-body[data-snow-mode="workspace"] .app > .snow-topline > :first-child { display: inline; flex: none; }
-body[data-snow-mode="workspace"] .app #snowLocation {
-  margin: 0; padding-left: 12px; font-size: 14px;
-  line-height: 24px; font-weight: 400; border-left: 1px solid var(--snow-line);
-}
-body[data-snow-mode="workspace"] .app > nav.snow-primary-nav {
-  grid-column: 1; grid-row: 1; justify-self: end; align-self: center;
-  position: static; inset: auto; z-index: 1;
-  width: max-content; margin: 0 var(--snow-admin-gutter) 1px 0;
-}
-body[data-snow-mode="workspace"] .app > #adminPanel,
-body[data-snow-mode="workspace"] .app > .snow-footer {
-  grid-column: 1;
-  width: calc(100% - 2 * var(--snow-admin-gutter));
-  max-width: var(--snow-admin-content); min-width: 0;
-  margin-inline: auto;
-}
-body[data-snow-mode="workspace"] .app > #adminPanel { grid-row: 2; }
-body[data-snow-mode="workspace"] .app > .snow-footer { grid-row: 3; }
-body[data-snow-mode="workspace"] .snow-page-heading { padding: 28px 0 24px; }
-body[data-snow-mode="workspace"] .snow-page-heading h2 {
-  margin: 0 0 8px; font-size: 26px; font-weight: 650; line-height: 1.4;
-}
-body[data-snow-mode="workspace"] .snow-page-heading p { margin: 0; font-size: 14px; line-height: 1.75; }
-
-/* The account module keeps its original event root, scrolling and leave guards. */
-#memberDialog.workspace-page[data-role="admin"] .member-head {
-  flex: none; height: var(--snow-admin-header); min-height: 0;
-  padding: 0 var(--snow-admin-gutter); gap: 12px; flex-wrap: nowrap;
-}
-#memberDialog[data-role="admin"] .member-logo { gap: 12px; min-width: 0; font-weight: 400; letter-spacing: 0; }
-.snow-admin-breadcrumb { display: none; }
-#memberDialog[data-role="admin"] .snow-admin-breadcrumb { display: inline; flex: none; font-size: 14px; color: var(--snow-ink); }
-#memberDialog.workspace-page[data-role="admin"] .member-head .workspace-context {
-  margin: 0; padding-left: 12px; border-left: 1px solid var(--snow-line);
-  font-size: 14px; font-weight: 400; line-height: 24px; color: var(--snow-ink);
-}
-#memberDialog.workspace-page[data-role="admin"] > .member-layout {
-  height: calc(100% - var(--snow-admin-header)); min-height: 0;
-}
-#memberDialog.workspace-page[data-role="admin"][data-auth="false"] .member-main {
-  width: 100%; max-width: none; margin: 0; padding: 28px 0 32px;
-  scrollbar-gutter: auto; --workspace-main-top: 28px;
-}
-#memberDialog[data-role="admin"] .snow-admin-content {
-  width: calc(100% - 2 * var(--snow-admin-gutter));
-  max-width: var(--snow-admin-content); min-width: 0; margin-inline: auto;
-}
-#memberDialog[data-role="admin"] .snow-admin-content > .member-page-title { margin: 0 0 24px; }
-#memberDialog[data-role="admin"] .snow-admin-content > .member-page-title h2 { font-weight: 650; }
-#memberDialog[data-role="admin"] .snow-admin-content > .member-nav {
-  width: 100%; padding: 0 0 16px; margin: 0 0 24px;
-  background: transparent; border-bottom: 1px solid var(--snow-line); overflow: visible;
-}
-#memberDialog[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links {
-  display: flex; flex-wrap: wrap; gap: 8px;
-}
-#memberDialog[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links button {
-  flex: none; width: auto; min-height: 44px; padding: 10px 14px; white-space: nowrap;
-}
-
-/* Match heading baselines and content starts across the overview's three cards. */
-body[data-snow-mode="workspace"] #subOverview { align-items: stretch; }
-body[data-snow-mode="workspace"] #subOverview .studio-hero { min-height: 340px; }
-body[data-snow-mode="workspace"] #subOverview .studio-hero-copy { width: 100%; }
-body[data-snow-mode="workspace"] #subOverview .studio-hero-copy h2,
-body[data-snow-mode="workspace"] #subOverview .studio-section-heading {
-  display: flex; align-items: center; min-height: 44px; margin: 0 0 16px;
-}
-body[data-snow-mode="workspace"] #subOverview .studio-home-columns > section {
-  display: flex; flex-direction: column; min-height: 340px;
-}
-body[data-snow-mode="workspace"] #subOverview .studio-section-heading { flex: none; }
-body[data-snow-mode="workspace"] #subOverview .studio-section-heading h3 { min-width: 0; }
-body[data-snow-mode="workspace"] #subOverview .studio-section-heading > :last-child { flex-shrink: 0; }
-body[data-snow-mode="workspace"] #subOverview .studio-attention > .studio-text-button {
-  margin-top: auto; align-self: flex-start;
-}
-
-@media (min-width: 761px) and (max-width: 1279px) {
-  :root { --snow-admin-gutter: 24px; }
-  body[data-snow-mode="workspace"] #subOverview { grid-template-columns: minmax(0, 1fr); }
-  body[data-snow-mode="workspace"] #subOverview .studio-hero {
-    display: grid; grid-template-columns: minmax(0, 1fr) 108px; min-height: 0;
-  }
-  body[data-snow-mode="workspace"] #subOverview .studio-orbit { grid-column: 2; grid-row: 1/3; margin: 0; }
-  body[data-snow-mode="workspace"] #subOverview .snow-dashboard-course-action { grid-column: 1; width: fit-content; }
-  body[data-snow-mode="workspace"] #subOverview .studio-home-columns {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;
-  }
-  body[data-snow-mode="workspace"] #subOverview .studio-home-columns > section { min-height: 280px; }
-}
-@media (max-width: 760px) {
-  :root { --snow-admin-gutter: 16px; --snow-admin-header: calc(112px + env(safe-area-inset-top)); }
-  body[data-snow-mode="workspace"]:not([data-snow-access]) > .app {
-    grid-template-rows: auto auto auto auto;
-    padding-bottom: calc(108px + env(safe-area-inset-bottom) + var(--snow-mobile-feedback-height, 0px));
-  }
-  body[data-snow-mode="workspace"] .app > .snow-topline {
-    height: calc(44px + env(safe-area-inset-top));
-    padding: calc(12px + env(safe-area-inset-top)) var(--snow-admin-gutter) 8px;
-  }
-  body[data-snow-mode="workspace"] .app > nav.snow-primary-nav {
-    grid-row: 2; justify-self: stretch;
-    width: calc(100% - 2 * var(--snow-admin-gutter));
-    margin: 0 var(--snow-admin-gutter) 14px;
-  }
-  body[data-snow-mode="workspace"] .app > #adminPanel { grid-row: 3; }
-  body[data-snow-mode="workspace"] .app > .snow-footer { grid-row: 4; }
-  body[data-snow-mode="workspace"] .snow-page-heading { padding: 24px 0; }
-  body[data-snow-mode="workspace"] .snow-page-heading h2 { font-size: 24px; }
-  body[data-snow-mode="workspace"] .snow-page-heading p { font-size: 13px; }
-  #memberDialog.workspace-page[data-role="admin"] .member-head {
-    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 20px 54px;
-    gap: 8px; padding: calc(12px + env(safe-area-inset-top)) 16px 18px;
-  }
-  #memberDialog.workspace-page[data-role="admin"] .member-head nav.snow-primary-nav { width: 100%; margin: 0; }
-  #memberDialog.workspace-page[data-role="admin"][data-auth="false"] .member-main { padding-block: 24px 32px; --workspace-main-top: 24px; }
-  #memberDialog[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links {
-    flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;
-  }
-  #memberDialog[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links button { min-width: 100px; }
-  body[data-snow-mode="workspace"] #subOverview .studio-hero { min-height: 0; }
-  body[data-snow-mode="workspace"] #subOverview .studio-home-columns > section { min-height: 0; }
-  body[data-snow-mode="workspace"] #subOverview .studio-attention > .studio-text-button { margin-top: 16px; }
-}
-
-</style>
-<style id="snowPersonalFrameDesign">
-/* Authenticated personal pages share the administrator frame's measuring rules. */
-#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-head {
-  height: var(--snow-admin-header); min-height: 0; flex: none;
-  padding: 0 var(--snow-admin-gutter) 0 calc(var(--snow-sidebar) + var(--snow-admin-gutter));
-  gap: 12px; flex-wrap: nowrap;
-}
-.snow-personal-breadcrumb { display: none; }
-#memberDialog[data-role="user"][data-auth="false"] .snow-personal-breadcrumb {
-  display: inline; flex: none; font-size: 14px; color: var(--snow-ink);
-}
-#memberDialog[data-role="user"][data-auth="false"] .member-logo {
-  gap: 12px; font-weight: 400; letter-spacing: 0; min-width: 0;
-}
-#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-head .workspace-context {
-  display: inline; margin: 0; padding-left: 12px;
-  border-left: 1px solid var(--snow-line);
-  font-size: 14px; font-weight: 400; line-height: 24px; color: var(--snow-ink);
-}
-#memberDialog.workspace-page[data-role="user"][data-auth="false"] > .member-layout {
-  height: calc(100% - var(--snow-admin-header)); min-height: 0;
-}
-#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-main {
-  width: 100%; max-width: none; min-width: 0; margin: 0;
-  padding: 28px 0 32px; border: 0; overflow: auto;
-  scrollbar-gutter: stable both-edges; --workspace-main-top: 28px;
-}
-#memberDialog[data-role="user"][data-auth="false"] .snow-personal-content {
-  /* Balanced reserved gutters keep the content still as short/long pages change.
-     Add back their measured width so the visible edges also match the admin frame. */
-  width: calc(100% - 2 * var(--snow-admin-gutter) + var(--snow-personal-scroll-space, 0px));
-  max-width: var(--snow-admin-content); min-width: 0; margin-inline: auto;
-}
-#memberDialog[data-role="user"][data-auth="false"] .snow-personal-content > .member-page-title { margin: 0 0 24px; }
-#memberDialog[data-role="user"][data-auth="false"] .snow-personal-content > .member-page-title h2 {
-  margin: 0 0 8px; font-size: 26px; font-weight: 650; line-height: 1.4;
-}
-#memberDialog[data-role="user"][data-auth="false"] .member-page-title > .member-muted { font-size: 14px; line-height: 1.75; }
-#memberDialog[data-role="user"][data-auth="false"] .member-shop-grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch;
-}
-#memberDialog[data-role="user"][data-auth="false"] .member-shop-grid > .member-product {
-  display: flex; flex-direction: column; grid-column: auto;
-  min-width: 0; margin: 0; padding: 24px;
-}
-#memberDialog[data-role="user"][data-auth="false"] .member-product > .member-actions { margin-top: auto; }
-#memberDialog[data-role="user"][data-auth="false"] .member-product > :is(.member-product-heading,.member-product-offer,.member-actions) { align-self: stretch; }
-#memberDialog[data-role="user"][data-auth="false"] .member-product > .member-product-offer {
-  border-bottom: 1px solid var(--snow-line); padding-bottom: 18px; margin-bottom: 18px;
-}
-#memberDialog[data-role="user"][data-auth="false"] .member-product > .member-actions > button { width: 100%; }
-@media (min-width: 761px) and (max-width: 1279px) {
-  #memberDialog[data-role="user"][data-auth="false"] .member-shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 761px) and (max-width: 1000px) {
-  #memberDialog[data-role="user"][data-auth="false"] .member-shop-grid { grid-template-columns: minmax(0, 1fr); }
-}
-@media (max-width: 760px) {
-  #memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-head {
-    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: 20px 54px;
-    gap: 8px; padding: calc(12px + env(safe-area-inset-top)) 16px 18px;
-  }
-  #memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-logo > :is(svg,strong) { display: none; }
-  #memberDialog[data-role="user"][data-auth="false"] .member-head nav.snow-primary-nav { width: 100%; margin: 0; }
-  #memberDialog.workspace-page[data-role="user"][data-auth="false"] > .member-layout { display: flex; flex-direction: column; }
-  #memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-main {
-    flex: 1; grid-column: auto; padding-block: 24px calc(32px + env(safe-area-inset-bottom)); --workspace-main-top: 24px;
-  }
-  #memberDialog[data-role="user"][data-auth="false"] .snow-personal-content > .member-page-title h2 { font-size: 24px; }
-  #memberDialog[data-role="user"][data-auth="false"] .member-page-title > .member-muted { font-size: 13px; }
-  #memberDialog.workspace-page[data-role="user"][data-auth="false"] .snow-personal-content > .member-nav {
-    position: static; inset: auto; width: 100%; height: auto;
-    margin: 0 0 24px; padding: 0 0 16px;
-    border: 0; border-bottom: 1px solid var(--snow-line); background: transparent; overflow: visible;
-  }
-  #memberDialog[data-role="user"][data-auth="false"] .snow-personal-content .member-nav-links {
-    display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; overflow-y: hidden;
-  }
-  #memberDialog[data-role="user"][data-auth="false"] .snow-personal-content .member-nav-links button {
-    flex: none; width: auto; min-width: 100px; min-height: 44px;
-    padding: 10px 14px; flex-direction: row; white-space: nowrap; font-size: 13px;
-  }
-  #memberDialog[data-role="user"][data-auth="false"] .member-shop-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  #memberDialog[data-role="user"][data-auth="false"] .member-shop-grid > .member-product { padding: 20px; }
-}
-
-</style>
-<style id="snowTopbarAlignment">
-/* Identical text metrics, not per-label offsets, keep both breadcrumb labels aligned. */
-#memberDialog.workspace-page[data-auth="false"] .member-head .member-logo {
-  font-size: 14px;
-  line-height: 24px;
-}
-#memberDialog.workspace-page[data-auth="false"] .member-head :is(.snow-personal-breadcrumb,.snow-admin-breadcrumb,.workspace-context),
-body[data-snow-mode="workspace"] .app > .snow-topline > span {
-  font-family: system-ui, -apple-system, "Microsoft YaHei", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 24px;
-  letter-spacing: 0;
-}
-
-</style>
-<style id="snowUnifiedInputFocus">
-/* Reference: administrator login input = a 1px green border, no halo or outline.
-   Restrict the reset to text-entry controls; keep button/checkbox/file focus cues. */
-:root { --snow-input-focus-color: #176b5b; }
-@layer snowUnifiedInputFocus {
-  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select):is(:focus,:focus-visible) {
-    box-shadow: none !important;
-    outline: none !important;
-  }
-  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select):not([aria-invalid="true"]):is(:focus,:focus-visible) {
-    border-color: var(--snow-input-focus-color) !important;
-  }
-  :is(input:not(:where([type="hidden" i],[type="checkbox" i],[type="radio" i],[type="range" i],[type="color" i],[type="file" i],[type="button" i],[type="submit" i],[type="reset" i],[type="image" i])), textarea, select)[aria-invalid="true"]:is(:focus,:focus-visible) {
-    border-color: #9f6a55 !important;
-  }
-}
-/* Important declarations in a named layer consistently override old per-page
-   focus styles. Invalid-field border colors and existing validation stay intact. */
 
 </style>
 <style id="snowInteractionMotion">
@@ -4192,6 +3779,469 @@ body[data-snow-credential-network="inline"] > #networkStatus { display:none !imp
 @media(prefers-reduced-motion:reduce){ #subTokens .credentials-list.credentials-stable .credential-inline { animation:none; } }
 
 </style>
+<style id="snowConsistencyDesign">
+/* Snow consistency V01. Authoritative shared tokens, controls and frame.
+   Embedded by scripts/sync-frontend-ui.mjs so Pages remains a single HTML.
+   Legacy feature-specific styles remain until their own regression is complete. */
+:root {
+  --snow-forest: #214a3b; --snow-forest-deep: #183d30; --snow-soft: #eaf0e8;
+  --snow-paper: #f5f5ef; --snow-surface: #fff; --snow-ink: #24382e;
+  --snow-body: #516258; --snow-muted: #6f7f72; --snow-line: #e1e6dc;
+  --snow-warm: #936327; --snow-warm-soft: #faf1df; --snow-danger: #a4524a;
+  --snow-sidebar: 224px; --snow-admin-header: 72px; --snow-admin-gutter: 34px;
+  --snow-admin-content: 1252px; --snow-control: 40px;
+  --snow-font: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+  --bg: var(--snow-paper); --bg-card: #fff; --text: var(--snow-ink);
+  --text-muted: var(--snow-muted); --border: var(--snow-line);
+  --accent: var(--snow-forest); --primary: var(--snow-forest);
+  --snow-accent: var(--snow-forest); --snow-green: var(--snow-forest);
+}
+body { background: var(--snow-paper); color: var(--snow-ink); font-family: var(--snow-font); font-size: 14px; }
+button, input, select, textarea { font-family: inherit; }
+:is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 2px solid #69876f; outline-offset: 3px;
+}
+input[type="checkbox"], input[type="radio"] { accent-color: var(--snow-forest); }
+:is(.btn, .member-primary, .member-secondary) {
+  min-height: var(--snow-control); border-radius: 4px; padding: 8px 16px;
+  font-size: 13px; line-height: 1.5; font-weight: 500; box-shadow: none;
+}
+:is(.btn-primary, .member-primary) { background: var(--snow-forest); border: 1px solid var(--snow-forest); color: #fff; }
+#memberDialog.workspace-page .member-main .member-primary { background: var(--snow-forest); border-color: var(--snow-forest); color: #fff; border-radius: 4px; min-height: var(--snow-control); }
+#memberDialog.workspace-page .member-main .member-secondary { background: #fff; border-color: var(--snow-line); color: var(--snow-body); border-radius: 4px; }
+:is(.btn-ghost, .member-secondary) { background: #fff; color: var(--snow-body); border: 1px solid var(--snow-line); }
+:is(.btn-danger, .member-danger) { color: #fff; background: var(--snow-danger); border-color: var(--snow-danger); }
+:is(.btn-sm, .member-row .member-secondary) { min-height: 32px; padding: 6px 11px; font-size: 12px; }
+:is(.btn, .member-primary, .member-secondary):disabled { opacity: .48; cursor: not-allowed; }
+:is(.input, .member-form input:not([type="checkbox"]):not([type="radio"]), .member-form select, .member-form textarea) {
+  min-height: var(--snow-control); border: 1px solid var(--snow-line); border-radius: 4px;
+  background: #fff; color: var(--snow-ink); font-size: 14px; box-shadow: none;
+}
+:is(.input, .member-form input, .member-form select, .member-form textarea):focus {
+  border-color: #69876f; box-shadow: 0 0 0 2px #214a3b0d;
+}
+:is(.card, .member-card, .snow-management-card, .snow-learning-overview, .course-group) {
+  background: var(--snow-surface); border-color: var(--snow-line); border-radius: 0; box-shadow: none;
+}
+:is(.member-muted, .member-help, .snow-read-stamp) { color: var(--snow-muted); }
+:is(.member-card, .member-product, .course-card) { min-width: 0; }
+.snow-ui-eyebrow { color: var(--snow-muted); font-size: 11px; letter-spacing: 1.6px; font-weight: 600; margin-bottom: 6px; }
+.snow-ui-badge { display: inline-flex; align-items: center; gap: 5px; border-radius: 3px; padding: 4px 8px; font-size: 11px; line-height: 1.5; white-space: nowrap; }
+.snow-ui-badge[data-tone="done"] { background: var(--snow-soft); color: #3b6344; }
+.snow-ui-badge[data-tone="progress"] { background: #e9efeb; color: #33594a; }
+.snow-ui-badge[data-tone="unknown"], .snow-ui-badge[data-tone="manual"] { background: var(--snow-warm-soft); color: var(--snow-warm); }
+.snow-ui-badge[data-tone="idle"] { background: #f0f2ed; color: #667365; }
+.snow-ui-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 0 0 20px; }
+.snow-ui-metric { min-width: 0; padding: 17px 19px; border: 1px solid var(--snow-line); background: #fff; }
+.snow-ui-metric > span { display: block; font-size: 12px; color: var(--snow-muted); }
+.snow-ui-metric > strong { display: block; font: 600 29px/1.2 system-ui, sans-serif; color: var(--snow-forest); margin: 9px 0 5px; letter-spacing: -.6px; }
+.snow-ui-metric > small { display: block; font-size: 11px; color: var(--snow-muted); line-height: 1.7; }
+.snow-ui-note { margin: 16px 0 0; font-size: 12px; line-height: 1.8; color: var(--snow-muted); overflow-wrap: anywhere; }
+
+/* Public extraction and authentication: same controls, lighter outer frame. */
+body[data-snow-access] { overflow: auto; }
+body[data-snow-access] > .app {
+  display: grid !important; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto;
+  width: 100%; max-width: 1136px; min-height: 0; height: auto; align-content: start; margin: 0 auto; padding: 0 28px; gap: 0; background: transparent;
+}
+body[data-snow-access] .app > .snow-topline { display: none; }
+body[data-snow-access] .app > .header {
+  grid-column: 1; grid-row: 1; display: flex; align-items: center; height: 80px; min-height: 0;
+  margin: 0; padding: 0; border: 0; background: transparent; position: static; z-index: auto; backdrop-filter: none;
+}
+body[data-snow-access] .header .brand-mark { width: 30px; height: 37px; background: none; color: var(--snow-forest); border: 0; }
+body[data-snow-access] .header .brand-mark svg { width: 100%; height: 100%; }
+body[data-snow-access] .header #mainTitle { font: 700 29px/1 system-ui, sans-serif; color: var(--snow-forest); letter-spacing: -1.5px; }
+body[data-snow-access] .header :is(.brand-subtitle, #transportStatus) { display: none; }
+body[data-snow-access] .app > nav.snow-primary-nav {
+  grid-column: 1; grid-row: 1; justify-self: end; align-self: center;
+  position: relative; inset: auto; z-index: 2; width: max-content; margin: 0; gap: 8px;
+  padding: 3px; border: 0; border-radius: 4px; background: transparent;
+}
+body .app nav.snow-primary-nav,
+#memberDialog.workspace-page .member-head nav.snow-primary-nav {
+  display: inline-flex; align-items: center; flex: none; gap: 3px; padding: 3px;
+  border: 1px solid var(--snow-line); border-radius: 4px; background: transparent; box-shadow: none;
+}
+body .app nav.snow-primary-nav > .snow-primary-link,
+#memberDialog.workspace-page .member-head nav.snow-primary-nav > .snow-primary-link {
+  min-height: 36px; border-radius: 4px; padding: 7px 12px;
+  min-width: 0; margin: 0; font-size: 12px; color: var(--snow-muted); border: 0; background: transparent; box-shadow: none;
+}
+body .app nav.snow-primary-nav > .snow-primary-link:is(.active,[aria-current="page"]),
+#memberDialog.workspace-page .member-head nav.snow-primary-nav > .snow-primary-link:is(.active,[aria-current="page"]) { background: var(--snow-soft); color: var(--snow-forest); box-shadow: none; }
+body[data-snow-access] #userPanel.active {
+  grid-column: 1; grid-row: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 72px; align-items: center; margin: 0; padding: 70px 0 50px;
+}
+body[data-snow-access] #userPanel > .snow-public-intro { display: block; min-height: 0; margin: 0; padding: 0; text-align: left; align-self: center; transform: none; }
+body[data-snow-access] .snow-public-intro .snow-eyebrow { font-size: 11px; letter-spacing: 2px; color: var(--snow-muted); }
+body[data-snow-access] .snow-public-intro h2 { margin: 20px 0 24px; font-size: clamp(30px, 3vw, 41px); line-height: 1.55; letter-spacing: -1.5px; color: var(--snow-ink); font-weight: 500; }
+body[data-snow-access] .snow-public-intro h2 span { color: #66815c; }
+body[data-snow-access] .snow-public-intro > p { font-size: 13px; color: var(--snow-muted); line-height: 2; margin: 0; }
+body[data-snow-access] .snow-public-art { display: none; }
+body[data-snow-access] #userPanel > .card {
+  margin: 0; padding: 29px 30px 25px; min-width: 0; min-height: 0;
+  width: auto; max-width: none; align-self: center; background: #fff; border: 1px solid var(--snow-line); border-radius: 0; box-shadow: none;
+}
+body[data-snow-access] .snow-form-heading { margin: 0 0 12px; padding: 0; }
+body[data-snow-access] .snow-form-heading .snow-eyebrow { color: var(--snow-muted); font-size: 11px; letter-spacing: 1.5px; }
+body[data-snow-access] .snow-form-heading h2 { font-size: 22px; font-weight: 500; line-height: 1.5; margin: 18px 0 10px; }
+body[data-snow-access] .snow-form-heading p { color: var(--snow-muted); font-size: 12px; line-height: 1.8; margin: 0 0 24px; }
+body[data-snow-access] .snow-form-heading label { display: block; margin-bottom: 9px; font-size: 12px; }
+body[data-snow-access] #tokenInput { min-height: 44px; padding: 10px 12px; font-size: 14px; }
+body[data-snow-access] #verifyBtn { min-height: 44px; border-radius: 4px; margin-top: 14px; }
+body[data-snow-access] :is(.tip, .snow-access-help, .member-profile-note) { color: var(--snow-muted); font-size: 12px; line-height: 1.9; }
+body[data-snow-access] .app > .snow-footer { grid-column: 1; grid-row: 3; margin: 0; padding: 20px 0; border-top: 1px solid var(--snow-line); color: var(--snow-muted); font-size: 11px; }
+body[data-snow-access="admin"] #adminPanel { display: none; }
+body[data-snow-access="admin"] #adminLoginCard { margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+#memberDialog.workspace-page.snow-access-embedded {
+  display: block; position: static; inset: auto; width: 100%; height: auto; min-width: 0;
+  max-width: none; max-height: none; margin: 0; padding: 0; border: 0; border-radius: 0;
+  overflow: visible; box-shadow: none; background: transparent; font: inherit;
+}
+#memberDialog.workspace-page.snow-access-embedded > .member-head,
+#memberDialog.workspace-page.snow-access-embedded :is(.workspace-welcome, .member-nav) { display: none !important; }
+#memberDialog.workspace-page.snow-access-embedded > .member-layout { display: block; height: auto; margin: 0; border: 0; background: transparent; }
+#memberDialog.workspace-page.snow-access-embedded .member-main { width: 100%; max-width: none; min-height: 0; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; }
+#memberDialog.workspace-page.snow-access-embedded .member-auth { width: 100%; max-width: none; margin: 0; padding: 0; border: 0; background: transparent; box-shadow: none; }
+#memberDialog.workspace-page.snow-access-embedded .member-page-title { margin: 0 0 24px; padding: 0; }
+#memberDialog.workspace-page.snow-access-embedded .member-page-title h2 { font-size: 22px; margin: 18px 0 10px; font-weight: 500; }
+#memberDialog.workspace-page.snow-access-embedded .member-form input { min-height: 44px; }
+
+/* Authenticated frames. Keep all real nodes and original event roots. */
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .app {
+  display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--snow-admin-header) auto auto;
+  align-content: start; width: calc(100% - var(--snow-sidebar)); max-width: none;
+  margin: 0 0 0 var(--snow-sidebar); padding: 0 0 32px;
+}
+body[data-snow-mode="workspace"] .app > .snow-topline {
+  grid-column: 1; grid-row: 1; height: var(--snow-admin-header); margin: 0;
+  padding: 0 var(--snow-admin-gutter); display: flex; align-items: center; gap: 12px;
+  background: #fffefa; font-size: 12px; letter-spacing: 0; color: var(--snow-muted); border-bottom: 1px solid var(--snow-line);
+}
+body[data-snow-mode="workspace"] .app > .snow-topline > :first-child { display: inline; }
+body[data-snow-mode="workspace"] .app #snowLocation { margin: 0; padding-left: 12px; border-left: 1px solid var(--snow-line); font-size: 12px; color: var(--snow-body); }
+body[data-snow-mode="workspace"] .app > nav.snow-primary-nav {
+  grid-column: 1; grid-row: 1; justify-self: end; align-self: center; position: static;
+  inset: auto; z-index: 1; width: max-content; margin: 0 var(--snow-admin-gutter) 0 0;
+}
+body[data-snow-mode="workspace"] .app > :is(#adminPanel, .snow-footer) {
+  grid-column: 1; width: calc(100% - 2 * var(--snow-admin-gutter)); max-width: var(--snow-admin-content);
+  min-width: 0; margin-inline: auto;
+}
+body[data-snow-mode="workspace"] .app > #adminPanel { grid-row: 2; }
+body[data-snow-mode="workspace"] .app > .snow-footer { grid-row: 3; }
+body[data-snow-mode="workspace"] .snow-page-heading { padding: 27px 0 24px; }
+body[data-snow-mode="workspace"] .snow-page-heading h2 { font-size: 27px; line-height: 1.4; font-weight: 600; margin: 4px 0 8px; }
+body[data-snow-mode="workspace"] .snow-page-heading p { font-size: 13px; line-height: 1.8; color: var(--snow-muted); margin: 0; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar {
+  width: var(--snow-sidebar); background: var(--snow-forest-deep); color: #d7e3d6;
+  padding: 27px 18px 20px; border: 0; box-shadow: none;
+}
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar :is(.snow-sidebar-brand, .snow-workspace strong) { color: #f4f5e9; }
+.snow-sidebar-brand { margin: 0 12px 16px; }
+body[data-snow-mode="workspace"] > .snow-sidebar .snow-sidebar-brand strong { color: #f4f5e9; font: 700 29px/1 system-ui, sans-serif; letter-spacing: -1.5px; }
+body[data-snow-mode="workspace"] > .snow-sidebar .snow-sidebar-brand svg { color: #f4f5e9; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar .snow-workspace { border: 0; padding: 0 12px 20px; margin: 0; background: none; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar .snow-workspace-avatar { display: none; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar :is(.snow-workspace small, .snow-nav-caption, .snow-sidebar-foot) { color: #a7bfae; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar .snow-nav-caption { font-size: 11px; padding: 0 13px; margin: 8px 0 12px; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar #adminSubtabs { gap: 5px; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar #adminSubtabs > button {
+  min-height: 43px; padding: 10px 13px; border: 0; border-radius: 4px;
+  background: transparent; color: #bfd0c1; font-size: 13px; gap: 12px; box-shadow: none;
+}
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar #adminSubtabs > button:is(.active,.selected,[aria-current="page"]) { background: #edf2e6; color: var(--snow-forest-deep); font-weight: 600; }
+body[data-snow-mode="workspace"]:not([data-snow-access]) > .snow-sidebar .snow-sidebar-foot .btn { background: transparent; color: #bfd0c1; border-color: #ffffff20; }
+#memberDialog.workspace-page:not(.snow-access-embedded) { background: var(--snow-paper); color: var(--snow-ink); }
+#memberDialog.workspace-page[data-auth="false"] .member-head {
+  display: flex; flex: none; min-height: 0; height: var(--snow-admin-header);
+  padding: 0 var(--snow-admin-gutter); gap: 12px; flex-wrap: nowrap; background: #fffefa; border-bottom: 1px solid var(--snow-line);
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-head { padding-left: calc(var(--snow-sidebar) + var(--snow-admin-gutter)); }
+#memberDialog[data-auth="false"] .member-logo { gap: 12px; min-width: 0; font-weight: 400; letter-spacing: 0; }
+.snow-admin-breadcrumb, .snow-personal-breadcrumb { display: none; }
+#memberDialog.workspace-page[data-role="admin"] .snow-admin-breadcrumb,
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .snow-personal-breadcrumb { display: inline; flex: none; color: var(--snow-muted); font-size: 12px; }
+#memberDialog.workspace-page[data-auth="false"] .member-head .workspace-context {
+  display: inline; margin: 0; padding-left: 12px; border-left: 1px solid var(--snow-line);
+  font-size: 12px; font-weight: 400; line-height: 24px; color: var(--snow-body);
+}
+#memberDialog.workspace-page[data-auth="false"] > .member-layout { height: calc(100% - var(--snow-admin-header)); min-height: 0; }
+#memberDialog.workspace-page[data-auth="false"] .member-main {
+  width: 100%; max-width: none; min-width: 0; margin: 0; padding: 27px 0 32px;
+  border: 0; background: var(--snow-paper); overflow: auto; scrollbar-gutter: auto; --workspace-main-top: 27px;
+}
+#memberDialog[data-auth="false"] :is(.snow-personal-content, .snow-admin-content) {
+  width: calc(100% - 2 * var(--snow-admin-gutter)); max-width: var(--snow-admin-content); min-width: 0; margin-inline: auto;
+}
+#memberDialog[data-auth="false"] :is(.snow-personal-content, .snow-admin-content) > .member-page-title { margin: 0 0 24px; padding: 0; border: 0; }
+#memberDialog[data-auth="false"] .member-page-title h2 { margin: 4px 0 8px; font-size: 27px; font-weight: 600; line-height: 1.4; letter-spacing: -.6px; }
+#memberDialog[data-auth="false"] .member-page-title .member-muted { font-size: 13px; line-height: 1.8; color: var(--snow-muted); }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav {
+  width: var(--snow-sidebar); background: var(--snow-forest-deep); color: #d7e3d6; border: 0; padding: 27px 18px 20px;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-brand { color: #f4f5e9; margin: 0 12px 18px; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-profile { border: 0; padding: 0 12px 22px; margin: 0; color: #d7e3d6; background: transparent; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-brand strong { color: #f4f5e9; font: 700 29px/1 system-ui, sans-serif; letter-spacing: -1.5px; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-brand svg { color: #f4f5e9; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-profile strong { color: #d7e3d6; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-profile small { color: #a7bfae; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-avatar { background: #ffffff12; color: #d6e5d3; border-color: #ffffff16; border-radius: 4px; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-links { display: grid; gap: 5px; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-links > button {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 43px; padding: 10px 13px;
+  border: 0; border-radius: 4px; background: transparent; color: #bfd0c1; font-size: 13px; font-weight: 400; text-align: left;
+}
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-links > button[aria-current="page"] { background: #edf2e6; color: var(--snow-forest-deep); font-weight: 600; }
+#memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-nav-foot { color: #a7bfae; font-size: 11px; border-color: #ffffff16; }
+#memberDialog.workspace-page[data-role="admin"] .snow-admin-content > .member-nav { width: 100%; margin: 0 0 20px; padding: 0 0 14px; border: 0; border-bottom: 1px solid var(--snow-line); background: transparent; overflow: visible; }
+#memberDialog.workspace-page[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
+#memberDialog.workspace-page[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links > button { width: auto; min-height: 36px; padding: 8px 13px; font-size: 12px; border-radius: 4px; }
+#memberDialog[data-auth="false"] .member-card { border-color: var(--snow-line); background: #fff; border-radius: 0; }
+#memberDialog[data-auth="false"] .member-shop-grid { gap: 20px; }
+#memberDialog[data-auth="false"] .member-product { padding: 24px; }
+
+/* Learning: summary + connection + cards, original preview/create/run controls. */
+#memberDialog.workspace-page[data-role="user"] .member-learning-workspace { min-width: 0; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account { padding: 16px 18px; margin-bottom: 22px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account-heading { gap: 14px; padding: 0; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account-heading h3 { font-size: 13px; color: var(--snow-ink); }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account-note { color: var(--snow-muted); }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account-heading .member-actions { gap: 8px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-account-heading .member-actions > button { min-height: 36px; font-size: 12px; padding: 7px 11px; border-radius: 4px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-login { border-color: var(--snow-line); padding-top: 18px; margin-top: 16px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-columns { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-workspace .member-learning-courses { padding: 0; border: 0; background: transparent; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-section-heading { padding: 0 0 14px; gap: 12px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-section-heading > h3 { font-size: 15px; }
+.snow-ui-course-tools { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 15px; }
+.snow-ui-course-tabs { display: flex; gap: 21px; border-bottom: 1px solid var(--snow-line); flex: 1; min-width: 0; }
+.snow-ui-course-tabs > button { border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--snow-muted); min-height: 40px; padding: 0 0 9px; font-size: 12px; white-space: nowrap; }
+.snow-ui-course-tabs > button[aria-pressed="true"] { color: var(--snow-forest); border-bottom-color: var(--snow-forest); font-weight: 600; }
+.snow-ui-course-search { display: flex; align-items: center; gap: 8px; }
+.snow-ui-course-search .input { max-width: 240px; min-width: 0; }
+.snow-ui-course-search > span { font-size: 12px; white-space: nowrap; color: var(--snow-muted); }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-list > .member-learning-course-card {
+  display: flex; flex-direction: column; min-width: 0; min-height: 213px; margin: 0;
+  padding: 20px 21px 16px; border: 1px solid var(--snow-line); border-radius: 0; background: #fff; gap: 12px; align-items: stretch;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-learning-course-card > div { flex: 0 0 auto; width: 100%; min-width: 0; align-self: stretch; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-card .member-course-check { width: 100%; align-items: flex-start; gap: 11px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-card .member-course-check input { margin-top: 5px; flex: none; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-card .member-course-check strong { font-size: 17px; line-height: 1.6; color: var(--snow-ink); }
+#memberDialog.workspace-page[data-role="user"] .member-learning-course-card .member-course-check small { font-size: 12px; color: var(--snow-muted); margin-top: 7px; line-height: 1.8; }
+.snow-ui-course-card-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.snow-ui-course-card-top > span:first-child { font-size: 11px; color: var(--snow-muted); }
+.snow-ui-progress { margin-top: auto; }
+.snow-ui-progress-caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; color: var(--snow-muted); margin-bottom: 8px; }
+.snow-ui-progress-track { height: 4px; background: #edf0e8; overflow: hidden; }
+.snow-ui-progress-fill { height: 100%; background: #648064; }
+.snow-ui-progress-track[data-unknown="true"] { border-top: 2px dashed #e2e7dc; background: transparent; }
+.snow-ui-course-card-foot { min-height: 24px; color: var(--snow-muted); font-size: 12px; line-height: 1.7; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-selection { margin-top: 16px; padding: 15px 0; border-top: 1px solid var(--snow-line); }
+#memberDialog.workspace-page[data-role="user"] .member-learning-task-column { display: grid; grid-template-columns: minmax(0, 1fr) 300px; align-items: start; gap: 20px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-rules { border: 1px solid var(--snow-line); background: #fff; padding: 20px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-task { padding: 22px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-task .member-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#memberDialog.workspace-page[data-role="user"] .member-learning-task .member-actions > button { width: auto; }
+.snow-ui-filter-empty { padding: 28px; border: 1px solid var(--snow-line); background: #fff; text-align: center; font-size: 13px; color: var(--snow-muted); }
+
+/* Users: actual current batch only. Existing actions and pagination preserved. */
+#memberDialog.workspace-page[data-role="admin"] .member-user-list { padding: 0; border: 1px solid var(--snow-line); }
+#memberDialog.workspace-page[data-auth="false"] .member-user-list .member-search-bar { padding: 18px 20px; border: 0; margin: 0; border-bottom: 1px solid var(--snow-line); background: #fff; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-list .member-search-bar label { font-size: 12px; color: var(--snow-muted); }
+#memberDialog.workspace-page[data-auth="false"] .member-users-labels, #memberDialog.workspace-page[data-auth="false"] .member-user-row {
+  display: grid; grid-template-columns: minmax(150px, 1.25fr) 80px minmax(70px, .6fr) minmax(70px, .6fr) minmax(290px, 1.7fr);
+  align-items: center; gap: 14px; margin: 0; padding: 16px 20px;
+}
+#memberDialog.workspace-page[data-auth="false"] .member-users-labels { color: var(--snow-muted); font-size: 12px; background: #fafbf6; border-bottom: 1px solid var(--snow-line); }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row { min-height: 76px; border: 0; border-bottom: 1px solid #eef0e9; background: #fff; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-identity { gap: 11px; min-width: 0; grid-column: auto; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-identity strong { font-size: 13px; overflow-wrap: anywhere; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-avatar { width: 34px; height: 34px; font-size: 12px; border-radius: 4px; background: #edf0e6; color: #54715b; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-balances { display: contents; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-balances > span { display: block; margin: 0; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-balances b { font: 13px/1.6 Consolas, monospace; color: #446240; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-balances small { display: none; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-actions { display: flex; justify-content: flex-end; gap: 7px; flex-wrap: wrap; margin: 0; }
+#memberDialog.workspace-page[data-auth="false"] .member-status-chip { display: inline-flex; width: max-content; border-radius: 3px; padding: 4px 8px; font-size: 11px; line-height: 1.5; }
+#memberDialog.workspace-page[data-auth="false"] .member-status-chip[data-status="active"] { background: var(--snow-soft); color: #3b6344; }
+#memberDialog.workspace-page[data-auth="false"] .member-status-chip[data-status="disabled"] { background: #f0f2ed; color: #667365; }
+#memberDialog.workspace-page[data-auth="false"] .member-user-list > .member-list-pager { padding: 16px 20px; margin: 0; border: 0; }
+#memberDialog.workspace-page[data-auth="false"] .member-row-menu > summary { border-radius: 4px; font-size: 12px; min-height: 32px; padding: 6px 11px; border-color: var(--snow-line); }
+#memberDialog.workspace-page[data-auth="false"] .member-row-menu > div { z-index: 35; border: 1px solid var(--snow-line); border-radius: 4px; background: #fff; box-shadow: 0 8px 24px #183d3014; }
+
+/* Dialogs and feedback reuse the same palette, without changing when they open. */
+:is(.confirm-box, .input-box, .member-confirm, .snow-more-dialog) { border-radius: 4px; border-color: var(--snow-line); color: var(--snow-ink); }
+:is(.member-notice, .result-card) { border-radius: 4px; font-size: 13px; line-height: 1.8; }
+:is(.snow-icon, .member-nav-icon) { stroke-width: 1.7; }
+[hidden] { display: none !important; }
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  :root { --snow-sidebar: 196px; --snow-admin-gutter: 24px; }
+}
+@media (min-width: 761px) and (max-width: 1100px) {
+  .snow-ui-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-course-list { grid-template-columns: minmax(0, 1fr); }
+  .snow-ui-course-tools { align-items: stretch; flex-direction: column; gap: 10px; }
+  .snow-ui-course-search .input { max-width: none; flex: 1; }
+  #memberDialog.workspace-page[data-auth="false"] .member-users-labels { display: none; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row { grid-template-columns: minmax(0, 1fr) auto; gap: 14px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row > .member-user-actions { grid-column: 1 / -1; justify-content: flex-start; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-balances small { display: inline; font-size: 12px; color: var(--snow-muted); margin-left: 8px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-task-column { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  :root { --snow-sidebar: 0px; --snow-admin-gutter: 17px; --snow-admin-header: calc(64px + env(safe-area-inset-top)); --snow-control: 44px; }
+  :is(.btn, .member-primary, .member-secondary) { min-height: 44px; font-size: 13px; }
+  :is(.input, .member-form input:not([type="checkbox"]):not([type="radio"]), .member-form select) { font-size: 16px; }
+  .snow-ui-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 15px; }
+  .snow-ui-metric { padding: 13px 14px; }
+  .snow-ui-metric > strong { font-size: 25px; }
+  .snow-ui-metric > small { display: none; }
+  body[data-snow-access] > .app { padding: 0 20px; }
+  body[data-snow-access] .app > .header { height: 64px; }
+  body[data-snow-access] .header #mainTitle { font-size: 25px; }
+  body[data-snow-access] .header .brand-mark { width: 24px; height: 30px; }
+  body[data-snow-access] .app > nav.snow-primary-nav { gap: 0; }
+  body[data-snow-access] .app > nav.snow-primary-nav .snow-primary-link { font-size: 11px; padding: 7px 8px; }
+  body[data-snow-access] #userPanel.active { grid-template-columns: minmax(0, 1fr); padding: 30px 0; gap: 28px; }
+  body[data-snow-access] .snow-public-intro h2 { font-size: 30px; margin: 14px 0; }
+  body[data-snow-access] .snow-public-intro > p { font-size: 12px; }
+  body[data-snow-access] #userPanel > .card { padding: 22px; }
+  body[data-snow-access] .app > .snow-footer { font-size: 10px; line-height: 1.8; }
+  #memberDialog.workspace-page[data-auth="false"] .member-head {
+    display: flex; height: var(--snow-admin-header); padding: env(safe-area-inset-top) 17px 0;
+    align-items: center; justify-content: space-between; gap: 8px; flex-wrap: nowrap;
+  }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"] .member-head { padding-left: 17px; }
+  #memberDialog[data-auth="false"] .member-head .member-logo { display: flex; gap: 7px; }
+  #memberDialog[data-auth="false"] .member-head .member-logo > :is(svg, strong) { display: inline; }
+  #memberDialog[data-auth="false"] .member-head .member-logo > svg { width: 21px; height: 27px; }
+  #memberDialog[data-auth="false"] .member-head .member-logo > strong { font: 700 23px/1 system-ui, sans-serif; color: var(--snow-forest); letter-spacing: -1px; }
+  #memberDialog[data-auth="false"] .member-head :is(.snow-personal-breadcrumb, .snow-admin-breadcrumb, .workspace-context) { display: none !important; }
+  #memberDialog[data-auth="false"] .member-head nav.snow-primary-nav { width: auto; margin: 0; flex: none; gap: 0; }
+  #memberDialog[data-auth="false"] .member-head nav.snow-primary-nav .snow-primary-link { min-height: 36px; padding: 6px 9px; font-size: 11px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-main { padding: 20px 0 calc(96px + env(safe-area-inset-bottom)); }
+  #memberDialog[data-auth="false"] .member-page-title h2 { font-size: 24px; }
+  #memberDialog[data-auth="false"] .member-page-title .member-muted { font-size: 12px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-course-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-course-list > .member-learning-course-card { padding: 16px; min-height: 205px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-course-card .member-course-check strong { font-size: 16px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-account { padding: 14px; margin-bottom: 18px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-account-heading { gap: 12px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-account-heading .member-actions { flex-wrap: wrap; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-account-heading .member-actions > button { min-height: 40px; }
+  .snow-ui-course-tools { align-items: stretch; flex-direction: column; gap: 12px; }
+  .snow-ui-course-tabs { gap: 20px; overflow-x: auto; }
+  .snow-ui-course-tabs > button { min-height: 44px; font-size: 12px; }
+  .snow-ui-course-search .input { max-width: none; flex: 1; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-task-column { grid-template-columns: minmax(0, 1fr); }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-selection { gap: 12px; padding: 14px 0; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-selection .member-actions { display: flex; width: 100%; gap: 8px; }
+  #memberDialog.workspace-page[data-role="user"] .member-learning-selection .member-actions > button { flex: 1; }
+  #memberDialog.workspace-page[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links { flex-wrap: nowrap; overflow-x: auto; }
+  #memberDialog.workspace-page[data-role="admin"] .snow-admin-content > .member-nav .member-nav-links > button { min-width: max-content; min-height: 44px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-users-labels { display: none; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 16px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row > .member-user-actions { grid-column: 1 / -1; justify-content: flex-start; gap: 8px; display: flex; flex-wrap: wrap; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-actions > button { width: auto; flex: 0 0 auto; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row { position: relative; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-row-menu { position: static; flex: none; width: auto; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-row-menu > div { inset: calc(100% - 12px) 16px auto 16px; width: auto; max-width: none; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row:last-of-type .member-row-menu > div { inset: auto 16px calc(100% - 12px) 16px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-balances small { display: inline; font-size: 12px; color: var(--snow-muted); margin-left: 8px; }
+  #memberDialog.workspace-page[data-auth="false"] .member-user-row .member-user-actions :is(button, summary) { min-height: 40px; }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] > .member-nav { position: fixed; inset: auto 0 0; z-index: 70; width: 100%; height: calc(65px + env(safe-area-inset-bottom)); overflow: visible; padding: 6px 10px max(7px, env(safe-area-inset-bottom)); background: #fffefa; border-top: 1px solid var(--snow-line); border-right: 0; }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] > .member-nav .member-nav-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] > .member-nav .member-nav-links > button,
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] .snow-personal-more > summary {
+    min-height: 52px; padding: 4px 2px; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 4px; font-size: 11px; border: 0; color: var(--snow-muted); background: none;
+  }
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] > .member-nav .member-nav-links > button[aria-current="page"],
+  #memberDialog.workspace-page[data-role="user"][data-auth="false"][data-snow-personal-mobile="true"] .snow-personal-more[data-current="true"] > summary { color: var(--snow-forest); background: var(--snow-soft); }
+  body[data-snow-mode="workspace"]:not([data-snow-access]) > .app { grid-template-rows: auto auto auto auto; padding-bottom: calc(100px + env(safe-area-inset-bottom) + var(--snow-mobile-feedback-height, 0px)); }
+  body[data-snow-mode="workspace"] .app > .snow-topline { height: 42px; padding: 0 17px; }
+  body[data-snow-mode="workspace"] .app > nav.snow-primary-nav { grid-row: 2; justify-self: stretch; width: calc(100% - 34px); margin: 0 17px 12px; }
+  body[data-snow-mode="workspace"] .app > #adminPanel { grid-row: 3; }
+  body[data-snow-mode="workspace"] .app > .snow-footer { grid-row: 4; }
+  .snow-mobile-nav { background: #fffefa; border-color: var(--snow-line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(.btn, .member-primary, .member-secondary, .snow-primary-link) { transition: none !important; }
+}
+</style>
+<script id="snowConsistencyUI">
+/* Pure presentation helpers. No network, storage, task execution or authority. */
+window.SnowUIConsistency = (() => {
+  'use strict';
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function progress(course) {
+    const value = course?.studyRate;
+    if (value === null || value === undefined || typeof value === 'boolean' || typeof value === 'object' || typeof value === 'string' && !value.trim()) return null;
+    const number = Number(value);
+    return Number.isFinite(number) && number >= 0 && number <= 100 ? number : null;
+  }
+  const badge = (label, tone) => '<span class="snow-ui-badge" data-tone="' + escape(tone) + '">' + escape(label) + '</span>';
+  const metric = (label, value, note) => '<div class="snow-ui-metric"><span>' + escape(label) + '</span><strong>' + escape(value) + '</strong><small>' + escape(note) + '</small></div>';
+  function courseMetrics(courses, read, complete, manual) {
+    const unique = [...new Map(courses.map(c => [String(c.courseId), c])).values()];
+    const done = unique.filter(complete).length;
+    return '<section class="snow-ui-metrics" aria-label="最近读取的课程概览">' +
+      metric('本次读取', read ? unique.length : '—', '最近返回的课程，不代表实时状态') +
+      metric('目标已完成', read ? done : '—', '按原有视频与评价判定') +
+      metric('待处理 / 待核对', read ? unique.length - done : '—', '未确认不等于未学习') +
+      metric('需手动环节', read ? unique.filter(manual).length : '—', '课程子集，不与前面三项相加') + '</section>';
+  }
+  function userMetrics(data) {
+    const users = data?.users || [];
+    return '<section class="snow-ui-metrics" aria-label="当前批次用户概览">' +
+      metric('本批用户', data ? users.length : '—', '仅统计本次返回，不是全库总数') +
+      metric('本批正常', data ? users.filter(u => u.status === 'active').length : '—', '状态由服务端返回') +
+      metric('本批已停用', data ? users.filter(u => u.status === 'disabled').length : '—', '保留原有账户状态') +
+      metric('当前页', data ? data.page || 1 : '—', data?.pagination?.hasMore ? '还有下一批记录' : '以当前读取范围为准') + '</section>';
+  }
+  function courseCard(course, selected, complete, manual) {
+    const percent = progress(course), done = complete(course), hand = manual(course);
+    const tone = done ? 'done' : percent === null ? 'unknown' : percent > 0 ? 'progress' : 'idle';
+    const label = done ? '目标已完成' : percent === null ? '待核对' : percent > 0 ? '视频已完成，评价待确认' : '未开始';
+    const status = !done && percent !== null && percent > 0 && percent < 100 ? '视频进行中' : label;
+    const evaluation = course.hasFinishEvaluate === true ? '评价已完成' : course.evaluationAccess?.source === 'platform-step-access' && course.evaluationAccess.status === 'blocked-by-exam' ? '评价受考试前置限制' : course.evaluationAccess?.source === 'platform-step-access' && course.evaluationAccess.status === 'not-required' ? '平台未要求评价' : '评价状态以读取结果为准';
+    return '<article class="member-row member-learning-course-card" data-course-visual-card data-course-visual-name="' + escape(course.courseName) + '" data-course-visual-complete="' + done + '">' +
+      '<div class="snow-ui-course-card-top"><span>学习课程</span>' + badge(status, tone) + '</div>' +
+      '<label class="member-course-check"><input type="checkbox" data-course-id="' + escape(course.courseId) + '" ' + (selected.has(course.courseId) ? 'checked ' : '') + (done ? 'disabled ' : '') + '><span><strong>' + escape(course.courseName) + '</strong><small>平台整课：' + (course.courseFinished ? '已完成' : '未确认完成') + ' · ' + escape(evaluation) + '</small></span></label>' +
+      '<div class="snow-ui-progress"><div class="snow-ui-progress-caption"><span>视频进度</span><span>' + (percent === null ? '—' : escape(percent) + '%') + '</span></div>' +
+      (percent === null ? '<div class="snow-ui-progress-track" data-unknown="true" aria-label="视频进度尚未确认"></div>' : '<div class="snow-ui-progress-track" role="progressbar" aria-label="视频进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + percent + '"><div class="snow-ui-progress-fill" style="width:' + percent + '%"></div></div>') + '</div>' +
+      '<div class="snow-ui-course-card-foot">' + (hand ? badge('含手动考试 / 练习', 'manual') : done ? '视频与可执行评价目标已完成' : '选择课程后先预览，再创建任务') + '</div></article>';
+  }
+  function courseTools(query, filter) {
+    return '<div class="snow-ui-course-tools"><div class="snow-ui-course-tabs" role="group" aria-label="筛选最近读取的课程">' +
+      [['all','全部'],['pending','待处理 / 待核对'],['done','目标已完成']].map(([key,label]) => '<button type="button" data-course-visual-filter="' + key + '" aria-pressed="' + (filter === key) + '">' + label + '</button>').join('') + '</div>' +
+      '<label class="snow-ui-course-search"><span>搜索课程</span><input class="input" type="search" data-course-visual-query placeholder="搜索已读取的课程" aria-label="搜索已读取的课程" value="' + escape(query) + '"></label></div>';
+  }
+  function filterCourseCards(root, query, filter) {
+    const normalized = value => String(value || '').normalize('NFKC').toLocaleLowerCase('zh-CN');
+    const needle = normalized(query);
+    let visible = 0;
+    for (const card of root.querySelectorAll('[data-course-visual-card]')) {
+      const done = card.dataset.courseVisualComplete === 'true';
+      const show = normalized(card.dataset.courseVisualName).includes(needle) && (filter === 'done' ? done : filter === 'pending' ? !done : true);
+      card.hidden = !show; if (show) visible++;
+    }
+    const note = root.querySelector('[data-course-visual-empty]');
+    if (note) note.hidden = visible > 0;
+    for (const button of root.querySelectorAll('[data-course-visual-filter]')) button.setAttribute('aria-pressed', String(button.dataset.courseVisualFilter === filter));
+    const output = root.querySelector('[data-course-visual-count]');
+    if (output) output.textContent = '当前显示 ' + visible + ' 门；筛选不改变已选课程和任务范围';
+    return visible;
+  }
+  return Object.freeze({progress, badge, metric, courseMetrics, userMetrics, courseCard, courseTools, filterCourseCards});
+})();
+</script>
 </head><body>
 <div id="snowBootScreen" role="status" aria-live="polite">
   <div class="snow-boot-card">
@@ -5535,12 +5585,12 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '13.0.44 RC1';
+const COURSE_FRONTEND_VERSION = '13.0.45 RC1';
 // 本页配套的云函数版本，与页面自身版本分开记录；部署时应与它一致。
 const COURSE_EXPECTED_BACKEND_VERSION = '11.13.25';
 const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '13.0.44 RC1';
+const API_CLIENT_VERSION = '13.0.45 RC1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -9607,7 +9657,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdminSession();
 
-console.log('Link · Token 管理 v13.0.44 RC1 — 已就绪');
+console.log('Link · Token 管理 v13.0.45 RC1 — 已就绪');
 </script>
 <script id="snowMemberJournal">
 (function(root){
@@ -9876,6 +9926,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     prepareFormFeedback(main);
     prepareConfigEditState(main);
     syncCourseWorkspace(main);
+    if(member.page==='courses'&&member.token&&!member.admin)SnowUIConsistency.filterCourseCards(main,coursePresentation.visualQuery,coursePresentation.visualFilter);
     main.dataset.authMode=isAuth?member.authMode:'';
     if(focused?.isConnected&&!focused.disabled)focused.focus({preventScroll:true});
     main.dataset.page=member.page;main.setAttribute('aria-busy',String(member.busy));
@@ -9909,7 +9960,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.44 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.45 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -9941,7 +9992,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function usersView(){
     const data=member.adminData,users=data?.users||[];
-    return title('用户管理。','按账户查看点数与课程额度，管理状态及待核对事项。')+'<section class="member-card member-user-list"><form id="memberUserSearch" class="member-form member-search-bar"><label>查找用户<input id="memberUserQuery" maxlength="32" placeholder="输入用户名查找" value="'+esc(member.browseFrames.users?.query||'')+'"></label><button class="member-secondary">查找</button></form><div class="member-users-labels" aria-hidden="true"><span>账户</span><span>可用点数 / 整课额度</span><span>操作</span></div>'+(!data?listPlaceholder(member.error,'用户列表'):'')+users.map(u=>'<article class="member-row member-user-row"><div class="member-user-identity"><span class="member-user-avatar" aria-hidden="true">'+esc(u.username.slice(0,1).toUpperCase())+'</span><div><strong>'+esc(u.username)+'</strong><small class="member-status-chip" data-status="'+esc(u.status)+'">'+esc(status(u.status))+'</small></div></div><div class="member-user-balances"><span><b>'+esc(u.points)+'</b><small>点数</small></span><span><b>'+esc(u.courseQuota)+'</b><small>整课额度</small></span></div><div class="member-actions member-user-actions">'+btn('查看账目','userLedger',false,'data-user="'+esc(u.userId)+'"')+btn('待核对事项','userReviews',false,'data-user="'+esc(u.userId)+'"')+'<details class="member-row-menu" data-maintenance-key="user-menu-'+esc(u.userId)+'"><summary aria-label="'+esc(u.username)+' 的更多操作">更多</summary><div>'+btn(u.status==='active'?'停用账户':'恢复账户','userStatus',false,'data-user="'+esc(u.userId)+'" data-status="'+(u.status==='active'?'disabled':'active')+'"')+btn('重置密码','userReset',false,'data-user="'+esc(u.userId)+'"')+'</div></details></div></article>').join('')+(data&&!users.length?'<div class="member-empty">'+(data.pagination?.hasMore?'本批暂无匹配用户，可继续读取下一批。':'没有找到匹配的用户。')+'</div>':'')+(data?listPager(data,'usersPrev','usersNext'):'')+'</section>';
+    return title('用户管理。','按账户查看点数与课程额度，管理状态及待核对事项。')+SnowUIConsistency.userMetrics(data)+'<section class="member-card member-user-list"><form id="memberUserSearch" class="member-form member-search-bar"><label>查找用户<input id="memberUserQuery" maxlength="32" placeholder="输入用户名查找" value="'+esc(member.browseFrames.users?.query||'')+'"></label><button class="member-secondary">查找</button></form><div class="member-users-labels" aria-hidden="true"><span>账户</span><span>状态</span><span>可用点数</span><span>整课额度</span><span>操作</span></div>'+(!data?listPlaceholder(member.error,'用户列表'):'')+users.map(u=>'<article class="member-row member-user-row"><div class="member-user-identity"><span class="member-user-avatar" aria-hidden="true">'+esc(u.username.slice(0,1).toUpperCase())+'</span><div><strong>'+esc(u.username)+'</strong></div></div><span class="member-status-chip" data-status="'+esc(u.status)+'">'+esc(status(u.status))+'</span><div class="member-user-balances"><span><b>'+esc(u.points)+'</b><small>点数</small></span><span><b>'+esc(u.courseQuota)+'</b><small>整课额度</small></span></div><div class="member-actions member-user-actions">'+btn('查看账目','userLedger',false,'data-user="'+esc(u.userId)+'"')+btn('待核对事项','userReviews',false,'data-user="'+esc(u.userId)+'"')+'<details class="member-row-menu" data-maintenance-key="user-menu-'+esc(u.userId)+'"><summary aria-label="'+esc(u.username)+' 的更多操作">更多</summary><div>'+btn(u.status==='active'?'停用账户':'恢复账户','userStatus',false,'data-user="'+esc(u.userId)+'" data-status="'+(u.status==='active'?'disabled':'active')+'"')+btn('重置密码','userReset',false,'data-user="'+esc(u.userId)+'"')+'</div></details></div></article>').join('')+(data&&!users.length?'<div class="member-empty">'+(data.pagination?.hasMore?'本批暂无匹配用户，可继续读取下一批。':'没有找到匹配的用户。')+'</div>':'')+(data?listPager(data,'usersPrev','usersNext'):'')+'</section><p class="snow-ui-note">概览仅统计本次返回的用户。查询和翻页沿用原接口；修改状态、重置密码等操作保留原有确认。</p>';
   }
 
   function userView(){
@@ -10130,8 +10181,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 
   // Presentation metadata only: no credentials, requests, persistence or billing rules.
-  const coursePresentation={connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null};
-  function resetCoursePresentation(){Object.assign(coursePresentation,{connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null});}
+  const coursePresentation={connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null,visualQuery:'',visualFilter:'all'};
+  function resetCoursePresentation(){Object.assign(coursePresentation,{connection:'unknown',loginExpanded:false,listPhase:'unread',listRead:false,listTime:null,taskRead:false,taskEmpty:false,createdBatchId:null,visualQuery:'',visualFilter:'all'});}
   function courseBatchLabel(b){if(b.taskScope==='learning'&&b.status==='completed')return '自动化目标已完成';return b.batchId&&b.batchId===coursePresentation.createdBatchId&&b.status==='running'&&!member.run?'待开始':status(b.status);}
   function courseReadLabel(){
     const p=coursePresentation;
@@ -10187,12 +10238,14 @@ document.addEventListener('DOMContentLoaded',()=>{
     const expanded=p.connection!=='connected'||p.loginExpanded||!!member.challenge;
     const login='<form id="memberCourseLoginForm" class="member-form"><div class="member-form-two">'+input('网课账号','memberCourseUsername','text','','autocomplete="off" required')+input('网课密码','memberCoursePassword','password','','autocomplete="off" required')+'</div><div><button class="member-primary" '+(member.busy?'disabled':'')+'>登录网课</button></div></form>';
     const account='<section class="member-card member-learning-account"><header class="member-learning-account-heading"><div><h3>网课账户</h3><span class="member-learning-connection" data-connection="'+p.connection+'">'+esc(courseConnectionLabel())+'</span><span class="member-learning-account-note">连接状态以最近返回结果为准</span></div><div class="member-actions">'+btn('读取课程','courseList')+btn('刷新任务与结算','courseStatus')+(p.connection==='connected'?'<button type="button" class="member-secondary" data-course-login-toggle aria-controls="memberCourseLoginPanel" aria-expanded="'+expanded+'" '+(member.busy?'disabled':'')+'>'+(expanded?'收起登录':'重新登录')+'</button>':'')+btn('退出网课','courseLogout')+'</div></header><div id="memberCourseLoginPanel" class="member-learning-login" '+(expanded?'':'hidden')+'>'+login+challengeView()+'</div></section>';
-    const courses=member.courses.length?'<div class="member-learning-course-list">'+member.courses.map(c=>'<div class="member-row"><label class="member-course-check"><input type="checkbox" data-course-id="'+esc(c.courseId)+'" '+(member.selected.has(c.courseId)?'checked':'')+' '+(courseAutomationComplete(c)?'disabled':'')+'><span><strong>'+esc(c.courseName)+'</strong><small>'+esc((courseAutomationComplete(c)?'自动化目标已完成':'视频/评价待处理或待核实')+' · 平台整课：'+(c.courseFinished?'已完成':'未确认完成'))+'</small></span></label></div>').join('')+'</div>':'<div class="member-empty member-learning-empty"><strong>'+(p.listRead?'本次未读取到课程':'课程会显示在这里')+'</strong><p>'+(p.listRead?'这是本次读取的结果，可按需重新读取。':p.connection==='connected'?'账户已连接，点击“读取课程”查看课程。':'连接账户后，手动读取课程；已连接的账户也可直接读取核对。')+'</p><small>读取和预览都不会自动开始任务。</small></div>';
+    const complete=c=>courseAutomationComplete(c);
+    const manual=c=>c.examPassed!==true&&courseHasWorkflow(c,'exam')||c.evaluationAccess?.source==='platform-step-access'&&c.evaluationAccess.status==='blocked-by-exam';
+    const courses=member.courses.length?'<div class="member-learning-course-list">'+member.courses.map(c=>SnowUIConsistency.courseCard(c,member.selected,complete,manual)).join('')+'</div><div class="snow-ui-filter-empty" data-course-visual-empty hidden>没有匹配课程，可调整筛选；不需要重新读取。</div>':'<div class="member-empty member-learning-empty"><strong>'+(p.listRead?'本次未读取到课程':'课程会显示在这里')+'</strong><p>'+(p.listRead?'这是本次读取的结果，可按需重新读取。':p.connection==='connected'?'账户已连接，点击“读取课程”查看课程。':'连接账户后，手动读取课程；已连接的账户也可直接读取核对。')+'</p><small>读取和预览都不会自动开始任务。</small></div>';
     const preview=member.preview?'<section class="member-learning-preview" aria-label="任务预览"><h3>任务预览</h3><p>可执行 '+esc(member.preview.executableCount)+' 门，跳过 '+esc(member.preview.skippedCount)+' 门。当前可用额度 '+esc(member.data?.courseQuota)+' 门。</p><p class="member-help">仅执行视频与可执行评价，不处理考试或练习；确认创建后仍需手动开始。</p>'+btn('确认创建任务','courseCreate',true)+'</section>':'';
-    const coursePanel='<section class="member-card member-learning-courses"><header class="member-learning-section-heading"><h3>选择课程</h3><span data-course-read-label role="status" aria-live="polite">'+esc(courseReadLabel())+'</span></header>'+courses+'<footer class="member-learning-selection"><span data-course-selection-count role="status" aria-live="polite">已选 '+esc(member.selected.size)+' 门</span><div class="member-actions">'+btn('预览全部课程','coursePreviewAll')+btn('预览所选课程','coursePreviewSelected',true)+'</div></footer>'+preview+(p.listTime?'<p class="member-learning-read-time">最近成功读取 '+esc(new Date(p.listTime).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}))+'；这是最近读取的课程，不代表实时平台状态。</p>':'')+'</section>';
+    const coursePanel='<section class="member-card member-learning-courses"><header class="member-learning-section-heading"><h3>选择课程</h3><span data-course-read-label role="status" aria-live="polite">'+esc(courseReadLabel())+'</span></header>'+(member.courses.length?SnowUIConsistency.courseTools(p.visualQuery,p.visualFilter):'')+courses+'<footer class="member-learning-selection"><span data-course-selection-count role="status" aria-live="polite">已选 '+esc(member.selected.size)+' 门</span><div class="member-actions">'+btn('预览全部课程','coursePreviewAll')+btn('预览所选课程','coursePreviewSelected',true)+'</div></footer>'+preview+(member.courses.length?'<p class="snow-ui-note" data-course-visual-count role="status" aria-live="polite"></p>':'')+(p.listTime?'<p class="member-learning-read-time">最近成功读取 '+esc(new Date(p.listTime).toLocaleTimeString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}))+'；这是最近读取的课程，不代表实时平台状态。</p>':'')+'</section>';
     const task=b?'<section class="member-card member-learning-task"><h3>当前任务 · <span data-course-batch-status>'+esc(courseBatchLabel(b))+'</span></h3>'+(p.taskRead&&p.taskEmpty?'<p class="member-help">本次未返回任务，上次任务信息暂保留；请先核对再操作。</p>':'')+'<p class="member-muted">'+esc(b.reason)+'<br>课程 '+esc(b.completedCourses)+' / '+esc(b.totalCourses)+' · 失败 '+esc(b.failedCourses)+'</p><div class="member-actions">'+btn('开始 / 继续任务','courseRun',true,b.taskScope==='learning'&&['running','paused','stopped'].includes(b.status)?'':'disabled')+btn('暂停后续步骤','coursePause')+'<button type="button" class="member-secondary" data-member="courseCancel" '+(['completed','completed_with_errors','cancelled'].includes(b.status)?'disabled':'')+'>取消任务</button>'+'</div>'+(b.items||[]).map(i=>'<div class="member-row"><div><strong>'+esc(i.courseName)+'</strong><small>'+esc(i.status==='pending'?'待开始':status(i.status))+' · '+esc(i.reason)+(i.lastCourse?' · 平台整课：'+esc(i.lastCourse.courseFinished?'已完成':'未确认完成'):'')+'</small></div></div>').join('')+'</section>':'<section class="member-card member-learning-task"><h3>当前任务</h3><div class="member-learning-task-empty"><strong>'+(p.taskRead?'本次未读取到当前任务':'尚未读取当前任务')+'</strong><p class="member-help">已创建的任务，可通过页面右上方“刷新任务与结算”查看。</p></div></section>';
     const rules='<section class="member-learning-rules" aria-label="额度结算规则"><h3>额度结算</h3><p>仅平台确认整门课程完成后消耗额度；本轮失败或取消的课程释放预留，不计作完成。</p></section>';
-    return title('学习任务，按完成结算。','连接账户，选择课程，先预览再开始。')+'<div class="member-learning-workspace">'+account+'<div class="member-learning-columns">'+coursePanel+'<aside class="member-learning-task-column" aria-label="任务与结算">'+task+rules+'</aside></div></div>';
+    return title('学习任务，按完成结算。','连接账户，选择课程，先预览再开始。')+SnowUIConsistency.courseMetrics(member.courses,p.listRead,complete,manual)+'<div class="member-learning-workspace">'+account+'<div class="member-learning-columns">'+coursePanel+'<aside class="member-learning-task-column" aria-label="任务与结算">'+task+rules+'</aside></div><p class="snow-ui-note">目标完成不等于平台整课完成。仅处理视频与可执行评价；考试、练习由你手动完成。</p></div>';
   }
 
   function challengeView(){
@@ -10563,6 +10616,18 @@ document.addEventListener('DOMContentLoaded',()=>{
     }}finally{member.run=false;}
     await refresh();member.notice='本轮视频与评价目标执行结束；考试和练习留给人工，失败项目不会算作成功。';
   }
+  // Snow consistency: local visual filtering only. No API calls or task changes.
+  dialog.addEventListener('input',event=>{
+    if(!event.target.matches('[data-course-visual-query]'))return;
+    coursePresentation.visualQuery=event.target.value;
+    SnowUIConsistency.filterCourseCards($('memberMain'),coursePresentation.visualQuery,coursePresentation.visualFilter);
+  });
+  dialog.addEventListener('click',event=>{
+    const filter=event.target.closest('[data-course-visual-filter]');if(!filter)return;
+    coursePresentation.visualFilter=filter.dataset.courseVisualFilter;
+    SnowUIConsistency.filterCourseCards($('memberMain'),coursePresentation.visualQuery,coursePresentation.visualFilter);
+  });
+  // End Snow consistency visual filtering.
   dialog.addEventListener('input',e=>{
     if(e.target.dataset.tokenProduct)member.tokenDrafts.set(e.target.dataset.tokenProduct,e.target.value);
     if(e.target.dataset.appendProduct){
