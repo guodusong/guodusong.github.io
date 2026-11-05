@@ -1,5 +1,90 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc5"><title>Snow · 雪松工作台</title><style>
+<html lang="zh-CN" data-snow-boot-state="loading"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f5f1"><meta name="description" content="Snow 雪松工作台"><meta name="snow-ui-version" content="12.0.0-rc5"><title>Snow · 雪松工作台</title>
+<style id="snowBootStyle">
+html[data-snow-boot-state="loading"] body,
+html[data-snow-boot-state="failed"] body { overflow: hidden !important; }
+html[data-snow-boot-state="loading"] body > :not(#snowBootScreen),
+html[data-snow-boot-state="failed"] body > :not(#snowBootScreen) {
+  visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+}
+#snowBootScreen { display: none; }
+html[data-snow-boot-state="loading"] #snowBootScreen,
+html[data-snow-boot-state="failed"] #snowBootScreen {
+  position: fixed; inset: 0; z-index: 2147483647; display: grid; place-items: center;
+  box-sizing: border-box; padding: 24px; background: #f6f5f1; color: #343a35;
+  visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+.snow-boot-card { width: 100%; max-width: 390px; text-align: center; }
+.snow-boot-brand { margin: 0 0 26px; font-size: 13px; font-weight: 600; letter-spacing: .16em; color: #757b70; }
+.snow-boot-spinner { width: 26px; height: 26px; box-sizing: border-box; margin: 0 auto 22px; border: 2px solid #dedfd6; border-top-color: #66765c; border-radius: 50%; animation: snowBootSpin .9s linear infinite; }
+#snowBootTitle { margin: 0 0 12px; font-size: 22px; font-weight: 600; line-height: 1.5; }
+#snowBootMessage, #snowBootNoScript { margin: 0; font-size: 14px; line-height: 1.8; color: #6f756b; }
+#snowBootRetry { margin-top: 24px; padding: 11px 22px; border: 1px solid #c7cdbf; border-radius: 10px; background: #fffefa; color: #3c4935; font: inherit; cursor: pointer; }
+#snowBootRetry:focus-visible { outline: 2px solid #66765c; outline-offset: 4px; }
+html[data-snow-boot-state="failed"] .snow-boot-spinner { animation: none; border-color: #b6ab8b; }
+@keyframes snowBootSpin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .snow-boot-spinner { animation: none; } }
+</style>
+<script id="snowBootGuard">
+/* Presentation-only startup gate. No API, storage, authentication or business state access. */
+(() => {
+  'use strict';
+  const win = window, doc = document, root = doc.documentElement;
+  let state = 'loading', fatal = false, failureReason = 'script';
+  root.setAttribute('data-snow-boot-state', state);
+  root.setAttribute('aria-busy', 'true');
+  const node = id => doc.getElementById(id);
+  function paintFailure(reason) {
+    const title = node('snowBootTitle'), message = node('snowBootMessage'), retry = node('snowBootRetry');
+    if (title) title.textContent = reason === 'timeout' ? '页面加载时间较长' : '工作台未能完整加载';
+    if (message) message.textContent = reason === 'timeout'
+      ? '可以继续等待，或重新加载页面。'
+      : '请重新加载页面；若仍无法打开，请保留此提示。';
+    if (retry) retry.hidden = false;
+  }
+  function fail(reason = 'script', isFatal = true) {
+    if (state === 'ready') return false;
+    fatal = fatal || isFatal;
+    failureReason = reason;
+    state = 'failed';
+    root.setAttribute('data-snow-boot-state', state);
+    root.setAttribute('aria-busy', 'false');
+    paintFailure(reason);
+    if (isFatal) win.clearTimeout(timer);
+    return true;
+  }
+  function onError(event) {
+    if (event.error || event.message || event.target?.tagName === 'SCRIPT') fail('script');
+  }
+  function onRejection() { fail('script'); }
+  function onDocumentReady() { if (state === 'failed') paintFailure(failureReason); }
+  function onRetry(event) {
+    if (state !== 'failed' || !event.target?.closest?.('#snowBootRetry')) return;
+    event.preventDefault();
+    win.location.reload();
+  }
+  function ready() {
+    if (fatal || state === 'ready') return false;
+    state = 'ready';
+    win.clearTimeout(timer);
+    root.setAttribute('data-snow-boot-state', state);
+    root.removeAttribute('aria-busy');
+    win.removeEventListener('error', onError, true);
+    win.removeEventListener('unhandledrejection', onRejection);
+    doc.removeEventListener('click', onRetry);
+    doc.removeEventListener('DOMContentLoaded', onDocumentReady);
+    return true;
+  }
+  const timer = win.setTimeout(() => fail('timeout', false), 20000);
+  win.addEventListener('error', onError, true);
+  win.addEventListener('unhandledrejection', onRejection);
+  doc.addEventListener('click', onRetry);
+  doc.addEventListener('DOMContentLoaded', onDocumentReady, {once: true});
+  win.SnowBoot = Object.freeze({ready, fail, get state() { return state; }});
+})();
+</script>
+<style>
 
 /* ═══════════════════════════════════════════
    Link · Clean Light · Mobile-First · 8px Grid
@@ -445,7 +530,7 @@ tr:hover td{background:var(--accent-light);color:var(--text);}
 
 
 /* ═══════════════════════════════════════════════════════════════
-GSS Responsive UI · v13.0.42 RC1
+GSS Responsive UI · v13.0.43 RC1
    HTTP only changes transport guards; course and answer workflows remain unchanged.
    ═══════════════════════════════════════════════════════════════ */
 :root {
@@ -1099,7 +1184,7 @@ html{scrollbar-gutter:stable}
 @media(max-width:760px){.product-sheet{top:var(--snow-visible-top,0px);bottom:max(0px,calc(100dvh - var(--snow-visible-top,0px) - var(--snow-visible-height,100dvh)));max-height:calc(var(--snow-visible-height,100dvh) - 12px)}}
 @media(prefers-reduced-motion:reduce){.interaction-toast{animation:none!important}}
 
-</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.42-rc1"><style id="snowMemberDesign">
+</style><meta name="snow-member-version" content="2.0.0-rc1"><meta name="snow-frontend-version" content="13.0.43-rc1"><style id="snowMemberDesign">
 /* Account settings v21: isolated information hierarchy, no business overrides. */
 .member-account-identity{display:flex;align-items:center;gap:14px;padding:18px 22px;margin:0 0 22px;border:1px solid #e0e7dc;border-radius:12px;background:#eef3e8;min-width:0}
 .member-account-avatar{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid #d8e2d0;border-radius:11px;background:#fff;color:#42634b;font-size:16px;font-weight:600}
@@ -4149,6 +4234,16 @@ body[data-snow-credential-network="inline"] > #networkStatus { display:none !imp
 
 </style>
 </head><body>
+<div id="snowBootScreen" role="status" aria-live="polite" aria-atomic="true">
+  <div class="snow-boot-card">
+    <p class="snow-boot-brand">SNOW WORKSPACE</p>
+    <div class="snow-boot-spinner" aria-hidden="true"></div>
+    <h1 id="snowBootTitle">正在打开工作台</h1>
+    <p id="snowBootMessage">正在准备界面，请稍候。</p>
+    <button id="snowBootRetry" type="button" hidden>重新加载</button>
+    <noscript><style>#snowBootTitle,#snowBootMessage,.snow-boot-spinner{display:none!important}</style><p id="snowBootNoScript">此工作台需要 JavaScript 才能显示完整界面。请启用后重新加载。</p></noscript>
+  </div>
+</div>
 
 
 <!-- Toast -->
@@ -5482,12 +5577,12 @@ const ADMIN_SESSION_STORAGE_KEY = 'gss.admin.session.v1';
 const COURSE_EXECUTION_PENDING_STORAGE_KEY = 'gss.course.pending-executions.v1';
 const ADMIN_OPERATION_PENDING_STORAGE_KEY = 'gss.admin.pending-operations.v1';
 const ADMIN_OPERATION_HISTORY_STORAGE_KEY = 'gss.admin.operation-history.v1';
-const COURSE_FRONTEND_VERSION = '13.0.42 RC1';
+const COURSE_FRONTEND_VERSION = '13.0.43 RC1';
 // 本页配套的云函数版本，与页面自身版本分开记录；部署时应与它一致。
 const COURSE_EXPECTED_BACKEND_VERSION = '11.13.25';
 const COURSE_API_PROTOCOL_VERSION = 3;
 const ADMIN_API_PROTOCOL_VERSION = 1;
-const API_CLIENT_VERSION = '13.0.42 RC1';
+const API_CLIENT_VERSION = '13.0.43 RC1';
 const API_DEFAULT_TIMEOUT_MS = 30000;
 const API_LONG_TIMEOUT_MS = 60000;
 // 北京云函数访问美国 Redis Cloud 时，大题库操作可能接近 60 秒。
@@ -9554,7 +9649,7 @@ renderDeploymentStatus();
 renderAdminOperationHistory();
 if (state.adminSessionToken && !isLegacyHttpCompatibilityMode()) void restoreAdminSession();
 
-console.log('Link · Token 管理 v13.0.42 RC1 — 已就绪');
+console.log('Link · Token 管理 v13.0.43 RC1 — 已就绪');
 </script>
 <script id="snowMemberJournal">
 (function(root){
@@ -9856,7 +9951,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   function safeDiagnostic({clientId,requestId,action,stage,code,status,backendVersion,operationId,outcome}){
     const safe=(v,re,max)=>typeof v==='string'&&v.length<=max&&re.test(v)?v:'';
-    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.42 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
+    return {clientId,time:new Date().toISOString(),frontendVersion:'13.0.43 RC1',requestId:safe(requestId,/^[a-zA-Z0-9._:-]+$/,120),action:safe(action,/^[a-zA-Z]+$/,40),stage,code:safe(code,/^[A-Z0-9_]+$/,64)||'REQUEST_FAILED',httpStatus:Number.isInteger(status)?status:0,backendVersion:safe(backendVersion,/^[0-9.]+$/,32),operationId:safe(operationId,/^[a-zA-Z0-9._:-]+$/,100),outcome};
   }
   function listPager(data,previous,next){
     if(data?.pagination)return '<div class="member-ledger-pagination"><span>第 '+esc(data.page||1)+' 批 · 本批 '+esc(data.rows?.length||0)+' 条</span><div class="member-actions">'+btn('上一批',previous,false,(data.page||1)<=1?'disabled':'')+btn('下一批',next,false,data.pagination.hasMore?'':'disabled')+'</div></div><p class="member-help">按扫描顺序分批读取，不是时间排序。数据变化时请重新查询；本批为空且仍有下一批时，可继续查找。</p>';
@@ -11334,4 +11429,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-</script></body></html>
+</script>
+<script id="snowBootReady">
+/* Registered last: reveal only after the existing UI listeners and first layout frames. */
+(() => {
+  'use strict';
+  function mounted() {
+    const afterFrame = typeof window.requestAnimationFrame === 'function'
+      ? window.requestAnimationFrame.bind(window) : callback => window.setTimeout(callback, 16);
+    afterFrame(() => afterFrame(() => {
+      const complete = window.SnowWorkspace && document.querySelector('.snow-topline')
+        && document.querySelector('.snow-sidebar') && document.getElementById('memberDialog')
+        && document.getElementById('memberMain') && window.SnowWorkbenchRefinement;
+      if (complete) window.SnowBoot?.ready();
+      else window.SnowBoot?.fail('incomplete');
+    }));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mounted, {once: true});
+  else mounted();
+})();
+</script>
+</body></html>
